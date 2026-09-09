@@ -1,5 +1,5 @@
 {
-  "name": "turborepo-template",
+  "name": "dk",
   "private": true,
   "scripts": {
     "build": "turbo run build",
