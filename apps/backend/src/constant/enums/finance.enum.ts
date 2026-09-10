@@ -1,0 +1,24 @@
+export enum IncomeCategoryEnum {
+  CONSULTATION_FEE = "CONSULTATION_FEE",
+  SURGERY_FEE = "SURGERY_FEE",
+  CABIN_RENT = "CABIN_RENT",
+  TEST_FEE = "TEST_FEE",
+  MEDICINE_SALE = "MEDICINE_SALE",
+  OTHER = "OTHER",
+}
+
+export enum ExpenseCategoryEnum {
+  SALARY = "SALARY",
+  RENT = "RENT",
+  ELECTRICITY = "ELECTRICITY",
+  MEDICINE_PURCHASE = "MEDICINE_PURCHASE",
+  MAINTENANCE = "MAINTENANCE",
+  OTHER = "OTHER",
+}
+
+export enum TransactionTypeEnum {
+  INCOME = "INCOME",
+  EXPENSE = "EXPENSE",
+  SALE = "SALE",
+  PURCHASE = "PURCHASE",
+}

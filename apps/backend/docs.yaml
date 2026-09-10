@@ -1,0 +1,3324 @@
+openapi: 3.0.0
+paths:
+  /api/v1/users/profile:
+    get:
+      operationId: UserController_getCurrentUser
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_0
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/users/profile",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_0
+    patch:
+      operationId: UserController_updateCurrentUser
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterDto'
+            example: &ref_1
+              phone: '01712345678'
+              email: example@gmail.com
+              password: securePassword123
+              role: USER
+              user: 652e0a823a37a1f8e82fdd4b
+              bloodGroup: O+
+              emergencyContact: '01787654321'
+              medicalHistory: Diabetes, Hypertension
+              currentMedications: &ref_131
+                - Paracetamol
+                - Insulin
+              lastVisited: '2025-02-15T00:00:00.000Z'
+              clinicName: 652fcf2c4f2b09a4b5a4c2a8
+              clinicAddress: 'House #12, Road #5, Rajshahi, Bangladesh'
+              licenseNumber: LIC-2025-0345
+              subscriptionStartDate: '2025-01-01T00:00:00.000Z'
+              subscriptionEndDate: '2026-01-01T00:00:00.000Z'
+              numberOfBeds: active
+              servicesOffered: &ref_132
+                - Ultrasonography
+                - Hernia Operation
+                - Gallstone Surgery
+              status: ACTIVE
+            examples:
+              default:
+                value: *ref_1
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_2
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/users/profile",
+            {
+              method: "PATCH",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "phone": "01712345678",\n  "email": "example@gmail.com",\n  "password": "securePassword123",\n  "role": "USER",\n  "user": "652e0a823a37a1f8e82fdd4b",\n  "bloodGroup": "O+",\n  "emergencyContact": "01787654321",\n  "medicalHistory": "Diabetes, Hypertension",\n  "currentMedications": [\n    "Paracetamol",\n    "Insulin"\n  ],\n  "lastVisited": "2025-02-15T00:00:00.000Z",\n  "clinicName": "652fcf2c4f2b09a4b5a4c2a8",\n  "clinicAddress": "House #12, Road #5, Rajshahi, Bangladesh",\n  "licenseNumber": "LIC-2025-0345",\n  "subscriptionStartDate": "2025-01-01T00:00:00.000Z",\n  "subscriptionEndDate": "2026-01-01T00:00:00.000Z",\n  "numberOfBeds": "active",\n  "servicesOffered": [\n    "Ultrasonography",\n    "Hernia Operation",\n    "Gallstone Surgery"\n  ],\n  "status": "ACTIVE"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_2
+  /api/v1/patients:
+    get:
+      operationId: PatientController_findAll
+      parameters:
+        - name: doctorId
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_3
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/patients",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_3
+  /api/v1/patients/doctor:
+    get:
+      operationId: PatientController_findDoctorPatients
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_4
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/patients/doctor",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_4
+  /api/v1/patients/{id}/appointments:
+    get:
+      operationId: PatientController_findAppointments
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_5
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/patients/{id}/appointments",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_5
+  /api/v1/patients/{id}/medical-records:
+    get:
+      operationId: PatientController_findMedicalRecords
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_6
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/patients/{id}/medical-records",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_6
+  /api/v1/patients/{id}:
+    get:
+      operationId: PatientController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_7
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/patients/{id}",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_7
+    patch:
+      operationId: PatientController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePatientDto'
+            example: &ref_8
+              user: 652fcf2c4f2b09a4b5a4c2a8
+              bloodGroup: O+
+              emergencyContact: '+8801712345678'
+              medicalHistory: Diabetes, High Blood Pressure
+              currentMedications: &ref_133
+                - Metformin
+                - Atorvastatin
+              lastVisited: '2025-02-15T00:00:00.000Z'
+            examples:
+              default:
+                value: *ref_8
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_9
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/patients/{id}",
+            {
+              method: "PATCH",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "user": "652fcf2c4f2b09a4b5a4c2a8",\n  "bloodGroup": "O+",\n  "emergencyContact": "+8801712345678",\n  "medicalHistory": "Diabetes, High Blood Pressure",\n  "currentMedications": [\n    "Metformin",\n    "Atorvastatin"\n  ],\n  "lastVisited": "2025-02-15T00:00:00.000Z"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_9
+    delete:
+      operationId: PatientController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_10
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/patients/{id}",
+            { method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_10
+  /api/v1/medical-records:
+    post:
+      operationId: MedicalRecordController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMedicalRecordDto'
+            example: &ref_11
+              patientId: 652fcf2c4f2b09a4b5a4c2a8
+              doctorId: 652f9f18c1b2a4a7b8f67890
+              appointmentId: 6530a2c44cb2dbd2a1111111
+              date: '2025-10-20T10:30:00.000Z'
+              diagnosis: Mild hypertension
+              prescription: &ref_134
+                - Lisinopril 10mg once daily
+              notes: Reduce sodium intake and monitor BP twice a week.
+              followUpDate: '2025-11-20T10:30:00.000Z'
+              recordedBy: 652e0a823a37a1f8e82fdd4b
+            examples:
+              default:
+                value: *ref_11
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_12
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/medical-records",
+            {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "patientId": "652fcf2c4f2b09a4b5a4c2a8",\n  "doctorId": "652f9f18c1b2a4a7b8f67890",\n  "appointmentId": "6530a2c44cb2dbd2a1111111",\n  "date": "2025-10-20T10:30:00.000Z",\n  "diagnosis": "Mild hypertension",\n  "prescription": [\n    "Lisinopril 10mg once daily"\n  ],\n  "notes": "Reduce sodium intake and monitor BP twice a week.",\n  "followUpDate": "2025-11-20T10:30:00.000Z",\n  "recordedBy": "652e0a823a37a1f8e82fdd4b"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_12
+    get:
+      operationId: MedicalRecordController_findAll
+      parameters:
+        - name: patientId
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_13
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/medical-records",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_13
+  /api/v1/medical-records/patient/{patientId}:
+    get:
+      operationId: MedicalRecordController_findByPatient
+      parameters:
+        - name: patientId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_14
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/medical-records/patient/{patientId}",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_14
+  /api/v1/medical-records/{id}:
+    get:
+      operationId: MedicalRecordController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_15
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/medical-records/{id}",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_15
+    patch:
+      operationId: MedicalRecordController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMedicalRecordDto'
+            example: &ref_16 {}
+            examples:
+              default:
+                value: *ref_16
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_17
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/medical-records/{id}",
+            {
+              method: "PATCH",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_17
+    delete:
+      operationId: MedicalRecordController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_18
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/medical-records/{id}",
+            { method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_18
+  /api/v1/merchants:
+    post:
+      operationId: MerchantController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMerchantDto'
+            example: &ref_19
+              phone: '01712345678'
+              email: example@gmail.com
+              password: securePassword123
+              role: USER
+              user: 652e0a823a37a1f8e82fdd4b
+              clinicName: 652fcf2c4f2b09a4b5a4c2a8
+              clinicAddress: 'House #12, Road #5, Rajshahi, Bangladesh'
+              licenseNumber: LIC-2025-0345
+              subscriptionStartDate: '2025-01-01T00:00:00.000Z'
+              subscriptionEndDate: '2026-01-01T00:00:00.000Z'
+              numberOfBeds: 45
+              servicesOffered: &ref_23
+                - Ultrasonography
+                - Hernia Operation
+                - Gallstone Surgery
+              status: ACTIVE
+            examples:
+              default:
+                value: *ref_19
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_20
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/merchants",
+            {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "phone": "01712345678",\n  "email": "example@gmail.com",\n  "password": "securePassword123",\n  "role": "USER",\n  "user": "652e0a823a37a1f8e82fdd4b",\n  "clinicName": "652fcf2c4f2b09a4b5a4c2a8",\n  "clinicAddress": "House #12, Road #5, Rajshahi, Bangladesh",\n  "licenseNumber": "LIC-2025-0345",\n  "subscriptionStartDate": "2025-01-01T00:00:00.000Z",\n  "subscriptionEndDate": "2026-01-01T00:00:00.000Z",\n  "numberOfBeds": 45,\n  "servicesOffered": [\n    "Ultrasonography",\n    "Hernia Operation",\n    "Gallstone Surgery"\n  ],\n  "status": "ACTIVE"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_20
+    get:
+      operationId: MerchantController_findAll
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_21
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/merchants",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_21
+  /api/v1/merchants/{id}:
+    get:
+      operationId: MerchantController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_22
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/merchants/{id}",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_22
+    patch:
+      operationId: MerchantController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMerchantDto'
+            example: &ref_24
+              phone: '01712345678'
+              email: example@gmail.com
+              password: securePassword123
+              role: USER
+              user: 652e0a823a37a1f8e82fdd4b
+              clinicName: 652fcf2c4f2b09a4b5a4c2a8
+              clinicAddress: 'House #12, Road #5, Rajshahi, Bangladesh'
+              licenseNumber: LIC-2025-0345
+              subscriptionStartDate: '2025-01-01T00:00:00.000Z'
+              subscriptionEndDate: '2026-01-01T00:00:00.000Z'
+              numberOfBeds: 45
+              servicesOffered: *ref_23
+              status: ACTIVE
+            examples:
+              default:
+                value: *ref_24
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_25
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/merchants/{id}",
+            {
+              method: "PATCH",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "phone": "01712345678",\n  "email": "example@gmail.com",\n  "password": "securePassword123",\n  "role": "USER",\n  "user": "652e0a823a37a1f8e82fdd4b",\n  "clinicName": "652fcf2c4f2b09a4b5a4c2a8",\n  "clinicAddress": "House #12, Road #5, Rajshahi, Bangladesh",\n  "licenseNumber": "LIC-2025-0345",\n  "subscriptionStartDate": "2025-01-01T00:00:00.000Z",\n  "subscriptionEndDate": "2026-01-01T00:00:00.000Z",\n  "numberOfBeds": 45,\n  "servicesOffered": [\n    "Ultrasonography",\n    "Hernia Operation",\n    "Gallstone Surgery"\n  ],\n  "status": "ACTIVE"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_25
+    delete:
+      operationId: MerchantController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_26
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/merchants/{id}",
+            { method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_26
+  /api/v1/doctors:
+    post:
+      operationId: DoctorController_createDoctorByMerchant
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDoctorDto'
+            example: &ref_27
+              specialization: &ref_32
+                - Cardiology
+                - Medicine
+              designation: Consultant Cardiologist
+              experienceInYears: 8
+              hospitals:
+                - hospitalName: Rajshahi Medical College Hospital
+                  chamberAddress: Ghoramara, Rajshahi
+                  location: Rajshahi, Bangladesh
+              degree:
+                - name: MBBS
+                  university: Dhaka Medical College
+                  year: 2018
+              languages: &ref_33
+                - Bangla
+                - English
+              fee: 500
+              schedules:
+                - startTime: 09:00 AM
+                  endTime: 02:00 PM
+                  days: &ref_34
+                    - Sunday
+                    - Tuesday
+                    - Thursday
+              phone: '+8801712345678'
+              password: strongpassword123
+              email: doctor@example.com
+              role: DOCTOR
+              merchant: 652fcf2c4f2b09a4b5a4c2a8
+            examples:
+              default:
+                value: *ref_27
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_28
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/doctors",
+            {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "specialization": [\n    "Cardiology",\n    "Medicine"\n  ],\n  "designation": "Consultant Cardiologist",\n  "experienceInYears": 8,\n  "hospitals": [\n    {\n      "hospitalName": "Rajshahi Medical College Hospital",\n      "chamberAddress": "Ghoramara, Rajshahi",\n      "location": "Rajshahi, Bangladesh"\n    }\n  ],\n  "degree": [\n    {\n      "name": "MBBS",\n      "university": "Dhaka Medical College",\n      "year": 2018\n    }\n  ],\n  "languages": [\n    "Bangla",\n    "English"\n  ],\n  "fee": 500,\n  "schedules": [\n    {\n      "startTime": "09:00 AM",\n      "endTime": "02:00 PM",\n      "days": [\n        "Sunday",\n        "Tuesday",\n        "Thursday"\n      ]\n    }\n  ],\n  "phone": "+8801712345678",\n  "password": "strongpassword123",\n  "email": "doctor@example.com",\n  "role": "DOCTOR",\n  "merchant": "652fcf2c4f2b09a4b5a4c2a8"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_28
+    get:
+      operationId: DoctorController_findAll
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_29
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/doctors",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_29
+  /api/v1/doctors/options:
+    get:
+      operationId: DoctorController_findAllForOptions
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_30
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/doctors/options",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_30
+  /api/v1/doctors/{id}:
+    get:
+      operationId: DoctorController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_31
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/doctors/{id}",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_31
+    patch:
+      operationId: DoctorController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDoctorDto'
+            example: &ref_35
+              specialization: *ref_32
+              designation: Consultant Cardiologist
+              experienceInYears: 8
+              hospitals:
+                - hospitalName: Rajshahi Medical College Hospital
+                  chamberAddress: Ghoramara, Rajshahi
+                  location: Rajshahi, Bangladesh
+              degree:
+                - name: MBBS
+                  university: Dhaka Medical College
+                  year: 2018
+              languages: *ref_33
+              fee: 500
+              schedules:
+                - startTime: 09:00 AM
+                  endTime: 02:00 PM
+                  days: *ref_34
+              phone: '+8801712345678'
+              password: strongpassword123
+              email: doctor@example.com
+              role: DOCTOR
+              merchant: 652fcf2c4f2b09a4b5a4c2a8
+            examples:
+              default:
+                value: *ref_35
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_36
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/doctors/{id}",
+            {
+              method: "PATCH",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "specialization": [\n    "Cardiology",\n    "Medicine"\n  ],\n  "designation": "Consultant Cardiologist",\n  "experienceInYears": 8,\n  "hospitals": [\n    {\n      "hospitalName": "Rajshahi Medical College Hospital",\n      "chamberAddress": "Ghoramara, Rajshahi",\n      "location": "Rajshahi, Bangladesh"\n    }\n  ],\n  "degree": [\n    {\n      "name": "MBBS",\n      "university": "Dhaka Medical College",\n      "year": 2018\n    }\n  ],\n  "languages": [\n    "Bangla",\n    "English"\n  ],\n  "fee": 500,\n  "schedules": [\n    {\n      "startTime": "09:00 AM",\n      "endTime": "02:00 PM",\n      "days": [\n        "Sunday",\n        "Tuesday",\n        "Thursday"\n      ]\n    }\n  ],\n  "phone": "+8801712345678",\n  "password": "strongpassword123",\n  "email": "doctor@example.com",\n  "role": "DOCTOR",\n  "merchant": "652fcf2c4f2b09a4b5a4c2a8"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_36
+    delete:
+      operationId: DoctorController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_37
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/doctors/{id}",
+            { method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_37
+  /api/v1/auth/login:
+    post:
+      operationId: AuthController_login
+      summary: User login
+      parameters: []
+      requestBody:
+        required: true
+        description: Login credentials for user authentication
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthDto'
+            example: &ref_38
+              phone: '01712345678'
+              password: password123
+            examples:
+              default:
+                value: *ref_38
+      responses:
+        '200':
+          description: Login successful, returns user data and token
+        '401':
+          description: Invalid credentials
+      tags: &ref_40
+        - Authentication
+      x-codeSamples: &ref_39
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/auth/login",
+            {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "phone": "01712345678",\n  "password": "password123"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_39
+  /api/v1/auth/signup:
+    post:
+      operationId: AuthController_signup
+      summary: User registration
+      parameters: []
+      requestBody:
+        required: true
+        description: >-
+          Registration details for creating a new user account. Only PATIENT or
+          MERCHANT roles are allowed for self-registration.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterDto'
+            example: *ref_1
+            examples:
+              default:
+                value: *ref_1
+      responses:
+        '201':
+          description: User registration successful
+        '400':
+          description: Invalid role or registration data
+      tags: *ref_40
+      x-codeSamples: &ref_41
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/auth/signup",
+            {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "phone": "01712345678",\n  "email": "example@gmail.com",\n  "password": "securePassword123",\n  "role": "USER",\n  "user": "652e0a823a37a1f8e82fdd4b",\n  "bloodGroup": "O+",\n  "emergencyContact": "01787654321",\n  "medicalHistory": "Diabetes, Hypertension",\n  "currentMedications": [\n    "Paracetamol",\n    "Insulin"\n  ],\n  "lastVisited": "2025-02-15T00:00:00.000Z",\n  "clinicName": "652fcf2c4f2b09a4b5a4c2a8",\n  "clinicAddress": "House #12, Road #5, Rajshahi, Bangladesh",\n  "licenseNumber": "LIC-2025-0345",\n  "subscriptionStartDate": "2025-01-01T00:00:00.000Z",\n  "subscriptionEndDate": "2026-01-01T00:00:00.000Z",\n  "numberOfBeds": "active",\n  "servicesOffered": [\n    "Ultrasonography",\n    "Hernia Operation",\n    "Gallstone Surgery"\n  ],\n  "status": "ACTIVE"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_41
+  /api/v1/staff:
+    post:
+      operationId: StaffController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateStaffDto'
+            example: &ref_42 {}
+            examples:
+              default:
+                value: *ref_42
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_43
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/staff",
+            {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_43
+    get:
+      operationId: StaffController_listMy
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_44
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/staff",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_44
+  /api/v1/staff/all:
+    get:
+      operationId: StaffController_listAll
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_45
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/staff/all",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_45
+  /api/v1/staff/{id}:
+    get:
+      operationId: StaffController_getById
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_46
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/staff/{id}",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_46
+    patch:
+      operationId: StaffController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateStaffDto'
+            example: &ref_47 {}
+            examples:
+              default:
+                value: *ref_47
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_48
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/staff/{id}",
+            {
+              method: "PATCH",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_48
+    delete:
+      operationId: StaffController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_49
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/staff/{id}",
+            { method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_49
+  /api/v1/staff/{id}/attendance:
+    post:
+      operationId: StaffController_recordAttendance
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecordAttendanceDto'
+            example: &ref_50 {}
+            examples:
+              default:
+                value: *ref_50
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_51
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/staff/{id}/attendance",
+            {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_51
+    get:
+      operationId: StaffController_listAttendance
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+        - name: fromDate
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: toDate
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_52
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/staff/{id}/attendance",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_52
+  /api/v1/staff/{id}/leave:
+    post:
+      operationId: StaffController_createLeaveRequest
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateLeaveRequestDto'
+            example: &ref_53 {}
+            examples:
+              default:
+                value: *ref_53
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_54
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/staff/{id}/leave",
+            {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_54
+    get:
+      operationId: StaffController_listLeaveRequests
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+        - name: status
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_55
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/staff/{id}/leave",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_55
+  /api/v1/staff/{id}/leave/{leaveId}:
+    patch:
+      operationId: StaffController_updateLeaveStatus
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+        - name: leaveId
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateLeaveStatusDto'
+            example: &ref_56 {}
+            examples:
+              default:
+                value: *ref_56
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_57
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/staff/{id}/leave/{leaveId}",
+            {
+              method: "PATCH",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_57
+  /api/v1/staff/{id}/payroll:
+    post:
+      operationId: StaffController_createPayroll
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePayrollDto'
+            example: &ref_58 {}
+            examples:
+              default:
+                value: *ref_58
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_59
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/staff/{id}/payroll",
+            {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_59
+    get:
+      operationId: StaffController_listPayroll
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_60
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/staff/{id}/payroll",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_60
+  /api/v1/clinic:
+    post:
+      operationId: ClinicController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateClinicDto'
+            example: &ref_61
+              name: Medicare Diagnostic Center
+              address: 'House #12, Road #5, Rajshahi, Bangladesh'
+              logo: https://example.com/uploads/clinic-logo.png
+              contactNumber: '+8801712345678'
+            examples:
+              default:
+                value: *ref_61
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_62
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/clinic",
+            {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "name": "Medicare Diagnostic Center",\n  "address": "House #12, Road #5, Rajshahi, Bangladesh",\n  "logo": "https://example.com/uploads/clinic-logo.png",\n  "contactNumber": "+8801712345678"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_62
+    get:
+      operationId: ClinicController_listMy
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_63
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/clinic",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_63
+  /api/v1/clinic/all:
+    get:
+      operationId: ClinicController_listAll
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_64
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/clinic/all",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_64
+  /api/v1/clinic/{id}:
+    put:
+      operationId: ClinicController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateClinicDto'
+            example: &ref_65
+              name: Medicare Diagnostic Center
+              address: 'House #12, Road #5, Rajshahi, Bangladesh'
+              logo: https://example.com/uploads/clinic-logo.png
+              contactNumber: '+8801712345678'
+            examples:
+              default:
+                value: *ref_65
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_66
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/clinic/{id}",
+            {
+              method: "PUT",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "name": "Medicare Diagnostic Center",\n  "address": "House #12, Road #5, Rajshahi, Bangladesh",\n  "logo": "https://example.com/uploads/clinic-logo.png",\n  "contactNumber": "+8801712345678"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_66
+    delete:
+      operationId: ClinicController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_67
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/clinic/{id}",
+            { method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_67
+  /api/v1/subscription:
+    post:
+      operationId: SubscriptionController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSubscriptionDto'
+            example: &ref_68 {}
+            examples:
+              default:
+                value: *ref_68
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_69
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/subscription",
+            {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_69
+    get:
+      operationId: SubscriptionController_listAll
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_70
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/subscription",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_70
+  /api/v1/subscription/{id}:
+    delete:
+      operationId: SubscriptionController_delete
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_71
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/subscription/{id}",
+            { method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_71
+  /api/v1/payment/subscription/sslcommerz/{id}:
+    post:
+      operationId: PaymentController_initiatePayment
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_72
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/payment/subscription/sslcommerz/{id}",
+            { method: "POST", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_72
+  /api/v1/payment/subscription/sslcommerz/repayment/{paymentId}:
+    patch:
+      operationId: PaymentController_repaymentInitiate
+      parameters:
+        - name: paymentId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_73
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/payment/subscription/sslcommerz/repayment/{paymentId}",
+            { method: "PATCH", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_73
+  /api/v1/payment/merchant:
+    get:
+      operationId: PaymentController_getMerchantPaymentList
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_74
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/payment/merchant",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_74
+  /api/v1/payment/success:
+    post:
+      operationId: PaymentController_success
+      parameters: []
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_75
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/payment/success",
+            { method: "POST", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_75
+  /api/v1/payment/redirect:
+    get:
+      operationId: PaymentController_redirect
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_76
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/payment/redirect",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_76
+  /api/v1/payment/fail:
+    post:
+      operationId: PaymentController_fail
+      parameters: []
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_77
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/payment/fail",
+            { method: "POST", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_77
+  /api/v1/payment/cancel:
+    post:
+      operationId: PaymentController_cancel
+      parameters: []
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_78
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/payment/cancel",
+            { method: "POST", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_78
+  /api/v1/merchant-pg:
+    post:
+      operationId: MerchantPGController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMerchantPGDto'
+            example: &ref_79
+              sslcommerz:
+                isActive: true
+                storeId: SSL_STORE_001
+                storePassword: ssl_pass_789
+                isSandbox: false
+                isTokenize: true
+            examples:
+              default:
+                value: *ref_79
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_80
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/merchant-pg",
+            {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "sslcommerz": {\n    "isActive": true,\n    "storeId": "SSL_STORE_001",\n    "storePassword": "ssl_pass_789",\n    "isSandbox": false,\n    "isTokenize": true\n  }\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_80
+    get:
+      operationId: MerchantPGController_listMy
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_81
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/merchant-pg",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_81
+    patch:
+      operationId: MerchantPGController_update
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMerchantPGDto'
+            example: &ref_82
+              sslcommerz:
+                isActive: true
+                storeId: SSL_STORE_001
+                storePassword: ssl_pass_789
+                isSandbox: false
+                isTokenize: true
+            examples:
+              default:
+                value: *ref_82
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_83
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/merchant-pg",
+            {
+              method: "PATCH",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "sslcommerz": {\n    "isActive": true,\n    "storeId": "SSL_STORE_001",\n    "storePassword": "ssl_pass_789",\n    "isSandbox": false,\n    "isTokenize": true\n  }\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_83
+  /api/v1/merchant-pg/all:
+    get:
+      operationId: MerchantPGController_listAll
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_84
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/merchant-pg/all",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_84
+  /api/v1/merchant-pg/{id}:
+    get:
+      operationId: MerchantPGController_getById
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_85
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/merchant-pg/{id}",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_85
+    delete:
+      operationId: MerchantPGController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_86
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/merchant-pg/{id}",
+            { method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_86
+  /api/v1/appointment:
+    post:
+      operationId: AppointmentController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAppointmentDto'
+            example: &ref_87
+              doctor: 652f9f18c1b2a4a7b8f67890
+              appointmentDate: '2025-10-20T10:30:00.000Z'
+              appointmentSlot: 10:30 AM - 11:00 AM
+              reasonFor: CHECK_UP
+              problemDescription: Severe headache and nausea for 2 days
+              note: Patient prefers morning appointments
+              paymentMethod: sslcommerz, bkash, nagad, rocket, cash
+              status: pending
+            examples:
+              default:
+                value: *ref_87
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_88
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/appointment",
+            {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "doctor": "652f9f18c1b2a4a7b8f67890",\n  "appointmentDate": "2025-10-20T10:30:00.000Z",\n  "appointmentSlot": "10:30 AM - 11:00 AM",\n  "reasonFor": "CHECK_UP",\n  "problemDescription": "Severe headache and nausea for 2 days",\n  "note": "Patient prefers morning appointments",\n  "paymentMethod": "sslcommerz, bkash, nagad, rocket, cash",\n  "status": "pending"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_88
+    get:
+      operationId: AppointmentController_listAppointments
+      parameters:
+        - name: patient
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_89
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/appointment",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_89
+  /api/v1/appointment/all:
+    get:
+      operationId: AppointmentController_listAll
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_90
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/appointment/all",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_90
+  /api/v1/appointment/slots/available:
+    get:
+      operationId: AppointmentController_getAvailableSlots
+      parameters:
+        - name: doctorId
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: appointmentDate
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: slotDuration
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_91
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/appointment/slots/available",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_91
+  /api/v1/appointment/stats:
+    get:
+      operationId: AppointmentController_getStats
+      parameters:
+        - name: doctorId
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: startDate
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: endDate
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_92
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/appointment/stats",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_92
+  /api/v1/appointment/{id}:
+    get:
+      operationId: AppointmentController_getById
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_93
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/appointment/{id}",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_93
+    put:
+      operationId: AppointmentController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAppointmentDto'
+            example: &ref_94
+              doctor: 652f9f18c1b2a4a7b8f67890
+              appointmentDate: '2025-10-20T10:30:00.000Z'
+              appointmentSlot: 10:30 AM - 11:00 AM
+              reasonFor: CHECK_UP
+              problemDescription: Severe headache and nausea for 2 days
+              note: Patient prefers morning appointments
+              paymentMethod: sslcommerz, bkash, nagad, rocket, cash
+              status: pending
+            examples:
+              default:
+                value: *ref_94
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_95
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/appointment/{id}",
+            {
+              method: "PUT",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "doctor": "652f9f18c1b2a4a7b8f67890",\n  "appointmentDate": "2025-10-20T10:30:00.000Z",\n  "appointmentSlot": "10:30 AM - 11:00 AM",\n  "reasonFor": "CHECK_UP",\n  "problemDescription": "Severe headache and nausea for 2 days",\n  "note": "Patient prefers morning appointments",\n  "paymentMethod": "sslcommerz, bkash, nagad, rocket, cash",\n  "status": "pending"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_95
+    delete:
+      operationId: AppointmentController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_96
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/appointment/{id}",
+            { method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_96
+  /api/v1/appointment/{id}/status:
+    put:
+      operationId: AppointmentController_updateStatus
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAppointmentStatusDto'
+            example: &ref_97
+              status: CONFIRMED
+              reason: Patient did not show up
+              notes: Patient rescheduled
+            examples:
+              default:
+                value: *ref_97
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_98
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/appointment/{id}/status",
+            {
+              method: "PUT",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "status": "CONFIRMED",\n  "reason": "Patient did not show up",\n  "notes": "Patient rescheduled"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_98
+  /api/v1/appointment/{id}/reschedule:
+    post:
+      operationId: AppointmentController_reschedule
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RescheduleAppointmentDto'
+            example: &ref_99
+              newAppointmentDate: '2025-10-21T10:30:00.000Z'
+              newAppointmentSlot: 10:30 AM - 11:00 AM
+              reason: Doctor has emergency
+            examples:
+              default:
+                value: *ref_99
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_100
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/appointment/{id}/reschedule",
+            {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "newAppointmentDate": "2025-10-21T10:30:00.000Z",\n  "newAppointmentSlot": "10:30 AM - 11:00 AM",\n  "reason": "Doctor has emergency"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_100
+  /api/v1/dashboard/merchant:
+    get:
+      operationId: DashboardController_merchant
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_101
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/dashboard/merchant",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_101
+  /api/v1/dashboard/super-admin:
+    get:
+      operationId: DashboardController_superAdmin
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_102
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/dashboard/super-admin",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_102
+  /api/v1/income:
+    post:
+      operationId: IncomeController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateIncomeDto'
+            example: &ref_103 {}
+            examples:
+              default:
+                value: *ref_103
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_104
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/income",
+            {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_104
+    get:
+      operationId: IncomeController_listMy
+      parameters:
+        - name: startDate
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: endDate
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: category
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_105
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/income",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_105
+  /api/v1/income/all:
+    get:
+      operationId: IncomeController_listAll
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_106
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/income/all",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_106
+  /api/v1/income/{id}:
+    patch:
+      operationId: IncomeController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateIncomeDto'
+            example: &ref_107 {}
+            examples:
+              default:
+                value: *ref_107
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_108
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/income/{id}",
+            {
+              method: "PATCH",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_108
+    delete:
+      operationId: IncomeController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_109
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/income/{id}",
+            { method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_109
+  /api/v1/income/sales:
+    post:
+      operationId: IncomeController_createSale
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateIncomeDto'
+            example: *ref_103
+            examples:
+              default:
+                value: *ref_103
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_110
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/income/sales",
+            {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_110
+    get:
+      operationId: IncomeController_listSales
+      parameters:
+        - name: startDate
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: endDate
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: category
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_111
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/income/sales",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_111
+  /api/v1/expense:
+    post:
+      operationId: ExpenseController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateExpenseDto'
+            example: &ref_112 {}
+            examples:
+              default:
+                value: *ref_112
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_113
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/expense",
+            {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_113
+    get:
+      operationId: ExpenseController_listMy
+      parameters:
+        - name: startDate
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: endDate
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: category
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_114
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/expense",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_114
+  /api/v1/expense/all:
+    get:
+      operationId: ExpenseController_listAll
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_115
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/expense/all",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_115
+  /api/v1/expense/{id}:
+    patch:
+      operationId: ExpenseController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateExpenseDto'
+            example: &ref_116 {}
+            examples:
+              default:
+                value: *ref_116
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_117
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/expense/{id}",
+            {
+              method: "PATCH",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_117
+    delete:
+      operationId: ExpenseController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_118
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/expense/{id}",
+            { method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_118
+  /api/v1/expense/purchases:
+    post:
+      operationId: ExpenseController_createPurchase
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateExpenseDto'
+            example: *ref_112
+            examples:
+              default:
+                value: *ref_112
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_119
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/expense/purchases",
+            {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_119
+    get:
+      operationId: ExpenseController_listPurchases
+      parameters:
+        - name: startDate
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: endDate
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: category
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_120
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/expense/purchases",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_120
+  /api/v1/finance/dashboard:
+    get:
+      operationId: FinanceController_getDashboard
+      parameters:
+        - name: startDate
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: endDate
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_121
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/finance/dashboard",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_121
+  /api/v1/finance/monthly-report:
+    get:
+      operationId: FinanceController_getMonthlyReport
+      parameters:
+        - name: year
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_122
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/finance/monthly-report",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_122
+  /api/v1/finance/net-profit:
+    get:
+      operationId: FinanceController_getNetProfit
+      parameters:
+        - name: startDate
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: endDate
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_123
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/finance/net-profit",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_123
+  /api/v1/finance/invoices:
+    get:
+      operationId: FinanceController_getInvoices
+      parameters:
+        - name: startDate
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: endDate
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_124
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/finance/invoices",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_124
+  /api/v1/staff-role-templates:
+    get:
+      operationId: StaffRoleTemplateController_list
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_125
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/staff-role-templates",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_125
+    post:
+      operationId: StaffRoleTemplateController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateStaffRoleTemplateDto'
+            example: &ref_126 {}
+            examples:
+              default:
+                value: *ref_126
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_127
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/staff-role-templates",
+            {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_127
+  /api/v1/staff-role-templates/{id}:
+    patch:
+      operationId: StaffRoleTemplateController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateStaffRoleTemplateDto'
+            example: &ref_128 {}
+            examples:
+              default:
+                value: *ref_128
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_129
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/staff-role-templates/{id}",
+            {
+              method: "PATCH",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_129
+    delete:
+      operationId: StaffRoleTemplateController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_130
+        - lang: fetch
+          source: >-
+            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/staff-role-templates/{id}",
+            { method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_130
+info:
+  title: ClinicFlow API
+  description: ClinicFlow backend API documentation
+  version: '1.0'
+  contact: {}
+tags: []
+servers: []
+components:
+  securitySchemes:
+    jwt:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
+  schemas:
+    ObjectId:
+      type: object
+      properties: {}
+    RegisterDto:
+      type: object
+      properties:
+        phone:
+          type: string
+          example: '01712345678'
+          description: Phone number of the user
+          _propertyName: phone
+        email:
+          type: string
+          example: example@gmail.com
+          description: Email address of the user
+          _propertyName: email
+        password:
+          type: string
+          example: securePassword123
+          description: Password for the user account
+          _propertyName: password
+        role:
+          type: string
+          enum:
+            - USER
+            - ADMIN
+            - DOCTOR
+            - PATIENT
+            - STAFF
+            - MERCHANT
+            - SUPER_ADMIN
+          description: Role of the user. Only PATIENT or MERCHANT allowed for signup
+          _propertyName: role
+        user:
+          example: 652e0a823a37a1f8e82fdd4b
+          description: Reference to existing user ID (if applicable)
+          allOf:
+            - $ref: '#/components/schemas/ObjectId'
+          _propertyName: user
+        bloodGroup:
+          type: string
+          example: O+
+          description: Blood group of the user
+          _propertyName: bloodGroup
+        emergencyContact:
+          type: string
+          example: '01787654321'
+          description: Emergency contact phone number
+          _propertyName: emergencyContact
+        medicalHistory:
+          type: string
+          example: Diabetes, Hypertension
+          description: Medical history or past health conditions
+          _propertyName: medicalHistory
+        currentMedications:
+          example: *ref_131
+          description: List of current medications
+          type: array
+          items:
+            type: string
+          _propertyName: currentMedications
+        lastVisited:
+          format: date-time
+          type: string
+          description: Date when the patient last visited the clinic
+          example: '2025-02-15T00:00:00.000Z'
+          _propertyName: lastVisited
+        clinicName:
+          type: string
+          description: Profile ID associated with the merchant
+          example: 652fcf2c4f2b09a4b5a4c2a8
+          _propertyName: clinicName
+        clinicAddress:
+          type: string
+          description: Address of the clinic
+          example: 'House #12, Road #5, Rajshahi, Bangladesh'
+          _propertyName: clinicAddress
+        licenseNumber:
+          type: string
+          description: Clinic license or registration number
+          example: LIC-2025-0345
+          _propertyName: licenseNumber
+        subscriptionStartDate:
+          type: string
+          description: Date when the subscription started
+          example: '2025-01-01T00:00:00.000Z'
+          _propertyName: subscriptionStartDate
+        subscriptionEndDate:
+          type: string
+          description: Date when the subscription will end
+          example: '2026-01-01T00:00:00.000Z'
+          _propertyName: subscriptionEndDate
+        numberOfBeds:
+          type: number
+          description: Current status of the subscription
+          example: active
+          _propertyName: numberOfBeds
+        servicesOffered:
+          description: List of services offered by the clinic
+          example: *ref_132
+          type: array
+          items:
+            type: string
+          _propertyName: servicesOffered
+        status:
+          type: string
+          description: Indicates if the merchant account is active
+          example: ACTIVE
+          _propertyName: status
+      required:
+        - phone
+        - password
+        - bloodGroup
+        - clinicName
+        - clinicAddress
+        - licenseNumber
+        - subscriptionStartDate
+        - subscriptionEndDate
+      example: *ref_1
+    UpdatePatientDto:
+      type: object
+      properties:
+        user:
+          description: User ID linked with this patient record
+          example: 652fcf2c4f2b09a4b5a4c2a8
+          allOf:
+            - $ref: '#/components/schemas/ObjectId'
+          _propertyName: user
+        bloodGroup:
+          type: string
+          description: Patient’s blood group
+          example: O+
+          _propertyName: bloodGroup
+        emergencyContact:
+          type: string
+          description: Emergency contact number for the patient
+          example: '+8801712345678'
+          _propertyName: emergencyContact
+        medicalHistory:
+          type: string
+          description: Brief medical history of the patient
+          example: Diabetes, High Blood Pressure
+          _propertyName: medicalHistory
+        currentMedications:
+          description: List of current medications the patient is taking
+          example: *ref_133
+          type: array
+          items:
+            type: string
+          _propertyName: currentMedications
+        lastVisited:
+          format: date-time
+          type: string
+          description: Date when the patient last visited the clinic
+          example: '2025-02-15T00:00:00.000Z'
+          _propertyName: lastVisited
+      example: *ref_8
+    CreateMedicalRecordDto:
+      type: object
+      properties:
+        patientId:
+          type: string
+          description: Patient ID linked to this medical record
+          example: 652fcf2c4f2b09a4b5a4c2a8
+          _propertyName: patientId
+        doctorId:
+          type: string
+          description: Doctor ID responsible for this record
+          example: 652f9f18c1b2a4a7b8f67890
+          _propertyName: doctorId
+        appointmentId:
+          type: string
+          description: Optional appointment ID for the consultation
+          example: 6530a2c44cb2dbd2a1111111
+          _propertyName: appointmentId
+        date:
+          type: string
+          description: Medical record date in ISO format
+          example: '2025-10-20T10:30:00.000Z'
+          _propertyName: date
+        diagnosis:
+          type: string
+          description: Diagnosis or clinical assessment
+          example: Mild hypertension
+          _propertyName: diagnosis
+        prescription:
+          description: List of prescribed medicines or instructions
+          example: *ref_134
+          type: array
+          items:
+            type: string
+          _propertyName: prescription
+        notes:
+          type: string
+          description: Doctor notes
+          example: Reduce sodium intake and monitor BP twice a week.
+          _propertyName: notes
+        followUpDate:
+          type: string
+          description: Follow-up date in ISO format
+          example: '2025-11-20T10:30:00.000Z'
+          _propertyName: followUpDate
+        recordedBy:
+          type: string
+          description: User who recorded the record
+          example: 652e0a823a37a1f8e82fdd4b
+          _propertyName: recordedBy
+      required:
+        - patientId
+        - doctorId
+        - diagnosis
+      example: *ref_11
+    UpdateMedicalRecordDto:
+      type: object
+      properties: {}
+      example: *ref_16
+    CreateMerchantDto:
+      type: object
+      properties:
+        phone:
+          type: string
+          example: '01712345678'
+          description: Phone number of the user
+          _propertyName: phone
+        email:
+          type: string
+          example: example@gmail.com
+          description: Email address of the user
+          _propertyName: email
+        password:
+          type: string
+          example: securePassword123
+          description: Password for the user account
+          _propertyName: password
+        role:
+          type: string
+          enum: &ref_135
+            - USER
+            - ADMIN
+            - DOCTOR
+            - PATIENT
+            - STAFF
+            - MERCHANT
+            - SUPER_ADMIN
+          description: Role of the user. Only PATIENT or MERCHANT allowed for signup
+          _propertyName: role
+        user:
+          example: 652e0a823a37a1f8e82fdd4b
+          description: Reference to existing user ID (if applicable)
+          allOf:
+            - $ref: '#/components/schemas/ObjectId'
+          _propertyName: user
+        clinicName:
+          type: string
+          description: Profile ID associated with the merchant
+          example: 652fcf2c4f2b09a4b5a4c2a8
+          _propertyName: clinicName
+        clinicAddress:
+          type: string
+          description: Address of the clinic
+          example: 'House #12, Road #5, Rajshahi, Bangladesh'
+          _propertyName: clinicAddress
+        licenseNumber:
+          type: string
+          description: Clinic license or registration number
+          example: LIC-2025-0345
+          _propertyName: licenseNumber
+        subscriptionStartDate:
+          type: string
+          description: Date when the subscription started
+          example: '2025-01-01T00:00:00.000Z'
+          _propertyName: subscriptionStartDate
+        subscriptionEndDate:
+          type: string
+          description: Date when the subscription will end
+          example: '2026-01-01T00:00:00.000Z'
+          _propertyName: subscriptionEndDate
+        numberOfBeds:
+          type: number
+          description: Total number of beds available in the clinic
+          example: 45
+          _propertyName: numberOfBeds
+        servicesOffered:
+          description: List of services offered by the clinic
+          example: *ref_23
+          type: array
+          items:
+            type: string
+          _propertyName: servicesOffered
+        status:
+          type: string
+          description: Indicates if the merchant account is active
+          example: ACTIVE
+          _propertyName: status
+      required:
+        - phone
+        - password
+        - clinicName
+        - clinicAddress
+        - licenseNumber
+        - subscriptionStartDate
+        - subscriptionEndDate
+      example: *ref_19
+    UpdateMerchantDto:
+      type: object
+      properties:
+        phone:
+          type: string
+          example: '01712345678'
+          description: Phone number of the user
+          _propertyName: phone
+        email:
+          type: string
+          example: example@gmail.com
+          description: Email address of the user
+          _propertyName: email
+        password:
+          type: string
+          example: securePassword123
+          description: Password for the user account
+          _propertyName: password
+        role:
+          type: string
+          enum: *ref_135
+          description: Role of the user. Only PATIENT or MERCHANT allowed for signup
+          _propertyName: role
+        user:
+          example: 652e0a823a37a1f8e82fdd4b
+          description: Reference to existing user ID (if applicable)
+          allOf:
+            - $ref: '#/components/schemas/ObjectId'
+          _propertyName: user
+        clinicName:
+          type: string
+          description: Profile ID associated with the merchant
+          example: 652fcf2c4f2b09a4b5a4c2a8
+          _propertyName: clinicName
+        clinicAddress:
+          type: string
+          description: Address of the clinic
+          example: 'House #12, Road #5, Rajshahi, Bangladesh'
+          _propertyName: clinicAddress
+        licenseNumber:
+          type: string
+          description: Clinic license or registration number
+          example: LIC-2025-0345
+          _propertyName: licenseNumber
+        subscriptionStartDate:
+          type: string
+          description: Date when the subscription started
+          example: '2025-01-01T00:00:00.000Z'
+          _propertyName: subscriptionStartDate
+        subscriptionEndDate:
+          type: string
+          description: Date when the subscription will end
+          example: '2026-01-01T00:00:00.000Z'
+          _propertyName: subscriptionEndDate
+        numberOfBeds:
+          type: number
+          description: Total number of beds available in the clinic
+          example: 45
+          _propertyName: numberOfBeds
+        servicesOffered:
+          description: List of services offered by the clinic
+          example: *ref_23
+          type: array
+          items:
+            type: string
+          _propertyName: servicesOffered
+        status:
+          type: string
+          description: Indicates if the merchant account is active
+          example: ACTIVE
+          _propertyName: status
+      example: *ref_24
+    HospitalInfoDto:
+      type: object
+      properties:
+        hospitalName:
+          type: string
+          example: Rajshahi Medical College Hospital
+          _propertyName: hospitalName
+        chamberAddress:
+          type: string
+          example: Ghoramara, Rajshahi
+          _propertyName: chamberAddress
+        location:
+          type: string
+          example: Rajshahi, Bangladesh
+          _propertyName: location
+    DegreeInfoDto:
+      type: object
+      properties:
+        name:
+          type: string
+          example: MBBS
+          _propertyName: name
+        university:
+          type: string
+          example: Dhaka Medical College
+          _propertyName: university
+        year:
+          type: number
+          example: 2018
+          _propertyName: year
+      required:
+        - name
+        - university
+        - year
+    ScheduleDto:
+      type: object
+      properties:
+        startTime:
+          type: string
+          example: 09:00 AM
+          _propertyName: startTime
+        endTime:
+          type: string
+          example: 02:00 PM
+          _propertyName: endTime
+        days:
+          example: *ref_34
+          description: Days the doctor is available
+          type: array
+          items:
+            type: string
+          _propertyName: days
+      required:
+        - startTime
+        - endTime
+        - days
+    CreateDoctorDto:
+      type: object
+      properties:
+        specialization:
+          description: List of doctor’s specializations
+          example: *ref_32
+          type: array
+          items:
+            type: string
+          _propertyName: specialization
+        designation:
+          type: string
+          description: Doctor’s designation or position
+          example: Consultant Cardiologist
+          _propertyName: designation
+        experienceInYears:
+          type: number
+          description: Years of experience
+          example: 8
+          _propertyName: experienceInYears
+        hospitals:
+          description: List of hospitals where the doctor practices
+          type: array
+          items:
+            $ref: '#/components/schemas/HospitalInfoDto'
+          _propertyName: hospitals
+        degree:
+          description: List of degrees earned by the doctor
+          type: array
+          items:
+            $ref: '#/components/schemas/DegreeInfoDto'
+          _propertyName: degree
+        languages:
+          description: Languages spoken by the doctor
+          example: *ref_33
+          type: array
+          items:
+            type: string
+          _propertyName: languages
+        fee:
+          type: number
+          description: Consultation fee
+          example: 500
+          _propertyName: fee
+        schedules:
+          description: Doctor’s weekly schedules
+          type: array
+          items:
+            $ref: '#/components/schemas/ScheduleDto'
+          _propertyName: schedules
+        phone:
+          type: string
+          description: Doctor’s phone number
+          example: '+8801712345678'
+          _propertyName: phone
+        password:
+          type: string
+          description: Password for doctor’s account
+          example: strongpassword123
+          _propertyName: password
+        email:
+          type: string
+          description: Doctor’s email address
+          example: doctor@example.com
+          _propertyName: email
+        role:
+          type: string
+          description: User role (defaults to DOCTOR)
+          enum: &ref_136
+            - USER
+            - ADMIN
+            - DOCTOR
+            - PATIENT
+            - STAFF
+            - MERCHANT
+            - SUPER_ADMIN
+          example: DOCTOR
+          _propertyName: role
+        merchant:
+          type: string
+          description: Merchant ID (only for merchant-linked doctors)
+          example: 652fcf2c4f2b09a4b5a4c2a8
+          _propertyName: merchant
+      required:
+        - specialization
+        - designation
+        - degree
+        - fee
+        - schedules
+        - phone
+        - password
+      example: *ref_27
+    UpdateDoctorDto:
+      type: object
+      properties:
+        specialization:
+          description: List of doctor’s specializations
+          example: *ref_32
+          type: array
+          items:
+            type: string
+          _propertyName: specialization
+        designation:
+          type: string
+          description: Doctor’s designation or position
+          example: Consultant Cardiologist
+          _propertyName: designation
+        experienceInYears:
+          type: number
+          description: Years of experience
+          example: 8
+          _propertyName: experienceInYears
+        hospitals:
+          description: List of hospitals where the doctor practices
+          type: array
+          items:
+            $ref: '#/components/schemas/HospitalInfoDto'
+          _propertyName: hospitals
+        degree:
+          description: List of degrees earned by the doctor
+          type: array
+          items:
+            $ref: '#/components/schemas/DegreeInfoDto'
+          _propertyName: degree
+        languages:
+          description: Languages spoken by the doctor
+          example: *ref_33
+          type: array
+          items:
+            type: string
+          _propertyName: languages
+        fee:
+          type: number
+          description: Consultation fee
+          example: 500
+          _propertyName: fee
+        schedules:
+          description: Doctor’s weekly schedules
+          type: array
+          items:
+            $ref: '#/components/schemas/ScheduleDto'
+          _propertyName: schedules
+        phone:
+          type: string
+          description: Doctor’s phone number
+          example: '+8801712345678'
+          _propertyName: phone
+        password:
+          type: string
+          description: Password for doctor’s account
+          example: strongpassword123
+          _propertyName: password
+        email:
+          type: string
+          description: Doctor’s email address
+          example: doctor@example.com
+          _propertyName: email
+        role:
+          type: string
+          description: User role (defaults to DOCTOR)
+          enum: *ref_136
+          example: DOCTOR
+          _propertyName: role
+        merchant:
+          type: string
+          description: Merchant ID (only for merchant-linked doctors)
+          example: 652fcf2c4f2b09a4b5a4c2a8
+          _propertyName: merchant
+      example: *ref_35
+    AuthDto:
+      type: object
+      properties:
+        phone:
+          type: string
+          example: '01712345678'
+          description: Phone number used for login
+          _propertyName: phone
+        password:
+          type: string
+          example: password123
+          description: Password for authentication
+          _propertyName: password
+      required:
+        - phone
+        - password
+      example: *ref_38
+    CreateStaffDto:
+      type: object
+      properties: {}
+      example: *ref_42
+    UpdateStaffDto:
+      type: object
+      properties: {}
+      example: *ref_47
+    RecordAttendanceDto:
+      type: object
+      properties: {}
+      example: *ref_50
+    CreateLeaveRequestDto:
+      type: object
+      properties: {}
+      example: *ref_53
+    UpdateLeaveStatusDto:
+      type: object
+      properties: {}
+      example: *ref_56
+    CreatePayrollDto:
+      type: object
+      properties: {}
+      example: *ref_58
+    CreateClinicDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the clinic
+          example: Medicare Diagnostic Center
+          _propertyName: name
+        address:
+          type: string
+          description: Address of the clinic
+          example: 'House #12, Road #5, Rajshahi, Bangladesh'
+          _propertyName: address
+        logo:
+          type: string
+          description: URL of the clinic logo
+          example: https://example.com/uploads/clinic-logo.png
+          _propertyName: logo
+        contactNumber:
+          type: string
+          description: Contact number of the clinic
+          example: '+8801712345678'
+          _propertyName: contactNumber
+      required:
+        - name
+      example: *ref_61
+    UpdateClinicDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the clinic
+          example: Medicare Diagnostic Center
+          _propertyName: name
+        address:
+          type: string
+          description: Address of the clinic
+          example: 'House #12, Road #5, Rajshahi, Bangladesh'
+          _propertyName: address
+        logo:
+          type: string
+          description: URL of the clinic logo
+          example: https://example.com/uploads/clinic-logo.png
+          _propertyName: logo
+        contactNumber:
+          type: string
+          description: Contact number of the clinic
+          example: '+8801712345678'
+          _propertyName: contactNumber
+      example: *ref_65
+    CreateSubscriptionDto:
+      type: object
+      properties: {}
+      example: *ref_68
+    SSLCommerzCredentialDto:
+      type: object
+      properties:
+        isActive:
+          type: boolean
+          example: true
+          description: Whether SSLCommerz is active
+          _propertyName: isActive
+        storeId:
+          type: string
+          example: SSL_STORE_001
+          _propertyName: storeId
+        storePassword:
+          type: string
+          example: ssl_pass_789
+          _propertyName: storePassword
+        isSandbox:
+          type: boolean
+          example: false
+          description: Whether to use sandbox mode
+          _propertyName: isSandbox
+        isTokenize:
+          type: boolean
+          example: true
+          description: Whether to use tokenization
+          _propertyName: isTokenize
+      required:
+        - isActive
+        - storeId
+        - storePassword
+        - isSandbox
+        - isTokenize
+    CreateMerchantPGDto:
+      type: object
+      properties:
+        sslcommerz:
+          $ref: '#/components/schemas/SSLCommerzCredentialDto'
+          _propertyName: sslcommerz
+      required:
+        - sslcommerz
+      example: *ref_79
+    UpdateMerchantPGDto:
+      type: object
+      properties:
+        sslcommerz:
+          $ref: '#/components/schemas/SSLCommerzCredentialDto'
+          _propertyName: sslcommerz
+      example: *ref_82
+    CreateAppointmentDto:
+      type: object
+      properties:
+        doctor:
+          type: string
+          description: Reference ID of the doctor (from Doctor collection)
+          example: 652f9f18c1b2a4a7b8f67890
+          _propertyName: doctor
+        appointmentDate:
+          type: string
+          description: Appointment date and time (ISO format)
+          example: '2025-10-20T10:30:00.000Z'
+          _propertyName: appointmentDate
+        appointmentSlot:
+          type: string
+          description: Appointment slot (e.g., '10:30 AM - 11:00 AM')
+          example: 10:30 AM - 11:00 AM
+          _propertyName: appointmentSlot
+        reasonFor:
+          type: string
+          description: Reason for the appointment
+          example: CHECK_UP
+          enum: &ref_137
+            - CHECK_UP
+            - CONSULTATION
+            - FOLLOW_UP
+            - EMERGENCY
+            - VACCINATION
+          _propertyName: reasonFor
+        problemDescription:
+          type: string
+          description: Short description of the patient's problem
+          example: Severe headache and nausea for 2 days
+          _propertyName: problemDescription
+        note:
+          type: string
+          description: Additional notes for the appointment
+          example: Patient prefers morning appointments
+          _propertyName: note
+        paymentMethod:
+          type: string
+          description: Payment method used for the appointment
+          example: sslcommerz, bkash, nagad, rocket, cash
+          _propertyName: paymentMethod
+        status:
+          type: string
+          description: Current appointment status
+          example: pending
+          _propertyName: status
+      required:
+        - doctor
+        - appointmentDate
+        - appointmentSlot
+        - reasonFor
+      example: *ref_87
+    UpdateAppointmentDto:
+      type: object
+      properties:
+        doctor:
+          type: string
+          description: Reference ID of the doctor (from Doctor collection)
+          example: 652f9f18c1b2a4a7b8f67890
+          _propertyName: doctor
+        appointmentDate:
+          type: string
+          description: Appointment date and time (ISO format)
+          example: '2025-10-20T10:30:00.000Z'
+          _propertyName: appointmentDate
+        appointmentSlot:
+          type: string
+          description: Appointment slot (e.g., '10:30 AM - 11:00 AM')
+          example: 10:30 AM - 11:00 AM
+          _propertyName: appointmentSlot
+        reasonFor:
+          type: string
+          description: Reason for the appointment
+          example: CHECK_UP
+          enum: *ref_137
+          _propertyName: reasonFor
+        problemDescription:
+          type: string
+          description: Short description of the patient's problem
+          example: Severe headache and nausea for 2 days
+          _propertyName: problemDescription
+        note:
+          type: string
+          description: Additional notes for the appointment
+          example: Patient prefers morning appointments
+          _propertyName: note
+        paymentMethod:
+          type: string
+          description: Payment method used for the appointment
+          example: sslcommerz, bkash, nagad, rocket, cash
+          _propertyName: paymentMethod
+        status:
+          type: string
+          description: Current appointment status
+          example: pending
+          _propertyName: status
+      example: *ref_94
+    UpdateAppointmentStatusDto:
+      type: object
+      properties:
+        status:
+          type: string
+          description: New appointment status
+          enum:
+            - PENDING
+            - CONFIRMED
+            - CANCELLED
+            - COMPLETED
+            - NO_SHOW
+            - RESCHEDULED
+          example: CONFIRMED
+          _propertyName: status
+        reason:
+          type: string
+          description: Reason for status change (for cancellation or no-show)
+          example: Patient did not show up
+          _propertyName: reason
+        notes:
+          type: string
+          description: Additional notes
+          example: Patient rescheduled
+          _propertyName: notes
+      required:
+        - status
+      example: *ref_97
+    RescheduleAppointmentDto:
+      type: object
+      properties:
+        newAppointmentDate:
+          type: string
+          description: New appointment date (ISO format)
+          example: '2025-10-21T10:30:00.000Z'
+          _propertyName: newAppointmentDate
+        newAppointmentSlot:
+          type: string
+          description: New appointment slot (e.g., '10:30 AM - 11:00 AM')
+          example: 10:30 AM - 11:00 AM
+          _propertyName: newAppointmentSlot
+        reason:
+          type: string
+          description: Reason for rescheduling
+          example: Doctor has emergency
+          _propertyName: reason
+      required:
+        - newAppointmentDate
+        - newAppointmentSlot
+        - reason
+      example: *ref_99
+    CreateIncomeDto:
+      type: object
+      properties: {}
+      example: *ref_103
+    UpdateIncomeDto:
+      type: object
+      properties: {}
+      example: *ref_107
+    CreateExpenseDto:
+      type: object
+      properties: {}
+      example: *ref_112
+    UpdateExpenseDto:
+      type: object
+      properties: {}
+      example: *ref_116
+    CreateStaffRoleTemplateDto:
+      type: object
+      properties: {}
+      example: *ref_126
+    UpdateStaffRoleTemplateDto:
+      type: object
+      properties: {}
+      example: *ref_128

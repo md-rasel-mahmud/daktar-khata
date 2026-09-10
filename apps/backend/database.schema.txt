@@ -1,0 +1,131 @@
+✅ 1. users – Authentication & Global Roles
+Field	Type	Description
+_id	ObjectId	Primary key
+email	string	Unique email for login
+password	string	Hashed password
+role	enum	super_admin | admin | merchant | doctor | employee | patient
+merchantId	ObjectId	Refers to merchants._id (nullable for super_admin)
+isActive	boolean	To enable/disable user
+createdAt	Date	
+updatedAt	Date	
+
+✅ 2. merchants – Clinics/Clients
+Field	Type	Description
+_id	ObjectId	Primary key
+name	string	Clinic/organization name
+email	string	Contact email
+phone	string	Contact number
+address	string	Physical address
+subscription	object	{ plan: string, status: 'active' | 'expired', startDate, endDate }
+billing	object	{ monthlyFee: number, invoices: ObjectId[] }
+createdAt	Date	
+updatedAt	Date	
+
+✅ 3. profiles – Doctor, Employee, Patient Info
+Field	Type	Description
+_id	ObjectId	Primary key
+userId	ObjectId	Refers to users._id
+merchantId	ObjectId	Refers to merchants._id
+type	enum	doctor | employee | patient
+fullName	string	Name
+phone	string	Mobile number
+gender	enum	male | female | other
+dob	Date	Date of birth (for patient)
+address	string	For patient
+designation	string	For employee (nurse, receptionist, etc.)
+department	string	Optional field
+specialization	string	For doctor
+bio	string	For doctor (short description)
+salary	number	For employee
+hireDate	Date	For employee
+createdAt	Date	
+updatedAt	Date	
+
+✅ 4. appointments – Booking System
+Field	Type	Description
+_id	ObjectId	Primary key
+merchantId	ObjectId	Refers to clinic
+patientProfileId	ObjectId	Refers to profiles._id
+doctorProfileId	ObjectId	Refers to profiles._id
+appointmentDate	Date	Date & time of appointment
+status	enum	pending, confirmed, completed, cancelled
+reason	string	Why the appointment is needed
+notes	string	Extra notes
+createdAt	Date	
+updatedAt	Date	
+
+✅ 5. medical_records – Doctor's Diagnosis & Prescription
+Field	Type	Description
+_id	ObjectId	Primary key
+merchantId	ObjectId	Refers to clinic
+patientProfileId	ObjectId	Refers to patient
+doctorProfileId	ObjectId	Refers to doctor
+visitDate	Date	Date of visit
+diagnosis	string	Doctor's diagnosis
+prescription	string	Medications and instructions
+notes	string	Optional
+createdAt	Date	
+updatedAt	Date	
+
+✅ 6. attendances – Employee Attendance Log
+Field	Type	Description
+_id	ObjectId	Primary key
+merchantId	ObjectId	Clinic
+employeeProfileId	ObjectId	Refers to employee
+date	Date	Attendance date
+status	enum	present, absent, leave
+createdAt	Date	
+
+✅ 7. leaves – Leave Requests from Employees
+Field	Type	Description
+_id	ObjectId	Primary key
+merchantId	ObjectId	Clinic
+employeeProfileId	ObjectId	Refers to employee
+startDate	Date	From when leave starts
+endDate	Date	To when leave ends
+type	string	sick, casual, maternity, etc.
+status	enum	pending, approved, rejected
+reason	string	Leave reason
+createdAt	Date	
+updatedAt	Date	
+
+✅ 8. subscriptions – Merchant's Active Plan
+Field	Type	Description
+_id	ObjectId	Primary key
+merchantId	ObjectId	Clinic
+plan	string	basic, standard, premium
+startDate	Date	When started
+endDate	Date	Valid until
+status	enum	active, expired, cancelled
+createdAt	Date	
+
+✅ 9. invoices – Billing Record for Each Merchant
+Field	Type	Description
+_id	ObjectId	Primary key
+merchantId	ObjectId	Who the invoice is for
+month	string	Format: 2025-07
+amount	number	Total bill
+status	enum	paid, unpaid, failed
+dueDate	Date	Payment due
+paidAt	Date	If paid
+paymentMethod	string	bkash, stripe, manual etc.
+createdAt	Date	
+
+✅ 10. notifications (optional)
+Field	Type	Description
+_id	ObjectId	Primary key
+userId	ObjectId	Receiver
+type	string	appointment, invoice, system, etc.
+message	string	What to show
+isRead	boolean	If already seen
+createdAt	Date	
+
+✅ 11. audit_logs (optional)
+Field	Type	Description
+_id	ObjectId	Primary key
+actorId	ObjectId	Who did the action
+action	string	CREATE_USER, DELETE_PATIENT, etc.
+target	string	user, appointment, etc.
+targetId	ObjectId	Which record was affected
+merchantId	ObjectId	Optional
+timestamp	Date	When it happened

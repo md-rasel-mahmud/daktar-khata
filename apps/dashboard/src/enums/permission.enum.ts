@@ -1,0 +1,16 @@
+export enum PermissionKeyEnum {
+  STAFF_READ = "staff.read",
+  STAFF_CREATE = "staff.create",
+  STAFF_UPDATE = "staff.update",
+  STAFF_DELETE = "staff.delete",
+  STAFF_ATTENDANCE = "staff.attendance",
+  STAFF_LEAVE = "staff.leave",
+  STAFF_PAYROLL = "staff.payroll",
+  FINANCE_READ = "finance.read",
+  FINANCE_WRITE = "finance.write",
+  SALE_READ = "sale.read",
+  SALE_WRITE = "sale.write",
+  PURCHASE_READ = "purchase.read",
+  PURCHASE_WRITE = "purchase.write",
+  INVOICE_READ = "invoice.read",
+}
