@@ -1,7 +1,7 @@
 import React from "react"
 import { Controller, type Control, type FieldValues } from "react-hook-form"
 import type { TFunction } from "i18next"
-import { Button } from "@/components/ui/button"
+import { Button } from "@repo/ui/button"
 import {
   Dialog,
   DialogContent,
@@ -9,9 +9,9 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from "@repo/ui/dialog"
+import { Input } from "@repo/ui/input"
+import { Label } from "@repo/ui/label"
 import {
   FormInput,
   type FormInputConfig,
@@ -20,13 +20,13 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
+} from "@repo/ui/popover"
 import {
   Command,
   CommandGroup,
   CommandInput,
   CommandItem,
-} from "@/components/ui/command"
+} from "@repo/ui/command"
 import { Check, ChevronsUpDown, PlusCircle, Trash2 } from "lucide-react"
 import type {
   FieldArrayWithId,

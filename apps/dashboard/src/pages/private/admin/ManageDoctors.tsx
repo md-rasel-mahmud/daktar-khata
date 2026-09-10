@@ -5,16 +5,16 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
+} from "@repo/ui/card"
+import { Button } from "@repo/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+} from "@repo/ui/dropdown-menu"
+import { Avatar, AvatarFallback } from "@repo/ui/avatar"
 import { Plus, Edit, Trash2, MoreHorizontal, Calendar } from "lucide-react"
 import { toast } from "sonner"
 import {

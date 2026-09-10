@@ -1,5 +1,5 @@
 "use client"
-import { Label } from "@/components/ui/label"
+import { Label } from "@repo/ui/label"
 import { cn } from "@/lib/utils"
 import { type ReactNode } from "react"
 

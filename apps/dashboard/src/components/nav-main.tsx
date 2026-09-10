@@ -2,7 +2,7 @@ import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible"
+} from "@repo/ui/collapsible"
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -12,7 +12,7 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-} from "@/components/ui/sidebar"
+} from "@repo/ui/sidebar"
 import { IconChevronRight } from "@tabler/icons-react"
 import { Link, useLocation } from "react-router"
 import { useTranslation } from "react-i18next"

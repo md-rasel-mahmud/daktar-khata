@@ -7,11 +7,11 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
-import { Label } from "@/components/ui/label"
+} from "@repo/ui/dialog"
+import { Alert, AlertDescription } from "@repo/ui/alert"
+import { Button } from "@repo/ui/button"
+import { Calendar } from "@repo/ui/calendar"
+import { Label } from "@repo/ui/label"
 import RHFField from "@/components/common/form/RHFField"
 import SlotPicker from "@/components/common/SlotPicker"
 

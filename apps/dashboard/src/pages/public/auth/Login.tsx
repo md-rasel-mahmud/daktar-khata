@@ -6,8 +6,8 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
+} from "@repo/ui/card"
+import { Button } from "@repo/ui/button"
 import { useTranslation } from "react-i18next"
 import { Link, useNavigate } from "react-router"
 import { useForm, type FieldValues } from "react-hook-form"

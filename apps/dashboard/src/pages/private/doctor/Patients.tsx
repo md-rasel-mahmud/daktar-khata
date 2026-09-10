@@ -1,15 +1,15 @@
 import React, { useCallback, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@repo/ui/button"
+import { Badge } from "@repo/ui/badge"
+import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar"
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@repo/ui/card"
 import { toast } from "sonner"
 import {
   ClientDataTable,

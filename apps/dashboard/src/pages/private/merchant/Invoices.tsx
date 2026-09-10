@@ -7,12 +7,12 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@repo/ui/card"
 import {
   ClientDataTable,
   type DataTableColumn,
 } from "@/components/common/table"
-import { Badge } from "@/components/ui/badge"
+import { Badge } from "@repo/ui/badge"
 
 const MerchantInvoices: React.FC = () => {
   const { data: invoices = [], isLoading } = useGetInvoicesQuery(undefined)

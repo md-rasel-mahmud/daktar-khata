@@ -6,17 +6,17 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
+} from "@repo/ui/card"
+import { Button } from "@repo/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
+} from "@repo/ui/dropdown-menu"
+import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar"
+import { Badge } from "@repo/ui/badge"
 import { MoreHorizontal, UserCheck, UserX } from "lucide-react"
 import { mockPatients } from "@/lib/mock-data"
 import { toast } from "sonner"

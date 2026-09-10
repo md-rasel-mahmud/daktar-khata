@@ -1,8 +1,8 @@
 import React from "react"
 import { useTranslation } from "react-i18next"
-import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
+import { Button } from "@repo/ui/button"
+import { Label } from "@repo/ui/label"
+import { Textarea } from "@repo/ui/textarea"
 import {
   Dialog,
   DialogContent,
@@ -10,7 +10,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
+} from "@repo/ui/dialog"
 
 type CompleteAppointmentDialogProps = {
   open: boolean

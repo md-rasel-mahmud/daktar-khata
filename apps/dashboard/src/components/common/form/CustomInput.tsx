@@ -1,7 +1,7 @@
 // @ts-nocheck
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
-import { Checkbox } from "@/components/ui/checkbox"
+import { Button } from "@repo/ui/button"
+import { Calendar } from "@repo/ui/calendar"
+import { Checkbox } from "@repo/ui/checkbox"
 import {
   Combobox,
   ComboboxChip,
@@ -15,7 +15,7 @@ import {
   ComboboxTrigger,
   ComboboxValue,
   useComboboxAnchor,
-} from "@/components/ui/combobox"
+} from "@repo/ui/combobox"
 import {
   Field,
   FieldContent,
@@ -24,14 +24,14 @@ import {
   FieldLabel,
   FieldLegend,
   FieldSet,
-} from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+} from "@repo/ui/field"
+import { Input } from "@repo/ui/input"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+} from "@repo/ui/popover"
+import { RadioGroup, RadioGroupItem } from "@repo/ui/radio-group"
 import {
   Select,
   SelectContent,
@@ -41,9 +41,9 @@ import {
   SelectSeparator,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Switch } from "@/components/ui/switch"
-import { Textarea } from "@/components/ui/textarea"
+} from "@repo/ui/select"
+import { Switch } from "@repo/ui/switch"
+import { Textarea } from "@repo/ui/textarea"
 import { Eye, EyeOff, X } from "lucide-react"
 import { useState } from "react"
 import { Controller, useFormContext } from "react-hook-form"

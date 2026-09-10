@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next"
 // import DashboardLayout from "@/components/layout/DashboardLayout"
 import StatsCard from "@/components/dashboard/StatsCard"
 import AppointmentsList from "@/components/dashboard/AppointmentsList"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card"
 import {
   Users,
   UserCheck,

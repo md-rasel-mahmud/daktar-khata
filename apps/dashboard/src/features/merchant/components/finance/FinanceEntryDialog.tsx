@@ -1,5 +1,5 @@
 import React from "react"
-import { Button } from "@/components/ui/button"
+import { Button } from "@repo/ui/button"
 import {
   Dialog,
   DialogContent,
@@ -7,7 +7,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
+} from "@repo/ui/dialog"
 import {
   FormInput,
   type FormInputConfig,

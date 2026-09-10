@@ -3,7 +3,7 @@ import {
   FormInput,
   type FormInputConfig,
 } from "@/components/common/form/FormInput"
-import { Button } from "@/components/ui/button"
+import { Button } from "@repo/ui/button"
 import {
   Dialog,
   DialogContent,
@@ -11,8 +11,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Skeleton } from "@/components/ui/skeleton"
+} from "@repo/ui/dialog"
+import { Skeleton } from "@repo/ui/skeleton"
 import { cn } from "@/lib/utils"
 import { type FC } from "react"
 import {

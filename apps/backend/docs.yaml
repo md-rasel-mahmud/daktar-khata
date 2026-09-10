@@ -10,9 +10,9 @@ paths:
       x-codeSamples: &ref_0
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/users/profile",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/users/profile", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_0
     patch:
       operationId: UserController_updateCurrentUser
@@ -55,9 +55,8 @@ paths:
           description: ''
       x-codeSamples: &ref_2
         - lang: fetch
-          source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/users/profile",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/users/profile", {
               method: "PATCH",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -81,9 +80,9 @@ paths:
       x-codeSamples: &ref_3
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/patients",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/patients", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_3
   /api/v1/patients/doctor:
     get:
@@ -95,9 +94,9 @@ paths:
       x-codeSamples: &ref_4
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/patients/doctor",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/patients/doctor", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_4
   /api/v1/patients/{id}/appointments:
     get:
@@ -114,8 +113,8 @@ paths:
       x-codeSamples: &ref_5
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/patients/{id}/appointments",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            fetch("http://localhost:7733/api/v1/patients/{id}/appointments", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_5
   /api/v1/patients/{id}/medical-records:
@@ -133,7 +132,7 @@ paths:
       x-codeSamples: &ref_6
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/patients/{id}/medical-records",
+            fetch("http://localhost:7733/api/v1/patients/{id}/medical-records",
             { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_6
@@ -152,9 +151,9 @@ paths:
       x-codeSamples: &ref_7
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/patients/{id}",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/patients/{id}", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_7
     patch:
       operationId: PatientController_update
@@ -187,9 +186,8 @@ paths:
           description: ''
       x-codeSamples: &ref_9
         - lang: fetch
-          source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/patients/{id}",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/patients/{id}", {
               method: "PATCH",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -212,9 +210,9 @@ paths:
       x-codeSamples: &ref_10
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/patients/{id}",
-            { method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/patients/{id}", { method:
+            "DELETE", headers: { 'Authorization': 'Bearer <token>' } }).then(r
+            => r.json()).then(console.log)
       x-code-samples: *ref_10
   /api/v1/medical-records:
     post:
@@ -245,9 +243,8 @@ paths:
           description: ''
       x-codeSamples: &ref_12
         - lang: fetch
-          source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/medical-records",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/medical-records", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -270,9 +267,9 @@ paths:
       x-codeSamples: &ref_13
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/medical-records",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/medical-records", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_13
   /api/v1/medical-records/patient/{patientId}:
     get:
@@ -289,7 +286,7 @@ paths:
       x-codeSamples: &ref_14
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/medical-records/patient/{patientId}",
+            fetch("http://localhost:7733/api/v1/medical-records/patient/{patientId}",
             { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_14
@@ -308,9 +305,9 @@ paths:
       x-codeSamples: &ref_15
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/medical-records/{id}",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/medical-records/{id}", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_15
     patch:
       operationId: MedicalRecordController_update
@@ -335,9 +332,8 @@ paths:
           description: ''
       x-codeSamples: &ref_17
         - lang: fetch
-          source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/medical-records/{id}",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/medical-records/{id}", {
               method: "PATCH",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -360,9 +356,9 @@ paths:
       x-codeSamples: &ref_18
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/medical-records/{id}",
-            { method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/medical-records/{id}", { method:
+            "DELETE", headers: { 'Authorization': 'Bearer <token>' } }).then(r
+            => r.json()).then(console.log)
       x-code-samples: *ref_18
   /api/v1/merchants:
     post:
@@ -399,9 +395,8 @@ paths:
           description: ''
       x-codeSamples: &ref_20
         - lang: fetch
-          source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/merchants",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/merchants", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -419,9 +414,9 @@ paths:
       x-codeSamples: &ref_21
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/merchants",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/merchants", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_21
   /api/v1/merchants/{id}:
     get:
@@ -438,9 +433,9 @@ paths:
       x-codeSamples: &ref_22
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/merchants/{id}",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/merchants/{id}", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_22
     patch:
       operationId: MerchantController_update
@@ -478,9 +473,8 @@ paths:
           description: ''
       x-codeSamples: &ref_25
         - lang: fetch
-          source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/merchants/{id}",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/merchants/{id}", {
               method: "PATCH",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -503,9 +497,9 @@ paths:
       x-codeSamples: &ref_26
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/merchants/{id}",
-            { method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/merchants/{id}", { method:
+            "DELETE", headers: { 'Authorization': 'Bearer <token>' } }).then(r
+            => r.json()).then(console.log)
       x-code-samples: *ref_26
   /api/v1/doctors:
     post:
@@ -555,9 +549,8 @@ paths:
           description: ''
       x-codeSamples: &ref_28
         - lang: fetch
-          source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/doctors",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/doctors", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -575,9 +568,9 @@ paths:
       x-codeSamples: &ref_29
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/doctors",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/doctors", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_29
   /api/v1/doctors/options:
     get:
@@ -589,9 +582,9 @@ paths:
       x-codeSamples: &ref_30
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/doctors/options",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/doctors/options", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_30
   /api/v1/doctors/{id}:
     get:
@@ -608,9 +601,9 @@ paths:
       x-codeSamples: &ref_31
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/doctors/{id}",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/doctors/{id}", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_31
     patch:
       operationId: DoctorController_update
@@ -657,9 +650,8 @@ paths:
           description: ''
       x-codeSamples: &ref_36
         - lang: fetch
-          source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/doctors/{id}",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/doctors/{id}", {
               method: "PATCH",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -682,9 +674,9 @@ paths:
       x-codeSamples: &ref_37
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/doctors/{id}",
-            { method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/doctors/{id}", { method:
+            "DELETE", headers: { 'Authorization': 'Bearer <token>' } }).then(r
+            => r.json()).then(console.log)
       x-code-samples: *ref_37
   /api/v1/auth/login:
     post:
@@ -713,9 +705,8 @@ paths:
         - Authentication
       x-codeSamples: &ref_39
         - lang: fetch
-          source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/auth/login",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/auth/login", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -750,9 +741,8 @@ paths:
       tags: *ref_40
       x-codeSamples: &ref_41
         - lang: fetch
-          source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/auth/signup",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/auth/signup", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -780,9 +770,8 @@ paths:
           description: ''
       x-codeSamples: &ref_43
         - lang: fetch
-          source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/staff",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/staff", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -800,9 +789,9 @@ paths:
       x-codeSamples: &ref_44
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/staff",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/staff", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_44
   /api/v1/staff/all:
     get:
@@ -814,9 +803,9 @@ paths:
       x-codeSamples: &ref_45
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/staff/all",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/staff/all", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_45
   /api/v1/staff/{id}:
     get:
@@ -833,9 +822,9 @@ paths:
       x-codeSamples: &ref_46
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/staff/{id}",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/staff/{id}", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_46
     patch:
       operationId: StaffController_update
@@ -860,9 +849,8 @@ paths:
           description: ''
       x-codeSamples: &ref_48
         - lang: fetch
-          source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/staff/{id}",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/staff/{id}", {
               method: "PATCH",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -885,9 +873,9 @@ paths:
       x-codeSamples: &ref_49
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/staff/{id}",
-            { method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/staff/{id}", { method: "DELETE",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_49
   /api/v1/staff/{id}/attendance:
     post:
@@ -913,9 +901,8 @@ paths:
           description: ''
       x-codeSamples: &ref_51
         - lang: fetch
-          source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/staff/{id}/attendance",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/staff/{id}/attendance", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -948,8 +935,8 @@ paths:
       x-codeSamples: &ref_52
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/staff/{id}/attendance",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            fetch("http://localhost:7733/api/v1/staff/{id}/attendance", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_52
   /api/v1/staff/{id}/leave:
@@ -976,9 +963,8 @@ paths:
           description: ''
       x-codeSamples: &ref_54
         - lang: fetch
-          source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/staff/{id}/leave",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/staff/{id}/leave", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -1006,9 +992,9 @@ paths:
       x-codeSamples: &ref_55
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/staff/{id}/leave",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/staff/{id}/leave", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_55
   /api/v1/staff/{id}/leave/{leaveId}:
     patch:
@@ -1039,9 +1025,8 @@ paths:
           description: ''
       x-codeSamples: &ref_57
         - lang: fetch
-          source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/staff/{id}/leave/{leaveId}",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/staff/{id}/leave/{leaveId}", {
               method: "PATCH",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -1074,9 +1059,8 @@ paths:
           description: ''
       x-codeSamples: &ref_59
         - lang: fetch
-          source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/staff/{id}/payroll",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/staff/{id}/payroll", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -1099,9 +1083,9 @@ paths:
       x-codeSamples: &ref_60
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/staff/{id}/payroll",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/staff/{id}/payroll", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_60
   /api/v1/clinic:
     post:
@@ -1126,9 +1110,8 @@ paths:
           description: ''
       x-codeSamples: &ref_62
         - lang: fetch
-          source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/clinic",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/clinic", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -1146,9 +1129,9 @@ paths:
       x-codeSamples: &ref_63
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/clinic",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/clinic", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_63
   /api/v1/clinic/all:
     get:
@@ -1160,9 +1143,9 @@ paths:
       x-codeSamples: &ref_64
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/clinic/all",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/clinic/all", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_64
   /api/v1/clinic/{id}:
     put:
@@ -1192,9 +1175,8 @@ paths:
           description: ''
       x-codeSamples: &ref_66
         - lang: fetch
-          source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/clinic/{id}",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/clinic/{id}", {
               method: "PUT",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -1217,9 +1199,9 @@ paths:
       x-codeSamples: &ref_67
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/clinic/{id}",
-            { method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/clinic/{id}", { method:
+            "DELETE", headers: { 'Authorization': 'Bearer <token>' } }).then(r
+            => r.json()).then(console.log)
       x-code-samples: *ref_67
   /api/v1/subscription:
     post:
@@ -1240,9 +1222,8 @@ paths:
           description: ''
       x-codeSamples: &ref_69
         - lang: fetch
-          source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/subscription",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/subscription", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -1260,9 +1241,9 @@ paths:
       x-codeSamples: &ref_70
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/subscription",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/subscription", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_70
   /api/v1/subscription/{id}:
     delete:
@@ -1279,9 +1260,9 @@ paths:
       x-codeSamples: &ref_71
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/subscription/{id}",
-            { method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/subscription/{id}", { method:
+            "DELETE", headers: { 'Authorization': 'Bearer <token>' } }).then(r
+            => r.json()).then(console.log)
       x-code-samples: *ref_71
   /api/v1/payment/subscription/sslcommerz/{id}:
     post:
@@ -1298,7 +1279,7 @@ paths:
       x-codeSamples: &ref_72
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/payment/subscription/sslcommerz/{id}",
+            fetch("http://localhost:7733/api/v1/payment/subscription/sslcommerz/{id}",
             { method: "POST", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_72
@@ -1317,7 +1298,7 @@ paths:
       x-codeSamples: &ref_73
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/payment/subscription/sslcommerz/repayment/{paymentId}",
+            fetch("http://localhost:7733/api/v1/payment/subscription/sslcommerz/repayment/{paymentId}",
             { method: "PATCH", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_73
@@ -1331,9 +1312,9 @@ paths:
       x-codeSamples: &ref_74
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/payment/merchant",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/payment/merchant", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_74
   /api/v1/payment/success:
     post:
@@ -1345,9 +1326,9 @@ paths:
       x-codeSamples: &ref_75
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/payment/success",
-            { method: "POST", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/payment/success", { method:
+            "POST", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_75
   /api/v1/payment/redirect:
     get:
@@ -1359,9 +1340,9 @@ paths:
       x-codeSamples: &ref_76
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/payment/redirect",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/payment/redirect", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_76
   /api/v1/payment/fail:
     post:
@@ -1373,9 +1354,9 @@ paths:
       x-codeSamples: &ref_77
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/payment/fail",
-            { method: "POST", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/payment/fail", { method: "POST",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_77
   /api/v1/payment/cancel:
     post:
@@ -1387,9 +1368,9 @@ paths:
       x-codeSamples: &ref_78
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/payment/cancel",
-            { method: "POST", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/payment/cancel", { method:
+            "POST", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_78
   /api/v1/merchant-pg:
     post:
@@ -1416,9 +1397,8 @@ paths:
           description: ''
       x-codeSamples: &ref_80
         - lang: fetch
-          source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/merchant-pg",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/merchant-pg", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -1436,9 +1416,9 @@ paths:
       x-codeSamples: &ref_81
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/merchant-pg",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/merchant-pg", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_81
     patch:
       operationId: MerchantPGController_update
@@ -1464,9 +1444,8 @@ paths:
           description: ''
       x-codeSamples: &ref_83
         - lang: fetch
-          source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/merchant-pg",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/merchant-pg", {
               method: "PATCH",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -1485,9 +1464,9 @@ paths:
       x-codeSamples: &ref_84
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/merchant-pg/all",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/merchant-pg/all", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_84
   /api/v1/merchant-pg/{id}:
     get:
@@ -1504,9 +1483,9 @@ paths:
       x-codeSamples: &ref_85
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/merchant-pg/{id}",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/merchant-pg/{id}", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_85
     delete:
       operationId: MerchantPGController_remove
@@ -1522,9 +1501,9 @@ paths:
       x-codeSamples: &ref_86
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/merchant-pg/{id}",
-            { method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/merchant-pg/{id}", { method:
+            "DELETE", headers: { 'Authorization': 'Bearer <token>' } }).then(r
+            => r.json()).then(console.log)
       x-code-samples: *ref_86
   /api/v1/appointment:
     post:
@@ -1553,9 +1532,8 @@ paths:
           description: ''
       x-codeSamples: &ref_88
         - lang: fetch
-          source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/appointment",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/appointment", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -1578,9 +1556,9 @@ paths:
       x-codeSamples: &ref_89
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/appointment",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/appointment", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_89
   /api/v1/appointment/all:
     get:
@@ -1592,9 +1570,9 @@ paths:
       x-codeSamples: &ref_90
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/appointment/all",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/appointment/all", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_90
   /api/v1/appointment/slots/available:
     get:
@@ -1621,8 +1599,8 @@ paths:
       x-codeSamples: &ref_91
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/appointment/slots/available",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            fetch("http://localhost:7733/api/v1/appointment/slots/available", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_91
   /api/v1/appointment/stats:
@@ -1650,9 +1628,9 @@ paths:
       x-codeSamples: &ref_92
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/appointment/stats",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/appointment/stats", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_92
   /api/v1/appointment/{id}:
     get:
@@ -1669,9 +1647,9 @@ paths:
       x-codeSamples: &ref_93
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/appointment/{id}",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/appointment/{id}", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_93
     put:
       operationId: AppointmentController_update
@@ -1704,9 +1682,8 @@ paths:
           description: ''
       x-codeSamples: &ref_95
         - lang: fetch
-          source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/appointment/{id}",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/appointment/{id}", {
               method: "PUT",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -1729,9 +1706,9 @@ paths:
       x-codeSamples: &ref_96
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/appointment/{id}",
-            { method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/appointment/{id}", { method:
+            "DELETE", headers: { 'Authorization': 'Bearer <token>' } }).then(r
+            => r.json()).then(console.log)
       x-code-samples: *ref_96
   /api/v1/appointment/{id}/status:
     put:
@@ -1760,9 +1737,8 @@ paths:
           description: ''
       x-codeSamples: &ref_98
         - lang: fetch
-          source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/appointment/{id}/status",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/appointment/{id}/status", {
               method: "PUT",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -1798,9 +1774,8 @@ paths:
           description: ''
       x-codeSamples: &ref_100
         - lang: fetch
-          source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/appointment/{id}/reschedule",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/appointment/{id}/reschedule", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -1819,9 +1794,9 @@ paths:
       x-codeSamples: &ref_101
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/dashboard/merchant",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/dashboard/merchant", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_101
   /api/v1/dashboard/super-admin:
     get:
@@ -1833,8 +1808,8 @@ paths:
       x-codeSamples: &ref_102
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/dashboard/super-admin",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            fetch("http://localhost:7733/api/v1/dashboard/super-admin", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_102
   /api/v1/income:
@@ -1856,9 +1831,8 @@ paths:
           description: ''
       x-codeSamples: &ref_104
         - lang: fetch
-          source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/income",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/income", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -1891,9 +1865,9 @@ paths:
       x-codeSamples: &ref_105
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/income",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/income", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_105
   /api/v1/income/all:
     get:
@@ -1905,9 +1879,9 @@ paths:
       x-codeSamples: &ref_106
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/income/all",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/income/all", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_106
   /api/v1/income/{id}:
     patch:
@@ -1933,9 +1907,8 @@ paths:
           description: ''
       x-codeSamples: &ref_108
         - lang: fetch
-          source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/income/{id}",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/income/{id}", {
               method: "PATCH",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -1958,9 +1931,9 @@ paths:
       x-codeSamples: &ref_109
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/income/{id}",
-            { method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/income/{id}", { method:
+            "DELETE", headers: { 'Authorization': 'Bearer <token>' } }).then(r
+            => r.json()).then(console.log)
       x-code-samples: *ref_109
   /api/v1/income/sales:
     post:
@@ -1981,9 +1954,8 @@ paths:
           description: ''
       x-codeSamples: &ref_110
         - lang: fetch
-          source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/income/sales",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/income/sales", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -2016,9 +1988,9 @@ paths:
       x-codeSamples: &ref_111
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/income/sales",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/income/sales", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_111
   /api/v1/expense:
     post:
@@ -2039,9 +2011,8 @@ paths:
           description: ''
       x-codeSamples: &ref_113
         - lang: fetch
-          source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/expense",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/expense", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -2074,9 +2045,9 @@ paths:
       x-codeSamples: &ref_114
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/expense",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/expense", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_114
   /api/v1/expense/all:
     get:
@@ -2088,9 +2059,9 @@ paths:
       x-codeSamples: &ref_115
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/expense/all",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/expense/all", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_115
   /api/v1/expense/{id}:
     patch:
@@ -2116,9 +2087,8 @@ paths:
           description: ''
       x-codeSamples: &ref_117
         - lang: fetch
-          source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/expense/{id}",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/expense/{id}", {
               method: "PATCH",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -2141,9 +2111,9 @@ paths:
       x-codeSamples: &ref_118
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/expense/{id}",
-            { method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/expense/{id}", { method:
+            "DELETE", headers: { 'Authorization': 'Bearer <token>' } }).then(r
+            => r.json()).then(console.log)
       x-code-samples: *ref_118
   /api/v1/expense/purchases:
     post:
@@ -2164,9 +2134,8 @@ paths:
           description: ''
       x-codeSamples: &ref_119
         - lang: fetch
-          source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/expense/purchases",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/expense/purchases", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -2199,9 +2168,9 @@ paths:
       x-codeSamples: &ref_120
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/expense/purchases",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/expense/purchases", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_120
   /api/v1/finance/dashboard:
     get:
@@ -2223,9 +2192,9 @@ paths:
       x-codeSamples: &ref_121
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/finance/dashboard",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/finance/dashboard", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_121
   /api/v1/finance/monthly-report:
     get:
@@ -2242,8 +2211,8 @@ paths:
       x-codeSamples: &ref_122
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/finance/monthly-report",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            fetch("http://localhost:7733/api/v1/finance/monthly-report", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_122
   /api/v1/finance/net-profit:
@@ -2266,9 +2235,9 @@ paths:
       x-codeSamples: &ref_123
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/finance/net-profit",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/finance/net-profit", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_123
   /api/v1/finance/invoices:
     get:
@@ -2290,9 +2259,9 @@ paths:
       x-codeSamples: &ref_124
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/finance/invoices",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/finance/invoices", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_124
   /api/v1/staff-role-templates:
     get:
@@ -2304,9 +2273,9 @@ paths:
       x-codeSamples: &ref_125
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/staff-role-templates",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/staff-role-templates", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_125
     post:
       operationId: StaffRoleTemplateController_create
@@ -2326,9 +2295,8 @@ paths:
           description: ''
       x-codeSamples: &ref_127
         - lang: fetch
-          source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/staff-role-templates",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/staff-role-templates", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -2361,9 +2329,8 @@ paths:
           description: ''
       x-codeSamples: &ref_129
         - lang: fetch
-          source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/staff-role-templates/{id}",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/staff-role-templates/{id}", {
               method: "PATCH",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -2386,8 +2353,8 @@ paths:
       x-codeSamples: &ref_130
         - lang: fetch
           source: >-
-            fetch("https://leeringly-promodern-lettie.ngrok-free.dev/api/v1/staff-role-templates/{id}",
-            { method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
+            fetch("http://localhost:7733/api/v1/staff-role-templates/{id}", {
+            method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_130
 info:

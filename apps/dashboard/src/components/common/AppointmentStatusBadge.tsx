@@ -1,5 +1,5 @@
 import React from "react"
-import { Badge } from "@/components/ui/badge"
+import { Badge } from "@repo/ui/badge"
 import { cn } from "@/lib/utils"
 import { useTranslation } from "react-i18next"
 

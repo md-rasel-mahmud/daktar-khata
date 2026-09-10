@@ -12,14 +12,14 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+} from "@repo/ui/card"
+import { Button } from "@repo/ui/button"
+import { Input } from "@repo/ui/input"
 import {
   ClientDataTable,
   type DataTableColumn,
 } from "@/components/common/table"
-import { Badge } from "@/components/ui/badge"
+import { Badge } from "@repo/ui/badge"
 import { toast } from "sonner"
 
 const PURCHASE_CATEGORIES = [

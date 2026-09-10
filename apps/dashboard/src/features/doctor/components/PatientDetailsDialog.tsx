@@ -2,24 +2,24 @@ import React, { useMemo, useState } from "react"
 import { format } from "date-fns"
 import { CalendarPlus, FileText, Pencil, Trash2 } from "lucide-react"
 import { useSelector } from "react-redux"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
+import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar"
+import { Badge } from "@repo/ui/badge"
+import { Button } from "@repo/ui/button"
+import { Input } from "@repo/ui/input"
+import { Textarea } from "@repo/ui/textarea"
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@repo/ui/card"
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
+} from "@repo/ui/dialog"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -29,8 +29,8 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+} from "@repo/ui/alert-dialog"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/tabs"
 import {
   useAddMedicalRecordMutation,
   useDeleteMedicalRecordMutation,

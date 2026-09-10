@@ -6,7 +6,7 @@ import {
   useNavigate,
   useRouteError,
 } from "react-router"
-import { Button } from "@/components/ui/button"
+import { Button } from "@repo/ui/button"
 import { RolesEnum } from "@/enums/role.enum"
 import { useSelector } from "react-redux"
 import type { RootState } from "@/lib/store/store"

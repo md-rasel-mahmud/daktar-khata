@@ -12,18 +12,18 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
-} from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+} from "@repo/ui/card"
+import { Button } from "@repo/ui/button"
+import { Input } from "@repo/ui/input"
+import { Badge } from "@repo/ui/badge"
+import { Avatar, AvatarFallback } from "@repo/ui/avatar"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@repo/ui/select"
 import {
   Form,
   FormField,
@@ -31,7 +31,7 @@ import {
   FormLabel,
   FormControl,
   FormMessage,
-} from "@/components/ui/form"
+} from "@repo/ui/form"
 import {
   IconEdit,
   IconDeviceFloppy,

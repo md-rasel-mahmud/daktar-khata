@@ -1,14 +1,14 @@
 import { type Control, type FieldValues, type Path } from "react-hook-form"
-import { FormField } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
+import { FormField } from "@repo/ui/form"
+import { Input } from "@repo/ui/input"
+import { Textarea } from "@repo/ui/textarea"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@repo/ui/select"
 
 type FieldType = "text" | "select" | "textarea"
 

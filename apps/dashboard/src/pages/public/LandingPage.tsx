@@ -1,6 +1,6 @@
 import { Link } from "react-router"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import { Button } from "@repo/ui/button"
+import { Card, CardContent } from "@repo/ui/card"
 import { ArrowRight, User, Calendar, BookOpen, Layout } from "lucide-react"
 
 const LandingPage = () => {

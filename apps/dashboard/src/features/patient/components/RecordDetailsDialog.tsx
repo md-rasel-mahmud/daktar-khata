@@ -1,13 +1,13 @@
 import React from "react"
 import { format } from "date-fns"
 import { ArrowRight, Download } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { Button } from "@repo/ui/button"
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
+} from "@repo/ui/dialog"
 
 type RecordDetailsDialogProps = {
   open: boolean

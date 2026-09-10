@@ -16,19 +16,19 @@ import {
   FormInput,
   type FormInputConfig,
 } from "@/components/common/form/FormInput"
-import { Button } from "@/components/ui/button"
+import { Button } from "@repo/ui/button"
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@repo/ui/card"
 import {
   ClientDataTable,
   type DataTableColumn,
 } from "@/components/common/table"
-import { Badge } from "@/components/ui/badge"
+import { Badge } from "@repo/ui/badge"
 import { toast } from "sonner"
 import { type Control, type FieldValues, useForm } from "react-hook-form"
 import { useLocation } from "react-router"

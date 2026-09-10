@@ -1,14 +1,14 @@
 import React from "react"
 import { format } from "date-fns"
 import { useTranslation } from "react-i18next"
-import { Label } from "@/components/ui/label"
+import { Label } from "@repo/ui/label"
 import AppointmentStatusBadge from "@/components/common/AppointmentStatusBadge"
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
+} from "@repo/ui/dialog"
 
 export interface AppointmentDialogModel {
   appointmentDate: string

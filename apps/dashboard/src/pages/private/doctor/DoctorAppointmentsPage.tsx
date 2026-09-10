@@ -1,17 +1,17 @@
 import React, { useCallback, useMemo, useState } from "react"
 import { addDays, format, isAfter, isSameDay } from "date-fns"
 import { useTranslation } from "react-i18next"
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
-import { Badge } from "@/components/ui/badge"
+import { Button } from "@repo/ui/button"
+import { Calendar } from "@repo/ui/calendar"
+import { Badge } from "@repo/ui/badge"
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+} from "@repo/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/tabs"
 import { toast } from "sonner"
 import AppointmentStatusBadge from "@/components/common/AppointmentStatusBadge"
 import {

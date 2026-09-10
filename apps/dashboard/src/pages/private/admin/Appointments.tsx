@@ -6,28 +6,28 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@repo/ui/card"
 import {
   ClientDataTable,
   type DataTableColumn,
 } from "@/components/common/table"
-import { Button } from "@/components/ui/button"
+import { Button } from "@repo/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
+} from "@repo/ui/dropdown-menu"
+import { Input } from "@repo/ui/input"
+import { Badge } from "@repo/ui/badge"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@repo/ui/select"
 import {
   Search,
   Plus,

@@ -62,7 +62,7 @@ async function bootstrap() {
   // Add code samples (curl and fetch) to each operation so Swagger UI shows them
   try {
     const baseUrl =
-      process.env.APP_URL || `http://localhost:${process.env.PORT || 7711}`;
+      process.env.APP_URL || `http://localhost:${process.env.PORT || 7733}`;
     const paths = document.paths || {};
     // helper to build a simple example object from a JSON Schema
     const components = (document as any).components || {};
@@ -234,7 +234,7 @@ async function bootstrap() {
   app.useGlobalFilters(new MongoExceptionFilter());
   app.useGlobalInterceptors(new I18nInterceptor());
 
-  await app.listen(process.env.PORT || 7711);
+  await app.listen(process.env.PORT || 7733);
   console.log(`Application is running on: ${await app.getUrl()}`);
 }
 bootstrap();

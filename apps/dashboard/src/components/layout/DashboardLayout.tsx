@@ -4,7 +4,7 @@ import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
-} from "@/components/ui/sidebar"
+} from "@repo/ui/sidebar"
 import { HeaderControls } from "@/components/header-controls"
 import { useTranslation } from "react-i18next"
 

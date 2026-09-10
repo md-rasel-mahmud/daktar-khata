@@ -15,15 +15,15 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+} from "@repo/ui/card"
+import { Button } from "@repo/ui/button"
+import { Input } from "@repo/ui/input"
 import {
   ClientDataTable,
   type DataTableColumn,
 } from "@/components/common/table"
 import { toast } from "sonner"
-import { Badge } from "@/components/ui/badge"
+import { Badge } from "@repo/ui/badge"
 import { type FieldValues, useForm } from "react-hook-form"
 import FinanceEntryDialog from "@/features/merchant/components/finance/FinanceEntryDialog"
 

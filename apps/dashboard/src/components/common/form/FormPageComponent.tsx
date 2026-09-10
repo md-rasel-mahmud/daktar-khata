@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
+import { Button } from "@repo/ui/button";
+import { Spinner } from "@repo/ui/spinner";
 import CustomInput from "./CustomInput";
 import { useFormContext } from "react-hook-form";
 import { cn } from "@/lib/utils";
@@ -10,7 +10,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@repo/ui/card";
 import { Link } from "react-router";
 import { ChevronLeft } from "lucide-react";
 

@@ -15,8 +15,8 @@ const appConfig = () => ({
   payment: {
     max_retry: parseInt(process.env.PAYMENT_MAX_RETRY || "3", 10),
   },
-  frontend_url: process.env.FRONTEND_URL || "http://localhost:3000",
-  backend_url: process.env.APP_URL || "http://localhost:7711",
+  frontend_url: process.env.FRONTEND_URL || "http://localhost:7722",
+  backend_url: process.env.APP_URL || "http://localhost:7733",
 });
 
 export type AppConfigType = ReturnType<typeof appConfig>;

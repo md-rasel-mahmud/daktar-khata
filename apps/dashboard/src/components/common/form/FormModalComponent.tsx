@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+import { Button } from "@repo/ui/button"
 import {
   Dialog,
   DialogClose,
@@ -7,8 +7,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Spinner } from "@/components/ui/spinner"
+} from "@repo/ui/dialog"
+import { Spinner } from "@repo/ui/spinner"
 import CustomInput from "./CustomInput"
 import { useFormContext } from "react-hook-form"
 import { cn } from "@/lib/utils"

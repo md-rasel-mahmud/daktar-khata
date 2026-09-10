@@ -4,7 +4,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
+} from "@repo/ui/tooltip"
 import { type FC } from "react"
 import Slider from "rc-slider"
 
