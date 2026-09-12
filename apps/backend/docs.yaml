@@ -32,7 +32,7 @@ paths:
               bloodGroup: O+
               emergencyContact: '01787654321'
               medicalHistory: Diabetes, Hypertension
-              currentMedications: &ref_131
+              currentMedications: &ref_138
                 - Paracetamol
                 - Insulin
               lastVisited: '2025-02-15T00:00:00.000Z'
@@ -42,7 +42,7 @@ paths:
               subscriptionStartDate: '2025-01-01T00:00:00.000Z'
               subscriptionEndDate: '2026-01-01T00:00:00.000Z'
               numberOfBeds: active
-              servicesOffered: &ref_132
+              servicesOffered: &ref_139
                 - Ultrasonography
                 - Hernia Operation
                 - Gallstone Surgery
@@ -174,7 +174,7 @@ paths:
               bloodGroup: O+
               emergencyContact: '+8801712345678'
               medicalHistory: Diabetes, High Blood Pressure
-              currentMedications: &ref_133
+              currentMedications: &ref_140
                 - Metformin
                 - Atorvastatin
               lastVisited: '2025-02-15T00:00:00.000Z'
@@ -230,7 +230,7 @@ paths:
               appointmentId: 6530a2c44cb2dbd2a1111111
               date: '2025-10-20T10:30:00.000Z'
               diagnosis: Mild hypertension
-              prescription: &ref_134
+              prescription: &ref_141
                 - Lisinopril 10mg once daily
               notes: Reduce sodium intake and monitor BP twice a week.
               followUpDate: '2025-11-20T10:30:00.000Z'
@@ -1747,6 +1747,25 @@ paths:
               body: JSON.stringify({\n  "status": "CONFIRMED",\n  "reason": "Patient did not show up",\n  "notes": "Patient rescheduled"\n})
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_98
+  /api/v1/appointment/{id}/queue-status:
+    put:
+      operationId: AppointmentController_updateQueueStatus
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_99
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/appointment/{id}/queue-status",
+            { method: "PUT", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_99
   /api/v1/appointment/{id}/reschedule:
     post:
       operationId: AppointmentController_reschedule
@@ -1762,17 +1781,17 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/RescheduleAppointmentDto'
-            example: &ref_99
+            example: &ref_100
               newAppointmentDate: '2025-10-21T10:30:00.000Z'
               newAppointmentSlot: 10:30 AM - 11:00 AM
               reason: Doctor has emergency
             examples:
               default:
-                value: *ref_99
+                value: *ref_100
       responses:
         '201':
           description: ''
-      x-codeSamples: &ref_100
+      x-codeSamples: &ref_101
         - lang: fetch
           source: |-
             fetch("http://localhost:7733/api/v1/appointment/{id}/reschedule", {
@@ -1783,7 +1802,7 @@ paths:
               },
               body: JSON.stringify({\n  "newAppointmentDate": "2025-10-21T10:30:00.000Z",\n  "newAppointmentSlot": "10:30 AM - 11:00 AM",\n  "reason": "Doctor has emergency"\n})
             }).then(r => r.json()).then(console.log)
-      x-code-samples: *ref_100
+      x-code-samples: *ref_101
   /api/v1/dashboard/merchant:
     get:
       operationId: DashboardController_merchant
@@ -1791,13 +1810,13 @@ paths:
       responses:
         '200':
           description: ''
-      x-codeSamples: &ref_101
+      x-codeSamples: &ref_102
         - lang: fetch
           source: >-
             fetch("http://localhost:7733/api/v1/dashboard/merchant", { method:
             "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
             r.json()).then(console.log)
-      x-code-samples: *ref_101
+      x-code-samples: *ref_102
   /api/v1/dashboard/super-admin:
     get:
       operationId: DashboardController_superAdmin
@@ -1805,13 +1824,13 @@ paths:
       responses:
         '200':
           description: ''
-      x-codeSamples: &ref_102
+      x-codeSamples: &ref_103
         - lang: fetch
           source: >-
             fetch("http://localhost:7733/api/v1/dashboard/super-admin", {
             method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
-      x-code-samples: *ref_102
+      x-code-samples: *ref_103
   /api/v1/income:
     post:
       operationId: IncomeController_create
@@ -1822,14 +1841,14 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/CreateIncomeDto'
-            example: &ref_103 {}
+            example: &ref_104 {}
             examples:
               default:
-                value: *ref_103
+                value: *ref_104
       responses:
         '201':
           description: ''
-      x-codeSamples: &ref_104
+      x-codeSamples: &ref_105
         - lang: fetch
           source: |-
             fetch("http://localhost:7733/api/v1/income", {
@@ -1840,7 +1859,7 @@ paths:
               },
               body: JSON.stringify({})
             }).then(r => r.json()).then(console.log)
-      x-code-samples: *ref_104
+      x-code-samples: *ref_105
     get:
       operationId: IncomeController_listMy
       parameters:
@@ -1862,13 +1881,13 @@ paths:
       responses:
         '200':
           description: ''
-      x-codeSamples: &ref_105
+      x-codeSamples: &ref_106
         - lang: fetch
           source: >-
             fetch("http://localhost:7733/api/v1/income", { method: "GET",
             headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
             r.json()).then(console.log)
-      x-code-samples: *ref_105
+      x-code-samples: *ref_106
   /api/v1/income/all:
     get:
       operationId: IncomeController_listAll
@@ -1876,13 +1895,13 @@ paths:
       responses:
         '200':
           description: ''
-      x-codeSamples: &ref_106
+      x-codeSamples: &ref_107
         - lang: fetch
           source: >-
             fetch("http://localhost:7733/api/v1/income/all", { method: "GET",
             headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
             r.json()).then(console.log)
-      x-code-samples: *ref_106
+      x-code-samples: *ref_107
   /api/v1/income/{id}:
     patch:
       operationId: IncomeController_update
@@ -1898,14 +1917,14 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/UpdateIncomeDto'
-            example: &ref_107 {}
+            example: &ref_108 {}
             examples:
               default:
-                value: *ref_107
+                value: *ref_108
       responses:
         '200':
           description: ''
-      x-codeSamples: &ref_108
+      x-codeSamples: &ref_109
         - lang: fetch
           source: |-
             fetch("http://localhost:7733/api/v1/income/{id}", {
@@ -1916,7 +1935,7 @@ paths:
               },
               body: JSON.stringify({})
             }).then(r => r.json()).then(console.log)
-      x-code-samples: *ref_108
+      x-code-samples: *ref_109
     delete:
       operationId: IncomeController_remove
       parameters:
@@ -1928,13 +1947,13 @@ paths:
       responses:
         '200':
           description: ''
-      x-codeSamples: &ref_109
+      x-codeSamples: &ref_110
         - lang: fetch
           source: >-
             fetch("http://localhost:7733/api/v1/income/{id}", { method:
             "DELETE", headers: { 'Authorization': 'Bearer <token>' } }).then(r
             => r.json()).then(console.log)
-      x-code-samples: *ref_109
+      x-code-samples: *ref_110
   /api/v1/income/sales:
     post:
       operationId: IncomeController_createSale
@@ -1945,14 +1964,14 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/CreateIncomeDto'
-            example: *ref_103
+            example: *ref_104
             examples:
               default:
-                value: *ref_103
+                value: *ref_104
       responses:
         '201':
           description: ''
-      x-codeSamples: &ref_110
+      x-codeSamples: &ref_111
         - lang: fetch
           source: |-
             fetch("http://localhost:7733/api/v1/income/sales", {
@@ -1963,7 +1982,7 @@ paths:
               },
               body: JSON.stringify({})
             }).then(r => r.json()).then(console.log)
-      x-code-samples: *ref_110
+      x-code-samples: *ref_111
     get:
       operationId: IncomeController_listSales
       parameters:
@@ -1985,13 +2004,13 @@ paths:
       responses:
         '200':
           description: ''
-      x-codeSamples: &ref_111
+      x-codeSamples: &ref_112
         - lang: fetch
           source: >-
             fetch("http://localhost:7733/api/v1/income/sales", { method: "GET",
             headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
             r.json()).then(console.log)
-      x-code-samples: *ref_111
+      x-code-samples: *ref_112
   /api/v1/expense:
     post:
       operationId: ExpenseController_create
@@ -2002,14 +2021,14 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/CreateExpenseDto'
-            example: &ref_112 {}
+            example: &ref_113 {}
             examples:
               default:
-                value: *ref_112
+                value: *ref_113
       responses:
         '201':
           description: ''
-      x-codeSamples: &ref_113
+      x-codeSamples: &ref_114
         - lang: fetch
           source: |-
             fetch("http://localhost:7733/api/v1/expense", {
@@ -2020,7 +2039,7 @@ paths:
               },
               body: JSON.stringify({})
             }).then(r => r.json()).then(console.log)
-      x-code-samples: *ref_113
+      x-code-samples: *ref_114
     get:
       operationId: ExpenseController_listMy
       parameters:
@@ -2042,13 +2061,13 @@ paths:
       responses:
         '200':
           description: ''
-      x-codeSamples: &ref_114
+      x-codeSamples: &ref_115
         - lang: fetch
           source: >-
             fetch("http://localhost:7733/api/v1/expense", { method: "GET",
             headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
             r.json()).then(console.log)
-      x-code-samples: *ref_114
+      x-code-samples: *ref_115
   /api/v1/expense/all:
     get:
       operationId: ExpenseController_listAll
@@ -2056,13 +2075,13 @@ paths:
       responses:
         '200':
           description: ''
-      x-codeSamples: &ref_115
+      x-codeSamples: &ref_116
         - lang: fetch
           source: >-
             fetch("http://localhost:7733/api/v1/expense/all", { method: "GET",
             headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
             r.json()).then(console.log)
-      x-code-samples: *ref_115
+      x-code-samples: *ref_116
   /api/v1/expense/{id}:
     patch:
       operationId: ExpenseController_update
@@ -2078,14 +2097,14 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/UpdateExpenseDto'
-            example: &ref_116 {}
+            example: &ref_117 {}
             examples:
               default:
-                value: *ref_116
+                value: *ref_117
       responses:
         '200':
           description: ''
-      x-codeSamples: &ref_117
+      x-codeSamples: &ref_118
         - lang: fetch
           source: |-
             fetch("http://localhost:7733/api/v1/expense/{id}", {
@@ -2096,7 +2115,7 @@ paths:
               },
               body: JSON.stringify({})
             }).then(r => r.json()).then(console.log)
-      x-code-samples: *ref_117
+      x-code-samples: *ref_118
     delete:
       operationId: ExpenseController_remove
       parameters:
@@ -2108,13 +2127,13 @@ paths:
       responses:
         '200':
           description: ''
-      x-codeSamples: &ref_118
+      x-codeSamples: &ref_119
         - lang: fetch
           source: >-
             fetch("http://localhost:7733/api/v1/expense/{id}", { method:
             "DELETE", headers: { 'Authorization': 'Bearer <token>' } }).then(r
             => r.json()).then(console.log)
-      x-code-samples: *ref_118
+      x-code-samples: *ref_119
   /api/v1/expense/purchases:
     post:
       operationId: ExpenseController_createPurchase
@@ -2125,14 +2144,14 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/CreateExpenseDto'
-            example: *ref_112
+            example: *ref_113
             examples:
               default:
-                value: *ref_112
+                value: *ref_113
       responses:
         '201':
           description: ''
-      x-codeSamples: &ref_119
+      x-codeSamples: &ref_120
         - lang: fetch
           source: |-
             fetch("http://localhost:7733/api/v1/expense/purchases", {
@@ -2143,7 +2162,7 @@ paths:
               },
               body: JSON.stringify({})
             }).then(r => r.json()).then(console.log)
-      x-code-samples: *ref_119
+      x-code-samples: *ref_120
     get:
       operationId: ExpenseController_listPurchases
       parameters:
@@ -2165,13 +2184,13 @@ paths:
       responses:
         '200':
           description: ''
-      x-codeSamples: &ref_120
+      x-codeSamples: &ref_121
         - lang: fetch
           source: >-
             fetch("http://localhost:7733/api/v1/expense/purchases", { method:
             "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
             r.json()).then(console.log)
-      x-code-samples: *ref_120
+      x-code-samples: *ref_121
   /api/v1/finance/dashboard:
     get:
       operationId: FinanceController_getDashboard
@@ -2189,13 +2208,13 @@ paths:
       responses:
         '200':
           description: ''
-      x-codeSamples: &ref_121
+      x-codeSamples: &ref_122
         - lang: fetch
           source: >-
             fetch("http://localhost:7733/api/v1/finance/dashboard", { method:
             "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
             r.json()).then(console.log)
-      x-code-samples: *ref_121
+      x-code-samples: *ref_122
   /api/v1/finance/monthly-report:
     get:
       operationId: FinanceController_getMonthlyReport
@@ -2208,13 +2227,13 @@ paths:
       responses:
         '200':
           description: ''
-      x-codeSamples: &ref_122
+      x-codeSamples: &ref_123
         - lang: fetch
           source: >-
             fetch("http://localhost:7733/api/v1/finance/monthly-report", {
             method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
-      x-code-samples: *ref_122
+      x-code-samples: *ref_123
   /api/v1/finance/net-profit:
     get:
       operationId: FinanceController_getNetProfit
@@ -2232,13 +2251,13 @@ paths:
       responses:
         '200':
           description: ''
-      x-codeSamples: &ref_123
+      x-codeSamples: &ref_124
         - lang: fetch
           source: >-
             fetch("http://localhost:7733/api/v1/finance/net-profit", { method:
             "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
             r.json()).then(console.log)
-      x-code-samples: *ref_123
+      x-code-samples: *ref_124
   /api/v1/finance/invoices:
     get:
       operationId: FinanceController_getInvoices
@@ -2256,13 +2275,13 @@ paths:
       responses:
         '200':
           description: ''
-      x-codeSamples: &ref_124
+      x-codeSamples: &ref_125
         - lang: fetch
           source: >-
             fetch("http://localhost:7733/api/v1/finance/invoices", { method:
             "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
             r.json()).then(console.log)
-      x-code-samples: *ref_124
+      x-code-samples: *ref_125
   /api/v1/staff-role-templates:
     get:
       operationId: StaffRoleTemplateController_list
@@ -2270,13 +2289,13 @@ paths:
       responses:
         '200':
           description: ''
-      x-codeSamples: &ref_125
+      x-codeSamples: &ref_126
         - lang: fetch
           source: >-
             fetch("http://localhost:7733/api/v1/staff-role-templates", { method:
             "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
             r.json()).then(console.log)
-      x-code-samples: *ref_125
+      x-code-samples: *ref_126
     post:
       operationId: StaffRoleTemplateController_create
       parameters: []
@@ -2286,14 +2305,14 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/CreateStaffRoleTemplateDto'
-            example: &ref_126 {}
+            example: &ref_127 {}
             examples:
               default:
-                value: *ref_126
+                value: *ref_127
       responses:
         '201':
           description: ''
-      x-codeSamples: &ref_127
+      x-codeSamples: &ref_128
         - lang: fetch
           source: |-
             fetch("http://localhost:7733/api/v1/staff-role-templates", {
@@ -2304,7 +2323,7 @@ paths:
               },
               body: JSON.stringify({})
             }).then(r => r.json()).then(console.log)
-      x-code-samples: *ref_127
+      x-code-samples: *ref_128
   /api/v1/staff-role-templates/{id}:
     patch:
       operationId: StaffRoleTemplateController_update
@@ -2320,14 +2339,14 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/UpdateStaffRoleTemplateDto'
-            example: &ref_128 {}
+            example: &ref_129 {}
             examples:
               default:
-                value: *ref_128
+                value: *ref_129
       responses:
         '200':
           description: ''
-      x-codeSamples: &ref_129
+      x-codeSamples: &ref_130
         - lang: fetch
           source: |-
             fetch("http://localhost:7733/api/v1/staff-role-templates/{id}", {
@@ -2338,7 +2357,7 @@ paths:
               },
               body: JSON.stringify({})
             }).then(r => r.json()).then(console.log)
-      x-code-samples: *ref_129
+      x-code-samples: *ref_130
     delete:
       operationId: StaffRoleTemplateController_remove
       parameters:
@@ -2350,13 +2369,146 @@ paths:
       responses:
         '200':
           description: ''
-      x-codeSamples: &ref_130
+      x-codeSamples: &ref_131
         - lang: fetch
           source: >-
             fetch("http://localhost:7733/api/v1/staff-role-templates/{id}", {
             method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
-      x-code-samples: *ref_130
+      x-code-samples: *ref_131
+  /api/v1/encounter:
+    post:
+      operationId: EncounterController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateEncounterDto'
+            example: &ref_132
+              patient: string
+              doctor: string
+              appointment: string
+              chiefComplaint: string
+              symptoms:
+                - string
+              vitals: {}
+              diagnosis: string
+              clinicalNotes: string
+              prescription: string
+              testOrders:
+                - string
+              advice: string
+              followUpDate: string
+              admissionRecommended: true
+              operationRecommended: true
+            examples:
+              default:
+                value: *ref_132
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_133
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/encounter", {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "patient": "string",\n  "doctor": "string",\n  "appointment": "string",\n  "chiefComplaint": "string",\n  "symptoms": [\n    "string"\n  ],\n  "vitals": {},\n  "diagnosis": "string",\n  "clinicalNotes": "string",\n  "prescription": "string",\n  "testOrders": [\n    "string"\n  ],\n  "advice": "string",\n  "followUpDate": "string",\n  "admissionRecommended": true,\n  "operationRecommended": true\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_133
+  /api/v1/encounter/appointment/{id}:
+    get:
+      operationId: EncounterController_getByAppointment
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_134
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/encounter/appointment/{id}", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_134
+  /api/v1/encounter/patient/{id}:
+    get:
+      operationId: EncounterController_getByPatient
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_135
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/encounter/patient/{id}", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_135
+  /api/v1/encounter/{id}:
+    put:
+      operationId: EncounterController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateEncounterDto'
+            example: &ref_136
+              patient: string
+              doctor: string
+              appointment: string
+              chiefComplaint: string
+              symptoms:
+                - string
+              vitals: {}
+              diagnosis: string
+              clinicalNotes: string
+              prescription: string
+              testOrders:
+                - string
+              advice: string
+              followUpDate: string
+              admissionRecommended: true
+              operationRecommended: true
+            examples:
+              default:
+                value: *ref_136
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_137
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/encounter/{id}", {
+              method: "PUT",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "patient": "string",\n  "doctor": "string",\n  "appointment": "string",\n  "chiefComplaint": "string",\n  "symptoms": [\n    "string"\n  ],\n  "vitals": {},\n  "diagnosis": "string",\n  "clinicalNotes": "string",\n  "prescription": "string",\n  "testOrders": [\n    "string"\n  ],\n  "advice": "string",\n  "followUpDate": "string",\n  "admissionRecommended": true,\n  "operationRecommended": true\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_137
 info:
   title: ClinicFlow API
   description: ClinicFlow backend API documentation
@@ -2426,7 +2578,7 @@ components:
           description: Medical history or past health conditions
           _propertyName: medicalHistory
         currentMedications:
-          example: *ref_131
+          example: *ref_138
           description: List of current medications
           type: array
           items:
@@ -2470,7 +2622,7 @@ components:
           _propertyName: numberOfBeds
         servicesOffered:
           description: List of services offered by the clinic
-          example: *ref_132
+          example: *ref_139
           type: array
           items:
             type: string
@@ -2516,7 +2668,7 @@ components:
           _propertyName: medicalHistory
         currentMedications:
           description: List of current medications the patient is taking
-          example: *ref_133
+          example: *ref_140
           type: array
           items:
             type: string
@@ -2558,7 +2710,7 @@ components:
           _propertyName: diagnosis
         prescription:
           description: List of prescribed medicines or instructions
-          example: *ref_134
+          example: *ref_141
           type: array
           items:
             type: string
@@ -2607,7 +2759,7 @@ components:
           _propertyName: password
         role:
           type: string
-          enum: &ref_135
+          enum: &ref_142
             - USER
             - ADMIN
             - DOCTOR
@@ -2694,7 +2846,7 @@ components:
           _propertyName: password
         role:
           type: string
-          enum: *ref_135
+          enum: *ref_142
           description: Role of the user. Only PATIENT or MERCHANT allowed for signup
           _propertyName: role
         user:
@@ -2870,7 +3022,7 @@ components:
         role:
           type: string
           description: User role (defaults to DOCTOR)
-          enum: &ref_136
+          enum: &ref_143
             - USER
             - ADMIN
             - DOCTOR
@@ -2962,7 +3114,7 @@ components:
         role:
           type: string
           description: User role (defaults to DOCTOR)
-          enum: *ref_136
+          enum: *ref_143
           example: DOCTOR
           _propertyName: role
         merchant:
@@ -3136,7 +3288,7 @@ components:
           type: string
           description: Reason for the appointment
           example: CHECK_UP
-          enum: &ref_137
+          enum: &ref_144
             - CHECK_UP
             - CONSULTATION
             - FOLLOW_UP
@@ -3191,7 +3343,7 @@ components:
           type: string
           description: Reason for the appointment
           example: CHECK_UP
-          enum: *ref_137
+          enum: *ref_144
           _propertyName: reasonFor
         problemDescription:
           type: string
@@ -3264,28 +3416,131 @@ components:
         - newAppointmentDate
         - newAppointmentSlot
         - reason
-      example: *ref_99
+      example: *ref_100
     CreateIncomeDto:
       type: object
       properties: {}
-      example: *ref_103
+      example: *ref_104
     UpdateIncomeDto:
       type: object
       properties: {}
-      example: *ref_107
+      example: *ref_108
     CreateExpenseDto:
       type: object
       properties: {}
-      example: *ref_112
+      example: *ref_113
     UpdateExpenseDto:
       type: object
       properties: {}
-      example: *ref_116
+      example: *ref_117
     CreateStaffRoleTemplateDto:
       type: object
       properties: {}
-      example: *ref_126
+      example: *ref_127
     UpdateStaffRoleTemplateDto:
       type: object
       properties: {}
-      example: *ref_128
+      example: *ref_129
+    CreateEncounterDto:
+      type: object
+      properties:
+        patient:
+          type: string
+          _propertyName: patient
+        doctor:
+          type: string
+          _propertyName: doctor
+        appointment:
+          type: string
+          _propertyName: appointment
+        chiefComplaint:
+          type: string
+          _propertyName: chiefComplaint
+        symptoms:
+          type: array
+          items:
+            type: string
+          _propertyName: symptoms
+        vitals:
+          type: object
+          _propertyName: vitals
+        diagnosis:
+          type: string
+          _propertyName: diagnosis
+        clinicalNotes:
+          type: string
+          _propertyName: clinicalNotes
+        prescription:
+          type: string
+          _propertyName: prescription
+        testOrders:
+          type: array
+          items:
+            type: string
+          _propertyName: testOrders
+        advice:
+          type: string
+          _propertyName: advice
+        followUpDate:
+          type: string
+          _propertyName: followUpDate
+        admissionRecommended:
+          type: boolean
+          _propertyName: admissionRecommended
+        operationRecommended:
+          type: boolean
+          _propertyName: operationRecommended
+      required:
+        - patient
+        - doctor
+      example: *ref_132
+    UpdateEncounterDto:
+      type: object
+      properties:
+        patient:
+          type: string
+          _propertyName: patient
+        doctor:
+          type: string
+          _propertyName: doctor
+        appointment:
+          type: string
+          _propertyName: appointment
+        chiefComplaint:
+          type: string
+          _propertyName: chiefComplaint
+        symptoms:
+          type: array
+          items:
+            type: string
+          _propertyName: symptoms
+        vitals:
+          type: object
+          _propertyName: vitals
+        diagnosis:
+          type: string
+          _propertyName: diagnosis
+        clinicalNotes:
+          type: string
+          _propertyName: clinicalNotes
+        prescription:
+          type: string
+          _propertyName: prescription
+        testOrders:
+          type: array
+          items:
+            type: string
+          _propertyName: testOrders
+        advice:
+          type: string
+          _propertyName: advice
+        followUpDate:
+          type: string
+          _propertyName: followUpDate
+        admissionRecommended:
+          type: boolean
+          _propertyName: admissionRecommended
+        operationRecommended:
+          type: boolean
+          _propertyName: operationRecommended
+      example: *ref_136

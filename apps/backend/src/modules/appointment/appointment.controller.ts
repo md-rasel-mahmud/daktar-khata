@@ -20,6 +20,7 @@ import { GetAvailableSlotsDto } from "./dto/get-available-slots.dto";
 import { Types } from "mongoose";
 import { Roles } from "src/common/decorators/roles.decorator";
 import { IAuthUser } from "src/common";
+import { QueueStatus } from "src/constant/enums/status.enum";
 
 @Controller("appointment")
 export class AppointmentController {
@@ -165,6 +166,27 @@ export class AppointmentController {
       new Types.ObjectId(id),
       dto,
       new Types.ObjectId(user._id),
+    );
+  }
+
+  @Put(":id/queue-status")
+  @Roles(
+    RolesEnum.DOCTOR,
+    RolesEnum.MERCHANT,
+    RolesEnum.ADMIN,
+    RolesEnum.SUPER_ADMIN,
+  )
+  async updateQueueStatus(
+    @AuthUser() user: IAuthUser,
+    @Param("id") id: string,
+    @Body("queueStatus") queueStatus: QueueStatus,
+  ) {
+    if (!Types.ObjectId.isValid(id)) {
+      throw new BadRequestException("Invalid appointment ID");
+    }
+    return this.appointmentService.updateQueueStatus(
+      new Types.ObjectId(id),
+      queueStatus,
     );
   }
 

@@ -24,6 +24,8 @@ import { DoctorService } from "src/modules/doctor/doctor.service";
 import { BillingForEnum } from "src/constant/enums/billing-for.enum";
 import { MerchantPGService } from "src/modules/merchant-pg/merchant-pg.service";
 import { Doctor } from "src/modules/doctor/schema/doctor.schema";
+import { QueueGateway } from "../queue/queue.gateway";
+import { QueueStatus } from "src/constant/enums/status.enum";
 
 @Injectable()
 export class AppointmentService {
@@ -38,6 +40,7 @@ export class AppointmentService {
     private readonly doctorService: DoctorService,
     private readonly merchantPgService: MerchantPGService,
     @InjectConnection() private readonly connection: Connection,
+    private readonly queueGateway: QueueGateway,
   ) {}
 
   /**
@@ -71,6 +74,20 @@ export class AppointmentService {
       const doctor = await this.doctorService.findOne(dto.doctor);
       const transactionId = `TXN_${Date.now()}`;
 
+      // Calculate serial number
+      const reqDate = new Date(dto.appointmentDate);
+      const startOfDay = new Date(reqDate);
+      startOfDay.setHours(0, 0, 0, 0);
+      const endOfDay = new Date(reqDate);
+      endOfDay.setHours(23, 59, 59, 999);
+
+      const appointmentCount = await this.appointmentModel.countDocuments({
+        doctor: doctor._id,
+        appointmentDate: { $gte: startOfDay, $lte: endOfDay },
+      }).session(session);
+
+      const serialNumber = appointmentCount + 1;
+
       // Step 2: create appointment
       const createdAppointments = await this.appointmentModel.create(
         [
@@ -81,6 +98,7 @@ export class AppointmentService {
             transactionId,
             patient: patient._id,
             doctor: doctor._id,
+            serialNumber,
           },
         ],
         { session }
@@ -422,6 +440,35 @@ export class AppointmentService {
     });
 
     return !existingAppointment;
+  }
+
+  /**
+   * Update appointment queue status
+   */
+  async updateQueueStatus(appointmentId: Types.ObjectId, queueStatus: QueueStatus) {
+    const appointment = await this.appointmentModel.findById(appointmentId);
+    if (!appointment) throw new NotFoundException("Appointment not found");
+
+    appointment.queueStatus = queueStatus;
+    // When completed, also set appointment status to COMPLETED
+    if (queueStatus === QueueStatus.COMPLETED) {
+      appointment.status = AppointmentStatus.COMPLETED;
+      appointment.completedAt = new Date();
+    }
+    
+    await appointment.save();
+
+    // Emit event to public screens
+    this.queueGateway.emitQueueUpdate(appointment.doctor.toString(), {
+      appointmentId,
+      queueStatus,
+      serialNumber: appointment.serialNumber,
+    });
+
+    return {
+      message: `Queue status updated to ${queueStatus}`,
+      appointment,
+    };
   }
 
   /**

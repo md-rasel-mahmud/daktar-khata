@@ -39,3 +39,12 @@ export enum PaymentMethod {
   ROCKET = "rocket",
   CASH = "CASH",
 }
+
+export enum QueueStatus {
+  WAITING = "WAITING",
+  CALLED = "CALLED",
+  IN_CONSULTATION = "IN_CONSULTATION",
+  COMPLETED = "COMPLETED",
+  SKIPPED = "SKIPPED",
+  CANCELLED = "CANCELLED",
+}

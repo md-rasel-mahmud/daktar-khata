@@ -19,4 +19,5 @@ export const collectionsName = {
   auditLog: "AuditLog",
   setting: "Setting",
   merchantPG: "MerchantPG",
+  encounter: "Encounter",
 };

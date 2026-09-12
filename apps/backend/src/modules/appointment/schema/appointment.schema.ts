@@ -5,6 +5,7 @@ import {
   AppointmentStatus,
   PaymentMethod,
   PaymentStatus,
+  QueueStatus,
 } from "src/constant/enums/status.enum";
 
 export type AppointmentDocument = Appointment & Document;
@@ -84,6 +85,18 @@ export class Appointment {
     default: AppointmentStatus.PENDING,
   })
   status?: string;
+
+  @Prop({
+    type: String,
+    enum: QueueStatus,
+    default: QueueStatus.WAITING,
+  })
+  queueStatus?: string;
+
+  @Prop({
+    type: Number,
+  })
+  serialNumber?: number;
 
   @Prop({
     type: [

@@ -8,6 +8,7 @@ import { PaymentModule } from "src/modules/payment/payment.module";
 import { PatientModule } from "src/modules/patient/patient.module";
 import { DoctorModule } from "src/modules/doctor/doctor.module";
 import { MerchantPGModule } from "src/modules/merchant-pg/merchant-pg.module";
+import { QueueModule } from "../queue/queue.module";
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { MerchantPGModule } from "src/modules/merchant-pg/merchant-pg.module";
     PatientModule,
     DoctorModule,
     MerchantPGModule,
+    QueueModule,
   ],
   controllers: [AppointmentController],
   providers: [AppointmentService],

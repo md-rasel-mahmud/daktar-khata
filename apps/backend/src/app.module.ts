@@ -27,6 +27,8 @@ import { ExpenseModule } from "src/modules/expense/expense.module";
 import { FinanceModule } from "src/modules/finance/finance.module";
 import { StaffRoleTemplateModule } from "src/modules/staff-role-template/staff-role-template.module";
 import { MedicalRecordModule } from "src/modules/medical-records/medical-record.module";
+import { QueueModule } from "./modules/queue/queue.module";
+import { EncounterModule } from "./modules/encounter/encounter.module";
 
 @Module({
   imports: [
@@ -82,6 +84,8 @@ import { MedicalRecordModule } from "src/modules/medical-records/medical-record.
     FinanceModule,
     StaffRoleTemplateModule,
     MedicalRecordModule,
+    QueueModule,
+    EncounterModule,
   ],
   controllers: [],
   providers: [DatabaseSeederService],
