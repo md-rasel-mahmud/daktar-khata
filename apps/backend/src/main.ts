@@ -24,7 +24,14 @@ async function bootstrap() {
   app.use("/api/v1/payment/success", express.raw({ type: "*/*" }));
   app.use("/api/v1/payment/fail", express.raw({ type: "*/*" }));
   app.use("/api/v1/payment/cancel", express.raw({ type: "*/*" }));
-  app.enableCors({ origin: "*" });
+  const allowedOrigins = process.env.FRONTEND_URL
+    ? process.env.FRONTEND_URL.split(",")
+    : ["http://localhost:7722", "http://localhost:7733"];
+
+  app.enableCors({
+    origin: allowedOrigins,
+    credentials: true,
+  });
   app.setGlobalPrefix("api/v1"); //route prefix
   app.useGlobalPipes(
     new ValidationPipe({
@@ -211,7 +218,7 @@ async function bootstrap() {
     }
   } catch (e) {
     // non-fatal
-    // eslint-disable-next-line no-console
+     
     console.warn(
       "Failed to add code samples to OpenAPI document:",
       e?.message || e,
@@ -224,7 +231,7 @@ async function bootstrap() {
     fs.writeFileSync(path.join(process.cwd(), "docs.yaml"), out, "utf8");
   } catch (err) {
     // ignore write errors in environments where filesystem may be read-only
-    // eslint-disable-next-line no-console
+     
     console.warn("Could not write docs.yaml:", err?.message || err);
   }
 

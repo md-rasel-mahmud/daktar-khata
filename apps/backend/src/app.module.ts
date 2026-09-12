@@ -7,6 +7,7 @@ import { UserModule } from "./modules/user/user.module";
 import * as Joi from "@hapi/joi";
 import * as path from "path";
 import { AcceptLanguageResolver, I18nModule, QueryResolver } from "nestjs-i18n";
+import { ThrottlerModule } from "@nestjs/throttler";
 
 import { CommonModule } from "./common/config.module";
 import { AuthModule } from "./modules/auth/auth.module";
@@ -57,6 +58,12 @@ import { MedicalRecordModule } from "src/modules/medical-records/medical-record.
         AcceptLanguageResolver,
       ],
     }),
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000,
+        limit: 5,
+      },
+    ]),
     CommonModule,
     UserModule,
     AuthModule,

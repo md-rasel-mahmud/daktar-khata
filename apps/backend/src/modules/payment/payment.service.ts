@@ -78,7 +78,7 @@ export class PaymentService {
     const storeId: string = customCredentials.storeId || sslConfig.store_id;
     const storePass: string =
       customCredentials.storePass || sslConfig.store_passwd;
-    const sandbox: Boolean = sslConfig.sandbox !== "false";
+    const sandbox: boolean = sslConfig.sandbox !== "false";
 
     // Prepare payload for SSLCommerz initiate API
     const payload: SSLCommerzInitPayload = {
@@ -358,7 +358,7 @@ export class PaymentService {
     const sslConfig = this.getSSLCommerzConfig();
     const storeId: string = sslConfig.store_id;
     const storePass: string = sslConfig.store_passwd;
-    const sandbox: Boolean = sslConfig.sandbox !== "false";
+    const sandbox: boolean = sslConfig.sandbox !== "false";
 
     const baseUrl = sandbox
       ? "https://sandbox.sslcommerz.com"

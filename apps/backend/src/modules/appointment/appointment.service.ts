@@ -56,7 +56,7 @@ export class AppointmentService {
 
     const doctor = await this.doctorService.findOne(dto.doctor);
 
-    let transactionId = `TXN_${Date.now()}`;
+    const transactionId = `TXN_${Date.now()}`;
 
     // Step 2: create appointment
     const createdAppointment = await this.appointmentModel.create({
