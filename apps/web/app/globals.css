@@ -1,4 +1,5 @@
 @import "tailwindcss";
 @import "@repo/ui/styles.css";
+@source "../../../packages/ui/src";
 @import "@fontsource-variable/dm-sans";
 @import "@fontsource-variable/inter";
