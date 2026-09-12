@@ -38,6 +38,10 @@ import { RoomModule } from "./modules/room/room.module";
 import { BedModule } from "./modules/bed/bed.module";
 import { BedAllocationModule } from "./modules/bed-allocation/bed-allocation.module";
 import { AdmissionModule } from "./modules/admission/admission.module";
+import { ServiceCatalogModule } from "./modules/service-catalog/service-catalog.module";
+import { InvoiceModule } from "./modules/invoice/invoice.module";
+import { CommissionRuleModule } from "./modules/commission-rule/commission-rule.module";
+import { CommissionRecordModule } from "./modules/commission-record/commission-record.module";
 
 @Module({
   imports: [
@@ -104,6 +108,10 @@ import { AdmissionModule } from "./modules/admission/admission.module";
     BedModule,
     BedAllocationModule,
     AdmissionModule,
+    ServiceCatalogModule,
+    InvoiceModule,
+    CommissionRuleModule,
+    CommissionRecordModule,
   ],
   controllers: [],
   providers: [DatabaseSeederService],

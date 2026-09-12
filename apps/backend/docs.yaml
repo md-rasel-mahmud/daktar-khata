@@ -32,7 +32,7 @@ paths:
               bloodGroup: O+
               emergencyContact: '01787654321'
               medicalHistory: Diabetes, Hypertension
-              currentMedications: &ref_197
+              currentMedications: &ref_230
                 - Paracetamol
                 - Insulin
               lastVisited: '2025-02-15T00:00:00.000Z'
@@ -42,7 +42,7 @@ paths:
               subscriptionStartDate: '2025-01-01T00:00:00.000Z'
               subscriptionEndDate: '2026-01-01T00:00:00.000Z'
               numberOfBeds: active
-              servicesOffered: &ref_198
+              servicesOffered: &ref_231
                 - Ultrasonography
                 - Hernia Operation
                 - Gallstone Surgery
@@ -174,7 +174,7 @@ paths:
               bloodGroup: O+
               emergencyContact: '+8801712345678'
               medicalHistory: Diabetes, High Blood Pressure
-              currentMedications: &ref_199
+              currentMedications: &ref_232
                 - Metformin
                 - Atorvastatin
               lastVisited: '2025-02-15T00:00:00.000Z'
@@ -230,7 +230,7 @@ paths:
               appointmentId: 6530a2c44cb2dbd2a1111111
               date: '2025-10-20T10:30:00.000Z'
               diagnosis: Mild hypertension
-              prescription: &ref_200
+              prescription: &ref_233
                 - Lisinopril 10mg once daily
               notes: Reduce sodium intake and monitor BP twice a week.
               followUpDate: '2025-11-20T10:30:00.000Z'
@@ -3643,6 +3643,689 @@ paths:
               body: JSON.stringify({\n  "dischargeNotes": "string"\n})
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_196
+  /api/v1/service-catalog:
+    post:
+      operationId: ServiceCatalogController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateServiceCatalogDto'
+            example: &ref_197
+              name: General Consultation
+              category: SERVICE
+              description: Standard OPD consultation
+              defaultPrice: 500
+              tax: 0
+              discountEligible: true
+              commissionEligible: false
+              inventoryImpact: false
+              serviceDuration: 30
+              department: General Medicine
+            examples:
+              default:
+                value: *ref_197
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_198
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/service-catalog", {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "name": "General Consultation",\n  "category": "SERVICE",\n  "description": "Standard OPD consultation",\n  "defaultPrice": 500,\n  "tax": 0,\n  "discountEligible": true,\n  "commissionEligible": false,\n  "inventoryImpact": false,\n  "serviceDuration": 30,\n  "department": "General Medicine"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_198
+    get:
+      operationId: ServiceCatalogController_findAll
+      parameters:
+        - name: merchant
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: category
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: search
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_199
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/service-catalog", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
+      x-code-samples: *ref_199
+  /api/v1/service-catalog/{id}:
+    get:
+      operationId: ServiceCatalogController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_200
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/service-catalog/{id}", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
+      x-code-samples: *ref_200
+    put:
+      operationId: ServiceCatalogController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateServiceCatalogDto'
+            example: &ref_201
+              name: General Consultation
+              category: SERVICE
+              description: Standard OPD consultation
+              defaultPrice: 500
+              tax: 0
+              discountEligible: true
+              commissionEligible: false
+              inventoryImpact: false
+              serviceDuration: 30
+              department: General Medicine
+            examples:
+              default:
+                value: *ref_201
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_202
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/service-catalog/{id}", {
+              method: "PUT",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "name": "General Consultation",\n  "category": "SERVICE",\n  "description": "Standard OPD consultation",\n  "defaultPrice": 500,\n  "tax": 0,\n  "discountEligible": true,\n  "commissionEligible": false,\n  "inventoryImpact": false,\n  "serviceDuration": 30,\n  "department": "General Medicine"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_202
+    delete:
+      operationId: ServiceCatalogController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_203
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/service-catalog/{id}", { method:
+            "DELETE", headers: { 'Authorization': 'Bearer <token>' } }).then(r
+            => r.json()).then(console.log)
+      x-code-samples: *ref_203
+  /api/v1/invoice:
+    post:
+      operationId: InvoiceController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateInvoiceDto'
+            example: &ref_204
+              patient: 64e7c3b2f1a2b3c4d5e6f7a8
+              doctor: 64e7c3b2f1a2b3c4d5e6f7a9
+              admission: 64e7c3b2f1a2b3c4d5e6f7aa
+              appointment: 64e7c3b2f1a2b3c4d5e6f7ab
+              dueDate: '2026-09-30T00:00:00.000Z'
+              notes: Special discount for OPD patient
+              invoiceDiscount: 0
+              lineItems:
+                - service: 64e7c3b2f1a2b3c4d5e6f7a8
+                  serviceName: OPD Consultation
+                  category: CONSULTATION
+                  quantity: 1
+                  unitPrice: 500
+                  discount: 0
+                  tax: 0
+              initialPayment:
+                amount: 500
+                method: CASH
+                transactionId: TRX-12345
+                note: Advance payment
+            examples:
+              default:
+                value: *ref_204
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_205
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/invoice", {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "patient": "64e7c3b2f1a2b3c4d5e6f7a8",\n  "doctor": "64e7c3b2f1a2b3c4d5e6f7a9",\n  "admission": "64e7c3b2f1a2b3c4d5e6f7aa",\n  "appointment": "64e7c3b2f1a2b3c4d5e6f7ab",\n  "dueDate": "2026-09-30T00:00:00.000Z",\n  "notes": "Special discount for OPD patient",\n  "invoiceDiscount": 0,\n  "lineItems": [\n    {\n      "service": "64e7c3b2f1a2b3c4d5e6f7a8",\n      "serviceName": "OPD Consultation",\n      "category": "CONSULTATION",\n      "quantity": 1,\n      "unitPrice": 500,\n      "discount": 0,\n      "tax": 0\n    }\n  ],\n  "initialPayment": {\n    "amount": 500,\n    "method": "CASH",\n    "transactionId": "TRX-12345",\n    "note": "Advance payment"\n  }\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_205
+    get:
+      operationId: InvoiceController_findAll
+      parameters:
+        - name: merchant
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: patient
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: status
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: search
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_206
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/invoice", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
+      x-code-samples: *ref_206
+  /api/v1/invoice/patient/{patientId}:
+    get:
+      operationId: InvoiceController_findByPatient
+      parameters:
+        - name: patientId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_207
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/invoice/patient/{patientId}", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_207
+  /api/v1/invoice/{id}:
+    get:
+      operationId: InvoiceController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_208
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/invoice/{id}", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
+      x-code-samples: *ref_208
+  /api/v1/invoice/{id}/payment:
+    post:
+      operationId: InvoiceController_recordPayment
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecordPaymentDto'
+            example: &ref_209
+              amount: 1000
+              method: CASH
+              transactionId: TRX-98765
+              note: Partial cash payment at counter
+            examples:
+              default:
+                value: *ref_209
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_210
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/invoice/{id}/payment", {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "amount": 1000,\n  "method": "CASH",\n  "transactionId": "TRX-98765",\n  "note": "Partial cash payment at counter"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_210
+  /api/v1/invoice/{id}/refund:
+    post:
+      operationId: InvoiceController_recordRefund
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecordRefundDto'
+            example: &ref_211
+              amount: 500
+              reason: Service cancelled by patient
+            examples:
+              default:
+                value: *ref_211
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_212
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/invoice/{id}/refund", {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "amount": 500,\n  "reason": "Service cancelled by patient"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_212
+  /api/v1/invoice/{id}/status:
+    patch:
+      operationId: InvoiceController_updateStatus
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateInvoiceStatusDto'
+            example: &ref_213
+              status: CANCELLED
+            examples:
+              default:
+                value: *ref_213
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_214
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/invoice/{id}/status", {
+              method: "PATCH",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "status": "CANCELLED"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_214
+  /api/v1/commission-rule:
+    post:
+      operationId: CommissionRuleController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCommissionRuleDto'
+            example: &ref_215
+              doctor: 64e7c3b2f1a2b3c4d5e6f7a8
+              service: 64e7c3b2f1a2b3c4d5e6f7a9
+              commissionType: PERCENTAGE
+              commissionValue: 20
+              effectiveDate: '2026-09-01T00:00:00.000Z'
+              notes: 20% commission on OPD consultations
+              isActive: true
+            examples:
+              default:
+                value: *ref_215
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_216
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/commission-rule", {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "doctor": "64e7c3b2f1a2b3c4d5e6f7a8",\n  "service": "64e7c3b2f1a2b3c4d5e6f7a9",\n  "commissionType": "PERCENTAGE",\n  "commissionValue": 20,\n  "effectiveDate": "2026-09-01T00:00:00.000Z",\n  "notes": "20% commission on OPD consultations",\n  "isActive": true\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_216
+    get:
+      operationId: CommissionRuleController_findAll
+      parameters:
+        - name: merchant
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: doctor
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: service
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_217
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/commission-rule", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
+      x-code-samples: *ref_217
+  /api/v1/commission-rule/{id}:
+    get:
+      operationId: CommissionRuleController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_218
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/commission-rule/{id}", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
+      x-code-samples: *ref_218
+    put:
+      operationId: CommissionRuleController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCommissionRuleDto'
+            example: &ref_219
+              doctor: 64e7c3b2f1a2b3c4d5e6f7a8
+              service: 64e7c3b2f1a2b3c4d5e6f7a9
+              commissionType: PERCENTAGE
+              commissionValue: 20
+              effectiveDate: '2026-09-01T00:00:00.000Z'
+              notes: 20% commission on OPD consultations
+              isActive: true
+            examples:
+              default:
+                value: *ref_219
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_220
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/commission-rule/{id}", {
+              method: "PUT",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "doctor": "64e7c3b2f1a2b3c4d5e6f7a8",\n  "service": "64e7c3b2f1a2b3c4d5e6f7a9",\n  "commissionType": "PERCENTAGE",\n  "commissionValue": 20,\n  "effectiveDate": "2026-09-01T00:00:00.000Z",\n  "notes": "20% commission on OPD consultations",\n  "isActive": true\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_220
+    delete:
+      operationId: CommissionRuleController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_221
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/commission-rule/{id}", { method:
+            "DELETE", headers: { 'Authorization': 'Bearer <token>' } }).then(r
+            => r.json()).then(console.log)
+      x-code-samples: *ref_221
+  /api/v1/commission-record:
+    post:
+      operationId: CommissionRecordController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCommissionRecordDto'
+            example: &ref_222
+              doctor: 64e7c3b2f1a2b3c4d5e6f7a8
+              invoice: 64e7c3b2f1a2b3c4d5e6f7a9
+              service: 64e7c3b2f1a2b3c4d5e6f7aa
+              commissionRule: 64e7c3b2f1a2b3c4d5e6f7ab
+              amount: 100
+              calculationType: PERCENTAGE
+              rate: 20
+              baseAmount: 500
+              status: EARNED
+              notes: OPD Consultation Commission
+            examples:
+              default:
+                value: *ref_222
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_223
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/commission-record", {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "doctor": "64e7c3b2f1a2b3c4d5e6f7a8",\n  "invoice": "64e7c3b2f1a2b3c4d5e6f7a9",\n  "service": "64e7c3b2f1a2b3c4d5e6f7aa",\n  "commissionRule": "64e7c3b2f1a2b3c4d5e6f7ab",\n  "amount": 100,\n  "calculationType": "PERCENTAGE",\n  "rate": 20,\n  "baseAmount": 500,\n  "status": "EARNED",\n  "notes": "OPD Consultation Commission"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_223
+    get:
+      operationId: CommissionRecordController_findAll
+      parameters:
+        - name: merchant
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: doctor
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: invoice
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: status
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_224
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/commission-record", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
+      x-code-samples: *ref_224
+  /api/v1/commission-record/generate-from-invoice/{invoiceId}:
+    post:
+      operationId: CommissionRecordController_generateFromInvoice
+      parameters:
+        - name: invoiceId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_225
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/commission-record/generate-from-invoice/{invoiceId}",
+            { method: "POST", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_225
+  /api/v1/commission-record/doctor/{doctorId}:
+    get:
+      operationId: CommissionRecordController_findByDoctor
+      parameters:
+        - name: doctorId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_226
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/commission-record/doctor/{doctorId}",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_226
+  /api/v1/commission-record/{id}:
+    get:
+      operationId: CommissionRecordController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_227
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/commission-record/{id}", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_227
+  /api/v1/commission-record/{id}/status:
+    patch:
+      operationId: CommissionRecordController_updateStatus
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCommissionStatusDto'
+            example: &ref_228
+              status: SETTLED
+              notes: 'Settled via bank transfer #BT98231'
+            examples:
+              default:
+                value: *ref_228
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_229
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/commission-record/{id}/status",
+            {
+              method: "PATCH",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "status": "SETTLED",\n  "notes": "Settled via bank transfer #BT98231"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_229
 info:
   title: ClinicFlow API
   description: ClinicFlow backend API documentation
@@ -3712,7 +4395,7 @@ components:
           description: Medical history or past health conditions
           _propertyName: medicalHistory
         currentMedications:
-          example: *ref_197
+          example: *ref_230
           description: List of current medications
           type: array
           items:
@@ -3756,7 +4439,7 @@ components:
           _propertyName: numberOfBeds
         servicesOffered:
           description: List of services offered by the clinic
-          example: *ref_198
+          example: *ref_231
           type: array
           items:
             type: string
@@ -3802,7 +4485,7 @@ components:
           _propertyName: medicalHistory
         currentMedications:
           description: List of current medications the patient is taking
-          example: *ref_199
+          example: *ref_232
           type: array
           items:
             type: string
@@ -3844,7 +4527,7 @@ components:
           _propertyName: diagnosis
         prescription:
           description: List of prescribed medicines or instructions
-          example: *ref_200
+          example: *ref_233
           type: array
           items:
             type: string
@@ -3893,7 +4576,7 @@ components:
           _propertyName: password
         role:
           type: string
-          enum: &ref_201
+          enum: &ref_234
             - USER
             - ADMIN
             - DOCTOR
@@ -3980,7 +4663,7 @@ components:
           _propertyName: password
         role:
           type: string
-          enum: *ref_201
+          enum: *ref_234
           description: Role of the user. Only PATIENT or MERCHANT allowed for signup
           _propertyName: role
         user:
@@ -4156,7 +4839,7 @@ components:
         role:
           type: string
           description: User role (defaults to DOCTOR)
-          enum: &ref_202
+          enum: &ref_235
             - USER
             - ADMIN
             - DOCTOR
@@ -4248,7 +4931,7 @@ components:
         role:
           type: string
           description: User role (defaults to DOCTOR)
-          enum: *ref_202
+          enum: *ref_235
           example: DOCTOR
           _propertyName: role
         merchant:
@@ -4422,7 +5105,7 @@ components:
           type: string
           description: Reason for the appointment
           example: CHECK_UP
-          enum: &ref_203
+          enum: &ref_236
             - CHECK_UP
             - CONSULTATION
             - FOLLOW_UP
@@ -4477,7 +5160,7 @@ components:
           type: string
           description: Reason for the appointment
           example: CHECK_UP
-          enum: *ref_203
+          enum: *ref_236
           _propertyName: reasonFor
         problemDescription:
           type: string
@@ -5084,3 +5767,431 @@ components:
           type: string
           _propertyName: dischargeNotes
       example: *ref_195
+    CreateServiceCatalogDto:
+      type: object
+      properties:
+        name:
+          type: string
+          example: General Consultation
+          _propertyName: name
+        category:
+          type: string
+          enum: &ref_237
+            - CONSULTATION
+            - TEST
+            - ADMISSION
+            - BED
+            - OPERATION
+            - MEDICINE
+            - MEDICAL_SUPPLY
+            - NURSING
+            - MEAL
+            - SERVICE
+            - OTHER
+          default: SERVICE
+          _propertyName: category
+        description:
+          type: string
+          example: Standard OPD consultation
+          _propertyName: description
+        defaultPrice:
+          type: number
+          example: 500
+          _propertyName: defaultPrice
+        tax:
+          type: number
+          example: 0
+          _propertyName: tax
+        discountEligible:
+          type: boolean
+          example: true
+          _propertyName: discountEligible
+        commissionEligible:
+          type: boolean
+          example: false
+          _propertyName: commissionEligible
+        inventoryImpact:
+          type: boolean
+          example: false
+          _propertyName: inventoryImpact
+        serviceDuration:
+          type: number
+          example: 30
+          _propertyName: serviceDuration
+        department:
+          type: string
+          example: General Medicine
+          _propertyName: department
+      required:
+        - name
+        - category
+        - defaultPrice
+      example: *ref_197
+    UpdateServiceCatalogDto:
+      type: object
+      properties:
+        name:
+          type: string
+          example: General Consultation
+          _propertyName: name
+        category:
+          type: string
+          enum: *ref_237
+          default: SERVICE
+          _propertyName: category
+        description:
+          type: string
+          example: Standard OPD consultation
+          _propertyName: description
+        defaultPrice:
+          type: number
+          example: 500
+          _propertyName: defaultPrice
+        tax:
+          type: number
+          example: 0
+          _propertyName: tax
+        discountEligible:
+          type: boolean
+          example: true
+          _propertyName: discountEligible
+        commissionEligible:
+          type: boolean
+          example: false
+          _propertyName: commissionEligible
+        inventoryImpact:
+          type: boolean
+          example: false
+          _propertyName: inventoryImpact
+        serviceDuration:
+          type: number
+          example: 30
+          _propertyName: serviceDuration
+        department:
+          type: string
+          example: General Medicine
+          _propertyName: department
+      example: *ref_201
+    LineItemInputDto:
+      type: object
+      properties:
+        service:
+          type: string
+          example: 64e7c3b2f1a2b3c4d5e6f7a8
+          _propertyName: service
+        serviceName:
+          type: string
+          example: OPD Consultation
+          _propertyName: serviceName
+        category:
+          type: string
+          enum:
+            - CONSULTATION
+            - TEST
+            - ADMISSION
+            - BED
+            - OPERATION
+            - MEDICINE
+            - MEDICAL_SUPPLY
+            - NURSING
+            - MEAL
+            - SERVICE
+            - OTHER
+          _propertyName: category
+        quantity:
+          type: number
+          example: 1
+          default: 1
+          _propertyName: quantity
+        unitPrice:
+          type: number
+          example: 500
+          _propertyName: unitPrice
+        discount:
+          type: number
+          example: 0
+          default: 0
+          _propertyName: discount
+        tax:
+          type: number
+          example: 0
+          default: 0
+          _propertyName: tax
+      required:
+        - serviceName
+        - quantity
+        - unitPrice
+    InitialPaymentDto:
+      type: object
+      properties:
+        amount:
+          type: number
+          example: 500
+          _propertyName: amount
+        method:
+          type: string
+          example: CASH
+          default: CASH
+          _propertyName: method
+        transactionId:
+          type: string
+          example: TRX-12345
+          _propertyName: transactionId
+        note:
+          type: string
+          example: Advance payment
+          _propertyName: note
+      required:
+        - amount
+        - method
+    CreateInvoiceDto:
+      type: object
+      properties:
+        patient:
+          type: string
+          example: 64e7c3b2f1a2b3c4d5e6f7a8
+          _propertyName: patient
+        doctor:
+          type: string
+          example: 64e7c3b2f1a2b3c4d5e6f7a9
+          _propertyName: doctor
+        admission:
+          type: string
+          example: 64e7c3b2f1a2b3c4d5e6f7aa
+          _propertyName: admission
+        appointment:
+          type: string
+          example: 64e7c3b2f1a2b3c4d5e6f7ab
+          _propertyName: appointment
+        dueDate:
+          type: string
+          example: '2026-09-30T00:00:00.000Z'
+          _propertyName: dueDate
+        notes:
+          type: string
+          example: Special discount for OPD patient
+          _propertyName: notes
+        invoiceDiscount:
+          type: number
+          example: 0
+          default: 0
+          _propertyName: invoiceDiscount
+        lineItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/LineItemInputDto'
+          _propertyName: lineItems
+        initialPayment:
+          $ref: '#/components/schemas/InitialPaymentDto'
+          _propertyName: initialPayment
+      required:
+        - patient
+        - lineItems
+      example: *ref_204
+    RecordPaymentDto:
+      type: object
+      properties:
+        amount:
+          type: number
+          example: 1000
+          _propertyName: amount
+        method:
+          type: string
+          example: CASH
+          default: CASH
+          _propertyName: method
+        transactionId:
+          type: string
+          example: TRX-98765
+          _propertyName: transactionId
+        note:
+          type: string
+          example: Partial cash payment at counter
+          _propertyName: note
+      required:
+        - amount
+        - method
+      example: *ref_209
+    RecordRefundDto:
+      type: object
+      properties:
+        amount:
+          type: number
+          example: 500
+          _propertyName: amount
+        reason:
+          type: string
+          example: Service cancelled by patient
+          _propertyName: reason
+      required:
+        - amount
+      example: *ref_211
+    UpdateInvoiceStatusDto:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - DRAFT
+            - ISSUED
+            - PARTIALLY_PAID
+            - PAID
+            - DUE
+            - CANCELLED
+            - REFUNDED
+          example: CANCELLED
+          _propertyName: status
+      required:
+        - status
+      example: *ref_213
+    CreateCommissionRuleDto:
+      type: object
+      properties:
+        doctor:
+          type: string
+          example: 64e7c3b2f1a2b3c4d5e6f7a8
+          _propertyName: doctor
+        service:
+          type: string
+          example: 64e7c3b2f1a2b3c4d5e6f7a9
+          _propertyName: service
+        commissionType:
+          type: string
+          enum: &ref_238
+            - PERCENTAGE
+            - FIXED_AMOUNT
+            - NONE
+          example: PERCENTAGE
+          _propertyName: commissionType
+        commissionValue:
+          type: number
+          example: 20
+          _propertyName: commissionValue
+        effectiveDate:
+          type: string
+          example: '2026-09-01T00:00:00.000Z'
+          _propertyName: effectiveDate
+        notes:
+          type: string
+          example: 20% commission on OPD consultations
+          _propertyName: notes
+        isActive:
+          type: boolean
+          example: true
+          _propertyName: isActive
+      required:
+        - doctor
+        - commissionType
+        - commissionValue
+      example: *ref_215
+    UpdateCommissionRuleDto:
+      type: object
+      properties:
+        doctor:
+          type: string
+          example: 64e7c3b2f1a2b3c4d5e6f7a8
+          _propertyName: doctor
+        service:
+          type: string
+          example: 64e7c3b2f1a2b3c4d5e6f7a9
+          _propertyName: service
+        commissionType:
+          type: string
+          enum: *ref_238
+          example: PERCENTAGE
+          _propertyName: commissionType
+        commissionValue:
+          type: number
+          example: 20
+          _propertyName: commissionValue
+        effectiveDate:
+          type: string
+          example: '2026-09-01T00:00:00.000Z'
+          _propertyName: effectiveDate
+        notes:
+          type: string
+          example: 20% commission on OPD consultations
+          _propertyName: notes
+        isActive:
+          type: boolean
+          example: true
+          _propertyName: isActive
+      example: *ref_219
+    CreateCommissionRecordDto:
+      type: object
+      properties:
+        doctor:
+          type: string
+          example: 64e7c3b2f1a2b3c4d5e6f7a8
+          _propertyName: doctor
+        invoice:
+          type: string
+          example: 64e7c3b2f1a2b3c4d5e6f7a9
+          _propertyName: invoice
+        service:
+          type: string
+          example: 64e7c3b2f1a2b3c4d5e6f7aa
+          _propertyName: service
+        commissionRule:
+          type: string
+          example: 64e7c3b2f1a2b3c4d5e6f7ab
+          _propertyName: commissionRule
+        amount:
+          type: number
+          example: 100
+          _propertyName: amount
+        calculationType:
+          type: string
+          enum:
+            - PERCENTAGE
+            - FIXED_AMOUNT
+            - NONE
+          default: PERCENTAGE
+          _propertyName: calculationType
+        rate:
+          type: number
+          example: 20
+          _propertyName: rate
+        baseAmount:
+          type: number
+          example: 500
+          _propertyName: baseAmount
+        status:
+          type: string
+          enum:
+            - EARNED
+            - PAYABLE
+            - APPROVED
+            - SETTLED
+            - CANCELLED
+          default: EARNED
+          _propertyName: status
+        notes:
+          type: string
+          example: OPD Consultation Commission
+          _propertyName: notes
+      required:
+        - doctor
+        - invoice
+        - amount
+      example: *ref_222
+    UpdateCommissionStatusDto:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - EARNED
+            - PAYABLE
+            - APPROVED
+            - SETTLED
+            - CANCELLED
+          example: SETTLED
+          _propertyName: status
+        notes:
+          type: string
+          example: 'Settled via bank transfer #BT98231'
+          _propertyName: notes
+      required:
+        - status
+      example: *ref_228

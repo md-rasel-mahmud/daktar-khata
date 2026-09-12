@@ -84,3 +84,41 @@ export enum BedStatus {
   MAINTENANCE = "MAINTENANCE",
 }
 
+export enum InvoiceStatus {
+  DRAFT = "DRAFT",
+  ISSUED = "ISSUED",
+  PARTIALLY_PAID = "PARTIALLY_PAID",
+  PAID = "PAID",
+  DUE = "DUE",
+  CANCELLED = "CANCELLED",
+  REFUNDED = "REFUNDED",
+}
+
+export enum CommissionType {
+  PERCENTAGE = "PERCENTAGE",
+  FIXED_AMOUNT = "FIXED_AMOUNT",
+  NONE = "NONE",
+}
+
+export enum CommissionStatus {
+  EARNED = "EARNED",
+  PAYABLE = "PAYABLE",
+  APPROVED = "APPROVED",
+  SETTLED = "SETTLED",
+  CANCELLED = "CANCELLED",
+}
+
+export enum ServiceCategory {
+  CONSULTATION = "CONSULTATION",
+  TEST = "TEST",
+  ADMISSION = "ADMISSION",
+  BED = "BED",
+  OPERATION = "OPERATION",
+  MEDICINE = "MEDICINE",
+  MEDICAL_SUPPLY = "MEDICAL_SUPPLY",
+  NURSING = "NURSING",
+  MEAL = "MEAL",
+  SERVICE = "SERVICE",
+  OTHER = "OTHER",
+}
+

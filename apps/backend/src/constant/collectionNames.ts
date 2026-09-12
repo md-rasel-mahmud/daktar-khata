@@ -29,4 +29,8 @@ export const collectionsName = {
   bed: "Bed",
   bedAllocation: "BedAllocation",
   admission: "Admission",
+  serviceCatalog: "ServiceCatalog",
+  invoice: "Invoice",
+  commissionRule: "CommissionRule",
+  commissionRecord: "CommissionRecord",
 };
