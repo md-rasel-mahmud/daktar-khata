@@ -5,8 +5,8 @@ import {
   Inject,
   forwardRef,
 } from "@nestjs/common";
-import { InjectModel } from "@nestjs/mongoose";
-import { Model, Types } from "mongoose";
+import { InjectModel, InjectConnection } from "@nestjs/mongoose";
+import { Model, Types, Connection } from "mongoose";
 import { collectionsName } from "../../constant";
 import { AppointmentDocument } from "./schema/appointment.schema";
 import { CreateAppointmentDto } from "./dto/create-appointment.dto";
@@ -37,6 +37,7 @@ export class AppointmentService {
     private readonly patientService: PatientService,
     private readonly doctorService: DoctorService,
     private readonly merchantPgService: MerchantPGService,
+    @InjectConnection() private readonly connection: Connection,
   ) {}
 
   /**
@@ -45,74 +46,103 @@ export class AppointmentService {
    * Else => PENDING and initiate SSLCommerz payment
    */
   async createAppointment(userId: Types.ObjectId, dto: CreateAppointmentDto) {
-    let paymentStatus = PaymentStatus.PENDING;
+    const isSlotAvailable = await this.validateSlot(
+      dto.doctor,
+      dto.appointmentDate,
+      dto.appointmentSlot,
+    );
 
-    // Step 1: check payment method
-    if (dto.paymentMethod === PaymentMethod.CASH) {
-      paymentStatus = PaymentStatus.COMPLETED;
+    if (!isSlotAvailable) {
+      throw new BadRequestException("The requested slot is not available. Please choose another time.");
     }
 
-    const patient = await this.patientService.findOneByUserId(userId);
+    const session = await this.connection.startSession();
+    session.startTransaction();
 
-    const doctor = await this.doctorService.findOne(dto.doctor);
+    try {
+      let paymentStatus = PaymentStatus.PENDING;
 
-    const transactionId = `TXN_${Date.now()}`;
-
-    // Step 2: create appointment
-    const createdAppointment = await this.appointmentModel.create({
-      ...dto,
-      merchant: doctor.merchant,
-      paymentStatus,
-      transactionId,
-      patient: patient._id,
-      doctor: doctor._id,
-    });
-
-    // Step 3: if not cash, initiate payment
-    if (dto.paymentMethod === PaymentMethod.SSL_COMMERZ) {
-      const paymentPayload = {
-        amount: doctor.fee,
-        paymentId: createdAppointment._id.toString(),
-        transactionId,
-      };
-
-      const customerPayload = {
-        customerName: patient.name,
-        customerAddress: patient.address || "N/A",
-        customerEmail: patient.user?.["email"] || "unknown@mail.com",
-        customerPhone: patient.user["phone"],
-      };
-
-      const merchantPG = await this.merchantPgService.getSinglePG(
-        new Types.ObjectId(doctor.merchant),
-      );
-
-      if (!merchantPG || !merchantPG.sslcommerz.isActive) {
-        throw new BadRequestException(
-          "SSLCOMMERZ Payment Gateway is not configured for this merchant or inactive. Try cash payment method.",
-        );
+      // Step 1: check payment method
+      if (dto.paymentMethod === PaymentMethod.CASH) {
+        paymentStatus = PaymentStatus.COMPLETED;
       }
 
-      const paymentInit = await this.paymentService.initiate(
-        paymentPayload,
-        customerPayload,
-        BillingForEnum.PATIENT_APPOINTMENT,
+      const patient = await this.patientService.findOneByUserId(userId);
+      const doctor = await this.doctorService.findOne(dto.doctor);
+      const transactionId = `TXN_${Date.now()}`;
+
+      // Step 2: create appointment
+      const createdAppointments = await this.appointmentModel.create(
+        [
+          {
+            ...dto,
+            merchant: doctor.merchant,
+            paymentStatus,
+            transactionId,
+            patient: patient._id,
+            doctor: doctor._id,
+          },
+        ],
+        { session }
       );
+      const createdAppointment = createdAppointments[0];
+
+      // Step 3: if not cash, initiate payment
+      if (dto.paymentMethod === PaymentMethod.SSL_COMMERZ) {
+        const paymentPayload = {
+          amount: doctor.fee,
+          paymentId: createdAppointment._id.toString(),
+          transactionId,
+        };
+
+        const customerPayload = {
+          customerName: patient.name,
+          customerAddress: patient.address || "N/A",
+          customerEmail: patient.user?.["email"] || "unknown@mail.com",
+          customerPhone: patient.user["phone"],
+        };
+
+        const merchantPG = await this.merchantPgService.getSinglePG(
+          new Types.ObjectId(doctor.merchant),
+        );
+
+        if (!merchantPG || !merchantPG.sslcommerz.isActive) {
+          throw new BadRequestException(
+            "SSLCOMMERZ Payment Gateway is not configured for this merchant or inactive. Try cash payment method.",
+          );
+        }
+
+        const paymentInit = await this.paymentService.initiate(
+          paymentPayload,
+          customerPayload,
+          BillingForEnum.PATIENT_APPOINTMENT,
+        );
+
+        await session.commitTransaction();
+        session.endSession();
+
+        return {
+          message: "Appointment created successfully. Please complete payment.",
+          data: {
+            appointment: createdAppointment,
+            payment: paymentInit,
+          },
+        };
+      }
+
+      // Step 4: if cash, no payment needed
+      await session.commitTransaction();
+      session.endSession();
 
       return {
-        message: "Appointment created successfully. Please complete payment.",
-        data: {
-          appointment: createdAppointment,
-          payment: paymentInit,
-        },
+        message: "Appointment created successfully (Cash payment).",
+        appointment: createdAppointment,
       };
+    } catch (error) {
+      await session.abortTransaction();
+      session.endSession();
+      throw error;
     }
-
-    // Step 4: if cash, no payment needed
-    return {
-      message: "Appointment created successfully (Cash payment).",
-      appointment: createdAppointment,
-    };
   }
 
   async getAppointmentByTransactionId(transactionId: string) {
