@@ -32,7 +32,7 @@ paths:
               bloodGroup: O+
               emergencyContact: '01787654321'
               medicalHistory: Diabetes, Hypertension
-              currentMedications: &ref_138
+              currentMedications: &ref_162
                 - Paracetamol
                 - Insulin
               lastVisited: '2025-02-15T00:00:00.000Z'
@@ -42,7 +42,7 @@ paths:
               subscriptionStartDate: '2025-01-01T00:00:00.000Z'
               subscriptionEndDate: '2026-01-01T00:00:00.000Z'
               numberOfBeds: active
-              servicesOffered: &ref_139
+              servicesOffered: &ref_163
                 - Ultrasonography
                 - Hernia Operation
                 - Gallstone Surgery
@@ -174,7 +174,7 @@ paths:
               bloodGroup: O+
               emergencyContact: '+8801712345678'
               medicalHistory: Diabetes, High Blood Pressure
-              currentMedications: &ref_140
+              currentMedications: &ref_164
                 - Metformin
                 - Atorvastatin
               lastVisited: '2025-02-15T00:00:00.000Z'
@@ -230,7 +230,7 @@ paths:
               appointmentId: 6530a2c44cb2dbd2a1111111
               date: '2025-10-20T10:30:00.000Z'
               diagnosis: Mild hypertension
-              prescription: &ref_141
+              prescription: &ref_165
                 - Lisinopril 10mg once daily
               notes: Reduce sodium intake and monitor BP twice a week.
               followUpDate: '2025-11-20T10:30:00.000Z'
@@ -2509,6 +2509,478 @@ paths:
               body: JSON.stringify({\n  "patient": "string",\n  "doctor": "string",\n  "appointment": "string",\n  "chiefComplaint": "string",\n  "symptoms": [\n    "string"\n  ],\n  "vitals": {},\n  "diagnosis": "string",\n  "clinicalNotes": "string",\n  "prescription": "string",\n  "testOrders": [\n    "string"\n  ],\n  "advice": "string",\n  "followUpDate": "string",\n  "admissionRecommended": true,\n  "operationRecommended": true\n})
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_137
+  /api/v1/prescription:
+    post:
+      operationId: PrescriptionController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePrescriptionDto'
+            example: &ref_138
+              patient: string
+              doctor: string
+              encounter: string
+              medicines:
+                - name: string
+                  dosage: string
+                  route: string
+                  frequency: string
+                  duration: string
+                  timing: string
+                  quantity: 0
+                  instructions: string
+                  beforeAfterMeal: string
+                  notes: string
+              notes: string
+            examples:
+              default:
+                value: *ref_138
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_139
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/prescription", {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "patient": "string",\n  "doctor": "string",\n  "encounter": "string",\n  "medicines": [\n    {\n      "name": "string",\n      "dosage": "string",\n      "route": "string",\n      "frequency": "string",\n      "duration": "string",\n      "timing": "string",\n      "quantity": 0,\n      "instructions": "string",\n      "beforeAfterMeal": "string",\n      "notes": "string"\n    }\n  ],\n  "notes": "string"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_139
+  /api/v1/prescription/encounter/{id}:
+    get:
+      operationId: PrescriptionController_getByEncounter
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_140
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/prescription/encounter/{id}", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_140
+  /api/v1/prescription/patient/{id}:
+    get:
+      operationId: PrescriptionController_getByPatient
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_141
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/prescription/patient/{id}", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_141
+  /api/v1/prescription/{id}:
+    put:
+      operationId: PrescriptionController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePrescriptionDto'
+            example: &ref_142
+              patient: string
+              doctor: string
+              encounter: string
+              medicines:
+                - name: string
+                  dosage: string
+                  route: string
+                  frequency: string
+                  duration: string
+                  timing: string
+                  quantity: 0
+                  instructions: string
+                  beforeAfterMeal: string
+                  notes: string
+              notes: string
+            examples:
+              default:
+                value: *ref_142
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_143
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/prescription/{id}", {
+              method: "PUT",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "patient": "string",\n  "doctor": "string",\n  "encounter": "string",\n  "medicines": [\n    {\n      "name": "string",\n      "dosage": "string",\n      "route": "string",\n      "frequency": "string",\n      "duration": "string",\n      "timing": "string",\n      "quantity": 0,\n      "instructions": "string",\n      "beforeAfterMeal": "string",\n      "notes": "string"\n    }\n  ],\n  "notes": "string"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_143
+  /api/v1/prescription/{id}/status:
+    patch:
+      operationId: PrescriptionController_updateStatus
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_144
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/prescription/{id}/status", {
+            method: "PATCH", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_144
+  /api/v1/test-catalog:
+    post:
+      operationId: TestCatalogController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTestCatalogDto'
+            example: &ref_145
+              name: string
+              category: string
+              description: string
+              price: 0
+              sampleType: string
+              turnaroundTime: string
+              preparationInstructions: string
+              isActive: true
+            examples:
+              default:
+                value: *ref_145
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_146
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/test-catalog", {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "name": "string",\n  "category": "string",\n  "description": "string",\n  "price": 0,\n  "sampleType": "string",\n  "turnaroundTime": "string",\n  "preparationInstructions": "string",\n  "isActive": true\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_146
+    get:
+      operationId: TestCatalogController_findAll
+      parameters:
+        - name: merchant
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_147
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/test-catalog", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
+      x-code-samples: *ref_147
+  /api/v1/test-catalog/{id}:
+    get:
+      operationId: TestCatalogController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_148
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/test-catalog/{id}", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
+      x-code-samples: *ref_148
+    put:
+      operationId: TestCatalogController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTestCatalogDto'
+            example: &ref_149
+              name: string
+              category: string
+              description: string
+              price: 0
+              sampleType: string
+              turnaroundTime: string
+              preparationInstructions: string
+              isActive: true
+            examples:
+              default:
+                value: *ref_149
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_150
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/test-catalog/{id}", {
+              method: "PUT",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "name": "string",\n  "category": "string",\n  "description": "string",\n  "price": 0,\n  "sampleType": "string",\n  "turnaroundTime": "string",\n  "preparationInstructions": "string",\n  "isActive": true\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_150
+    delete:
+      operationId: TestCatalogController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_151
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/test-catalog/{id}", { method:
+            "DELETE", headers: { 'Authorization': 'Bearer <token>' } }).then(r
+            => r.json()).then(console.log)
+      x-code-samples: *ref_151
+  /api/v1/test-order:
+    post:
+      operationId: TestOrderController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTestOrderDto'
+            example: &ref_152
+              patient: string
+              doctor: string
+              encounter: string
+              items:
+                - test: string
+                  testName: string
+                  price: 0
+                  notes: string
+            examples:
+              default:
+                value: *ref_152
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_153
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/test-order", {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "patient": "string",\n  "doctor": "string",\n  "encounter": "string",\n  "items": [\n    {\n      "test": "string",\n      "testName": "string",\n      "price": 0,\n      "notes": "string"\n    }\n  ]\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_153
+  /api/v1/test-order/encounter/{id}:
+    get:
+      operationId: TestOrderController_getByEncounter
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_154
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/test-order/encounter/{id}", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_154
+  /api/v1/test-order/patient/{id}:
+    get:
+      operationId: TestOrderController_getByPatient
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_155
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/test-order/patient/{id}", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_155
+  /api/v1/test-order/{id}/item/{itemIndex}/status:
+    patch:
+      operationId: TestOrderController_updateItemStatus
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+        - name: itemIndex
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTestOrderItemStatusDto'
+            example: &ref_156
+              status: ORDERED
+            examples:
+              default:
+                value: *ref_156
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_157
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/test-order/{id}/item/{itemIndex}/status",
+            {
+              method: "PATCH",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "status": "ORDERED"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_157
+  /api/v1/lab-report:
+    post:
+      operationId: LabReportController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateLabReportDto'
+            example: &ref_158
+              testOrder: string
+              testOrderItemIndex: 0
+              patient: string
+              findings: string
+              conclusion: string
+              remarks: string
+            examples:
+              default:
+                value: *ref_158
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_159
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/lab-report", {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "testOrder": "string",\n  "testOrderItemIndex": 0,\n  "patient": "string",\n  "findings": "string",\n  "conclusion": "string",\n  "remarks": "string"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_159
+  /api/v1/lab-report/patient/{id}:
+    get:
+      operationId: LabReportController_getByPatient
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_160
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/lab-report/patient/{id}", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_160
+  /api/v1/lab-report/{id}/approve:
+    patch:
+      operationId: LabReportController_approve
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_161
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/lab-report/{id}/approve", {
+            method: "PATCH", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_161
 info:
   title: ClinicFlow API
   description: ClinicFlow backend API documentation
@@ -2578,7 +3050,7 @@ components:
           description: Medical history or past health conditions
           _propertyName: medicalHistory
         currentMedications:
-          example: *ref_138
+          example: *ref_162
           description: List of current medications
           type: array
           items:
@@ -2622,7 +3094,7 @@ components:
           _propertyName: numberOfBeds
         servicesOffered:
           description: List of services offered by the clinic
-          example: *ref_139
+          example: *ref_163
           type: array
           items:
             type: string
@@ -2668,7 +3140,7 @@ components:
           _propertyName: medicalHistory
         currentMedications:
           description: List of current medications the patient is taking
-          example: *ref_140
+          example: *ref_164
           type: array
           items:
             type: string
@@ -2710,7 +3182,7 @@ components:
           _propertyName: diagnosis
         prescription:
           description: List of prescribed medicines or instructions
-          example: *ref_141
+          example: *ref_165
           type: array
           items:
             type: string
@@ -2759,7 +3231,7 @@ components:
           _propertyName: password
         role:
           type: string
-          enum: &ref_142
+          enum: &ref_166
             - USER
             - ADMIN
             - DOCTOR
@@ -2846,7 +3318,7 @@ components:
           _propertyName: password
         role:
           type: string
-          enum: *ref_142
+          enum: *ref_166
           description: Role of the user. Only PATIENT or MERCHANT allowed for signup
           _propertyName: role
         user:
@@ -3022,7 +3494,7 @@ components:
         role:
           type: string
           description: User role (defaults to DOCTOR)
-          enum: &ref_143
+          enum: &ref_167
             - USER
             - ADMIN
             - DOCTOR
@@ -3114,7 +3586,7 @@ components:
         role:
           type: string
           description: User role (defaults to DOCTOR)
-          enum: *ref_143
+          enum: *ref_167
           example: DOCTOR
           _propertyName: role
         merchant:
@@ -3288,7 +3760,7 @@ components:
           type: string
           description: Reason for the appointment
           example: CHECK_UP
-          enum: &ref_144
+          enum: &ref_168
             - CHECK_UP
             - CONSULTATION
             - FOLLOW_UP
@@ -3343,7 +3815,7 @@ components:
           type: string
           description: Reason for the appointment
           example: CHECK_UP
-          enum: *ref_144
+          enum: *ref_168
           _propertyName: reasonFor
         problemDescription:
           type: string
@@ -3544,3 +4016,229 @@ components:
           type: boolean
           _propertyName: operationRecommended
       example: *ref_136
+    MedicineItemDto:
+      type: object
+      properties:
+        name:
+          type: string
+          _propertyName: name
+        dosage:
+          type: string
+          _propertyName: dosage
+        route:
+          type: string
+          _propertyName: route
+        frequency:
+          type: string
+          _propertyName: frequency
+        duration:
+          type: string
+          _propertyName: duration
+        timing:
+          type: string
+          _propertyName: timing
+        quantity:
+          type: number
+          _propertyName: quantity
+        instructions:
+          type: string
+          _propertyName: instructions
+        beforeAfterMeal:
+          type: string
+          _propertyName: beforeAfterMeal
+        notes:
+          type: string
+          _propertyName: notes
+      required:
+        - name
+    CreatePrescriptionDto:
+      type: object
+      properties:
+        patient:
+          type: string
+          _propertyName: patient
+        doctor:
+          type: string
+          _propertyName: doctor
+        encounter:
+          type: string
+          _propertyName: encounter
+        medicines:
+          type: array
+          items:
+            $ref: '#/components/schemas/MedicineItemDto'
+          _propertyName: medicines
+        notes:
+          type: string
+          _propertyName: notes
+      required:
+        - patient
+        - doctor
+        - encounter
+        - medicines
+      example: *ref_138
+    UpdatePrescriptionDto:
+      type: object
+      properties:
+        patient:
+          type: string
+          _propertyName: patient
+        doctor:
+          type: string
+          _propertyName: doctor
+        encounter:
+          type: string
+          _propertyName: encounter
+        medicines:
+          type: array
+          items:
+            $ref: '#/components/schemas/MedicineItemDto'
+          _propertyName: medicines
+        notes:
+          type: string
+          _propertyName: notes
+      example: *ref_142
+    CreateTestCatalogDto:
+      type: object
+      properties:
+        name:
+          type: string
+          _propertyName: name
+        category:
+          type: string
+          _propertyName: category
+        description:
+          type: string
+          _propertyName: description
+        price:
+          type: number
+          _propertyName: price
+        sampleType:
+          type: string
+          _propertyName: sampleType
+        turnaroundTime:
+          type: string
+          _propertyName: turnaroundTime
+        preparationInstructions:
+          type: string
+          _propertyName: preparationInstructions
+        isActive:
+          type: boolean
+          _propertyName: isActive
+      required:
+        - name
+        - price
+      example: *ref_145
+    UpdateTestCatalogDto:
+      type: object
+      properties:
+        name:
+          type: string
+          _propertyName: name
+        category:
+          type: string
+          _propertyName: category
+        description:
+          type: string
+          _propertyName: description
+        price:
+          type: number
+          _propertyName: price
+        sampleType:
+          type: string
+          _propertyName: sampleType
+        turnaroundTime:
+          type: string
+          _propertyName: turnaroundTime
+        preparationInstructions:
+          type: string
+          _propertyName: preparationInstructions
+        isActive:
+          type: boolean
+          _propertyName: isActive
+      example: *ref_149
+    TestOrderItemDto:
+      type: object
+      properties:
+        test:
+          type: string
+          _propertyName: test
+        testName:
+          type: string
+          _propertyName: testName
+        price:
+          type: number
+          _propertyName: price
+        notes:
+          type: string
+          _propertyName: notes
+      required:
+        - test
+        - testName
+        - price
+    CreateTestOrderDto:
+      type: object
+      properties:
+        patient:
+          type: string
+          _propertyName: patient
+        doctor:
+          type: string
+          _propertyName: doctor
+        encounter:
+          type: string
+          _propertyName: encounter
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestOrderItemDto'
+          _propertyName: items
+      required:
+        - patient
+        - doctor
+        - items
+      example: *ref_152
+    UpdateTestOrderItemStatusDto:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - ORDERED
+            - PAYMENT_PENDING
+            - SAMPLE_PENDING
+            - SAMPLE_COLLECTED
+            - PROCESSING
+            - REPORT_READY
+            - APPROVED
+            - CANCELLED
+          _propertyName: status
+      required:
+        - status
+      example: *ref_156
+    CreateLabReportDto:
+      type: object
+      properties:
+        testOrder:
+          type: string
+          _propertyName: testOrder
+        testOrderItemIndex:
+          type: number
+          _propertyName: testOrderItemIndex
+        patient:
+          type: string
+          _propertyName: patient
+        findings:
+          type: string
+          _propertyName: findings
+        conclusion:
+          type: string
+          _propertyName: conclusion
+        remarks:
+          type: string
+          _propertyName: remarks
+      required:
+        - testOrder
+        - testOrderItemIndex
+        - patient
+      example: *ref_158

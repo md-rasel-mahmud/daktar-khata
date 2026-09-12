@@ -29,6 +29,10 @@ import { StaffRoleTemplateModule } from "src/modules/staff-role-template/staff-r
 import { MedicalRecordModule } from "src/modules/medical-records/medical-record.module";
 import { QueueModule } from "./modules/queue/queue.module";
 import { EncounterModule } from "./modules/encounter/encounter.module";
+import { PrescriptionModule } from "./modules/prescription/prescription.module";
+import { TestCatalogModule } from "./modules/test-catalog/test-catalog.module";
+import { TestOrderModule } from "./modules/test-order/test-order.module";
+import { LabReportModule } from "./modules/lab-report/lab-report.module";
 
 @Module({
   imports: [
@@ -86,6 +90,10 @@ import { EncounterModule } from "./modules/encounter/encounter.module";
     MedicalRecordModule,
     QueueModule,
     EncounterModule,
+    PrescriptionModule,
+    TestCatalogModule,
+    TestOrderModule,
+    LabReportModule,
   ],
   controllers: [],
   providers: [DatabaseSeederService],

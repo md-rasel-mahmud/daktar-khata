@@ -20,4 +20,8 @@ export const collectionsName = {
   setting: "Setting",
   merchantPG: "MerchantPG",
   encounter: "Encounter",
+  prescription: "Prescription",
+  testCatalog: "TestCatalog",
+  testOrder: "TestOrder",
+  labReport: "LabReport",
 };
