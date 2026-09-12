@@ -33,6 +33,11 @@ import { PrescriptionModule } from "./modules/prescription/prescription.module";
 import { TestCatalogModule } from "./modules/test-catalog/test-catalog.module";
 import { TestOrderModule } from "./modules/test-order/test-order.module";
 import { LabReportModule } from "./modules/lab-report/lab-report.module";
+import { WardModule } from "./modules/ward/ward.module";
+import { RoomModule } from "./modules/room/room.module";
+import { BedModule } from "./modules/bed/bed.module";
+import { BedAllocationModule } from "./modules/bed-allocation/bed-allocation.module";
+import { AdmissionModule } from "./modules/admission/admission.module";
 
 @Module({
   imports: [
@@ -94,6 +99,11 @@ import { LabReportModule } from "./modules/lab-report/lab-report.module";
     TestCatalogModule,
     TestOrderModule,
     LabReportModule,
+    WardModule,
+    RoomModule,
+    BedModule,
+    BedAllocationModule,
+    AdmissionModule,
   ],
   controllers: [],
   providers: [DatabaseSeederService],

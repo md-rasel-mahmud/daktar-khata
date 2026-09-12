@@ -24,4 +24,9 @@ export const collectionsName = {
   testCatalog: "TestCatalog",
   testOrder: "TestOrder",
   labReport: "LabReport",
+  ward: "Ward",
+  room: "Room",
+  bed: "Bed",
+  bedAllocation: "BedAllocation",
+  admission: "Admission",
 };

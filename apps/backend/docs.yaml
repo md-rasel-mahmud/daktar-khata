@@ -32,7 +32,7 @@ paths:
               bloodGroup: O+
               emergencyContact: '01787654321'
               medicalHistory: Diabetes, Hypertension
-              currentMedications: &ref_162
+              currentMedications: &ref_197
                 - Paracetamol
                 - Insulin
               lastVisited: '2025-02-15T00:00:00.000Z'
@@ -42,7 +42,7 @@ paths:
               subscriptionStartDate: '2025-01-01T00:00:00.000Z'
               subscriptionEndDate: '2026-01-01T00:00:00.000Z'
               numberOfBeds: active
-              servicesOffered: &ref_163
+              servicesOffered: &ref_198
                 - Ultrasonography
                 - Hernia Operation
                 - Gallstone Surgery
@@ -174,7 +174,7 @@ paths:
               bloodGroup: O+
               emergencyContact: '+8801712345678'
               medicalHistory: Diabetes, High Blood Pressure
-              currentMedications: &ref_164
+              currentMedications: &ref_199
                 - Metformin
                 - Atorvastatin
               lastVisited: '2025-02-15T00:00:00.000Z'
@@ -230,7 +230,7 @@ paths:
               appointmentId: 6530a2c44cb2dbd2a1111111
               date: '2025-10-20T10:30:00.000Z'
               diagnosis: Mild hypertension
-              prescription: &ref_165
+              prescription: &ref_200
                 - Lisinopril 10mg once daily
               notes: Reduce sodium intake and monitor BP twice a week.
               followUpDate: '2025-11-20T10:30:00.000Z'
@@ -2981,6 +2981,668 @@ paths:
             method: "PATCH", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_161
+  /api/v1/ward:
+    post:
+      operationId: WardController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWardDto'
+            example: &ref_162
+              name: string
+              description: string
+              isActive: true
+            examples:
+              default:
+                value: *ref_162
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_163
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/ward", {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "name": "string",\n  "description": "string",\n  "isActive": true\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_163
+    get:
+      operationId: WardController_findAll
+      parameters:
+        - name: merchant
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_164
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/ward", { method: "GET", headers:
+            { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
+      x-code-samples: *ref_164
+  /api/v1/ward/{id}:
+    get:
+      operationId: WardController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_165
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/ward/{id}", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
+      x-code-samples: *ref_165
+    put:
+      operationId: WardController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateWardDto'
+            example: &ref_166
+              name: string
+              description: string
+              isActive: true
+            examples:
+              default:
+                value: *ref_166
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_167
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/ward/{id}", {
+              method: "PUT",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "name": "string",\n  "description": "string",\n  "isActive": true\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_167
+    delete:
+      operationId: WardController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_168
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/ward/{id}", { method: "DELETE",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
+      x-code-samples: *ref_168
+  /api/v1/room:
+    post:
+      operationId: RoomController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateRoomDto'
+            example: &ref_169
+              name: string
+              ward: string
+              floor: string
+              roomType: string
+              isActive: true
+            examples:
+              default:
+                value: *ref_169
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_170
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/room", {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "name": "string",\n  "ward": "string",\n  "floor": "string",\n  "roomType": "string",\n  "isActive": true\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_170
+    get:
+      operationId: RoomController_findAll
+      parameters:
+        - name: ward
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: merchant
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_171
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/room", { method: "GET", headers:
+            { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
+      x-code-samples: *ref_171
+  /api/v1/room/{id}:
+    get:
+      operationId: RoomController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_172
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/room/{id}", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
+      x-code-samples: *ref_172
+    put:
+      operationId: RoomController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRoomDto'
+            example: &ref_173
+              name: string
+              ward: string
+              floor: string
+              roomType: string
+              isActive: true
+            examples:
+              default:
+                value: *ref_173
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_174
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/room/{id}", {
+              method: "PUT",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "name": "string",\n  "ward": "string",\n  "floor": "string",\n  "roomType": "string",\n  "isActive": true\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_174
+    delete:
+      operationId: RoomController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_175
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/room/{id}", { method: "DELETE",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
+      x-code-samples: *ref_175
+  /api/v1/bed:
+    post:
+      operationId: BedController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBedDto'
+            example: &ref_176
+              bedNumber: string
+              room: string
+              ward: string
+              notes: string
+            examples:
+              default:
+                value: *ref_176
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_177
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/bed", {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "bedNumber": "string",\n  "room": "string",\n  "ward": "string",\n  "notes": "string"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_177
+    get:
+      operationId: BedController_findAll
+      parameters:
+        - name: ward
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: room
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: status
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: merchant
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_178
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/bed", { method: "GET", headers:
+            { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
+      x-code-samples: *ref_178
+  /api/v1/bed/{id}:
+    get:
+      operationId: BedController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_179
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/bed/{id}", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
+      x-code-samples: *ref_179
+    put:
+      operationId: BedController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateBedDto'
+            example: &ref_180
+              bedNumber: string
+              room: string
+              ward: string
+              notes: string
+            examples:
+              default:
+                value: *ref_180
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_181
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/bed/{id}", {
+              method: "PUT",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "bedNumber": "string",\n  "room": "string",\n  "ward": "string",\n  "notes": "string"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_181
+  /api/v1/bed/{id}/status:
+    patch:
+      operationId: BedController_updateStatus
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_182
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/bed/{id}/status", { method:
+            "PATCH", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
+      x-code-samples: *ref_182
+  /api/v1/bed-allocation:
+    post:
+      operationId: BedAllocationController_allocate
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AllocateBedDto'
+            example: &ref_183
+              bed: string
+              patient: string
+              admission: string
+            examples:
+              default:
+                value: *ref_183
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_184
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/bed-allocation", {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "bed": "string",\n  "patient": "string",\n  "admission": "string"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_184
+  /api/v1/bed-allocation/{id}/release:
+    post:
+      operationId: BedAllocationController_release
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_185
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/bed-allocation/{id}/release", {
+            method: "POST", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_185
+  /api/v1/bed-allocation/{id}/transfer:
+    post:
+      operationId: BedAllocationController_transfer
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferBedDto'
+            example: &ref_186
+              newBed: string
+            examples:
+              default:
+                value: *ref_186
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_187
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/bed-allocation/{id}/transfer", {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "newBed": "string"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_187
+  /api/v1/bed-allocation/patient/{id}:
+    get:
+      operationId: BedAllocationController_getByPatient
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_188
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/bed-allocation/patient/{id}", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_188
+  /api/v1/admission:
+    post:
+      operationId: AdmissionController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAdmissionDto'
+            example: &ref_189
+              patient: string
+              doctor: string
+              clinic: string
+              reason: string
+              diagnosis: string
+              ward: string
+              room: string
+              bed: string
+              expectedDischargeDate: string
+              emergencyContact: '+8801712345678'
+              notes: string
+              responsibleStaff: string
+            examples:
+              default:
+                value: *ref_189
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_190
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/admission", {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "patient": "string",\n  "doctor": "string",\n  "clinic": "string",\n  "reason": "string",\n  "diagnosis": "string",\n  "ward": "string",\n  "room": "string",\n  "bed": "string",\n  "expectedDischargeDate": "string",\n  "emergencyContact": "+8801712345678",\n  "notes": "string",\n  "responsibleStaff": "string"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_190
+    get:
+      operationId: AdmissionController_findAll
+      parameters:
+        - name: status
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: doctor
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: merchant
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_191
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/admission", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
+      x-code-samples: *ref_191
+  /api/v1/admission/{id}:
+    get:
+      operationId: AdmissionController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_192
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/admission/{id}", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
+      x-code-samples: *ref_192
+  /api/v1/admission/patient/{id}:
+    get:
+      operationId: AdmissionController_getByPatient
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_193
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/admission/patient/{id}", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_193
+  /api/v1/admission/{id}/status:
+    patch:
+      operationId: AdmissionController_updateStatus
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_194
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/admission/{id}/status", {
+            method: "PATCH", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_194
+  /api/v1/admission/{id}/discharge:
+    post:
+      operationId: AdmissionController_discharge
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DischargeDto'
+            example: &ref_195
+              dischargeNotes: string
+            examples:
+              default:
+                value: *ref_195
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_196
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/admission/{id}/discharge", {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "dischargeNotes": "string"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_196
 info:
   title: ClinicFlow API
   description: ClinicFlow backend API documentation
@@ -3050,7 +3712,7 @@ components:
           description: Medical history or past health conditions
           _propertyName: medicalHistory
         currentMedications:
-          example: *ref_162
+          example: *ref_197
           description: List of current medications
           type: array
           items:
@@ -3094,7 +3756,7 @@ components:
           _propertyName: numberOfBeds
         servicesOffered:
           description: List of services offered by the clinic
-          example: *ref_163
+          example: *ref_198
           type: array
           items:
             type: string
@@ -3140,7 +3802,7 @@ components:
           _propertyName: medicalHistory
         currentMedications:
           description: List of current medications the patient is taking
-          example: *ref_164
+          example: *ref_199
           type: array
           items:
             type: string
@@ -3182,7 +3844,7 @@ components:
           _propertyName: diagnosis
         prescription:
           description: List of prescribed medicines or instructions
-          example: *ref_165
+          example: *ref_200
           type: array
           items:
             type: string
@@ -3231,7 +3893,7 @@ components:
           _propertyName: password
         role:
           type: string
-          enum: &ref_166
+          enum: &ref_201
             - USER
             - ADMIN
             - DOCTOR
@@ -3318,7 +3980,7 @@ components:
           _propertyName: password
         role:
           type: string
-          enum: *ref_166
+          enum: *ref_201
           description: Role of the user. Only PATIENT or MERCHANT allowed for signup
           _propertyName: role
         user:
@@ -3494,7 +4156,7 @@ components:
         role:
           type: string
           description: User role (defaults to DOCTOR)
-          enum: &ref_167
+          enum: &ref_202
             - USER
             - ADMIN
             - DOCTOR
@@ -3586,7 +4248,7 @@ components:
         role:
           type: string
           description: User role (defaults to DOCTOR)
-          enum: *ref_167
+          enum: *ref_202
           example: DOCTOR
           _propertyName: role
         merchant:
@@ -3760,7 +4422,7 @@ components:
           type: string
           description: Reason for the appointment
           example: CHECK_UP
-          enum: &ref_168
+          enum: &ref_203
             - CHECK_UP
             - CONSULTATION
             - FOLLOW_UP
@@ -3815,7 +4477,7 @@ components:
           type: string
           description: Reason for the appointment
           example: CHECK_UP
-          enum: *ref_168
+          enum: *ref_203
           _propertyName: reasonFor
         problemDescription:
           type: string
@@ -4242,3 +4904,183 @@ components:
         - testOrderItemIndex
         - patient
       example: *ref_158
+    CreateWardDto:
+      type: object
+      properties:
+        name:
+          type: string
+          _propertyName: name
+        description:
+          type: string
+          _propertyName: description
+        isActive:
+          type: boolean
+          _propertyName: isActive
+      required:
+        - name
+      example: *ref_162
+    UpdateWardDto:
+      type: object
+      properties:
+        name:
+          type: string
+          _propertyName: name
+        description:
+          type: string
+          _propertyName: description
+        isActive:
+          type: boolean
+          _propertyName: isActive
+      example: *ref_166
+    CreateRoomDto:
+      type: object
+      properties:
+        name:
+          type: string
+          _propertyName: name
+        ward:
+          type: string
+          _propertyName: ward
+        floor:
+          type: string
+          _propertyName: floor
+        roomType:
+          type: string
+          _propertyName: roomType
+        isActive:
+          type: boolean
+          _propertyName: isActive
+      required:
+        - name
+        - ward
+      example: *ref_169
+    UpdateRoomDto:
+      type: object
+      properties:
+        name:
+          type: string
+          _propertyName: name
+        ward:
+          type: string
+          _propertyName: ward
+        floor:
+          type: string
+          _propertyName: floor
+        roomType:
+          type: string
+          _propertyName: roomType
+        isActive:
+          type: boolean
+          _propertyName: isActive
+      example: *ref_173
+    CreateBedDto:
+      type: object
+      properties:
+        bedNumber:
+          type: string
+          _propertyName: bedNumber
+        room:
+          type: string
+          _propertyName: room
+        ward:
+          type: string
+          _propertyName: ward
+        notes:
+          type: string
+          _propertyName: notes
+      required:
+        - bedNumber
+        - room
+        - ward
+      example: *ref_176
+    UpdateBedDto:
+      type: object
+      properties:
+        bedNumber:
+          type: string
+          _propertyName: bedNumber
+        room:
+          type: string
+          _propertyName: room
+        ward:
+          type: string
+          _propertyName: ward
+        notes:
+          type: string
+          _propertyName: notes
+      example: *ref_180
+    AllocateBedDto:
+      type: object
+      properties:
+        bed:
+          type: string
+          _propertyName: bed
+        patient:
+          type: string
+          _propertyName: patient
+        admission:
+          type: string
+          _propertyName: admission
+      required:
+        - bed
+        - patient
+      example: *ref_183
+    TransferBedDto:
+      type: object
+      properties:
+        newBed:
+          type: string
+          _propertyName: newBed
+      required:
+        - newBed
+      example: *ref_186
+    CreateAdmissionDto:
+      type: object
+      properties:
+        patient:
+          type: string
+          _propertyName: patient
+        doctor:
+          type: string
+          _propertyName: doctor
+        clinic:
+          type: string
+          _propertyName: clinic
+        reason:
+          type: string
+          _propertyName: reason
+        diagnosis:
+          type: string
+          _propertyName: diagnosis
+        ward:
+          type: string
+          _propertyName: ward
+        room:
+          type: string
+          _propertyName: room
+        bed:
+          type: string
+          _propertyName: bed
+        expectedDischargeDate:
+          type: string
+          _propertyName: expectedDischargeDate
+        emergencyContact:
+          type: string
+          _propertyName: emergencyContact
+        notes:
+          type: string
+          _propertyName: notes
+        responsibleStaff:
+          type: string
+          _propertyName: responsibleStaff
+      required:
+        - patient
+        - doctor
+      example: *ref_189
+    DischargeDto:
+      type: object
+      properties:
+        dischargeNotes:
+          type: string
+          _propertyName: dischargeNotes
+      example: *ref_195
