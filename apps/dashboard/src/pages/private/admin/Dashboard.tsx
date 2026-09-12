@@ -37,7 +37,7 @@ const AdminDashboard: React.FC = () => {
   const doctorAppointmentData = mockStats.appointmentsByDoctor
 
   return (
-    <div className="fadeIn space-y-8">
+    <div className="fadeIn space-y-4">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">
           {t("admin_dashboard")}

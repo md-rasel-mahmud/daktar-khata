@@ -17,8 +17,8 @@ import {
 } from "@repo/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar"
 import { Badge } from "@repo/ui/badge"
-import { MoreHorizontal, UserCheck, UserX } from "lucide-react"
-import { mockPatients } from "@/lib/mock-data"
+import { MoreHorizontal, UserCheck, UserX, Loader2 } from "lucide-react"
+import { useGetPatientsQuery } from "@/lib/store/api/services/patient.service"
 import { toast } from "sonner"
 import { format } from "date-fns"
 import {
@@ -26,12 +26,12 @@ import {
   type DataTableColumn,
 } from "@/components/common/table"
 
-type PatientRow = (typeof mockPatients)[number]
+type PatientRow = any;
 
 const ManageUsers: React.FC = () => {
   const { t } = useTranslation()
   const [searchQuery, setSearchQuery] = useState("")
-  const [patients] = useState(mockPatients)
+  const { data: patients = [], isLoading, isError } = useGetPatientsQuery()
 
   const filteredPatients = useMemo(() => {
     const normalizedQuery = searchQuery.trim().toLowerCase()
@@ -78,8 +78,8 @@ const ManageUsers: React.FC = () => {
               <AvatarFallback>{patient.name.charAt(0)}</AvatarFallback>
             </Avatar>
             <div>
-              <p className="font-medium">{patient.name}</p>
-              <p className="text-sm text-muted-foreground">{patient.id}</p>
+              <p className="font-medium">{patient.name || `${patient.firstName} ${patient.lastName}`}</p>
+              <p className="text-sm text-muted-foreground">{patient.id || patient._id}</p>
             </div>
           </div>
         ),
@@ -97,7 +97,7 @@ const ManageUsers: React.FC = () => {
         sortable: true,
         sortValue: (patient) => patient.dateOfBirth,
         cell: (patient) =>
-          format(new Date(patient.dateOfBirth), "MMM dd, yyyy"),
+          patient.dateOfBirth ? format(new Date(patient.dateOfBirth), "MMM dd, yyyy") : "-",
       },
       {
         id: "contact",
@@ -149,13 +149,13 @@ const ManageUsers: React.FC = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>{t("actions")}</DropdownMenuLabel>
-              <DropdownMenuItem onClick={() => handleActivateUser(patient.id)}>
+              <DropdownMenuItem onClick={() => handleActivateUser(patient.id || patient._id)}>
                 <UserCheck className="mr-2 h-4 w-4" />
                 {t("activate")}
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="text-red-600"
-                onClick={() => handleDeactivateUser(patient.id)}
+                onClick={() => handleDeactivateUser(patient.id || patient._id)}
               >
                 <UserX className="mr-2 h-4 w-4" />
                 {t("deactivate")}
@@ -188,19 +188,29 @@ const ManageUsers: React.FC = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <ClientDataTable
-            data={filteredPatients}
-            columns={patientColumns}
-            getRowId={(patient) => patient.id}
-            searchPlaceholder={t("search patients")}
-            searchKeys={[(patient) => patient.name, (patient) => patient.email]}
-            searchValue={searchQuery}
-            onSearchChange={setSearchQuery}
-            emptyMessage={t("no patients found matching your search")}
-            defaultSort={{ columnId: "patient", direction: "asc" }}
-            pageSizeOptions={[5, 10, 20]}
-            initialPageSize={10}
-          />
+          {isLoading ? (
+            <div className="flex justify-center p-8">
+              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+            </div>
+          ) : isError ? (
+            <div className="flex justify-center p-8 text-red-500">
+              {t("Failed to load patients.")}
+            </div>
+          ) : (
+            <ClientDataTable
+              data={filteredPatients}
+              columns={patientColumns}
+              getRowId={(patient) => patient.id || patient._id}
+              searchPlaceholder={t("search patients")}
+              searchKeys={[(patient) => patient.name || `${patient.firstName} ${patient.lastName}`, (patient) => patient.email]}
+              searchValue={searchQuery}
+              onSearchChange={setSearchQuery}
+              emptyMessage={t("no patients found matching your search")}
+              defaultSort={{ columnId: "patient", direction: "asc" }}
+              pageSizeOptions={[5, 10, 20]}
+              initialPageSize={10}
+            />
+          )}
         </CardContent>
       </Card>
     </div>

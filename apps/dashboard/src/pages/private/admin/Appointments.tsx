@@ -35,11 +35,12 @@ import {
   XCircle,
   MoreHorizontal,
 } from "lucide-react"
-import { mockDoctors, mockPatients } from "@/lib/mock-data"
 import { toast } from "sonner"
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
 import { useGetAppointmentsQuery } from "@/lib/store/api/services/appointment.service"
+import { useGetPatientsQuery } from "@/lib/store/api/services/patient.service"
+import { useGetDoctorOptionsQuery } from "@/lib/store/api/services/doctor.service"
 import { type FieldValues, useForm } from "react-hook-form"
 import NewAppointmentDialog from "@/features/admin/components/appointments/NewAppointmentDialog"
 
@@ -49,9 +50,12 @@ const AdminAppointments: React.FC = () => {
   const [isAddAppointmentDialogOpen, setIsAddAppointmentDialogOpen] =
     useState(false)
 
+  const { data: patients = [] } = useGetPatientsQuery(undefined)
+  const { data: doctors = [] } = useGetDoctorOptionsQuery(undefined)
+
   const appointmentDefaultValues = {
-    patient: mockPatients[0]?.id || "",
-    doctor: mockDoctors[0]?.id || "",
+    patient: patients[0]?.id || patients[0]?._id || "",
+    doctor: doctors[0]?.id || doctors[0]?._id || "",
     date: "",
     time: "09:00 AM",
     type: "Consultation",
@@ -227,9 +231,9 @@ const AdminAppointments: React.FC = () => {
       label: "Select Patient",
       type: "select",
       required: true,
-      options: mockPatients.map((patient) => ({
-        label: patient.name,
-        value: patient.id,
+      options: patients.map((patient: any) => ({
+        label: patient.name || `${patient.firstName || ''} ${patient.lastName || ''}`,
+        value: patient.id || patient._id,
       })),
       className: "md:col-span-2",
     },
@@ -238,9 +242,9 @@ const AdminAppointments: React.FC = () => {
       label: "Select Doctor",
       type: "select",
       required: true,
-      options: mockDoctors.map((doctor) => ({
-        label: `${doctor.name} (${doctor.specialization})`,
-        value: doctor.id,
+      options: doctors.map((doctor: any) => ({
+        label: `${doctor.name || `${doctor.firstName || ''} ${doctor.lastName || ''}`} ${doctor.specialization ? `(${doctor.specialization})` : ''}`,
+        value: doctor.id || doctor._id,
       })),
       className: "md:col-span-2",
     },
