@@ -33,4 +33,7 @@ export const collectionsName = {
   invoice: "Invoice",
   commissionRule: "CommissionRule",
   commissionRecord: "CommissionRecord",
+  operationCase: "OperationCase",
+  nursingTask: "NursingTask",
+  medicationAdministration: "MedicationAdministration",
 };

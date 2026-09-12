@@ -32,7 +32,7 @@ paths:
               bloodGroup: O+
               emergencyContact: '01787654321'
               medicalHistory: Diabetes, Hypertension
-              currentMedications: &ref_230
+              currentMedications: &ref_262
                 - Paracetamol
                 - Insulin
               lastVisited: '2025-02-15T00:00:00.000Z'
@@ -42,7 +42,7 @@ paths:
               subscriptionStartDate: '2025-01-01T00:00:00.000Z'
               subscriptionEndDate: '2026-01-01T00:00:00.000Z'
               numberOfBeds: active
-              servicesOffered: &ref_231
+              servicesOffered: &ref_263
                 - Ultrasonography
                 - Hernia Operation
                 - Gallstone Surgery
@@ -174,7 +174,7 @@ paths:
               bloodGroup: O+
               emergencyContact: '+8801712345678'
               medicalHistory: Diabetes, High Blood Pressure
-              currentMedications: &ref_232
+              currentMedications: &ref_264
                 - Metformin
                 - Atorvastatin
               lastVisited: '2025-02-15T00:00:00.000Z'
@@ -230,7 +230,7 @@ paths:
               appointmentId: 6530a2c44cb2dbd2a1111111
               date: '2025-10-20T10:30:00.000Z'
               diagnosis: Mild hypertension
-              prescription: &ref_233
+              prescription: &ref_265
                 - Lisinopril 10mg once daily
               notes: Reduce sodium intake and monitor BP twice a week.
               followUpDate: '2025-11-20T10:30:00.000Z'
@@ -4326,6 +4326,669 @@ paths:
               body: JSON.stringify({\n  "status": "SETTLED",\n  "notes": "Settled via bank transfer #BT98231"\n})
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_229
+  /api/v1/operation:
+    post:
+      operationId: OperationController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOperationDto'
+            example: &ref_230
+              patient: 64e7c3b2f1a2b3c4d5e6f7a8
+              admission: 64e7c3b2f1a2b3c4d5e6f7a9
+              leadSurgeon: 64e7c3b2f1a2b3c4d5e6f7aa
+              assistantSurgeons: &ref_236
+                - 64e7c3b2f1a2b3c4d5e6f7ab
+              anesthesiologist: Dr. Anesthesiologist Name
+              procedureName: Laparoscopic Appendectomy
+              diagnosis: Acute Appendicitis
+              theatreName: OT-1 (Main Operating Theatre)
+              anesthesiaType: General Anesthesia
+              status: PLANNED
+              scheduledStartTime: '2026-09-15T09:00:00.000Z'
+              scheduledEndTime: '2026-09-15T11:00:00.000Z'
+              charges: 25000
+            examples:
+              default:
+                value: *ref_230
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_231
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/operation", {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "patient": "64e7c3b2f1a2b3c4d5e6f7a8",\n  "admission": "64e7c3b2f1a2b3c4d5e6f7a9",\n  "leadSurgeon": "64e7c3b2f1a2b3c4d5e6f7aa",\n  "assistantSurgeons": [\n    "64e7c3b2f1a2b3c4d5e6f7ab"\n  ],\n  "anesthesiologist": "Dr. Anesthesiologist Name",\n  "procedureName": "Laparoscopic Appendectomy",\n  "diagnosis": "Acute Appendicitis",\n  "theatreName": "OT-1 (Main Operating Theatre)",\n  "anesthesiaType": "General Anesthesia",\n  "status": "PLANNED",\n  "scheduledStartTime": "2026-09-15T09:00:00.000Z",\n  "scheduledEndTime": "2026-09-15T11:00:00.000Z",\n  "charges": 25000\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_231
+    get:
+      operationId: OperationController_findAll
+      parameters:
+        - name: merchant
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: surgeon
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: patient
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: status
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_232
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/operation", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
+      x-code-samples: *ref_232
+  /api/v1/operation/patient/{patientId}:
+    get:
+      operationId: OperationController_findByPatient
+      parameters:
+        - name: patientId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_233
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/operation/patient/{patientId}",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_233
+  /api/v1/operation/admission/{admissionId}:
+    get:
+      operationId: OperationController_findByAdmission
+      parameters:
+        - name: admissionId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_234
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/operation/admission/{admissionId}",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_234
+  /api/v1/operation/{id}:
+    get:
+      operationId: OperationController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_235
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/operation/{id}", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
+      x-code-samples: *ref_235
+    put:
+      operationId: OperationController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateOperationDto'
+            example: &ref_237
+              patient: 64e7c3b2f1a2b3c4d5e6f7a8
+              admission: 64e7c3b2f1a2b3c4d5e6f7a9
+              leadSurgeon: 64e7c3b2f1a2b3c4d5e6f7aa
+              assistantSurgeons: *ref_236
+              anesthesiologist: Dr. Anesthesiologist Name
+              procedureName: Laparoscopic Appendectomy
+              diagnosis: Acute Appendicitis
+              theatreName: OT-1 (Main Operating Theatre)
+              anesthesiaType: General Anesthesia
+              status: PLANNED
+              scheduledStartTime: '2026-09-15T09:00:00.000Z'
+              scheduledEndTime: '2026-09-15T11:00:00.000Z'
+              charges: 25000
+            examples:
+              default:
+                value: *ref_237
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_238
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/operation/{id}", {
+              method: "PUT",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "patient": "64e7c3b2f1a2b3c4d5e6f7a8",\n  "admission": "64e7c3b2f1a2b3c4d5e6f7a9",\n  "leadSurgeon": "64e7c3b2f1a2b3c4d5e6f7aa",\n  "assistantSurgeons": [\n    "64e7c3b2f1a2b3c4d5e6f7ab"\n  ],\n  "anesthesiologist": "Dr. Anesthesiologist Name",\n  "procedureName": "Laparoscopic Appendectomy",\n  "diagnosis": "Acute Appendicitis",\n  "theatreName": "OT-1 (Main Operating Theatre)",\n  "anesthesiaType": "General Anesthesia",\n  "status": "PLANNED",\n  "scheduledStartTime": "2026-09-15T09:00:00.000Z",\n  "scheduledEndTime": "2026-09-15T11:00:00.000Z",\n  "charges": 25000\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_238
+  /api/v1/operation/{id}/status:
+    patch:
+      operationId: OperationController_updateStatus
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateOperationStatusDto'
+            example: &ref_239
+              status: IN_PROGRESS
+            examples:
+              default:
+                value: *ref_239
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_240
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/operation/{id}/status", {
+              method: "PATCH",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "status": "IN_PROGRESS"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_240
+  /api/v1/operation/{id}/pre-op:
+    patch:
+      operationId: OperationController_updatePreOp
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePreOpDto'
+            example: &ref_241
+              consentRecorded: true
+              reportsAvailable: true
+              patientVerified: true
+              bloodGroupConfirmed: true
+              suppliesAvailable: true
+              anesthesiaAssessmentCompleted: true
+              notes: Patient NPO since 12:00 AM
+            examples:
+              default:
+                value: *ref_241
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_242
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/operation/{id}/pre-op", {
+              method: "PATCH",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "consentRecorded": true,\n  "reportsAvailable": true,\n  "patientVerified": true,\n  "bloodGroupConfirmed": true,\n  "suppliesAvailable": true,\n  "anesthesiaAssessmentCompleted": true,\n  "notes": "Patient NPO since 12:00 AM"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_242
+  /api/v1/operation/{id}/notes:
+    patch:
+      operationId: OperationController_updateNotes
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateOperationNotesDto'
+            example: &ref_243
+              findings: Inflamed retrocecal appendix with mild adhesions.
+              procedureDetails: 3-port laparoscopic appendectomy performed uneventfully.
+              complications: None. Minimal blood loss (<20ml).
+              postOpInstructions: NPO for 6 hours, IV fluids, analgesia as charted.
+              followUpPlan: Suture removal after 7 days in OPD.
+              actualStartTime: '2026-09-15T09:15:00.000Z'
+              actualEndTime: '2026-09-15T10:45:00.000Z'
+            examples:
+              default:
+                value: *ref_243
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_244
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/operation/{id}/notes", {
+              method: "PATCH",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "findings": "Inflamed retrocecal appendix with mild adhesions.",\n  "procedureDetails": "3-port laparoscopic appendectomy performed uneventfully.",\n  "complications": "None. Minimal blood loss (<20ml).",\n  "postOpInstructions": "NPO for 6 hours, IV fluids, analgesia as charted.",\n  "followUpPlan": "Suture removal after 7 days in OPD.",\n  "actualStartTime": "2026-09-15T09:15:00.000Z",\n  "actualEndTime": "2026-09-15T10:45:00.000Z"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_244
+  /api/v1/nursing-task:
+    post:
+      operationId: NursingTaskController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateNursingTaskDto'
+            example: &ref_245
+              patient: 64e7c3b2f1a2b3c4d5e6f7a8
+              admission: 64e7c3b2f1a2b3c4d5e6f7a9
+              bed: 64e7c3b2f1a2b3c4d5e6f7aa
+              taskType: VITALS_CHECK
+              title: Check 2:00 PM Vitals
+              description: Record BP, pulse, temp and SpO2
+              scheduledTime: '2026-09-15T14:00:00.000Z'
+              assignedTo: 64e7c3b2f1a2b3c4d5e6f7ab
+              notes: Patient reported mild headache in morning
+            examples:
+              default:
+                value: *ref_245
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_246
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/nursing-task", {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "patient": "64e7c3b2f1a2b3c4d5e6f7a8",\n  "admission": "64e7c3b2f1a2b3c4d5e6f7a9",\n  "bed": "64e7c3b2f1a2b3c4d5e6f7aa",\n  "taskType": "VITALS_CHECK",\n  "title": "Check 2:00 PM Vitals",\n  "description": "Record BP, pulse, temp and SpO2",\n  "scheduledTime": "2026-09-15T14:00:00.000Z",\n  "assignedTo": "64e7c3b2f1a2b3c4d5e6f7ab",\n  "notes": "Patient reported mild headache in morning"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_246
+    get:
+      operationId: NursingTaskController_findAll
+      parameters:
+        - name: merchant
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: admission
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: patient
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: assignedTo
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: status
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: taskType
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_247
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/nursing-task", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
+      x-code-samples: *ref_247
+  /api/v1/nursing-task/admission/{admissionId}:
+    get:
+      operationId: NursingTaskController_findByAdmission
+      parameters:
+        - name: admissionId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_248
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/nursing-task/admission/{admissionId}",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_248
+  /api/v1/nursing-task/{id}:
+    get:
+      operationId: NursingTaskController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_249
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/nursing-task/{id}", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
+      x-code-samples: *ref_249
+  /api/v1/nursing-task/{id}/status:
+    patch:
+      operationId: NursingTaskController_updateStatus
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateNursingTaskStatusDto'
+            example: &ref_250
+              status: COMPLETED
+              skippedReason: Patient was sleeping / refused check
+              notes: Dressing done, clean wound bed without signs of infection
+            examples:
+              default:
+                value: *ref_250
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_251
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/nursing-task/{id}/status", {
+              method: "PATCH",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "status": "COMPLETED",\n  "skippedReason": "Patient was sleeping / refused check",\n  "notes": "Dressing done, clean wound bed without signs of infection"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_251
+  /api/v1/nursing-task/{id}/vitals:
+    patch:
+      operationId: NursingTaskController_logVitals
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogVitalsDto'
+            example: &ref_252
+              bloodPressure: 120/80
+              pulse: 76
+              temperature: 98.6
+              spO2: 99
+              respiratoryRate: 18
+              notes: Patient stable and afebrile
+            examples:
+              default:
+                value: *ref_252
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_253
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/nursing-task/{id}/vitals", {
+              method: "PATCH",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "bloodPressure": "120/80",\n  "pulse": 76,\n  "temperature": 98.6,\n  "spO2": 99,\n  "respiratoryRate": 18,\n  "notes": "Patient stable and afebrile"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_253
+  /api/v1/medication-administration:
+    post:
+      operationId: MedicationAdministrationController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMedicationAdminDto'
+            example: &ref_254
+              patient: 64e7c3b2f1a2b3c4d5e6f7a8
+              admission: 64e7c3b2f1a2b3c4d5e6f7a9
+              prescription: 64e7c3b2f1a2b3c4d5e6f7aa
+              medicineName: Inj. Ceftriaxone
+              dose: 1g
+              route: IV
+              scheduledTime: '2026-09-15T08:00:00.000Z'
+              notes: Administer slowly over 30 minutes in 100ml NS
+            examples:
+              default:
+                value: *ref_254
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_255
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/medication-administration", {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "patient": "64e7c3b2f1a2b3c4d5e6f7a8",\n  "admission": "64e7c3b2f1a2b3c4d5e6f7a9",\n  "prescription": "64e7c3b2f1a2b3c4d5e6f7aa",\n  "medicineName": "Inj. Ceftriaxone",\n  "dose": "1g",\n  "route": "IV",\n  "scheduledTime": "2026-09-15T08:00:00.000Z",\n  "notes": "Administer slowly over 30 minutes in 100ml NS"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_255
+    get:
+      operationId: MedicationAdministrationController_findAll
+      parameters:
+        - name: merchant
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: admission
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: patient
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: prescription
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: status
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_256
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/medication-administration", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_256
+  /api/v1/medication-administration/admission/{admissionId}:
+    get:
+      operationId: MedicationAdministrationController_findByAdmission
+      parameters:
+        - name: admissionId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_257
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/medication-administration/admission/{admissionId}",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_257
+  /api/v1/medication-administration/patient/{patientId}:
+    get:
+      operationId: MedicationAdministrationController_findByPatient
+      parameters:
+        - name: patientId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_258
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/medication-administration/patient/{patientId}",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_258
+  /api/v1/medication-administration/{id}:
+    get:
+      operationId: MedicationAdministrationController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_259
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/medication-administration/{id}",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_259
+  /api/v1/medication-administration/{id}/administer:
+    patch:
+      operationId: MedicationAdministrationController_recordAdministration
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecordAdministrationDto'
+            example: &ref_260
+              status: GIVEN
+              actualTime: '2026-09-15T08:10:00.000Z'
+              skippedReason: Patient vomiting / unable to tolerate oral intake
+              notes: Tolerated well, no allergic reactions noted
+            examples:
+              default:
+                value: *ref_260
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_261
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/medication-administration/{id}/administer",
+            {
+              method: "PATCH",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "status": "GIVEN",\n  "actualTime": "2026-09-15T08:10:00.000Z",\n  "skippedReason": "Patient vomiting / unable to tolerate oral intake",\n  "notes": "Tolerated well, no allergic reactions noted"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_261
 info:
   title: ClinicFlow API
   description: ClinicFlow backend API documentation
@@ -4395,7 +5058,7 @@ components:
           description: Medical history or past health conditions
           _propertyName: medicalHistory
         currentMedications:
-          example: *ref_230
+          example: *ref_262
           description: List of current medications
           type: array
           items:
@@ -4439,7 +5102,7 @@ components:
           _propertyName: numberOfBeds
         servicesOffered:
           description: List of services offered by the clinic
-          example: *ref_231
+          example: *ref_263
           type: array
           items:
             type: string
@@ -4485,7 +5148,7 @@ components:
           _propertyName: medicalHistory
         currentMedications:
           description: List of current medications the patient is taking
-          example: *ref_232
+          example: *ref_264
           type: array
           items:
             type: string
@@ -4527,7 +5190,7 @@ components:
           _propertyName: diagnosis
         prescription:
           description: List of prescribed medicines or instructions
-          example: *ref_233
+          example: *ref_265
           type: array
           items:
             type: string
@@ -4576,7 +5239,7 @@ components:
           _propertyName: password
         role:
           type: string
-          enum: &ref_234
+          enum: &ref_266
             - USER
             - ADMIN
             - DOCTOR
@@ -4663,7 +5326,7 @@ components:
           _propertyName: password
         role:
           type: string
-          enum: *ref_234
+          enum: *ref_266
           description: Role of the user. Only PATIENT or MERCHANT allowed for signup
           _propertyName: role
         user:
@@ -4839,7 +5502,7 @@ components:
         role:
           type: string
           description: User role (defaults to DOCTOR)
-          enum: &ref_235
+          enum: &ref_267
             - USER
             - ADMIN
             - DOCTOR
@@ -4931,7 +5594,7 @@ components:
         role:
           type: string
           description: User role (defaults to DOCTOR)
-          enum: *ref_235
+          enum: *ref_267
           example: DOCTOR
           _propertyName: role
         merchant:
@@ -5105,7 +5768,7 @@ components:
           type: string
           description: Reason for the appointment
           example: CHECK_UP
-          enum: &ref_236
+          enum: &ref_268
             - CHECK_UP
             - CONSULTATION
             - FOLLOW_UP
@@ -5160,7 +5823,7 @@ components:
           type: string
           description: Reason for the appointment
           example: CHECK_UP
-          enum: *ref_236
+          enum: *ref_268
           _propertyName: reasonFor
         problemDescription:
           type: string
@@ -5776,7 +6439,7 @@ components:
           _propertyName: name
         category:
           type: string
-          enum: &ref_237
+          enum: &ref_269
             - CONSULTATION
             - TEST
             - ADMISSION
@@ -5836,7 +6499,7 @@ components:
           _propertyName: name
         category:
           type: string
-          enum: *ref_237
+          enum: *ref_269
           default: SERVICE
           _propertyName: category
         description:
@@ -6057,7 +6720,7 @@ components:
           _propertyName: service
         commissionType:
           type: string
-          enum: &ref_238
+          enum: &ref_270
             - PERCENTAGE
             - FIXED_AMOUNT
             - NONE
@@ -6097,7 +6760,7 @@ components:
           _propertyName: service
         commissionType:
           type: string
-          enum: *ref_238
+          enum: *ref_270
           example: PERCENTAGE
           _propertyName: commissionType
         commissionValue:
@@ -6195,3 +6858,396 @@ components:
       required:
         - status
       example: *ref_228
+    CreateOperationDto:
+      type: object
+      properties:
+        patient:
+          type: string
+          example: 64e7c3b2f1a2b3c4d5e6f7a8
+          _propertyName: patient
+        admission:
+          type: string
+          example: 64e7c3b2f1a2b3c4d5e6f7a9
+          _propertyName: admission
+        leadSurgeon:
+          type: string
+          example: 64e7c3b2f1a2b3c4d5e6f7aa
+          _propertyName: leadSurgeon
+        assistantSurgeons:
+          example: *ref_236
+          type: array
+          items:
+            type: string
+          _propertyName: assistantSurgeons
+        anesthesiologist:
+          type: string
+          example: Dr. Anesthesiologist Name
+          _propertyName: anesthesiologist
+        procedureName:
+          type: string
+          example: Laparoscopic Appendectomy
+          _propertyName: procedureName
+        diagnosis:
+          type: string
+          example: Acute Appendicitis
+          _propertyName: diagnosis
+        theatreName:
+          type: string
+          example: OT-1 (Main Operating Theatre)
+          _propertyName: theatreName
+        anesthesiaType:
+          type: string
+          example: General Anesthesia
+          _propertyName: anesthesiaType
+        status:
+          type: string
+          enum: &ref_271
+            - PLANNED
+            - SCHEDULED
+            - ADMITTED
+            - PRE_OP
+            - READY_FOR_OT
+            - IN_PROGRESS
+            - COMPLETED
+            - POST_OP
+            - CANCELLED
+          default: PLANNED
+          _propertyName: status
+        scheduledStartTime:
+          type: string
+          example: '2026-09-15T09:00:00.000Z'
+          _propertyName: scheduledStartTime
+        scheduledEndTime:
+          type: string
+          example: '2026-09-15T11:00:00.000Z'
+          _propertyName: scheduledEndTime
+        charges:
+          type: number
+          example: 25000
+          _propertyName: charges
+      required:
+        - patient
+        - leadSurgeon
+        - procedureName
+      example: *ref_230
+    UpdateOperationDto:
+      type: object
+      properties:
+        patient:
+          type: string
+          example: 64e7c3b2f1a2b3c4d5e6f7a8
+          _propertyName: patient
+        admission:
+          type: string
+          example: 64e7c3b2f1a2b3c4d5e6f7a9
+          _propertyName: admission
+        leadSurgeon:
+          type: string
+          example: 64e7c3b2f1a2b3c4d5e6f7aa
+          _propertyName: leadSurgeon
+        assistantSurgeons:
+          example: *ref_236
+          type: array
+          items:
+            type: string
+          _propertyName: assistantSurgeons
+        anesthesiologist:
+          type: string
+          example: Dr. Anesthesiologist Name
+          _propertyName: anesthesiologist
+        procedureName:
+          type: string
+          example: Laparoscopic Appendectomy
+          _propertyName: procedureName
+        diagnosis:
+          type: string
+          example: Acute Appendicitis
+          _propertyName: diagnosis
+        theatreName:
+          type: string
+          example: OT-1 (Main Operating Theatre)
+          _propertyName: theatreName
+        anesthesiaType:
+          type: string
+          example: General Anesthesia
+          _propertyName: anesthesiaType
+        status:
+          type: string
+          enum: *ref_271
+          default: PLANNED
+          _propertyName: status
+        scheduledStartTime:
+          type: string
+          example: '2026-09-15T09:00:00.000Z'
+          _propertyName: scheduledStartTime
+        scheduledEndTime:
+          type: string
+          example: '2026-09-15T11:00:00.000Z'
+          _propertyName: scheduledEndTime
+        charges:
+          type: number
+          example: 25000
+          _propertyName: charges
+      example: *ref_237
+    UpdateOperationStatusDto:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - PLANNED
+            - SCHEDULED
+            - ADMITTED
+            - PRE_OP
+            - READY_FOR_OT
+            - IN_PROGRESS
+            - COMPLETED
+            - POST_OP
+            - CANCELLED
+          example: IN_PROGRESS
+          _propertyName: status
+      required:
+        - status
+      example: *ref_239
+    UpdatePreOpDto:
+      type: object
+      properties:
+        consentRecorded:
+          type: boolean
+          example: true
+          _propertyName: consentRecorded
+        reportsAvailable:
+          type: boolean
+          example: true
+          _propertyName: reportsAvailable
+        patientVerified:
+          type: boolean
+          example: true
+          _propertyName: patientVerified
+        bloodGroupConfirmed:
+          type: boolean
+          example: true
+          _propertyName: bloodGroupConfirmed
+        suppliesAvailable:
+          type: boolean
+          example: true
+          _propertyName: suppliesAvailable
+        anesthesiaAssessmentCompleted:
+          type: boolean
+          example: true
+          _propertyName: anesthesiaAssessmentCompleted
+        notes:
+          type: string
+          example: Patient NPO since 12:00 AM
+          _propertyName: notes
+      example: *ref_241
+    UpdateOperationNotesDto:
+      type: object
+      properties:
+        findings:
+          type: string
+          example: Inflamed retrocecal appendix with mild adhesions.
+          _propertyName: findings
+        procedureDetails:
+          type: string
+          example: 3-port laparoscopic appendectomy performed uneventfully.
+          _propertyName: procedureDetails
+        complications:
+          type: string
+          example: None. Minimal blood loss (<20ml).
+          _propertyName: complications
+        postOpInstructions:
+          type: string
+          example: NPO for 6 hours, IV fluids, analgesia as charted.
+          _propertyName: postOpInstructions
+        followUpPlan:
+          type: string
+          example: Suture removal after 7 days in OPD.
+          _propertyName: followUpPlan
+        actualStartTime:
+          type: string
+          example: '2026-09-15T09:15:00.000Z'
+          _propertyName: actualStartTime
+        actualEndTime:
+          type: string
+          example: '2026-09-15T10:45:00.000Z'
+          _propertyName: actualEndTime
+      example: *ref_243
+    CreateNursingTaskDto:
+      type: object
+      properties:
+        patient:
+          type: string
+          example: 64e7c3b2f1a2b3c4d5e6f7a8
+          _propertyName: patient
+        admission:
+          type: string
+          example: 64e7c3b2f1a2b3c4d5e6f7a9
+          _propertyName: admission
+        bed:
+          type: string
+          example: 64e7c3b2f1a2b3c4d5e6f7aa
+          _propertyName: bed
+        taskType:
+          type: string
+          enum:
+            - MEDICATION
+            - INJECTION
+            - VITALS_CHECK
+            - WOUND_CARE
+            - DRESSING
+            - PATIENT_OBSERVATION
+            - MEAL
+            - TRANSFER
+            - OTHER
+          example: VITALS_CHECK
+          _propertyName: taskType
+        title:
+          type: string
+          example: Check 2:00 PM Vitals
+          _propertyName: title
+        description:
+          type: string
+          example: Record BP, pulse, temp and SpO2
+          _propertyName: description
+        scheduledTime:
+          type: string
+          example: '2026-09-15T14:00:00.000Z'
+          _propertyName: scheduledTime
+        assignedTo:
+          type: string
+          example: 64e7c3b2f1a2b3c4d5e6f7ab
+          _propertyName: assignedTo
+        notes:
+          type: string
+          example: Patient reported mild headache in morning
+          _propertyName: notes
+      required:
+        - patient
+        - admission
+        - taskType
+        - title
+      example: *ref_245
+    UpdateNursingTaskStatusDto:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - PENDING
+            - IN_PROGRESS
+            - COMPLETED
+            - SKIPPED
+            - CANCELLED
+          example: COMPLETED
+          _propertyName: status
+        skippedReason:
+          type: string
+          example: Patient was sleeping / refused check
+          _propertyName: skippedReason
+        notes:
+          type: string
+          example: Dressing done, clean wound bed without signs of infection
+          _propertyName: notes
+      required:
+        - status
+      example: *ref_250
+    LogVitalsDto:
+      type: object
+      properties:
+        bloodPressure:
+          type: string
+          example: 120/80
+          _propertyName: bloodPressure
+        pulse:
+          type: number
+          example: 76
+          _propertyName: pulse
+        temperature:
+          type: number
+          example: 98.6
+          _propertyName: temperature
+        spO2:
+          type: number
+          example: 99
+          _propertyName: spO2
+        respiratoryRate:
+          type: number
+          example: 18
+          _propertyName: respiratoryRate
+        notes:
+          type: string
+          example: Patient stable and afebrile
+          _propertyName: notes
+      example: *ref_252
+    CreateMedicationAdminDto:
+      type: object
+      properties:
+        patient:
+          type: string
+          example: 64e7c3b2f1a2b3c4d5e6f7a8
+          _propertyName: patient
+        admission:
+          type: string
+          example: 64e7c3b2f1a2b3c4d5e6f7a9
+          _propertyName: admission
+        prescription:
+          type: string
+          example: 64e7c3b2f1a2b3c4d5e6f7aa
+          _propertyName: prescription
+        medicineName:
+          type: string
+          example: Inj. Ceftriaxone
+          _propertyName: medicineName
+        dose:
+          type: string
+          example: 1g
+          _propertyName: dose
+        route:
+          type: string
+          example: IV
+          default: Oral
+          _propertyName: route
+        scheduledTime:
+          type: string
+          example: '2026-09-15T08:00:00.000Z'
+          _propertyName: scheduledTime
+        notes:
+          type: string
+          example: Administer slowly over 30 minutes in 100ml NS
+          _propertyName: notes
+      required:
+        - patient
+        - admission
+        - medicineName
+        - dose
+        - route
+        - scheduledTime
+      example: *ref_254
+    RecordAdministrationDto:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - SCHEDULED
+            - GIVEN
+            - SKIPPED
+            - REFUSED
+          example: GIVEN
+          _propertyName: status
+        actualTime:
+          type: string
+          example: '2026-09-15T08:10:00.000Z'
+          _propertyName: actualTime
+        skippedReason:
+          type: string
+          example: Patient vomiting / unable to tolerate oral intake
+          _propertyName: skippedReason
+        notes:
+          type: string
+          example: Tolerated well, no allergic reactions noted
+          _propertyName: notes
+      required:
+        - status
+      example: *ref_260

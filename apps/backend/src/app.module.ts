@@ -42,6 +42,9 @@ import { ServiceCatalogModule } from "./modules/service-catalog/service-catalog.
 import { InvoiceModule } from "./modules/invoice/invoice.module";
 import { CommissionRuleModule } from "./modules/commission-rule/commission-rule.module";
 import { CommissionRecordModule } from "./modules/commission-record/commission-record.module";
+import { OperationModule } from "./modules/operation/operation.module";
+import { NursingTaskModule } from "./modules/nursing-task/nursing-task.module";
+import { MedicationAdministrationModule } from "./modules/medication-administration/medication-administration.module";
 
 @Module({
   imports: [
@@ -112,6 +115,9 @@ import { CommissionRecordModule } from "./modules/commission-record/commission-r
     InvoiceModule,
     CommissionRuleModule,
     CommissionRecordModule,
+    OperationModule,
+    NursingTaskModule,
+    MedicationAdministrationModule,
   ],
   controllers: [],
   providers: [DatabaseSeederService],

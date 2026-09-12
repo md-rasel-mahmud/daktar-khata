@@ -122,3 +122,42 @@ export enum ServiceCategory {
   OTHER = "OTHER",
 }
 
+export enum OperationStatus {
+  PLANNED = "PLANNED",
+  SCHEDULED = "SCHEDULED",
+  ADMITTED = "ADMITTED",
+  PRE_OP = "PRE_OP",
+  READY_FOR_OT = "READY_FOR_OT",
+  IN_PROGRESS = "IN_PROGRESS",
+  COMPLETED = "COMPLETED",
+  POST_OP = "POST_OP",
+  CANCELLED = "CANCELLED",
+}
+
+export enum NursingTaskType {
+  MEDICATION = "MEDICATION",
+  INJECTION = "INJECTION",
+  VITALS_CHECK = "VITALS_CHECK",
+  WOUND_CARE = "WOUND_CARE",
+  DRESSING = "DRESSING",
+  PATIENT_OBSERVATION = "PATIENT_OBSERVATION",
+  MEAL = "MEAL",
+  TRANSFER = "TRANSFER",
+  OTHER = "OTHER",
+}
+
+export enum NursingTaskStatus {
+  PENDING = "PENDING",
+  IN_PROGRESS = "IN_PROGRESS",
+  COMPLETED = "COMPLETED",
+  SKIPPED = "SKIPPED",
+  CANCELLED = "CANCELLED",
+}
+
+export enum MedicationAdminStatus {
+  SCHEDULED = "SCHEDULED",
+  GIVEN = "GIVEN",
+  SKIPPED = "SKIPPED",
+  REFUSED = "REFUSED",
+}
+
