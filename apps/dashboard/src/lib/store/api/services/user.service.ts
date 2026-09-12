@@ -10,35 +10,7 @@ export const userApi = api.injectEndpoints({
       query: () => "users/profile",
     }),
 
-    createUser: builder.mutation({
-      query: ({ body }) => ({
-        url: "/users/admin/create",
-        method: "POST",
-        body,
-      }),
-      async onQueryStarted(
-        { body, handleDialogClose },
-        { dispatch, queryFulfilled }
-      ) {
-        // Optimistically update the cache for the doctor list
-        const updateUserListCacheUpdateResult = dispatch(
-          profileApi.util.updateQueryData(
-            "getAllProfiles",
-            RolesEnum.DOCTOR,
-            (draft) => {
-              draft.unshift({ _id: body._id, ...body })
-            }
-          )
-        )
 
-        try {
-          await queryFulfilled
-          handleDialogClose()
-        } catch {
-          updateUserListCacheUpdateResult.undo()
-        }
-      },
-    }),
 
     updateCurrentUser: builder.mutation({
       query: ({ body }) => ({
@@ -71,6 +43,5 @@ export const userApi = api.injectEndpoints({
 // Export hooks for usage in functional components
 export const {
   useGetCurrentUserQuery,
-  useCreateUserMutation,
   useUpdateCurrentUserMutation,
 } = userApi

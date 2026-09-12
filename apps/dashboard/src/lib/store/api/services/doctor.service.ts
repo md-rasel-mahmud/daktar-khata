@@ -7,12 +7,12 @@ import { profileApi } from "@/lib/store/api/services/profile.service";
 export const doctorApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getCurrentUser: builder.query({
-      query: () => "users/me",
+      query: () => "users/profile",
     }),
 
     createDoctorByMerchant: builder.mutation({
       query: ({ body }) => ({
-        url: "/users/admin/create",
+        url: "/doctors",
         method: "POST",
         body,
       }),

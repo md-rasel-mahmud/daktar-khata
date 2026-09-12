@@ -29,7 +29,7 @@ import { z } from "zod"
 import { Gender } from "@/enums/gender.enums"
 import { type FormInputConfig } from "@/components/common/form/FormInput"
 import { useTranslation } from "react-i18next"
-import { useCreateUserMutation } from "@/lib/store/api/services/user.service"
+import { useCreateDoctorByMerchantMutation } from "@/lib/store/api/services/doctor.service"
 import {
   ClientDataTable,
   type DataTableColumn,
@@ -72,7 +72,7 @@ const ManageDoctors: React.FC = () => {
 
   const [updateDoctorProfile] = useUpdateProfileMutation()
 
-  const [createDoctor] = useCreateUserMutation()
+  const [createDoctor] = useCreateDoctorByMerchantMutation()
 
   // validation schema should be following above Doctor type
   const validationSchema = z.object({
