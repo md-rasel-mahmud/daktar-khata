@@ -45,6 +45,10 @@ import { CommissionRecordModule } from "./modules/commission-record/commission-r
 import { OperationModule } from "./modules/operation/operation.module";
 import { NursingTaskModule } from "./modules/nursing-task/nursing-task.module";
 import { MedicationAdministrationModule } from "./modules/medication-administration/medication-administration.module";
+import { DischargeSummaryModule } from "./modules/discharge-summary/discharge-summary.module";
+import { SupplierModule } from "./modules/supplier/supplier.module";
+import { InventoryItemModule } from "./modules/inventory-item/inventory-item.module";
+import { StockTransactionModule } from "./modules/stock-transaction/stock-transaction.module";
 
 @Module({
   imports: [
@@ -118,6 +122,10 @@ import { MedicationAdministrationModule } from "./modules/medication-administrat
     OperationModule,
     NursingTaskModule,
     MedicationAdministrationModule,
+    DischargeSummaryModule,
+    SupplierModule,
+    InventoryItemModule,
+    StockTransactionModule,
   ],
   controllers: [],
   providers: [DatabaseSeederService],

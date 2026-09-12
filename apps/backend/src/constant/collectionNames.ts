@@ -36,4 +36,8 @@ export const collectionsName = {
   operationCase: "OperationCase",
   nursingTask: "NursingTask",
   medicationAdministration: "MedicationAdministration",
+  dischargeSummary: "DischargeSummary",
+  supplier: "Supplier",
+  inventoryItem: "InventoryItem",
+  stockTransaction: "StockTransaction",
 };

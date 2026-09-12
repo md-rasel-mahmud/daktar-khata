@@ -32,7 +32,7 @@ paths:
               bloodGroup: O+
               emergencyContact: '01787654321'
               medicalHistory: Diabetes, Hypertension
-              currentMedications: &ref_262
+              currentMedications: &ref_289
                 - Paracetamol
                 - Insulin
               lastVisited: '2025-02-15T00:00:00.000Z'
@@ -42,7 +42,7 @@ paths:
               subscriptionStartDate: '2025-01-01T00:00:00.000Z'
               subscriptionEndDate: '2026-01-01T00:00:00.000Z'
               numberOfBeds: active
-              servicesOffered: &ref_263
+              servicesOffered: &ref_290
                 - Ultrasonography
                 - Hernia Operation
                 - Gallstone Surgery
@@ -174,7 +174,7 @@ paths:
               bloodGroup: O+
               emergencyContact: '+8801712345678'
               medicalHistory: Diabetes, High Blood Pressure
-              currentMedications: &ref_264
+              currentMedications: &ref_291
                 - Metformin
                 - Atorvastatin
               lastVisited: '2025-02-15T00:00:00.000Z'
@@ -230,7 +230,7 @@ paths:
               appointmentId: 6530a2c44cb2dbd2a1111111
               date: '2025-10-20T10:30:00.000Z'
               diagnosis: Mild hypertension
-              prescription: &ref_265
+              prescription: &ref_292
                 - Lisinopril 10mg once daily
               notes: Reduce sodium intake and monitor BP twice a week.
               followUpDate: '2025-11-20T10:30:00.000Z'
@@ -4989,6 +4989,595 @@ paths:
               body: JSON.stringify({\n  "status": "GIVEN",\n  "actualTime": "2026-09-15T08:10:00.000Z",\n  "skippedReason": "Patient vomiting / unable to tolerate oral intake",\n  "notes": "Tolerated well, no allergic reactions noted"\n})
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_261
+  /api/v1/discharge-summary:
+    post:
+      operationId: DischargeSummaryController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDischargeSummaryDto'
+            example: &ref_262
+              admission: 64e7c3b2f1a2b3c4d5e6f7a8
+              patient: 64e7c3b2f1a2b3c4d5e6f7a9
+              doctor: 64e7c3b2f1a2b3c4d5e6f7aa
+              dischargeDate: '2026-09-20T10:00:00.000Z'
+              finalDiagnosis: Acute Appendicitis - Post Laparoscopic Appendectomy
+              treatmentSummary: >-
+                Patient underwent successful appendectomy on 15/09/2026. Post-op
+                recovery uneventful. Afebrile, tolerating regular diet, wound
+                clean and dry.
+              operationSummary: >-
+                Laparoscopic appendectomy performed on 15/09/2026. Minimal
+                adhesions.
+              dischargeMedicines:
+                - medicineName: Tab. Cefuroxime
+                  dose: 500mg
+                  frequency: 1+0+1
+                  duration: 5 days
+                  instructions: After food
+              followUpDate: '2026-09-27T09:00:00.000Z'
+              warningSigns: >-
+                High fever (>101°F), severe abdominal pain, persistent vomiting,
+                or discharge from wound site.
+              doctorInstructions: >-
+                Avoid lifting heavy objects for 2 weeks. Keep surgical wound
+                clean and dry.
+            examples:
+              default:
+                value: *ref_262
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_263
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/discharge-summary", {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "admission": "64e7c3b2f1a2b3c4d5e6f7a8",\n  "patient": "64e7c3b2f1a2b3c4d5e6f7a9",\n  "doctor": "64e7c3b2f1a2b3c4d5e6f7aa",\n  "dischargeDate": "2026-09-20T10:00:00.000Z",\n  "finalDiagnosis": "Acute Appendicitis - Post Laparoscopic Appendectomy",\n  "treatmentSummary": "Patient underwent successful appendectomy on 15/09/2026. Post-op recovery uneventful. Afebrile, tolerating regular diet, wound clean and dry.",\n  "operationSummary": "Laparoscopic appendectomy performed on 15/09/2026. Minimal adhesions.",\n  "dischargeMedicines": [\n    {\n      "medicineName": "Tab. Cefuroxime",\n      "dose": "500mg",\n      "frequency": "1+0+1",\n      "duration": "5 days",\n      "instructions": "After food"\n    }\n  ],\n  "followUpDate": "2026-09-27T09:00:00.000Z",\n  "warningSigns": "High fever (>101°F), severe abdominal pain, persistent vomiting, or discharge from wound site.",\n  "doctorInstructions": "Avoid lifting heavy objects for 2 weeks. Keep surgical wound clean and dry."\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_263
+  /api/v1/discharge-summary/admission/{admissionId}:
+    get:
+      operationId: DischargeSummaryController_findByAdmission
+      parameters:
+        - name: admissionId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_264
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/discharge-summary/admission/{admissionId}",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_264
+  /api/v1/discharge-summary/patient/{patientId}:
+    get:
+      operationId: DischargeSummaryController_findByPatient
+      parameters:
+        - name: patientId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_265
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/discharge-summary/patient/{patientId}",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_265
+  /api/v1/discharge-summary/{id}:
+    get:
+      operationId: DischargeSummaryController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_266
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/discharge-summary/{id}", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_266
+    put:
+      operationId: DischargeSummaryController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDischargeSummaryDto'
+            example: &ref_267
+              admission: 64e7c3b2f1a2b3c4d5e6f7a8
+              patient: 64e7c3b2f1a2b3c4d5e6f7a9
+              doctor: 64e7c3b2f1a2b3c4d5e6f7aa
+              dischargeDate: '2026-09-20T10:00:00.000Z'
+              finalDiagnosis: Acute Appendicitis - Post Laparoscopic Appendectomy
+              treatmentSummary: >-
+                Patient underwent successful appendectomy on 15/09/2026. Post-op
+                recovery uneventful. Afebrile, tolerating regular diet, wound
+                clean and dry.
+              operationSummary: >-
+                Laparoscopic appendectomy performed on 15/09/2026. Minimal
+                adhesions.
+              dischargeMedicines:
+                - medicineName: Tab. Cefuroxime
+                  dose: 500mg
+                  frequency: 1+0+1
+                  duration: 5 days
+                  instructions: After food
+              followUpDate: '2026-09-27T09:00:00.000Z'
+              warningSigns: >-
+                High fever (>101°F), severe abdominal pain, persistent vomiting,
+                or discharge from wound site.
+              doctorInstructions: >-
+                Avoid lifting heavy objects for 2 weeks. Keep surgical wound
+                clean and dry.
+            examples:
+              default:
+                value: *ref_267
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_268
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/discharge-summary/{id}", {
+              method: "PUT",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "admission": "64e7c3b2f1a2b3c4d5e6f7a8",\n  "patient": "64e7c3b2f1a2b3c4d5e6f7a9",\n  "doctor": "64e7c3b2f1a2b3c4d5e6f7aa",\n  "dischargeDate": "2026-09-20T10:00:00.000Z",\n  "finalDiagnosis": "Acute Appendicitis - Post Laparoscopic Appendectomy",\n  "treatmentSummary": "Patient underwent successful appendectomy on 15/09/2026. Post-op recovery uneventful. Afebrile, tolerating regular diet, wound clean and dry.",\n  "operationSummary": "Laparoscopic appendectomy performed on 15/09/2026. Minimal adhesions.",\n  "dischargeMedicines": [\n    {\n      "medicineName": "Tab. Cefuroxime",\n      "dose": "500mg",\n      "frequency": "1+0+1",\n      "duration": "5 days",\n      "instructions": "After food"\n    }\n  ],\n  "followUpDate": "2026-09-27T09:00:00.000Z",\n  "warningSigns": "High fever (>101°F), severe abdominal pain, persistent vomiting, or discharge from wound site.",\n  "doctorInstructions": "Avoid lifting heavy objects for 2 weeks. Keep surgical wound clean and dry."\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_268
+  /api/v1/supplier:
+    post:
+      operationId: SupplierController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSupplierDto'
+            example: &ref_269
+              name: Square Pharmaceuticals Ltd.
+              contactPerson: Mr. Rafiqul Islam
+              phone: '+8801712345678'
+              email: supply@squarepharma.com
+              address: Uttara, Dhaka - 1230
+            examples:
+              default:
+                value: *ref_269
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_270
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/supplier", {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "name": "Square Pharmaceuticals Ltd.",\n  "contactPerson": "Mr. Rafiqul Islam",\n  "phone": "+8801712345678",\n  "email": "supply@squarepharma.com",\n  "address": "Uttara, Dhaka - 1230"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_270
+    get:
+      operationId: SupplierController_findAll
+      parameters:
+        - name: merchant
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: search
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_271
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/supplier", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
+      x-code-samples: *ref_271
+  /api/v1/supplier/{id}:
+    get:
+      operationId: SupplierController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_272
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/supplier/{id}", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
+      x-code-samples: *ref_272
+    put:
+      operationId: SupplierController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSupplierDto'
+            example: &ref_273
+              name: Square Pharmaceuticals Ltd.
+              contactPerson: Mr. Rafiqul Islam
+              phone: '+8801712345678'
+              email: supply@squarepharma.com
+              address: Uttara, Dhaka - 1230
+            examples:
+              default:
+                value: *ref_273
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_274
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/supplier/{id}", {
+              method: "PUT",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "name": "Square Pharmaceuticals Ltd.",\n  "contactPerson": "Mr. Rafiqul Islam",\n  "phone": "+8801712345678",\n  "email": "supply@squarepharma.com",\n  "address": "Uttara, Dhaka - 1230"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_274
+    delete:
+      operationId: SupplierController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_275
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/supplier/{id}", { method:
+            "DELETE", headers: { 'Authorization': 'Bearer <token>' } }).then(r
+            => r.json()).then(console.log)
+      x-code-samples: *ref_275
+  /api/v1/inventory-item:
+    post:
+      operationId: InventoryItemController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateInventoryItemDto'
+            example: &ref_276
+              name: Paracetamol 500mg
+              genericName: Acetaminophen
+              category: MEDICINE
+              unit: strip
+              purchasePrice: 8.5
+              sellingPrice: 12
+              reorderLevel: 20
+              supplier: 64e7c3b2f1a2b3c4d5e6f7a8
+            examples:
+              default:
+                value: *ref_276
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_277
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/inventory-item", {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "name": "Paracetamol 500mg",\n  "genericName": "Acetaminophen",\n  "category": "MEDICINE",\n  "unit": "strip",\n  "purchasePrice": 8.5,\n  "sellingPrice": 12,\n  "reorderLevel": 20,\n  "supplier": "64e7c3b2f1a2b3c4d5e6f7a8"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_277
+    get:
+      operationId: InventoryItemController_findAll
+      parameters:
+        - name: merchant
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: category
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: supplier
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: search
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_278
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/inventory-item", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
+      x-code-samples: *ref_278
+  /api/v1/inventory-item/low-stock:
+    get:
+      operationId: InventoryItemController_findLowStock
+      parameters:
+        - name: merchant
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_279
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/inventory-item/low-stock", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_279
+  /api/v1/inventory-item/{id}:
+    get:
+      operationId: InventoryItemController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_280
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/inventory-item/{id}", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
+      x-code-samples: *ref_280
+    put:
+      operationId: InventoryItemController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateInventoryItemDto'
+            example: &ref_281
+              name: Paracetamol 500mg
+              genericName: Acetaminophen
+              category: MEDICINE
+              unit: strip
+              purchasePrice: 8.5
+              sellingPrice: 12
+              reorderLevel: 20
+              supplier: 64e7c3b2f1a2b3c4d5e6f7a8
+            examples:
+              default:
+                value: *ref_281
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_282
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/inventory-item/{id}", {
+              method: "PUT",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "name": "Paracetamol 500mg",\n  "genericName": "Acetaminophen",\n  "category": "MEDICINE",\n  "unit": "strip",\n  "purchasePrice": 8.5,\n  "sellingPrice": 12,\n  "reorderLevel": 20,\n  "supplier": "64e7c3b2f1a2b3c4d5e6f7a8"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_282
+    delete:
+      operationId: InventoryItemController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_283
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/inventory-item/{id}", { method:
+            "DELETE", headers: { 'Authorization': 'Bearer <token>' } }).then(r
+            => r.json()).then(console.log)
+      x-code-samples: *ref_283
+  /api/v1/stock-transaction:
+    post:
+      operationId: StockTransactionController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateStockTransactionDto'
+            example: &ref_284
+              item: 64e7c3b2f1a2b3c4d5e6f7a8
+              transactionType: PURCHASE
+              supplySource: CLINIC_STOCK
+              quantity: 100
+              unitPrice: 8.5
+              batchNumber: BATCH-2026-09A
+              expiryDate: '2027-12-31T00:00:00.000Z'
+              reason: Initial bulk procurement / Patient issue
+              patient: 64e7c3b2f1a2b3c4d5e6f7a9
+              admission: 64e7c3b2f1a2b3c4d5e6f7aa
+              operation: 64e7c3b2f1a2b3c4d5e6f7ab
+            examples:
+              default:
+                value: *ref_284
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_285
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/stock-transaction", {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({\n  "item": "64e7c3b2f1a2b3c4d5e6f7a8",\n  "transactionType": "PURCHASE",\n  "supplySource": "CLINIC_STOCK",\n  "quantity": 100,\n  "unitPrice": 8.5,\n  "batchNumber": "BATCH-2026-09A",\n  "expiryDate": "2027-12-31T00:00:00.000Z",\n  "reason": "Initial bulk procurement / Patient issue",\n  "patient": "64e7c3b2f1a2b3c4d5e6f7a9",\n  "admission": "64e7c3b2f1a2b3c4d5e6f7aa",\n  "operation": "64e7c3b2f1a2b3c4d5e6f7ab"\n})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_285
+    get:
+      operationId: StockTransactionController_findAll
+      parameters:
+        - name: merchant
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: item
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: type
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: source
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: patient
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: operation
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_286
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/stock-transaction", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
+      x-code-samples: *ref_286
+  /api/v1/stock-transaction/item/{itemId}:
+    get:
+      operationId: StockTransactionController_findByItem
+      parameters:
+        - name: itemId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_287
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/stock-transaction/item/{itemId}",
+            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_287
+  /api/v1/stock-transaction/{id}:
+    get:
+      operationId: StockTransactionController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_288
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/stock-transaction/{id}", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_288
 info:
   title: ClinicFlow API
   description: ClinicFlow backend API documentation
@@ -5058,7 +5647,7 @@ components:
           description: Medical history or past health conditions
           _propertyName: medicalHistory
         currentMedications:
-          example: *ref_262
+          example: *ref_289
           description: List of current medications
           type: array
           items:
@@ -5102,7 +5691,7 @@ components:
           _propertyName: numberOfBeds
         servicesOffered:
           description: List of services offered by the clinic
-          example: *ref_263
+          example: *ref_290
           type: array
           items:
             type: string
@@ -5148,7 +5737,7 @@ components:
           _propertyName: medicalHistory
         currentMedications:
           description: List of current medications the patient is taking
-          example: *ref_264
+          example: *ref_291
           type: array
           items:
             type: string
@@ -5190,7 +5779,7 @@ components:
           _propertyName: diagnosis
         prescription:
           description: List of prescribed medicines or instructions
-          example: *ref_265
+          example: *ref_292
           type: array
           items:
             type: string
@@ -5239,7 +5828,7 @@ components:
           _propertyName: password
         role:
           type: string
-          enum: &ref_266
+          enum: &ref_293
             - USER
             - ADMIN
             - DOCTOR
@@ -5326,7 +5915,7 @@ components:
           _propertyName: password
         role:
           type: string
-          enum: *ref_266
+          enum: *ref_293
           description: Role of the user. Only PATIENT or MERCHANT allowed for signup
           _propertyName: role
         user:
@@ -5502,7 +6091,7 @@ components:
         role:
           type: string
           description: User role (defaults to DOCTOR)
-          enum: &ref_267
+          enum: &ref_294
             - USER
             - ADMIN
             - DOCTOR
@@ -5594,7 +6183,7 @@ components:
         role:
           type: string
           description: User role (defaults to DOCTOR)
-          enum: *ref_267
+          enum: *ref_294
           example: DOCTOR
           _propertyName: role
         merchant:
@@ -5768,7 +6357,7 @@ components:
           type: string
           description: Reason for the appointment
           example: CHECK_UP
-          enum: &ref_268
+          enum: &ref_295
             - CHECK_UP
             - CONSULTATION
             - FOLLOW_UP
@@ -5823,7 +6412,7 @@ components:
           type: string
           description: Reason for the appointment
           example: CHECK_UP
-          enum: *ref_268
+          enum: *ref_295
           _propertyName: reasonFor
         problemDescription:
           type: string
@@ -6439,7 +7028,7 @@ components:
           _propertyName: name
         category:
           type: string
-          enum: &ref_269
+          enum: &ref_296
             - CONSULTATION
             - TEST
             - ADMISSION
@@ -6499,7 +7088,7 @@ components:
           _propertyName: name
         category:
           type: string
-          enum: *ref_269
+          enum: *ref_296
           default: SERVICE
           _propertyName: category
         description:
@@ -6720,7 +7309,7 @@ components:
           _propertyName: service
         commissionType:
           type: string
-          enum: &ref_270
+          enum: &ref_297
             - PERCENTAGE
             - FIXED_AMOUNT
             - NONE
@@ -6760,7 +7349,7 @@ components:
           _propertyName: service
         commissionType:
           type: string
-          enum: *ref_270
+          enum: *ref_297
           example: PERCENTAGE
           _propertyName: commissionType
         commissionValue:
@@ -6901,7 +7490,7 @@ components:
           _propertyName: anesthesiaType
         status:
           type: string
-          enum: &ref_271
+          enum: &ref_298
             - PLANNED
             - SCHEDULED
             - ADMITTED
@@ -6973,7 +7562,7 @@ components:
           _propertyName: anesthesiaType
         status:
           type: string
-          enum: *ref_271
+          enum: *ref_298
           default: PLANNED
           _propertyName: status
         scheduledStartTime:
@@ -7251,3 +7840,360 @@ components:
       required:
         - status
       example: *ref_260
+    DischargeMedicineDto:
+      type: object
+      properties:
+        medicineName:
+          type: string
+          example: Tab. Cefuroxime
+          _propertyName: medicineName
+        dose:
+          type: string
+          example: 500mg
+          _propertyName: dose
+        frequency:
+          type: string
+          example: 1+0+1
+          _propertyName: frequency
+        duration:
+          type: string
+          example: 5 days
+          _propertyName: duration
+        instructions:
+          type: string
+          example: After food
+          _propertyName: instructions
+      required:
+        - medicineName
+        - dose
+        - frequency
+        - duration
+    CreateDischargeSummaryDto:
+      type: object
+      properties:
+        admission:
+          type: string
+          example: 64e7c3b2f1a2b3c4d5e6f7a8
+          _propertyName: admission
+        patient:
+          type: string
+          example: 64e7c3b2f1a2b3c4d5e6f7a9
+          _propertyName: patient
+        doctor:
+          type: string
+          example: 64e7c3b2f1a2b3c4d5e6f7aa
+          _propertyName: doctor
+        dischargeDate:
+          type: string
+          example: '2026-09-20T10:00:00.000Z'
+          _propertyName: dischargeDate
+        finalDiagnosis:
+          type: string
+          example: Acute Appendicitis - Post Laparoscopic Appendectomy
+          _propertyName: finalDiagnosis
+        treatmentSummary:
+          type: string
+          example: >-
+            Patient underwent successful appendectomy on 15/09/2026. Post-op
+            recovery uneventful. Afebrile, tolerating regular diet, wound clean
+            and dry.
+          _propertyName: treatmentSummary
+        operationSummary:
+          type: string
+          example: >-
+            Laparoscopic appendectomy performed on 15/09/2026. Minimal
+            adhesions.
+          _propertyName: operationSummary
+        dischargeMedicines:
+          type: array
+          items:
+            $ref: '#/components/schemas/DischargeMedicineDto'
+          _propertyName: dischargeMedicines
+        followUpDate:
+          type: string
+          example: '2026-09-27T09:00:00.000Z'
+          _propertyName: followUpDate
+        warningSigns:
+          type: string
+          example: >-
+            High fever (>101°F), severe abdominal pain, persistent vomiting, or
+            discharge from wound site.
+          _propertyName: warningSigns
+        doctorInstructions:
+          type: string
+          example: >-
+            Avoid lifting heavy objects for 2 weeks. Keep surgical wound clean
+            and dry.
+          _propertyName: doctorInstructions
+      required:
+        - admission
+        - patient
+        - doctor
+        - finalDiagnosis
+      example: *ref_262
+    UpdateDischargeSummaryDto:
+      type: object
+      properties:
+        admission:
+          type: string
+          example: 64e7c3b2f1a2b3c4d5e6f7a8
+          _propertyName: admission
+        patient:
+          type: string
+          example: 64e7c3b2f1a2b3c4d5e6f7a9
+          _propertyName: patient
+        doctor:
+          type: string
+          example: 64e7c3b2f1a2b3c4d5e6f7aa
+          _propertyName: doctor
+        dischargeDate:
+          type: string
+          example: '2026-09-20T10:00:00.000Z'
+          _propertyName: dischargeDate
+        finalDiagnosis:
+          type: string
+          example: Acute Appendicitis - Post Laparoscopic Appendectomy
+          _propertyName: finalDiagnosis
+        treatmentSummary:
+          type: string
+          example: >-
+            Patient underwent successful appendectomy on 15/09/2026. Post-op
+            recovery uneventful. Afebrile, tolerating regular diet, wound clean
+            and dry.
+          _propertyName: treatmentSummary
+        operationSummary:
+          type: string
+          example: >-
+            Laparoscopic appendectomy performed on 15/09/2026. Minimal
+            adhesions.
+          _propertyName: operationSummary
+        dischargeMedicines:
+          type: array
+          items:
+            $ref: '#/components/schemas/DischargeMedicineDto'
+          _propertyName: dischargeMedicines
+        followUpDate:
+          type: string
+          example: '2026-09-27T09:00:00.000Z'
+          _propertyName: followUpDate
+        warningSigns:
+          type: string
+          example: >-
+            High fever (>101°F), severe abdominal pain, persistent vomiting, or
+            discharge from wound site.
+          _propertyName: warningSigns
+        doctorInstructions:
+          type: string
+          example: >-
+            Avoid lifting heavy objects for 2 weeks. Keep surgical wound clean
+            and dry.
+          _propertyName: doctorInstructions
+      example: *ref_267
+    CreateSupplierDto:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Square Pharmaceuticals Ltd.
+          _propertyName: name
+        contactPerson:
+          type: string
+          example: Mr. Rafiqul Islam
+          _propertyName: contactPerson
+        phone:
+          type: string
+          example: '+8801712345678'
+          _propertyName: phone
+        email:
+          type: string
+          example: supply@squarepharma.com
+          _propertyName: email
+        address:
+          type: string
+          example: Uttara, Dhaka - 1230
+          _propertyName: address
+      required:
+        - name
+        - phone
+      example: *ref_269
+    UpdateSupplierDto:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Square Pharmaceuticals Ltd.
+          _propertyName: name
+        contactPerson:
+          type: string
+          example: Mr. Rafiqul Islam
+          _propertyName: contactPerson
+        phone:
+          type: string
+          example: '+8801712345678'
+          _propertyName: phone
+        email:
+          type: string
+          example: supply@squarepharma.com
+          _propertyName: email
+        address:
+          type: string
+          example: Uttara, Dhaka - 1230
+          _propertyName: address
+      example: *ref_273
+    CreateInventoryItemDto:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Paracetamol 500mg
+          _propertyName: name
+        genericName:
+          type: string
+          example: Acetaminophen
+          _propertyName: genericName
+        category:
+          type: string
+          enum: &ref_299
+            - MEDICINE
+            - INJECTION
+            - BANDAGE
+            - SURGICAL_ITEM
+            - MEDICAL_SUPPLY
+            - EQUIPMENT
+            - OTHER
+          example: MEDICINE
+          _propertyName: category
+        unit:
+          type: string
+          example: strip
+          default: pcs
+          _propertyName: unit
+        purchasePrice:
+          type: number
+          example: 8.5
+          _propertyName: purchasePrice
+        sellingPrice:
+          type: number
+          example: 12
+          _propertyName: sellingPrice
+        reorderLevel:
+          type: number
+          example: 20
+          default: 10
+          _propertyName: reorderLevel
+        supplier:
+          type: string
+          example: 64e7c3b2f1a2b3c4d5e6f7a8
+          _propertyName: supplier
+      required:
+        - name
+        - category
+        - unit
+        - purchasePrice
+        - sellingPrice
+      example: *ref_276
+    UpdateInventoryItemDto:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Paracetamol 500mg
+          _propertyName: name
+        genericName:
+          type: string
+          example: Acetaminophen
+          _propertyName: genericName
+        category:
+          type: string
+          enum: *ref_299
+          example: MEDICINE
+          _propertyName: category
+        unit:
+          type: string
+          example: strip
+          default: pcs
+          _propertyName: unit
+        purchasePrice:
+          type: number
+          example: 8.5
+          _propertyName: purchasePrice
+        sellingPrice:
+          type: number
+          example: 12
+          _propertyName: sellingPrice
+        reorderLevel:
+          type: number
+          example: 20
+          default: 10
+          _propertyName: reorderLevel
+        supplier:
+          type: string
+          example: 64e7c3b2f1a2b3c4d5e6f7a8
+          _propertyName: supplier
+      example: *ref_281
+    CreateStockTransactionDto:
+      type: object
+      properties:
+        item:
+          type: string
+          example: 64e7c3b2f1a2b3c4d5e6f7a8
+          _propertyName: item
+        transactionType:
+          type: string
+          enum:
+            - PURCHASE
+            - SALE
+            - ISSUE_TO_PATIENT
+            - ISSUE_TO_OPERATION
+            - ISSUE_TO_DEPARTMENT
+            - RETURN
+            - ADJUSTMENT
+            - EXPIRED
+            - DAMAGED
+          example: PURCHASE
+          _propertyName: transactionType
+        supplySource:
+          type: string
+          enum:
+            - CLINIC_STOCK
+            - EXTERNAL_PURCHASE
+            - PATIENT_PROVIDED
+          default: CLINIC_STOCK
+          _propertyName: supplySource
+        quantity:
+          type: number
+          example: 100
+          _propertyName: quantity
+        unitPrice:
+          type: number
+          example: 8.5
+          _propertyName: unitPrice
+        batchNumber:
+          type: string
+          example: BATCH-2026-09A
+          _propertyName: batchNumber
+        expiryDate:
+          type: string
+          example: '2027-12-31T00:00:00.000Z'
+          _propertyName: expiryDate
+        reason:
+          type: string
+          example: Initial bulk procurement / Patient issue
+          _propertyName: reason
+        patient:
+          type: string
+          example: 64e7c3b2f1a2b3c4d5e6f7a9
+          _propertyName: patient
+        admission:
+          type: string
+          example: 64e7c3b2f1a2b3c4d5e6f7aa
+          _propertyName: admission
+        operation:
+          type: string
+          example: 64e7c3b2f1a2b3c4d5e6f7ab
+          _propertyName: operation
+      required:
+        - item
+        - transactionType
+        - quantity
+      example: *ref_284
