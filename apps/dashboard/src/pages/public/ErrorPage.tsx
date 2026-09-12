@@ -1,4 +1,3 @@
-import React from "react"
 import {
   isRouteErrorResponse,
   Link,
@@ -41,6 +40,8 @@ const ErrorPage: React.FC = () => {
         navigate("/merchant")
       } else if (currentUser?.user.role === RolesEnum.PATIENT) {
         navigate("/patient")
+      } else if (currentUser?.user.role === RolesEnum.STAFF) {
+        navigate("/staff")
       }
     }
   }

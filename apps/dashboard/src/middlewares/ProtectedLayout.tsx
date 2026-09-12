@@ -18,6 +18,9 @@ const ProtectedLayout = ({
 
   const currentUser = userData?.data?.user
 
+  // console currentUser
+  console.log("currentUser", currentUser)
+
   if (isLoading) {
     return <div>Loading...</div>
   }
