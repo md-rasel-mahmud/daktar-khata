@@ -4,7 +4,7 @@
   "private": true,
   "sideEffects": false,
   "exports": {
-    "./styles.css": "./src/styles/globals.css",
+    "./styles.css": "./globals.css",
     "./lib/utils": "./src/lib/utils.ts",
     "./hooks/use-mobile": "./src/hooks/use-mobile.ts",
     "./theme-provider": "./src/components/theme-provider.tsx",

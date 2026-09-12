@@ -3,7 +3,7 @@ import React, { Suspense, lazy } from "react"
 import { privateRoutes } from "@/routes/private.routes"
 import { createBrowserRouter } from "react-router"
 
-const LandingPage = lazy(() => import("@/pages/public/LandingPage"))
+const RootPage = lazy(() => import("@/pages/public/RootPage"))
 const NotFound = lazy(() => import("@/pages/public/NotFound"))
 const ErrorPage = lazy(() => import("@/pages/public/ErrorPage"))
 const Unauthorized = lazy(() => import("@/pages/public/Unauthorized"))
@@ -27,7 +27,7 @@ const withSuspense = (element: React.ReactNode) => (
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: withSuspense(<LandingPage />),
+    element: withSuspense(<RootPage />),
     errorElement: withSuspense(<ErrorPage />),
   },
   {
