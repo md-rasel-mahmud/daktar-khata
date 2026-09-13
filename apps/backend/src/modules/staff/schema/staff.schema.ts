@@ -6,8 +6,28 @@ import {
   PayrollStatusEnum,
   StaffRoleEnum,
 } from "src/constant/enums/staff-role.enum";
+import { SalaryType } from "src/constant/enums/status.enum";
 
 export type StaffDocument = Staff & Document;
+
+@Schema({ _id: false })
+export class BankDetails {
+  @Prop({ default: "" })
+  accountName?: string;
+
+  @Prop({ default: "" })
+  accountNumber?: string;
+
+  @Prop({ default: "" })
+  bankName?: string;
+
+  @Prop({ default: "" })
+  branchName?: string;
+
+  @Prop({ default: "" })
+  routingNumber?: string;
+}
+export const BankDetailsSchema = SchemaFactory.createForClass(BankDetails);
 
 @Schema({ versionKey: false, timestamps: true })
 export class Staff {
@@ -43,6 +63,12 @@ export class Staff {
 
   @Prop({ type: Number, default: 0 })
   salary: number;
+
+  @Prop({ type: String, enum: SalaryType, default: SalaryType.MONTHLY })
+  salaryType: SalaryType;
+
+  @Prop({ type: BankDetailsSchema, default: () => ({}) })
+  bankDetails: BankDetails;
 
   @Prop({ type: Number, default: 12 })
   leaveBalance: number;

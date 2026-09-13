@@ -40,4 +40,5 @@ export const collectionsName = {
   supplier: "Supplier",
   inventoryItem: "InventoryItem",
   stockTransaction: "StockTransaction",
+  payroll: "Payroll",
 };

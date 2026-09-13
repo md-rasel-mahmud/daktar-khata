@@ -49,6 +49,7 @@ import { DischargeSummaryModule } from "./modules/discharge-summary/discharge-su
 import { SupplierModule } from "./modules/supplier/supplier.module";
 import { InventoryItemModule } from "./modules/inventory-item/inventory-item.module";
 import { StockTransactionModule } from "./modules/stock-transaction/stock-transaction.module";
+import { PayrollModule } from "./modules/payroll/payroll.module";
 
 @Module({
   imports: [
@@ -126,6 +127,7 @@ import { StockTransactionModule } from "./modules/stock-transaction/stock-transa
     SupplierModule,
     InventoryItemModule,
     StockTransactionModule,
+    PayrollModule,
   ],
   controllers: [],
   providers: [DatabaseSeederService],

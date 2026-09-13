@@ -189,3 +189,20 @@ export enum SupplySource {
   PATIENT_PROVIDED = "PATIENT_PROVIDED",
 }
 
+export enum SalaryType {
+  MONTHLY = "MONTHLY",
+  DAILY = "DAILY",
+  PER_VISIT = "PER_VISIT",
+  PER_OPERATION = "PER_OPERATION",
+  COMMISSION_BASED = "COMMISSION_BASED",
+  HOURLY = "HOURLY",
+}
+
+export enum PayrollStatus {
+  DRAFT = "DRAFT",
+  PENDING = "PENDING",
+  APPROVED = "APPROVED",
+  PAID = "PAID",
+  CANCELLED = "CANCELLED",
+}
+
