@@ -50,6 +50,8 @@ import { SupplierModule } from "./modules/supplier/supplier.module";
 import { InventoryItemModule } from "./modules/inventory-item/inventory-item.module";
 import { StockTransactionModule } from "./modules/stock-transaction/stock-transaction.module";
 import { PayrollModule } from "./modules/payroll/payroll.module";
+import { NotificationModule } from "./modules/notification/notification.module";
+import { AuditLogModule } from "./modules/audit-log/audit-log.module";
 
 @Module({
   imports: [
@@ -128,6 +130,8 @@ import { PayrollModule } from "./modules/payroll/payroll.module";
     InventoryItemModule,
     StockTransactionModule,
     PayrollModule,
+    NotificationModule,
+    AuditLogModule,
   ],
   controllers: [],
   providers: [DatabaseSeederService],

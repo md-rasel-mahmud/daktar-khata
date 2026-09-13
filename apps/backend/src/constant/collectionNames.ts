@@ -41,4 +41,5 @@ export const collectionsName = {
   inventoryItem: "InventoryItem",
   stockTransaction: "StockTransaction",
   payroll: "Payroll",
+  notification: "Notification",
 };
