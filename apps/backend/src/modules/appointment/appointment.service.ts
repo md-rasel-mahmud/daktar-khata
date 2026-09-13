@@ -220,10 +220,12 @@ export class AppointmentService {
       throw new NotFoundException("Doctor not found");
     }
 
-    const data = await this.appointmentModel.find({
-      doctor: doctor._id,
-      ...(query.patient ? { patient: query.patient } : {}),
-    });
+    const data = await this.appointmentModel
+      .find({
+        doctor: doctor._id,
+        ...(query.patient ? { patient: query.patient } : {}),
+      })
+      .populate("patient");
 
     return data;
   }

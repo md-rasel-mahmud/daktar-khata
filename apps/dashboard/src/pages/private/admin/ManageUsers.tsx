@@ -31,7 +31,7 @@ type PatientRow = any;
 const ManageUsers: React.FC = () => {
   const { t } = useTranslation()
   const [searchQuery, setSearchQuery] = useState("")
-  const { data: patients = [], isLoading, isError } = useGetPatientsQuery()
+  const { data: patients = [], isLoading, isError } = useGetPatientsQuery(undefined)
 
   const filteredPatients = useMemo(() => {
     const normalizedQuery = searchQuery.trim().toLowerCase()
@@ -40,9 +40,10 @@ const ManageUsers: React.FC = () => {
     }
 
     return patients.filter(
-      (patient) =>
-        patient.name.toLowerCase().includes(normalizedQuery) ||
-        patient.email.toLowerCase().includes(normalizedQuery)
+      (patient: any) =>
+        (patient?.name || "").toLowerCase().includes(normalizedQuery) ||
+        (patient?.email || "").toLowerCase().includes(normalizedQuery) ||
+        (patient?.phone || "").toLowerCase().includes(normalizedQuery)
     )
   }, [patients, searchQuery])
 
