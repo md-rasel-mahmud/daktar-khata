@@ -21,22 +21,6 @@ import { APP_CONFIG } from "@/config/app.config"
 import { useSignupMutation } from "@/lib/store/api/services/auth.service"
 import { RolesEnum } from "@/enums/role.enum"
 
-// {
-//   "phone": "+8801300000000",                 // ✅ required | valid mobile number
-//   "password": "000000",                      // ✅ required | string
-//   "email": "patient@example.com",            // 🟡 optional  | valid email format
-
-//   "bloodGroup": "O+",                        // ✅ required | string
-//   "emergencyContact": "01812345678",         // 🟡 optional  | string
-//   "medicalHistory": "Diabetic, allergic to penicillin", // 🟡 optional  | string
-//   "currentMedications": ["Metformin", "Antihistamine"], // 🟡 optional  | string array
-
-//   "fullName": "Md. Rasel Mahmud Rana",       // ✅ required | string
-//   "gender": "MALE",                          // 🟡 optional  | must match Gender enum
-//   "dob": "1998-04-10T00:00:00.000Z",         // 🟡 optional  | ISO date string
-//   "address": "Rajshahi, Bangladesh",         // 🟡 optional  | string
-//   "bio": "Frontend developer, passionate about healthcare technology." // 🟡 optional | string
-// }
 
 type SignupFormValues = {
   phone: string
@@ -217,7 +201,7 @@ const Signup: React.FC = () => {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-muted/30 px-4">
+    <div className="flex min-h-screen items-center justify-center bg-muted/30 px-4 py-10">
       <div className="w-full max-w-2xl space-y-6">
         <div className="space-y-2 text-center">
           <h1 className="text-clinic-dark text-3xl font-bold">
@@ -249,7 +233,8 @@ const Signup: React.FC = () => {
 
               <Button
                 type="submit"
-                className="bg-clinic-primary hover:bg-clinic-dark w-full lg:col-span-2"
+                size="lg"
+                className="w-full lg:col-span-2 py-5"
                 disabled={isLoading}
               >
                 {isLoading ? "Signing up..." : "Sign up"}
