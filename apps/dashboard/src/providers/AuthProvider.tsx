@@ -8,7 +8,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const token = localStorage.getItem("token")
-  const { data, isLoading, isFetching, isSuccess } = useGetCurrentUserQuery(
+  const { data, isLoading, isFetching, isSuccess, isError } = useGetCurrentUserQuery(
     undefined,
     {
       skip: !token,
@@ -37,6 +37,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       }
     }
   }, [data, isSuccess])
+
+  useEffect(() => {
+    if (isError) {
+      dispatch(resetUser())
+    }
+  }, [isError, dispatch])
 
   return (
     <AuthContext.Provider value={{ isLoading: isLoading || isFetching }}>
