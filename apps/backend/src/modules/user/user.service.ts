@@ -95,6 +95,9 @@ export class UserService {
       return this.merchantService.findOneByUser(requestUser._id);
     } else if (requestUser.role === RolesEnum.DOCTOR) {
       return this.doctorService.findOneByUserId(requestUser._id);
+    } else if (requestUser.role === RolesEnum.ADMIN || requestUser.role === RolesEnum.SUPER_ADMIN) {
+      const user = await this.userModel.findById(requestUser._id).select("-password");
+      return { user };
     } else {
       throw new BadRequestException("User Not Found");
     }
