@@ -8,27 +8,27 @@ import { Badge } from "@repo/ui/badge"
 const blogs = [
     {
       id: 1,
-      image: 'https://ui.shadcn.com/placeholder.svg',
-      category: 'Technology',
-      title: 'AI Development Catalysts',
+      image: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&q=80&w=800',
+      category: 'Healthcare Technology',
+      title: 'Digital Transformation in Clinic Management',
       description:
-        'Exploring how AI-driven tools are transforming software development workflows and accelerating innovation.',
+        'How modern clinic management systems are streamlining operations, reducing wait times, and improving patient care.',
     },
     {
       id: 2,
-      image: 'https://ui.shadcn.com/placeholder.svg',
-      category: 'Lifestyle',
-      title: 'Minimalist Living Guide',
+      image: 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?auto=format&fit=crop&q=80&w=800',
+      category: 'Medical Practice',
+      title: 'The Importance of Digital Prescriptions',
       description:
-        'Minimalist living approaches that can help reduce stress and create more meaningful daily experiences.',
+        'Why moving from paper to digital prescriptions ensures accuracy, speeds up pharmacy workflows, and saves lives.',
     },
     {
       id: 3,
-      image: 'https://ui.shadcn.com/placeholder.svg',
-      category: 'Design',
-      title: 'Accessible UI Trends',
+      image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&q=80&w=800',
+      category: 'Finance & Admin',
+      title: 'Streamlining Patient Billing',
       description:
-        'How modern UI trends are embracing accessibility while maintaining sleek, intuitive user experiences.',
+        'Best practices for medical billing that reduce errors and improve the financial health of your clinic.',
     },
   ]
 
@@ -52,13 +52,12 @@ export function BlogSection() {
           {blogs.map(blog => (
             <Card key={blog.id} className="overflow-hidden py-0">
               <CardContent className="px-0">
-                <div className="aspect-video">
+                <div className="aspect-video relative">
                   <Image
                     src={blog.image}
                     alt={blog.title}
-                    width={400}
-                    height={225}
-                    className="size-full object-cover dark:invert dark:brightness-[0.95]"
+                    fill
+                    className="object-cover dark:invert dark:brightness-[0.95]"
                     loading="lazy"
                   />
                 </div>
@@ -66,17 +65,12 @@ export function BlogSection() {
                   <p className="text-muted-foreground text-xs tracking-widest uppercase">
                     {blog.category}
                   </p>
-                  <a
-                    href="#"
-                    onClick={e => e.preventDefault()}
-                    className="cursor-pointer"
-                  >
+                  <a href={`/blog/${blog.id}`} className="cursor-pointer">
                     <h3 className="text-xl font-bold hover:text-primary transition-colors">{blog.title}</h3>
                   </a>
                   <p className="text-muted-foreground">{blog.description}</p>
                   <a
-                    href="#"
-                    onClick={e => e.preventDefault()}
+                    href={`/blog/${blog.id}`}
                     className="inline-flex items-center gap-2 text-primary hover:underline cursor-pointer"
                   >
                     Learn More
