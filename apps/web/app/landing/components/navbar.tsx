@@ -29,7 +29,7 @@ import { MegaMenu } from '@/components/landing/mega-menu'
 import { ModeToggle } from '@/components/mode-toggle'
 import { useTheme } from "@/components/theme-provider"
 
-const DASHBOARD_URL = "http://localhost:7722"
+const DASHBOARD_URL = process.env.NEXT_PUBLIC_DASHBOARD_URL || "http://localhost:7722"
 
 const navigationItems = [
   { name: 'Home', href: '#hero' },
