@@ -10,15 +10,7 @@ const Unauthorized: React.FC = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  useEffect(() => {
-    // Remove the logic that clears the token
-    // Users should not be logged out just because they visited an unauthorized page
-    localStorage.removeItem("token")
 
-    // Reset the auth state and api cache to prevent infinite redirect loop
-    dispatch(logout())
-    dispatch(api.util.resetApiState())
-  }, [])
 
   return (
     <div className="flex min-h-screen items-center justify-center p-6">
