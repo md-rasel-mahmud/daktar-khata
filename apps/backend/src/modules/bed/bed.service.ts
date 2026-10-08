@@ -5,7 +5,7 @@ import { collectionsName } from "../../constant";
 import { BedDocument } from "./schema/bed.schema";
 import { CreateBedDto } from "./dto/create-bed.dto";
 import { UpdateBedDto } from "./dto/update-bed.dto";
-import { BedStatus } from "src/constant/enums/status.enum";
+import { BedStatus } from "../../constant/enums/status.enum";
 
 @Injectable()
 export class BedService {

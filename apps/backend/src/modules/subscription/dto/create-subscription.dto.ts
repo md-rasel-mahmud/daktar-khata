@@ -6,7 +6,7 @@ import {
   IsDateString,
   IsEnum,
 } from "class-validator";
-import { ActiveInactiveStatus } from "src/constant/enums/status.enum";
+import { ActiveInactiveStatus } from "../../../constant/enums/status.enum";
 
 export class CreateSubscriptionDto {
   @IsNotEmpty()

@@ -18,14 +18,14 @@ import {
   PaymentMethod,
   PaymentStatus,
   AppointmentStatus,
-} from "src/constant/enums/status.enum";
-import { PatientService } from "src/modules/patient/patient.service";
-import { DoctorService } from "src/modules/doctor/doctor.service";
-import { BillingForEnum } from "src/constant/enums/billing-for.enum";
-import { MerchantPGService } from "src/modules/merchant-pg/merchant-pg.service";
-import { Doctor } from "src/modules/doctor/schema/doctor.schema";
+} from "../../constant/enums/status.enum";
+import { PatientService } from "../patient/patient.service";
+import { DoctorService } from "../doctor/doctor.service";
+import { BillingForEnum } from "../../constant/enums/billing-for.enum";
+import { MerchantPGService } from "../merchant-pg/merchant-pg.service";
+import { Doctor } from "../doctor/schema/doctor.schema";
 import { QueueGateway } from "../queue/queue.gateway";
-import { QueueStatus } from "src/constant/enums/status.enum";
+import { QueueStatus } from "../../constant/enums/status.enum";
 
 @Injectable()
 export class AppointmentService {

@@ -1,5 +1,5 @@
 import { IsDateString, IsEnum, IsOptional, IsString } from "class-validator";
-import { AttendanceStatusEnum } from "src/constant/enums/staff-role.enum";
+import { AttendanceStatusEnum } from "../../../constant/enums/staff-role.enum";
 
 export class RecordAttendanceDto {
   @IsOptional()

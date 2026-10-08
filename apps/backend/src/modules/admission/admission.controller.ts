@@ -14,9 +14,9 @@ import { AuthUser } from "../../common/decorator/authUser.decorator";
 import { CreateAdmissionDto } from "./dto/create-admission.dto";
 import { DischargeDto } from "./dto/discharge.dto";
 import { Types } from "mongoose";
-import { Roles } from "src/common/decorators/roles.decorator";
-import { IAuthUser } from "src/common";
-import { AdmissionStatus } from "src/constant/enums/status.enum";
+import { Roles } from "../../common/decorators/roles.decorator";
+import { IAuthUser } from "../../common";
+import { AdmissionStatus } from "../../constant/enums/status.enum";
 
 @Controller("admission")
 export class AdmissionController {

@@ -11,8 +11,8 @@ import { RolesEnum } from "../../constant";
 import { AuthUser } from "../../common/decorator/authUser.decorator";
 import { AllocateBedDto, TransferBedDto } from "./dto/allocate-bed.dto";
 import { Types } from "mongoose";
-import { Roles } from "src/common/decorators/roles.decorator";
-import { IAuthUser } from "src/common";
+import { Roles } from "../../common/decorators/roles.decorator";
+import { IAuthUser } from "../../common";
 
 @Controller("bed-allocation")
 export class BedAllocationController {

@@ -5,7 +5,7 @@ import { collectionsName } from "../../constant";
 import { LabReportDocument } from "./schema/lab-report.schema";
 import { CreateLabReportDto } from "./dto/create-lab-report.dto";
 import { TestOrderService } from "../test-order/test-order.service";
-import { TestOrderStatus } from "src/constant/enums/status.enum";
+import { TestOrderStatus } from "../../constant/enums/status.enum";
 
 @Injectable()
 export class LabReportService {

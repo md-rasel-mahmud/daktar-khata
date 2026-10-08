@@ -5,8 +5,8 @@ import {
 } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, Types } from "mongoose";
-import { PermissionKeyEnum, collectionsName } from "src/constant";
-import { StaffRoleEnum } from "src/constant/enums/staff-role.enum";
+import { PermissionKeyEnum, collectionsName } from "../../constant";
+import { StaffRoleEnum } from "../../constant/enums/staff-role.enum";
 import { CreateStaffRoleTemplateDto } from "./dto/create-staff-role-template.dto";
 import { UpdateStaffRoleTemplateDto } from "./dto/update-staff-role-template.dto";
 import { StaffRoleTemplateDocument } from "./schema/staff-role-template.schema";

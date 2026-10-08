@@ -4,7 +4,7 @@ import { CreateSubscriptionDto } from "./dto/create-subscription.dto";
 import { RolesEnum } from "../../constant";
 import { AuthUser } from "../../common/decorator/authUser.decorator";
 import { Types } from "mongoose";
-import { Roles } from "src/common/decorators/roles.decorator";
+import { Roles } from "../../common/decorators/roles.decorator";
 
 @Controller("subscription")
 export class SubscriptionController {

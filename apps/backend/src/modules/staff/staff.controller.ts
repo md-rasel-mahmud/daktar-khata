@@ -13,16 +13,16 @@ import { RolesEnum } from "../../constant";
 import { AuthUser } from "../../common/decorator/authUser.decorator";
 import { CreateStaffDto } from "./dto/create-staff.dto";
 import { Types } from "mongoose";
-import { Roles } from "src/common/decorators/roles.decorator";
-import { IAuthUser } from "src/common";
+import { Roles } from "../../common/decorators/roles.decorator";
+import { IAuthUser } from "../../common";
 import { UpdateStaffDto } from "./dto/update-staff.dto";
 import { RecordAttendanceDto } from "./dto/record-attendance.dto";
 import { CreateLeaveRequestDto } from "./dto/create-leave-request.dto";
 import { UpdateLeaveStatusDto } from "./dto/update-leave-status.dto";
 import { CreatePayrollDto } from "./dto/create-payroll.dto";
-import { LeaveStatusEnum } from "src/constant/enums/staff-role.enum";
-import { Permissions } from "src/common/decorators/permissions.decorator";
-import { PermissionKeyEnum } from "src/constant";
+import { LeaveStatusEnum } from "../../constant/enums/staff-role.enum";
+import { Permissions } from "../../common/decorators/permissions.decorator";
+import { PermissionKeyEnum } from "../../constant";
 
 @Controller("staff")
 export class StaffController {

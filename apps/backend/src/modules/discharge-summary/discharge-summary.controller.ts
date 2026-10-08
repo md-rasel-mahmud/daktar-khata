@@ -13,8 +13,8 @@ import { AuthUser } from "../../common/decorator/authUser.decorator";
 import { CreateDischargeSummaryDto } from "./dto/create-discharge-summary.dto";
 import { UpdateDischargeSummaryDto } from "./dto/update-discharge-summary.dto";
 import { Types } from "mongoose";
-import { Roles } from "src/common/decorators/roles.decorator";
-import { IAuthUser } from "src/common";
+import { Roles } from "../../common/decorators/roles.decorator";
+import { IAuthUser } from "../../common";
 
 @Controller("discharge-summary")
 export class DischargeSummaryController {

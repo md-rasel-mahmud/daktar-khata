@@ -15,8 +15,8 @@ import { AuthUser } from "../../common/decorator/authUser.decorator";
 import { CreateRoomDto } from "./dto/create-room.dto";
 import { UpdateRoomDto } from "./dto/update-room.dto";
 import { Types } from "mongoose";
-import { Roles } from "src/common/decorators/roles.decorator";
-import { IAuthUser } from "src/common";
+import { Roles } from "../../common/decorators/roles.decorator";
+import { IAuthUser } from "../../common";
 
 @Controller("room")
 export class RoomController {

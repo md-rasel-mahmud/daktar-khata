@@ -10,7 +10,7 @@ import {
   IsString,
   Min,
 } from "class-validator";
-import { CommissionType } from "src/constant/enums/status.enum";
+import { CommissionType } from "../../../constant/enums/status.enum";
 
 export class CreateCommissionRuleDto {
   @ApiProperty({ example: "64e7c3b2f1a2b3c4d5e6f7a8" })

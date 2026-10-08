@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Types } from "mongoose";
-import { collectionsName } from "src/constant";
-import { StaffRoleEnum } from "src/constant/enums/staff-role.enum";
+import { collectionsName } from "../../../constant";
+import { StaffRoleEnum } from "../../../constant/enums/staff-role.enum";
 
 export type StaffRoleTemplateDocument = StaffRoleTemplate & Document;
 

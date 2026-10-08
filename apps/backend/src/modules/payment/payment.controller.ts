@@ -13,10 +13,10 @@ import { PaymentService } from "./payment.service";
 import { RolesEnum } from "../../constant";
 import { AuthUser } from "../../common/decorator/authUser.decorator";
 import { Types } from "mongoose";
-import { Roles } from "src/common/decorators/roles.decorator";
-import { IAuthUser, Public } from "src/common";
+import { Roles } from "../../common/decorators/roles.decorator";
+import { IAuthUser, Public } from "../../common";
 import * as querystring from "querystring";
-import { SSLCommerzValidateResponse } from "src/common/interfaces/sslcommerz.interface";
+import { SSLCommerzValidateResponse } from "../../common/interfaces/sslcommerz.interface";
 
 @Controller("payment")
 export class PaymentController {

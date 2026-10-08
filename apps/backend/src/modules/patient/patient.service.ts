@@ -3,11 +3,11 @@ import { InjectModel } from "@nestjs/mongoose";
 import { ClientSession, Model, Types } from "mongoose";
 import { CreatePatientDto } from "./dto/create-patient.dto";
 import { UpdatePatientDto } from "./dto/update-patient.dto";
-import { collectionsName, RolesEnum } from "src/constant";
-import { Patient } from "src/modules/patient/schema/patient.schema";
-import { AppointmentDocument } from "src/modules/appointment/schema/appointment.schema";
-import { Doctor } from "src/modules/doctor/schema/doctor.schema";
-import { AppointmentStatus } from "src/constant/enums/status.enum";
+import { collectionsName, RolesEnum } from "../../constant";
+import { Patient } from "./schema/patient.schema";
+import { AppointmentDocument } from "../appointment/schema/appointment.schema";
+import { Doctor } from "../doctor/schema/doctor.schema";
+import { AppointmentStatus } from "../../constant/enums/status.enum";
 
 type PatientWithAppointments = Patient & {
   appointments: Array<Record<string, any>>;

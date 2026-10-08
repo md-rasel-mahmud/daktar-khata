@@ -14,8 +14,8 @@ import { AuthUser } from "../../common/decorator/authUser.decorator";
 import { CreateMerchantPGDto } from "./dto/create-merchant-pg.dto";
 import { UpdateMerchantPGDto } from "./dto/update-merchant-pg.dto";
 import { Types } from "mongoose";
-import { Roles } from "src/common/decorators/roles.decorator";
-import { IAuthUser } from "src/common";
+import { Roles } from "../../common/decorators/roles.decorator";
+import { IAuthUser } from "../../common";
 
 @Controller("merchant-pg")
 export class MerchantPGController {

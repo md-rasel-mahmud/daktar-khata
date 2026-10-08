@@ -15,9 +15,9 @@ import { AuthUser } from "../../common/decorator/authUser.decorator";
 import { CreateBedDto } from "./dto/create-bed.dto";
 import { UpdateBedDto } from "./dto/update-bed.dto";
 import { Types } from "mongoose";
-import { Roles } from "src/common/decorators/roles.decorator";
-import { IAuthUser } from "src/common";
-import { BedStatus } from "src/constant/enums/status.enum";
+import { Roles } from "../../common/decorators/roles.decorator";
+import { IAuthUser } from "../../common";
+import { BedStatus } from "../../constant/enums/status.enum";
 
 @Controller("bed")
 export class BedController {

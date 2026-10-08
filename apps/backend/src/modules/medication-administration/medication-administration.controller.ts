@@ -14,8 +14,8 @@ import { AuthUser } from "../../common/decorator/authUser.decorator";
 import { CreateMedicationAdminDto } from "./dto/create-medication-admin.dto";
 import { RecordAdministrationDto } from "./dto/record-administration.dto";
 import { Types } from "mongoose";
-import { Roles } from "src/common/decorators/roles.decorator";
-import { IAuthUser } from "src/common";
+import { Roles } from "../../common/decorators/roles.decorator";
+import { IAuthUser } from "../../common";
 import { MedicationAdminStatus } from "../../constant/enums/status.enum";
 
 @Controller("medication-administration")

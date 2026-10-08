@@ -8,15 +8,15 @@ import { UserService } from "../user/user.service";
 import { AuthDto, RegisterDto } from "./dto/auth.dto";
 import { User } from "../user/schema/user.schema";
 import { ClientSession } from "mongoose";
-import { RolesEnum, Status } from "src/constant";
-import { PatientService } from "src/modules/patient/patient.service";
-import { CreateMerchantDto } from "src/modules/merchant/dto/create-merchant.dto";
-import { MerchantService } from "src/modules/merchant/merchant.service";
-import { CreatePatientDto } from "src/modules/patient/dto/create-patient.dto";
-import { IAuthUser } from "src/common";
-import { DoctorService } from "src/modules/doctor/doctor.service";
+import { RolesEnum, Status } from "../../constant";
+import { PatientService } from "../patient/patient.service";
+import { CreateMerchantDto } from "../merchant/dto/create-merchant.dto";
+import { MerchantService } from "../merchant/merchant.service";
+import { CreatePatientDto } from "../patient/dto/create-patient.dto";
+import { IAuthUser } from "../../common";
+import { DoctorService } from "../doctor/doctor.service";
 import { ConfigService } from "@nestjs/config";
-import { AppConfigType } from "src/config/app.config";
+import { AppConfigType } from "../../config/app.config";
 
 @Injectable()
 export class AuthService {

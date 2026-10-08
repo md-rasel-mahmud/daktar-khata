@@ -12,7 +12,7 @@ import {
   Min,
   ValidateNested,
 } from "class-validator";
-import { ServiceCategory } from "src/constant/enums/status.enum";
+import { ServiceCategory } from "../../../constant/enums/status.enum";
 
 export class LineItemInputDto {
   @ApiPropertyOptional({ example: "64e7c3b2f1a2b3c4d5e6f7a8" })

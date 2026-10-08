@@ -6,7 +6,7 @@ import {
   IsOptional,
   IsString,
 } from "class-validator";
-import { AuditEvent } from "src/constant/enums/status.enum";
+import { AuditEvent } from "../../../constant/enums/status.enum";
 
 export class CreateAuditLogDto {
   @ApiProperty({ enum: AuditEvent, example: AuditEvent.PATIENT_RECORD_UPDATE })

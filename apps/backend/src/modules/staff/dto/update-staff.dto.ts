@@ -8,7 +8,7 @@ import {
   IsString,
   Min,
 } from "class-validator";
-import { StaffRoleEnum } from "src/constant/enums/staff-role.enum";
+import { StaffRoleEnum } from "../../../constant/enums/staff-role.enum";
 
 export class UpdateStaffDto {
   @IsOptional()

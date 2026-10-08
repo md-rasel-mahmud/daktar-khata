@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Types } from "mongoose";
-import { collectionsName } from "src/constant";
-import { AttendanceStatusEnum } from "src/constant/enums/staff-role.enum";
+import { collectionsName } from "../../../constant";
+import { AttendanceStatusEnum } from "../../../constant/enums/staff-role.enum";
 
 export type AttendanceDocument = Attendance & Document;
 

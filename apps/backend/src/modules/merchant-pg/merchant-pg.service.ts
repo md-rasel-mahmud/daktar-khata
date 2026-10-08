@@ -4,7 +4,7 @@ import { Model, Types } from "mongoose";
 import { collectionsName } from "../../constant";
 import { CreateMerchantPGDto } from "./dto/create-merchant-pg.dto";
 import { UpdateMerchantPGDto } from "./dto/update-merchant-pg.dto";
-import { MerchantPG } from "src/modules/merchant-pg/schema/merchant-pg.schema";
+import { MerchantPG } from "./schema/merchant-pg.schema";
 
 @Injectable()
 export class MerchantPGService {

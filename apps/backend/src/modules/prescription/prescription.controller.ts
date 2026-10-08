@@ -14,9 +14,9 @@ import { AuthUser } from "../../common/decorator/authUser.decorator";
 import { CreatePrescriptionDto } from "./dto/create-prescription.dto";
 import { UpdatePrescriptionDto } from "./dto/update-prescription.dto";
 import { Types } from "mongoose";
-import { Roles } from "src/common/decorators/roles.decorator";
-import { IAuthUser } from "src/common";
-import { PrescriptionStatus } from "src/constant/enums/status.enum";
+import { Roles } from "../../common/decorators/roles.decorator";
+import { IAuthUser } from "../../common";
+import { PrescriptionStatus } from "../../constant/enums/status.enum";
 
 @Controller("prescription")
 export class PrescriptionController {

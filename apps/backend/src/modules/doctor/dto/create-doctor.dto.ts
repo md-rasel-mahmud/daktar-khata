@@ -12,8 +12,8 @@ import {
 } from "class-validator";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { RolesEnum } from "src/constant";
-import { PersonDto } from "src/common/dto/person.dto";
+import { RolesEnum } from "../../../constant";
+import { PersonDto } from "../../../common/dto/person.dto";
 
 // Nested DTOs for better Swagger clarity
 class HospitalInfoDto {

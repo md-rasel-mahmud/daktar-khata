@@ -11,8 +11,8 @@ import {
   IsString,
 } from "class-validator";
 import { Types } from "mongoose";
-import { PersonDto } from "src/common/dto/person.dto";
-import { RolesEnum, Status } from "src/constant";
+import { PersonDto } from "../../../common/dto/person.dto";
+import { RolesEnum, Status } from "../../../constant";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 
 export class AuthDto {

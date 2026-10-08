@@ -12,8 +12,8 @@ import { RolesEnum } from "../../constant";
 import { AuthUser } from "../../common/decorator/authUser.decorator";
 import { CreateLabReportDto } from "./dto/create-lab-report.dto";
 import { Types } from "mongoose";
-import { Roles } from "src/common/decorators/roles.decorator";
-import { IAuthUser } from "src/common";
+import { Roles } from "../../common/decorators/roles.decorator";
+import { IAuthUser } from "../../common";
 
 @Controller("lab-report")
 export class LabReportController {

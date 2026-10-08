@@ -15,10 +15,10 @@ import { UserService } from "./user.service";
 import { Connection, Types } from "mongoose";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { RolesEnum } from "../../constant";
-import { AuthService } from "src/modules/auth/auth.service";
+import { AuthService } from "../auth/auth.service";
 import { InjectConnection } from "@nestjs/mongoose";
-import { RegisterDto } from "src/modules/auth/dto/auth.dto";
-import { Roles } from "src/common/decorators/roles.decorator";
+import { RegisterDto } from "../auth/dto/auth.dto";
+import { Roles } from "../../common/decorators/roles.decorator";
 
 @Controller("users")
 export class UserController {

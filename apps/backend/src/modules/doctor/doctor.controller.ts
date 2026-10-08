@@ -10,12 +10,12 @@ import {
 import { DoctorService } from "./doctor.service";
 import { CreateDoctorDto } from "./dto/create-doctor.dto";
 import { UpdateDoctorDto } from "./dto/update-doctor.dto";
-import { RolesEnum } from "src/constant";
+import { RolesEnum } from "../../constant";
 import { InjectConnection } from "@nestjs/mongoose";
 import { Connection } from "mongoose";
-import { Roles } from "src/common/decorators/roles.decorator";
-import { AuthUser } from "src/common/decorator/authUser.decorator";
-import { IAuthUser } from "src/common";
+import { Roles } from "../../common/decorators/roles.decorator";
+import { AuthUser } from "../../common/decorator/authUser.decorator";
+import { IAuthUser } from "../../common";
 
 @Controller("doctors")
 export class DoctorController {

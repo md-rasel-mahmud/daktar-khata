@@ -14,8 +14,8 @@ import { AuthUser } from "../../common/decorator/authUser.decorator";
 import { CreateCommissionRecordDto } from "./dto/create-commission-record.dto";
 import { UpdateCommissionStatusDto } from "./dto/update-commission-status.dto";
 import { Types } from "mongoose";
-import { Roles } from "src/common/decorators/roles.decorator";
-import { IAuthUser } from "src/common";
+import { Roles } from "../../common/decorators/roles.decorator";
+import { IAuthUser } from "../../common";
 import { CommissionStatus } from "../../constant/enums/status.enum";
 
 @Controller("commission-record")

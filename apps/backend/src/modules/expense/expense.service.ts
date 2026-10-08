@@ -1,11 +1,11 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, Types } from "mongoose";
-import { collectionsName } from "src/constant";
+import { collectionsName } from "../../constant";
 import { CreateExpenseDto } from "./dto/create-expense.dto";
 import { UpdateExpenseDto } from "./dto/update-expense.dto";
 import { ExpenseDocument } from "./schema/expense.schema";
-import { TransactionTypeEnum } from "src/constant/enums/finance.enum";
+import { TransactionTypeEnum } from "../../constant/enums/finance.enum";
 
 @Injectable()
 export class ExpenseService {

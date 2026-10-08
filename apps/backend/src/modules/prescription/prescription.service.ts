@@ -5,7 +5,7 @@ import { collectionsName } from "../../constant";
 import { PrescriptionDocument } from "./schema/prescription.schema";
 import { CreatePrescriptionDto } from "./dto/create-prescription.dto";
 import { UpdatePrescriptionDto } from "./dto/update-prescription.dto";
-import { PrescriptionStatus } from "src/constant/enums/status.enum";
+import { PrescriptionStatus } from "../../constant/enums/status.enum";
 import { DoctorService } from "../doctor/doctor.service";
 
 @Injectable()

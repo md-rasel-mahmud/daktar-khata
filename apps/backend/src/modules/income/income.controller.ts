@@ -9,15 +9,15 @@ import {
   Query,
 } from "@nestjs/common";
 import { Types } from "mongoose";
-import { IAuthUser } from "src/common";
-import { AuthUser } from "src/common/decorator/authUser.decorator";
-import { Roles } from "src/common/decorators/roles.decorator";
-import { RolesEnum } from "src/constant";
+import { IAuthUser } from "../../common";
+import { AuthUser } from "../../common/decorator/authUser.decorator";
+import { Roles } from "../../common/decorators/roles.decorator";
+import { RolesEnum } from "../../constant";
 import { CreateIncomeDto } from "./dto/create-income.dto";
 import { UpdateIncomeDto } from "./dto/update-income.dto";
 import { IncomeService } from "./income.service";
-import { Permissions } from "src/common/decorators/permissions.decorator";
-import { PermissionKeyEnum } from "src/constant";
+import { Permissions } from "../../common/decorators/permissions.decorator";
+import { PermissionKeyEnum } from "../../constant";
 
 @Controller("income")
 export class IncomeController {

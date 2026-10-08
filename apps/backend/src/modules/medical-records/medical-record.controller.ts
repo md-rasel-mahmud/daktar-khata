@@ -10,10 +10,10 @@ import {
   Query,
 } from "@nestjs/common";
 import { Types } from "mongoose";
-import { Roles } from "src/common/decorators/roles.decorator";
-import { RolesEnum } from "src/constant";
-import { AuthUser } from "src/common/decorator/authUser.decorator";
-import { IAuthUser } from "src/common";
+import { Roles } from "../../common/decorators/roles.decorator";
+import { RolesEnum } from "../../constant";
+import { AuthUser } from "../../common/decorator/authUser.decorator";
+import { IAuthUser } from "../../common";
 import { MedicalRecordService } from "./medical-record.service";
 import { CreateMedicalRecordDto } from "./dto/create-medical-record.dto";
 import { UpdateMedicalRecordDto } from "./dto/update-medical-record.dto";

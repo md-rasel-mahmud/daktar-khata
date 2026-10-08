@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
-import { collectionsName } from "src/constant";
+import { collectionsName } from "../../constant";
 import { ExpenseController } from "./expense.controller";
 import { ExpenseService } from "./expense.service";
 import { ExpenseSchema } from "./schema/expense.schema";

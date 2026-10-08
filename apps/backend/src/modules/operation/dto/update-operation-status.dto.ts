@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsEnum, IsNotEmpty } from "class-validator";
-import { OperationStatus } from "src/constant/enums/status.enum";
+import { OperationStatus } from "../../../constant/enums/status.enum";
 
 export class UpdateOperationStatusDto {
   @ApiProperty({ enum: OperationStatus, example: OperationStatus.IN_PROGRESS })

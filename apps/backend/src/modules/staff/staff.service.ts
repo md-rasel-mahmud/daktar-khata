@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { UserService } from "src/modules/user/user.service";
+import { UserService } from "../user/user.service";
 import { CreateStaffDto } from "./dto/create-staff.dto";
 import { Model, Types } from "mongoose";
 import { RolesEnum, collectionsName } from "../../constant";
@@ -19,7 +19,7 @@ import {
   LeaveStatusEnum,
   PayrollStatusEnum,
   StaffRoleEnum,
-} from "src/constant/enums/staff-role.enum";
+} from "../../constant/enums/staff-role.enum";
 import { CreatePayrollDto } from "./dto/create-payroll.dto";
 
 @Injectable()

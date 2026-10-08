@@ -11,15 +11,15 @@ import * as qs from "qs";
 import {
   PaymentStatus,
   SubscriptionStatus,
-} from "src/constant/enums/status.enum";
-import { MerchantService } from "src/modules/merchant/merchant.service";
-import { AppointmentService } from "src/modules/appointment/appointment.service";
-import { AppConfigType, SSLCommerzConfig } from "src/config/app.config";
+} from "../../constant/enums/status.enum";
+import { MerchantService } from "../merchant/merchant.service";
+import { AppointmentService } from "../appointment/appointment.service";
+import { AppConfigType, SSLCommerzConfig } from "../../config/app.config";
 import {
   SSLCommerzInitPayload,
   SSLCommerzValidateResponse,
-} from "src/common/interfaces/sslcommerz.interface";
-import { BillingForEnum } from "src/constant/enums/billing-for.enum";
+} from "../../common/interfaces/sslcommerz.interface";
+import { BillingForEnum } from "../../constant/enums/billing-for.enum";
 
 @Injectable()
 export class PaymentService {

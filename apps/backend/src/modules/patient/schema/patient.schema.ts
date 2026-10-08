@@ -1,8 +1,8 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Types } from "mongoose";
-import { Person } from "src/common/schemas/person.schema";
-import { collectionsName, Status } from "src/constant";
-import { BloodGroup } from "src/constant/enums/blood-group.enum";
+import { Person } from "../../../common/schemas/person.schema";
+import { collectionsName, Status } from "../../../constant";
+import { BloodGroup } from "../../../constant/enums/blood-group.enum";
 
 export type PatientDocument = Patient & Document;
 

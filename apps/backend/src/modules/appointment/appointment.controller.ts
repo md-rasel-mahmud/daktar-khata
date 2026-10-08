@@ -18,9 +18,9 @@ import { UpdateAppointmentStatusDto } from "./dto/update-appointment-status.dto"
 import { RescheduleAppointmentDto } from "./dto/reschedule-appointment.dto";
 import { GetAvailableSlotsDto } from "./dto/get-available-slots.dto";
 import { Types } from "mongoose";
-import { Roles } from "src/common/decorators/roles.decorator";
-import { IAuthUser } from "src/common";
-import { QueueStatus } from "src/constant/enums/status.enum";
+import { Roles } from "../../common/decorators/roles.decorator";
+import { IAuthUser } from "../../common";
+import { QueueStatus } from "../../constant/enums/status.enum";
 
 @Controller("appointment")
 export class AppointmentController {

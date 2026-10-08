@@ -15,8 +15,8 @@ import { CreateNursingTaskDto } from "./dto/create-nursing-task.dto";
 import { UpdateNursingTaskStatusDto } from "./dto/update-nursing-task-status.dto";
 import { LogVitalsDto } from "./dto/log-vitals.dto";
 import { Types } from "mongoose";
-import { Roles } from "src/common/decorators/roles.decorator";
-import { IAuthUser } from "src/common";
+import { Roles } from "../../common/decorators/roles.decorator";
+import { IAuthUser } from "../../common";
 import {
   NursingTaskStatus,
   NursingTaskType,

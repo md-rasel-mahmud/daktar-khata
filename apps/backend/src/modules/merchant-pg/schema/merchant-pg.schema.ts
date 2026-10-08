@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Types } from "mongoose";
-import { collectionsName } from "src/constant";
+import { collectionsName } from "../../../constant";
 
 @Schema({ _id: false })
 class SSLCommerzSchema {

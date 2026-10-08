@@ -7,15 +7,15 @@ import {
 } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, Types } from "mongoose";
-import { collectionsName, PermissionKeyEnum, RolesEnum } from "src/constant";
+import { collectionsName, PermissionKeyEnum, RolesEnum } from "../../constant";
 import {
   AppointmentStatus,
   QueueStatus,
-} from "src/constant/enums/status.enum";
-import { IAuthUser } from "src/common";
+} from "../../constant/enums/status.enum";
+import { IAuthUser } from "../../common";
 import { AppointmentDocument } from "./schema/appointment.schema";
-import { Doctor } from "src/modules/doctor/schema/doctor.schema";
-import { MerchantDocument } from "src/modules/merchant/schema/merchant.schema";
+import { Doctor } from "../doctor/schema/doctor.schema";
+import { MerchantDocument } from "../merchant/schema/merchant.schema";
 import { QueueGateway } from "../queue/queue.gateway";
 
 /**

@@ -7,11 +7,11 @@ import {
   IsOptional,
   IsString,
 } from "class-validator";
-import { APPOINTMENT_TYPE } from "src/constant/enums/appointment.enum";
+import { APPOINTMENT_TYPE } from "../../../constant/enums/appointment.enum";
 import {
   AppointmentStatus,
   PaymentMethod,
-} from "src/constant/enums/status.enum";
+} from "../../../constant/enums/status.enum";
 
 export class CreateAppointmentDto {
   @ApiProperty({

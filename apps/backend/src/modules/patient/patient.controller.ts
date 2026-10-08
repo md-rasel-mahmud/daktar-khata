@@ -10,12 +10,12 @@ import {
 } from "@nestjs/common";
 import { PatientService } from "./patient.service";
 import { UpdatePatientDto } from "./dto/update-patient.dto";
-import { Roles } from "src/common/decorators/roles.decorator";
-import { RolesEnum } from "src/constant";
-import { AuthUser } from "src/common/decorator/authUser.decorator";
-import { IAuthUser } from "src/common";
+import { Roles } from "../../common/decorators/roles.decorator";
+import { RolesEnum } from "../../constant";
+import { AuthUser } from "../../common/decorator/authUser.decorator";
+import { IAuthUser } from "../../common";
 import { Types } from "mongoose";
-import { MedicalRecordService } from "src/modules/medical-records/medical-record.service";
+import { MedicalRecordService } from "../medical-records/medical-record.service";
 
 @Controller("patients")
 export class PatientController {

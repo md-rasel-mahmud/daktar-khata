@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Types } from "mongoose";
-import { collectionsName } from "src/constant";
-import { AuditEvent } from "src/constant/enums/status.enum";
+import { collectionsName } from "../../../constant";
+import { AuditEvent } from "../../../constant/enums/status.enum";
 
 export type AuditLogDocument = AuditLog & Document;
 

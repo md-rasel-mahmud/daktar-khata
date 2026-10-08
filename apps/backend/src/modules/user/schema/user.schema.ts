@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Types } from "mongoose";
-import { RolesEnum } from "src/constant";
+import { RolesEnum } from "../../../constant";
 import * as bcrypt from "bcrypt";
 
 @Schema({ versionKey: false, timestamps: true })

@@ -17,8 +17,8 @@ import { GenerateCyclePayrollDto } from "./dto/generate-cycle-payroll.dto";
 import { UpdatePayrollDto } from "./dto/update-payroll.dto";
 import { PayPayrollDto } from "./dto/pay-payroll.dto";
 import { Types } from "mongoose";
-import { Roles } from "src/common/decorators/roles.decorator";
-import { IAuthUser } from "src/common";
+import { Roles } from "../../common/decorators/roles.decorator";
+import { IAuthUser } from "../../common";
 import { PayrollStatus } from "../../constant/enums/status.enum";
 
 @Controller("payroll")

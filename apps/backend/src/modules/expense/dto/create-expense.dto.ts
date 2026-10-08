@@ -13,7 +13,7 @@ import { Type } from "class-transformer";
 import {
   ExpenseCategoryEnum,
   TransactionTypeEnum,
-} from "src/constant/enums/finance.enum";
+} from "../../../constant/enums/finance.enum";
 
 export class CreateExpenseDto {
   @IsNumber()

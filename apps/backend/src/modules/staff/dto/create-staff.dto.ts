@@ -10,8 +10,8 @@ import {
   Min,
   MinLength,
 } from "class-validator";
-import { RolesEnum } from "src/constant";
-import { StaffRoleEnum } from "src/constant/enums/staff-role.enum";
+import { RolesEnum } from "../../../constant";
+import { StaffRoleEnum } from "../../../constant/enums/staff-role.enum";
 
 export class CreateStaffDto {
   @IsNotEmpty()

@@ -13,7 +13,7 @@ import { AuthUser } from "../../common/decorator/authUser.decorator";
 import { CreateClinicDto } from "./dto/create-clinic.dto";
 import { UpdateClinicDto } from "./dto/update-clinic.dto";
 import { Types } from "mongoose";
-import { Roles } from "src/common/decorators/roles.decorator";
+import { Roles } from "../../common/decorators/roles.decorator";
 
 @Controller("clinic")
 export class ClinicController {

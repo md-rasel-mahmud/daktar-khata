@@ -18,8 +18,8 @@ import { UpdatePreOpDto } from "./dto/update-pre-op.dto";
 import { UpdateOperationNotesDto } from "./dto/update-operation-notes.dto";
 import { UpdateOperationStatusDto } from "./dto/update-operation-status.dto";
 import { Types } from "mongoose";
-import { Roles } from "src/common/decorators/roles.decorator";
-import { IAuthUser } from "src/common";
+import { Roles } from "../../common/decorators/roles.decorator";
+import { IAuthUser } from "../../common";
 import { OperationStatus } from "../../constant/enums/status.enum";
 
 @Controller("operation")

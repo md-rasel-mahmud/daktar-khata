@@ -1,12 +1,12 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Types } from "mongoose";
-import { collectionsName } from "src/constant";
+import { collectionsName } from "../../../constant";
 import {
   AppointmentStatus,
   PaymentMethod,
   PaymentStatus,
   QueueStatus,
-} from "src/constant/enums/status.enum";
+} from "../../../constant/enums/status.enum";
 
 export type AppointmentDocument = Appointment & Document;
 

@@ -9,7 +9,7 @@ import { collectionsName } from "../../constant";
 import { BedAllocationDocument } from "./schema/bed-allocation.schema";
 import { AllocateBedDto } from "./dto/allocate-bed.dto";
 import { BedDocument } from "../bed/schema/bed.schema";
-import { BedStatus } from "src/constant/enums/status.enum";
+import { BedStatus } from "../../constant/enums/status.enum";
 
 @Injectable()
 export class BedAllocationService {

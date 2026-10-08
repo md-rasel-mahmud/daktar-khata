@@ -8,7 +8,7 @@ import {
   Max,
   Min,
 } from "class-validator";
-import { PayrollStatusEnum } from "src/constant/enums/staff-role.enum";
+import { PayrollStatusEnum } from "../../../constant/enums/staff-role.enum";
 
 export class CreatePayrollDto {
   @IsInt()

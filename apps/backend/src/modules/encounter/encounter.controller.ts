@@ -13,8 +13,8 @@ import { AuthUser } from "../../common/decorator/authUser.decorator";
 import { CreateEncounterDto } from "./dto/create-encounter.dto";
 import { UpdateEncounterDto } from "./dto/update-encounter.dto";
 import { Types } from "mongoose";
-import { Roles } from "src/common/decorators/roles.decorator";
-import { IAuthUser } from "src/common";
+import { Roles } from "../../common/decorators/roles.decorator";
+import { IAuthUser } from "../../common";
 
 @Controller("encounter")
 export class EncounterController {

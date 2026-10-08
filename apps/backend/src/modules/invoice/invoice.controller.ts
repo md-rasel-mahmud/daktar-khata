@@ -16,8 +16,8 @@ import { RecordPaymentDto } from "./dto/record-payment.dto";
 import { RecordRefundDto } from "./dto/record-refund.dto";
 import { UpdateInvoiceStatusDto } from "./dto/update-invoice-status.dto";
 import { Types } from "mongoose";
-import { Roles } from "src/common/decorators/roles.decorator";
-import { IAuthUser } from "src/common";
+import { Roles } from "../../common/decorators/roles.decorator";
+import { IAuthUser } from "../../common";
 import { InvoiceStatus } from "../../constant/enums/status.enum";
 
 @Controller("invoice")

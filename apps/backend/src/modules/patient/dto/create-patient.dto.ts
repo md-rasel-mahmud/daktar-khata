@@ -8,7 +8,7 @@ import {
 } from "class-validator";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Types } from "mongoose";
-import { PersonDto } from "src/common/dto/person.dto";
+import { PersonDto } from "../../../common/dto/person.dto";
 
 export class CreatePatientDto extends PersonDto {
   @ApiProperty({

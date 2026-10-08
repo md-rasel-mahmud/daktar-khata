@@ -15,8 +15,8 @@ import { AuthUser } from "../../common/decorator/authUser.decorator";
 import { CreateInventoryItemDto } from "./dto/create-inventory-item.dto";
 import { UpdateInventoryItemDto } from "./dto/update-inventory-item.dto";
 import { Types } from "mongoose";
-import { Roles } from "src/common/decorators/roles.decorator";
-import { IAuthUser } from "src/common";
+import { Roles } from "../../common/decorators/roles.decorator";
+import { IAuthUser } from "../../common";
 import { InventoryCategory } from "../../constant/enums/status.enum";
 
 @Controller("inventory-item")

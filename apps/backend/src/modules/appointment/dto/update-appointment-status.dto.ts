@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { IsEnum, IsNotEmpty, IsOptional, IsString } from "class-validator";
-import { AppointmentStatus } from "src/constant/enums/status.enum";
+import { AppointmentStatus } from "../../../constant/enums/status.enum";
 
 export class UpdateAppointmentStatusDto {
   @ApiProperty({

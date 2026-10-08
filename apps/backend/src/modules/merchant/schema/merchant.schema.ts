@@ -1,8 +1,8 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Types } from "mongoose";
-import { Person } from "src/common/schemas/person.schema";
-import { collectionsName, RolesEnum, Status } from "src/constant";
-import { SubscriptionStatus } from "src/constant/enums/status.enum";
+import { Person } from "../../../common/schemas/person.schema";
+import { collectionsName, RolesEnum, Status } from "../../../constant";
+import { SubscriptionStatus } from "../../../constant/enums/status.enum";
 
 export type MerchantDocument = Merchant & Document;
 

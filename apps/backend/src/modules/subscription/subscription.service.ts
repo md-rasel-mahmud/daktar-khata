@@ -4,7 +4,7 @@ import { Model, Types } from "mongoose";
 import { collectionsName } from "../../constant";
 import { SubscriptionDocument } from "./subscription.schema";
 import { CreateSubscriptionDto } from "./dto/create-subscription.dto";
-import { SubscriptionStatus } from "src/constant/enums/status.enum";
+import { SubscriptionStatus } from "../../constant/enums/status.enum";
 
 @Injectable()
 export class SubscriptionService {

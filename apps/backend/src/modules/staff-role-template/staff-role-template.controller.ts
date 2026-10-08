@@ -8,11 +8,11 @@ import {
   Post,
 } from "@nestjs/common";
 import { Types } from "mongoose";
-import { IAuthUser } from "src/common";
-import { AuthUser } from "src/common/decorator/authUser.decorator";
-import { Permissions } from "src/common/decorators/permissions.decorator";
-import { Roles } from "src/common/decorators/roles.decorator";
-import { PermissionKeyEnum, RolesEnum } from "src/constant";
+import { IAuthUser } from "../../common";
+import { AuthUser } from "../../common/decorator/authUser.decorator";
+import { Permissions } from "../../common/decorators/permissions.decorator";
+import { Roles } from "../../common/decorators/roles.decorator";
+import { PermissionKeyEnum, RolesEnum } from "../../constant";
 import { CreateStaffRoleTemplateDto } from "./dto/create-staff-role-template.dto";
 import { UpdateStaffRoleTemplateDto } from "./dto/update-staff-role-template.dto";
 import { StaffRoleTemplateService } from "./staff-role-template.service";

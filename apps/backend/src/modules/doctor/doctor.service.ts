@@ -9,10 +9,10 @@ import { InjectModel } from "@nestjs/mongoose";
 import { ClientSession, Model, Types } from "mongoose";
 import { CreateDoctorDto } from "./dto/create-doctor.dto";
 import { UpdateDoctorDto } from "./dto/update-doctor.dto";
-import { Doctor } from "src/modules/doctor/schema/doctor.schema";
-import { collectionsName, RolesEnum } from "src/constant";
-import { UserService } from "src/modules/user/user.service";
-import { IAuthUser } from "src/common";
+import { Doctor } from "./schema/doctor.schema";
+import { collectionsName, RolesEnum } from "../../constant";
+import { UserService } from "../user/user.service";
+import { IAuthUser } from "../../common";
 
 @Injectable()
 export class DoctorService {

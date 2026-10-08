@@ -15,8 +15,8 @@ import { AuthUser } from "../../common/decorator/authUser.decorator";
 import { CreateTestCatalogDto } from "./dto/create-test-catalog.dto";
 import { UpdateTestCatalogDto } from "./dto/update-test-catalog.dto";
 import { Types } from "mongoose";
-import { Roles } from "src/common/decorators/roles.decorator";
-import { IAuthUser } from "src/common";
+import { Roles } from "../../common/decorators/roles.decorator";
+import { IAuthUser } from "../../common";
 
 @Controller("test-catalog")
 export class TestCatalogController {

@@ -5,17 +5,17 @@ import { RolesEnum, Status, collectionsName } from "../../constant";
 import { ClientSession, Connection, Model, Types } from "mongoose";
 import { User } from "./schema/user.schema";
 import { UpdateUserDto } from "./dto/update-user.dto";
-import { Patient } from "src/modules/patient/schema/patient.schema";
-import { Doctor } from "src/modules/doctor/schema/doctor.schema";
-import { Merchant } from "src/modules/merchant/schema/merchant.schema";
-import { RegisterDto } from "src/modules/auth/dto/auth.dto";
-import { appConfig } from "src/config";
+import { Patient } from "../patient/schema/patient.schema";
+import { Doctor } from "../doctor/schema/doctor.schema";
+import { Merchant } from "../merchant/schema/merchant.schema";
+import { RegisterDto } from "../auth/dto/auth.dto";
+import { appConfig } from "../../config";
 import { JwtService } from "@nestjs/jwt";
-import { PatientService } from "src/modules/patient/patient.service";
-import { MerchantService } from "src/modules/merchant/merchant.service";
-import { DoctorService } from "src/modules/doctor/doctor.service";
+import { PatientService } from "../patient/patient.service";
+import { MerchantService } from "../merchant/merchant.service";
+import { DoctorService } from "../doctor/doctor.service";
 import { ConfigService } from "@nestjs/config";
-import { AppConfigType } from "src/config/app.config";
+import { AppConfigType } from "../../config/app.config";
 
 interface RequestedUserType {
   _id?: Types.ObjectId;

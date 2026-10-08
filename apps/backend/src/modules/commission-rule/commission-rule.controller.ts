@@ -15,8 +15,8 @@ import { AuthUser } from "../../common/decorator/authUser.decorator";
 import { CreateCommissionRuleDto } from "./dto/create-commission-rule.dto";
 import { UpdateCommissionRuleDto } from "./dto/update-commission-rule.dto";
 import { Types } from "mongoose";
-import { Roles } from "src/common/decorators/roles.decorator";
-import { IAuthUser } from "src/common";
+import { Roles } from "../../common/decorators/roles.decorator";
+import { IAuthUser } from "../../common";
 
 @Controller("commission-rule")
 export class CommissionRuleController {

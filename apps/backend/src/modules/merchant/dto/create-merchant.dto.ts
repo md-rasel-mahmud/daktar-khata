@@ -12,8 +12,8 @@ import {
 } from "class-validator";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Types } from "mongoose";
-import { PersonDto } from "src/common/dto/person.dto";
-import { RolesEnum, Status } from "src/constant";
+import { PersonDto } from "../../../common/dto/person.dto";
+import { RolesEnum, Status } from "../../../constant";
 
 export class CreateMerchantDto extends PersonDto {
   @ApiProperty({

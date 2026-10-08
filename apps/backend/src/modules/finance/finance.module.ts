@@ -1,8 +1,8 @@
 import { Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
-import { collectionsName } from "src/constant";
-import { ExpenseSchema } from "src/modules/expense/schema/expense.schema";
-import { IncomeSchema } from "src/modules/income/schema/income.schema";
+import { collectionsName } from "../../constant";
+import { ExpenseSchema } from "../expense/schema/expense.schema";
+import { IncomeSchema } from "../income/schema/income.schema";
 import { FinanceController } from "./finance.controller";
 import { FinanceService } from "./finance.service";
 

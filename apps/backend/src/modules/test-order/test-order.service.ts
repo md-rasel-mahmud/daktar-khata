@@ -4,7 +4,7 @@ import { Model, Types } from "mongoose";
 import { collectionsName } from "../../constant";
 import { TestOrderDocument } from "./schema/test-order.schema";
 import { CreateTestOrderDto } from "./dto/create-test-order.dto";
-import { TestOrderStatus } from "src/constant/enums/status.enum";
+import { TestOrderStatus } from "../../constant/enums/status.enum";
 import { DoctorService } from "../doctor/doctor.service";
 
 @Injectable()

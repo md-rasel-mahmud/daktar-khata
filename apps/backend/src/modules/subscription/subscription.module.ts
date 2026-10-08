@@ -5,7 +5,7 @@ import { SubscriptionController } from "./subscription.controller";
 import { SubscriptionSchema } from "./subscription.schema";
 import { collectionsName } from "../../constant";
 import { SubscriptionScheduler } from "./subscription.scheduler";
-import { MerchantModule } from "src/modules/merchant/merchant.module";
+import { MerchantModule } from "../merchant/merchant.module";
 
 @Module({
   imports: [

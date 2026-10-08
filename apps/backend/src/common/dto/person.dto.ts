@@ -5,7 +5,7 @@ import {
   IsMobilePhone,
   IsEnum,
 } from "class-validator";
-import { Gender, Status } from "src/constant";
+import { Gender, Status } from "../../constant";
 
 export class PersonDto {
   @IsString()

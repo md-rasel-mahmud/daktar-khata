@@ -1,6 +1,6 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { Cron, CronExpression } from "@nestjs/schedule";
-import { MerchantService } from "src/modules/merchant/merchant.service";
+import { MerchantService } from "../merchant/merchant.service";
 
 @Injectable()
 export class SubscriptionScheduler {

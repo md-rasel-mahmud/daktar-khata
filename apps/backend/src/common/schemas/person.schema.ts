@@ -1,6 +1,6 @@
 import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
-import { Gender, Status } from "src/constant";
+import { Gender, Status } from "../../constant";
 
 @Schema({ versionKey: false, timestamps: true })
 export class Person extends Document {

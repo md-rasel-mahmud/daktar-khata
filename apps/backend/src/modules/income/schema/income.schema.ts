@@ -1,10 +1,10 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Types } from "mongoose";
-import { collectionsName } from "src/constant";
+import { collectionsName } from "../../../constant";
 import {
   IncomeCategoryEnum,
   TransactionTypeEnum,
-} from "src/constant/enums/finance.enum";
+} from "../../../constant/enums/finance.enum";
 
 export type IncomeDocument = Income & Document;
 

@@ -5,9 +5,9 @@ import { SubscriptionModule } from "../subscription/subscription.module";
 import { PaymentController } from "./payment.controller";
 import { PaymentSchema } from "./payment.schema";
 import { collectionsName } from "../../constant";
-import { MerchantModule } from "src/modules/merchant/merchant.module";
-import { MerchantPGModule } from "src/modules/merchant-pg/merchant-pg.module";
-import { AppointmentModule } from "src/modules/appointment/appointment.module";
+import { MerchantModule } from "../merchant/merchant.module";
+import { MerchantPGModule } from "../merchant-pg/merchant-pg.module";
+import { AppointmentModule } from "../appointment/appointment.module";
 
 @Module({
   imports: [

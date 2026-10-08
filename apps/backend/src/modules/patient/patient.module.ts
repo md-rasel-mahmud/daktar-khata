@@ -3,11 +3,11 @@ import { Module } from "@nestjs/common";
 import { PatientController } from "./patient.controller";
 import { MongooseModule } from "@nestjs/mongoose";
 import { PatientSchema } from "./schema/patient.schema";
-import { collectionsName } from "src/constant";
-import { PatientService } from "src/modules/patient/patient.service";
-import { AppointmentSchema } from "src/modules/appointment/schema/appointment.schema";
-import { DoctorSchema } from "src/modules/doctor/schema/doctor.schema";
-import { MedicalRecordModule } from "src/modules/medical-records/medical-record.module";
+import { collectionsName } from "../../constant";
+import { PatientService } from "./patient.service";
+import { AppointmentSchema } from "../appointment/schema/appointment.schema";
+import { DoctorSchema } from "../doctor/schema/doctor.schema";
+import { MedicalRecordModule } from "../medical-records/medical-record.module";
 
 @Module({
   imports: [

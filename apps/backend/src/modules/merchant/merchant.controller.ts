@@ -10,8 +10,8 @@ import {
 import { MerchantService } from "./merchant.service";
 import { CreateMerchantDto } from "./dto/create-merchant.dto";
 import { UpdateMerchantDto } from "./dto/update-merchant.dto";
-import { Roles } from "src/common/decorators/roles.decorator";
-import { RolesEnum } from "src/constant";
+import { Roles } from "../../common/decorators/roles.decorator";
+import { RolesEnum } from "../../constant";
 
 @Controller("merchants")
 export class MerchantController {

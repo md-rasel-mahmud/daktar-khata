@@ -3,7 +3,7 @@ import { MongooseModule } from "@nestjs/mongoose";
 import { StaffService } from "./staff.service";
 import { StaffController } from "./staff.controller";
 import { UserModule } from "../../modules/user/user.module";
-import { collectionsName } from "src/constant";
+import { collectionsName } from "../../constant";
 import { StaffSchema } from "./schema/staff.schema";
 import { AttendanceSchema } from "./schema/attendance.schema";
 

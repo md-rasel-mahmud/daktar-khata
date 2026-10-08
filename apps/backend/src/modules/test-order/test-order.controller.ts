@@ -13,8 +13,8 @@ import { AuthUser } from "../../common/decorator/authUser.decorator";
 import { CreateTestOrderDto } from "./dto/create-test-order.dto";
 import { UpdateTestOrderItemStatusDto } from "./dto/update-test-order-status.dto";
 import { Types } from "mongoose";
-import { Roles } from "src/common/decorators/roles.decorator";
-import { IAuthUser } from "src/common";
+import { Roles } from "../../common/decorators/roles.decorator";
+import { IAuthUser } from "../../common";
 
 @Controller("test-order")
 export class TestOrderController {

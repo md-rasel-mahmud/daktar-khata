@@ -8,7 +8,7 @@ import {
   IsString,
   Min,
 } from "class-validator";
-import { InventoryCategory } from "src/constant/enums/status.enum";
+import { InventoryCategory } from "../../../constant/enums/status.enum";
 
 export class CreateInventoryItemDto {
   @ApiProperty({ example: "Paracetamol 500mg" })

@@ -15,8 +15,8 @@ import { AuthUser } from "../../common/decorator/authUser.decorator";
 import { CreateServiceCatalogDto } from "./dto/create-service-catalog.dto";
 import { UpdateServiceCatalogDto } from "./dto/update-service-catalog.dto";
 import { Types } from "mongoose";
-import { Roles } from "src/common/decorators/roles.decorator";
-import { IAuthUser } from "src/common";
+import { Roles } from "../../common/decorators/roles.decorator";
+import { IAuthUser } from "../../common";
 import { ServiceCategory } from "../../constant/enums/status.enum";
 
 @Controller("service-catalog")

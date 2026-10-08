@@ -5,12 +5,12 @@ import { JwtModule } from "@nestjs/jwt";
 import { appConfig } from "../../config";
 import { UserModule } from "../user/user.module";
 import { JwtStrategy } from "./jwt.strategy";
-import { PatientService } from "src/modules/patient/patient.service";
-import { PatientModule } from "src/modules/patient/patient.module";
-import { AuthController } from "src/modules/auth/auth.controller";
-import { MerchantModule } from "src/modules/merchant/merchant.module";
-import { DoctorModule } from "src/modules/doctor/doctor.module";
-import { StaffModule } from "src/modules/staff/staff.module";
+import { PatientService } from "../patient/patient.service";
+import { PatientModule } from "../patient/patient.module";
+import { AuthController } from "./auth.controller";
+import { MerchantModule } from "../merchant/merchant.module";
+import { DoctorModule } from "../doctor/doctor.module";
+import { StaffModule } from "../staff/staff.module";
 
 @Module({
   imports: [

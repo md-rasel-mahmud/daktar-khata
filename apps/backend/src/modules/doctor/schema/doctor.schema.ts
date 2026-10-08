@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Types } from "mongoose";
-import { Person } from "src/common/schemas/person.schema";
-import { collectionsName } from "src/constant";
+import { Person } from "../../../common/schemas/person.schema";
+import { collectionsName } from "../../../constant";
 
 @Schema({ versionKey: false, timestamps: true })
 export class Doctor extends Person {

@@ -4,12 +4,12 @@ import { UserController } from "./user.controller";
 import { MongooseModule } from "@nestjs/mongoose";
 import { collectionsName } from "../../constant";
 import { UserSchema } from "./schema/user.schema";
-import { AuthModule } from "src/modules/auth/auth.module";
-import { PatientModule } from "src/modules/patient/patient.module";
+import { AuthModule } from "../auth/auth.module";
+import { PatientModule } from "../patient/patient.module";
 import { JwtModule } from "@nestjs/jwt";
-import { appConfig } from "src/config";
-import { MerchantModule } from "src/modules/merchant/merchant.module";
-import { DoctorModule } from "src/modules/doctor/doctor.module";
+import { appConfig } from "../../config";
+import { MerchantModule } from "../merchant/merchant.module";
+import { DoctorModule } from "../doctor/doctor.module";
 
 @Module({
   imports: [

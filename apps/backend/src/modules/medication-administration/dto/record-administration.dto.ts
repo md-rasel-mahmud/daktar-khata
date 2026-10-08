@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { IsDateString, IsEnum, IsNotEmpty, IsOptional, IsString } from "class-validator";
-import { MedicationAdminStatus } from "src/constant/enums/status.enum";
+import { MedicationAdminStatus } from "../../../constant/enums/status.enum";
 
 export class RecordAdministrationDto {
   @ApiProperty({

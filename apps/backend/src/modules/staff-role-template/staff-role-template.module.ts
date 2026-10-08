@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
-import { collectionsName } from "src/constant";
+import { collectionsName } from "../../constant";
 import { StaffRoleTemplateController } from "./staff-role-template.controller";
 import { StaffRoleTemplateService } from "./staff-role-template.service";
 import {

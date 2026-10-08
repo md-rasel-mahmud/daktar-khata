@@ -8,7 +8,7 @@ import {
   IsOptional,
   IsString,
 } from "class-validator";
-import { RolesEnum } from "src/constant";
+import { RolesEnum } from "../../../constant";
 
 export class CreateUserDto {
   @IsMobilePhone()

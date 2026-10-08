@@ -3,8 +3,8 @@ import { DoctorService } from "./doctor.service";
 import { DoctorController } from "./doctor.controller";
 import { MongooseModule } from "@nestjs/mongoose";
 import { DoctorSchema } from "./schema/doctor.schema";
-import { collectionsName } from "src/constant";
-import { UserModule } from "src/modules/user/user.module";
+import { collectionsName } from "../../constant";
+import { UserModule } from "../user/user.module";
 
 @Module({
   imports: [

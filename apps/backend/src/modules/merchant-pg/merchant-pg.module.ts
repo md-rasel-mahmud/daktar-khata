@@ -3,7 +3,7 @@ import { MongooseModule } from "@nestjs/mongoose";
 import { MerchantPGService } from "./merchant-pg.service";
 import { MerchantPGController } from "./merchant-pg.controller";
 import { collectionsName } from "../../constant";
-import { MerchantPGSchema } from "src/modules/merchant-pg/schema/merchant-pg.schema";
+import { MerchantPGSchema } from "./schema/merchant-pg.schema";
 
 @Module({
   imports: [

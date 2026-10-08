@@ -8,7 +8,7 @@ import {
   IsString,
   Min,
 } from "class-validator";
-import { ServiceCategory } from "src/constant/enums/status.enum";
+import { ServiceCategory } from "../../../constant/enums/status.enum";
 
 export class CreateServiceCatalogDto {
   @ApiProperty({ example: "General Consultation" })

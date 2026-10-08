@@ -9,7 +9,7 @@ import { collectionsName } from "../../constant";
 import { AdmissionDocument } from "./schema/admission.schema";
 import { CreateAdmissionDto } from "./dto/create-admission.dto";
 import { DischargeDto } from "./dto/discharge.dto";
-import { AdmissionStatus, BedStatus } from "src/constant/enums/status.enum";
+import { AdmissionStatus, BedStatus } from "../../constant/enums/status.enum";
 import { DoctorService } from "../doctor/doctor.service";
 import { BedDocument } from "../bed/schema/bed.schema";
 import { BedAllocationDocument } from "../bed-allocation/schema/bed-allocation.schema";

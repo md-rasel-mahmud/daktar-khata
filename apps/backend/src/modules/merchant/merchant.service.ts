@@ -4,12 +4,12 @@ import { ClientSession, Model, Types } from "mongoose";
 
 import { CreateMerchantDto } from "./dto/create-merchant.dto";
 import { UpdateMerchantDto } from "./dto/update-merchant.dto";
-import { collectionsName } from "src/constant";
+import { collectionsName } from "../../constant";
 import {
   Merchant,
   MerchantDocument,
-} from "src/modules/merchant/schema/merchant.schema";
-import { SubscriptionStatus } from "src/constant/enums/status.enum";
+} from "./schema/merchant.schema";
+import { SubscriptionStatus } from "../../constant/enums/status.enum";
 
 @Injectable()
 export class MerchantService {

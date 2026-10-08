@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, Types } from "mongoose";
-import { collectionsName } from "src/constant";
-import { Patient } from "src/modules/patient/schema/patient.schema";
-import { Doctor } from "src/modules/doctor/schema/doctor.schema";
+import { collectionsName } from "../../constant";
+import { Patient } from "../patient/schema/patient.schema";
+import { Doctor } from "../doctor/schema/doctor.schema";
 import {
   MedicalRecord,
   MedicalRecordDocument,
