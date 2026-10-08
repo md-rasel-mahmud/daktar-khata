@@ -13,6 +13,7 @@ import { type FieldValues, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { Gender } from "@/enums/gender.enums"
+import { BloodGroup } from "@/enums/blood-group.enum"
 import {
   FormInput,
   type FormInputConfig,
@@ -28,13 +29,13 @@ type SignupFormValues = {
   confirmPassword: string
   email?: string
 
-  fullName: string
+  name: string
   gender: Gender
   dob: string
   address: string
   bio?: string
 
-  bloodGroup: string
+  bloodGroup: BloodGroup
   emergencyContact?: string
   medicalHistory?: string
   currentMedications?: string[]
@@ -46,13 +47,13 @@ const SIGNUP_DEFAULT_VALUES: SignupFormValues = {
   confirmPassword: "",
   email: "",
 
-  fullName: "",
+  name: "",
   gender: Gender.MALE,
   dob: "",
   address: "",
   bio: "",
 
-  bloodGroup: "",
+  bloodGroup: BloodGroup.A_POSITIVE,
   emergencyContact: "",
   medicalHistory: "",
   currentMedications: [],
@@ -75,13 +76,13 @@ const Signup: React.FC = () => {
       confirmPassword: z.string().min(6, "Confirm password is required"),
       email: z.string().email("Invalid email format").optional(),
 
-      fullName: z.string().min(1, "Full name is required"),
+      name: z.string().min(1, "Full name is required"),
       gender: z.enum(Object.values(Gender) as [string, ...string[]]),
       dob: z.string().min(1, "Date of birth is required"),
       address: z.string().min(1, "Address is required"),
       bio: z.string().optional(),
 
-      bloodGroup: z.string().min(1, "Blood group is required"),
+      bloodGroup: z.enum(Object.values(BloodGroup) as [string, ...string[]]),
       emergencyContact: z.string().optional(),
       medicalHistory: z.string().optional(),
       currentMedications: z.array(z.string()).optional(),
@@ -99,9 +100,20 @@ const Signup: React.FC = () => {
     resolver: zodResolver(signupValidationSchema),
   })
 
+  const bloodGroupOptions = [
+    { label: "A+ (Positive)", value: BloodGroup.A_POSITIVE },
+    { label: "A- (Negative)", value: BloodGroup.A_NEGATIVE },
+    { label: "B+ (Positive)", value: BloodGroup.B_POSITIVE },
+    { label: "B- (Negative)", value: BloodGroup.B_NEGATIVE },
+    { label: "AB+ (Positive)", value: BloodGroup.AB_POSITIVE },
+    { label: "AB- (Negative)", value: BloodGroup.AB_NEGATIVE },
+    { label: "O+ (Positive)", value: BloodGroup.O_POSITIVE },
+    { label: "O- (Negative)", value: BloodGroup.O_NEGATIVE },
+  ]
+
   const formData: FormInputConfig[] = [
     {
-      name: "fullName",
+      name: "name",
       label: t("full name"),
       type: "text",
       placeholder: t("enter your full name"),
@@ -155,8 +167,8 @@ const Signup: React.FC = () => {
     {
       name: "bloodGroup",
       label: t("blood group"),
-      type: "text",
-      placeholder: t("enter your blood group"),
+      type: "select",
+      options: bloodGroupOptions,
       required: true,
     },
     {
@@ -194,6 +206,7 @@ const Signup: React.FC = () => {
     console.log("data :>> ", data)
 
     const postBody = { ...data }
+
     postBody.role = RolesEnum.PATIENT
     delete postBody.confirmPassword
 
