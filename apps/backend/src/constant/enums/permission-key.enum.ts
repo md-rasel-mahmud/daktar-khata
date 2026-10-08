@@ -13,4 +13,5 @@ export enum PermissionKeyEnum {
   PURCHASE_READ = "purchase.read",
   PURCHASE_WRITE = "purchase.write",
   INVOICE_READ = "invoice.read",
+  APPOINTMENT_QUEUE_MANAGE = "appointment.queue.manage",
 }

@@ -155,6 +155,41 @@ export class Appointment {
     trim: true,
   })
   diagnosis?: string;
+
+  // ---- Consultation queue ----
+
+  /** Emergency patients are sorted ahead of the serial order. */
+  @Prop({ type: Boolean, default: false })
+  isEmergency?: boolean;
+
+  @Prop({ type: Date })
+  checkedInAt?: Date;
+
+  @Prop({ type: Date })
+  calledAt?: Date;
+
+  @Prop({ type: Date })
+  consultationStartedAt?: Date;
+
+  @Prop({
+    type: [
+      {
+        from: String,
+        to: String,
+        changedBy: Types.ObjectId,
+        changedAt: { type: Date, default: Date.now },
+      },
+    ],
+    default: [],
+  })
+  queueHistory?: {
+    from: string;
+    to: string;
+    changedBy: Types.ObjectId;
+    changedAt: Date;
+  }[];
 }
 
 export const AppointmentSchema = SchemaFactory.createForClass(Appointment);
+
+AppointmentSchema.index({ doctor: 1, appointmentDate: 1, queueStatus: 1 });
