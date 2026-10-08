@@ -6,12 +6,15 @@ import { DoctorSchema } from "./schema/doctor.schema";
 import { collectionsName } from "../../constant";
 import { UserModule } from "../user/user.module";
 
+import { MerchantModule } from "../merchant/merchant.module";
+
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: collectionsName.doctor, schema: DoctorSchema },
     ]),
     forwardRef(() => UserModule),
+    forwardRef(() => MerchantModule),
   ],
   controllers: [DoctorController],
   providers: [DoctorService],

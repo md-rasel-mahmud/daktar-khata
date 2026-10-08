@@ -4,3 +4,4 @@ export { PERMISSION_KEY, Permission } from "./decorator/permission.decorator";
 export { HttpExceptionFilter } from "./http-exception/http-exception.filter";
 export { I18nInterceptor } from "./interceptor/i18n.interceptor";
 export { ErrorFormatter } from "./functions/error-formatter.utils";
+export { CurrentTenant, TenantId } from "./decorators/tenant.decorator";

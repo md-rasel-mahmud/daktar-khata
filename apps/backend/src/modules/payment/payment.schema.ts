@@ -7,7 +7,7 @@ export type PaymentDocument = Payment & Document;
 
 @Schema({ versionKey: false, timestamps: true })
 export class Payment {
-  @Prop({ type: Types.ObjectId, ref: collectionsName.user, required: true })
+  @Prop({ type: Types.ObjectId, ref: collectionsName.merchant, required: true })
   merchant: Types.ObjectId;
 
   @Prop({ required: true })
@@ -18,6 +18,12 @@ export class Payment {
 
   @Prop({ type: Types.ObjectId, ref: collectionsName.subscription })
   subscription: Types.ObjectId;
+
+  @Prop({ type: String, default: "monthly" })
+  billingCycle: string;
+
+  @Prop({ type: Number, default: 30 })
+  planDurationDays: number;
 
   @Prop({ default: PaymentStatus.PENDING })
   status: string;

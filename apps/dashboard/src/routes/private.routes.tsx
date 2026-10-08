@@ -52,11 +52,22 @@ const MerchantPurchases = lazy(
   () => import("@/pages/private/merchant/Purchases")
 )
 const MerchantInvoices = lazy(() => import("@/pages/private/merchant/Invoices"))
+const MerchantSubscriptionPage = lazy(
+  () => import("@/pages/private/merchant/MerchantSubscriptionPage")
+)
 
 const withSuspense = (element: React.ReactNode) => (
   <Suspense
     fallback={
-      <div className="p-4 text-sm text-muted-foreground">Loading...</div>
+      <div className="p-6 space-y-4">
+        <div className="h-8 w-48 bg-muted animate-pulse rounded-md" />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="h-28 bg-muted animate-pulse rounded-xl" />
+          <div className="h-28 bg-muted animate-pulse rounded-xl" />
+          <div className="h-28 bg-muted animate-pulse rounded-xl" />
+        </div>
+        <div className="h-64 bg-muted animate-pulse rounded-xl" />
+      </div>
     }
   >
     {element}
@@ -77,6 +88,16 @@ export const privateRoutes = [
   {
     path: "/merchant/doctors",
     element: withSuspense(<ManageDoctors />),
+    allowRoutes: [RolesEnum.SUPER_ADMIN, RolesEnum.ADMIN, RolesEnum.MERCHANT],
+  },
+  {
+    path: "/merchant/subscription",
+    element: withSuspense(<MerchantSubscriptionPage />),
+    allowRoutes: [RolesEnum.SUPER_ADMIN, RolesEnum.ADMIN, RolesEnum.MERCHANT],
+  },
+  {
+    path: "/subscription",
+    element: withSuspense(<MerchantSubscriptionPage />),
     allowRoutes: [RolesEnum.SUPER_ADMIN, RolesEnum.ADMIN, RolesEnum.MERCHANT],
   },
   {

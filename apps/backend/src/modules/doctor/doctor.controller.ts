@@ -12,7 +12,7 @@ import { CreateDoctorDto } from "./dto/create-doctor.dto";
 import { UpdateDoctorDto } from "./dto/update-doctor.dto";
 import { RolesEnum } from "../../constant";
 import { InjectConnection } from "@nestjs/mongoose";
-import { Connection } from "mongoose";
+import { Connection, Types } from "mongoose";
 import { Roles } from "../../common/decorators/roles.decorator";
 import { AuthUser } from "../../common/decorator/authUser.decorator";
 import { IAuthUser } from "../../common";
@@ -30,8 +30,6 @@ export class DoctorController {
     @Body() createDoctorDto: CreateDoctorDto,
     @AuthUser() authUser: IAuthUser,
   ) {
-    // return this.doctorService.create(createDoctorDto);
-
     const session = await this.connection.startSession();
 
     try {
@@ -49,8 +47,39 @@ export class DoctorController {
         message: `Doctor Create Successful`,
       };
     } catch (error) {
-      throw error; // Handle errors appropriately
+      throw error;
     }
+  }
+
+  @Get("pending")
+  @Roles(RolesEnum.MERCHANT)
+  async listPending(@AuthUser() authUser: IAuthUser) {
+    return this.doctorService.listPendingForMerchant(authUser.merchant);
+  }
+
+  @Patch(":id/approve")
+  @Roles(RolesEnum.MERCHANT)
+  async approveDoctor(
+    @Param("id") id: string,
+    @AuthUser() authUser: IAuthUser,
+  ) {
+    return this.doctorService.approveDoctor(
+      authUser.merchant,
+      new Types.ObjectId(id),
+      authUser._id,
+    );
+  }
+
+  @Patch(":id/reject")
+  @Roles(RolesEnum.MERCHANT)
+  async rejectDoctor(
+    @Param("id") id: string,
+    @AuthUser() authUser: IAuthUser,
+  ) {
+    return this.doctorService.rejectDoctor(
+      authUser.merchant,
+      new Types.ObjectId(id),
+    );
   }
 
   @Get()

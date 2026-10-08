@@ -627,18 +627,35 @@ export class DashboardService {
   }
 
   async superAdminStats() {
-    const totalMerchants = await this.merchantModel.countDocuments();
-    const activeSubscriptions = await this.subscriptionModel.countDocuments({
-      status: "ACTIVE",
-    });
-    const revenue = await this.paymentModel.aggregate([
-      { $group: { _id: null, total: { $sum: "$amount" } } },
+    const [
+      totalMerchants,
+      totalDoctors,
+      totalPatients,
+      totalStaff,
+      activeSubscriptions,
+      revenueAgg,
+    ] = await Promise.all([
+      this.merchantModel.countDocuments(),
+      this.doctorModel.countDocuments(),
+      this.patientModel.countDocuments(),
+      this.staffModel.countDocuments(),
+      this.subscriptionModel.countDocuments({
+        status: "ACTIVE",
+        isDeleted: { $ne: true },
+      }),
+      this.paymentModel.aggregate([
+        { $match: { status: "COMPLETED" } },
+        { $group: { _id: null, total: { $sum: "$amount" } } },
+      ]),
     ]);
 
     return {
       totalMerchants,
+      totalDoctors,
+      totalPatients,
+      totalStaff,
       activeSubscriptions,
-      revenue: revenue[0] ? revenue[0].total : 0,
+      revenue: revenueAgg[0]?.total || 0,
     };
   }
 }

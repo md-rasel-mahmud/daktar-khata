@@ -17,7 +17,14 @@ const ProtectedLayout = lazy(() => import("@/middlewares/ProtectedLayout"))
 const withSuspense = (element: React.ReactNode) => (
   <Suspense
     fallback={
-      <div className="p-4 text-sm text-muted-foreground">Loading...</div>
+      <div className="flex h-screen w-full items-center justify-center bg-background">
+        <div className="flex flex-col items-center gap-3">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+          <p className="text-sm font-medium text-muted-foreground animate-pulse">
+            Loading Daktar Khata...
+          </p>
+        </div>
+      </div>
     }
   >
     {element}

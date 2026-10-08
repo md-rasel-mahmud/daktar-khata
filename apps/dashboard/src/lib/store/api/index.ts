@@ -17,6 +17,27 @@ const baseQuery = fetchBaseQuery({
       headers.set("authorization", `Bearer ${token}`)
     }
 
+    // Pass tenant domain header from window hostname or localStorage
+    if (typeof window !== "undefined") {
+      const hostname = window.location.hostname.toLowerCase()
+      if (hostname.endsWith(".localhost")) {
+        const sub = hostname.split(".")[0]
+        if (sub && sub !== "www") {
+          headers.set("x-tenant-domain", sub)
+        }
+      } else if (hostname.includes(".")) {
+        const parts = hostname.split(".")
+        if (parts.length >= 3 && parts[0] !== "www" && parts[0] !== "admin" && parts[0] !== "app") {
+          headers.set("x-tenant-domain", parts[0])
+        }
+      }
+
+      const storedTenant = localStorage.getItem("daktar_khata_tenant_domain")
+      if (storedTenant && !headers.has("x-tenant-domain")) {
+        headers.set("x-tenant-domain", storedTenant)
+      }
+    }
+
     return headers
   },
 })
@@ -42,6 +63,12 @@ export const api = createApi({
     "Patient",
     "MedicalRecords",
     "PatientAppointments",
+    "Merchants",
+    "Subscriptions",
+    "Clinics",
+    "Admins",
+    "PendingDoctors",
+    "Profiles",
   ],
   endpoints: () => ({}),
 })

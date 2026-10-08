@@ -18,8 +18,11 @@ export class Clinic {
   @Prop()
   contactNumber: string;
 
-  @Prop({ type: Types.ObjectId, ref: collectionsName.user, required: true })
+  @Prop({ type: Types.ObjectId, ref: collectionsName.merchant, required: true })
   merchant: Types.ObjectId;
+
+  @Prop({ default: false })
+  isMainBranch: boolean;
 
   @Prop({ default: true })
   active: boolean;

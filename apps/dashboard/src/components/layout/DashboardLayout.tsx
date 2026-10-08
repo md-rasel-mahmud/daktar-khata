@@ -7,6 +7,7 @@ import {
 } from "@repo/ui/sidebar"
 import { HeaderControls } from "@/components/header-controls"
 import { useTranslation } from "react-i18next"
+import { SubscriptionWarningBanner } from "@/components/subscription/SubscriptionWarningBanner"
 
 const DashboardLayout = () => {
   const { t, i18n } = useTranslation()
@@ -26,6 +27,8 @@ const DashboardLayout = () => {
 
           <HeaderControls />
         </header>
+
+        <SubscriptionWarningBanner />
 
         <div className="flex min-w-0 flex-1 flex-col gap-4 overflow-x-hidden p-4 pt-4">
           <Outlet key={i18n.language} />

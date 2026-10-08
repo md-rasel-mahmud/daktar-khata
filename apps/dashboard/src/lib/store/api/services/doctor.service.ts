@@ -16,6 +16,7 @@ export const doctorApi = api.injectEndpoints({
         method: "POST",
         body,
       }),
+      invalidatesTags: ["PendingDoctors", "DoctorOptions"],
       async onQueryStarted(
         { body, handleDialogClose },
         { dispatch, queryFulfilled },
@@ -33,7 +34,7 @@ export const doctorApi = api.injectEndpoints({
 
         try {
           await queryFulfilled;
-          handleDialogClose();
+          if (handleDialogClose) handleDialogClose();
         } catch {
           updateUserListCacheUpdateResult.undo();
         }
@@ -42,8 +43,30 @@ export const doctorApi = api.injectEndpoints({
 
     getDoctorOptions: builder.query({
       query: () => "doctors/options",
-      transformResponse: (response) => response.data || [],
+      transformResponse: (response: any) => response?.data || response || [],
       providesTags: ["DoctorOptions"],
+    }),
+
+    getPendingDoctors: builder.query<any[], void>({
+      query: () => "/doctors/pending",
+      transformResponse: (response: any) => response?.data || response || [],
+      providesTags: ["PendingDoctors"],
+    }),
+
+    approveDoctor: builder.mutation<any, string>({
+      query: (id) => ({
+        url: `/doctors/${id}/approve`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["PendingDoctors", "DoctorOptions", "Profiles"],
+    }),
+
+    rejectDoctor: builder.mutation<any, string>({
+      query: (id) => ({
+        url: `/doctors/${id}/reject`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["PendingDoctors", "DoctorOptions", "Profiles"],
     }),
   }),
 });
@@ -53,4 +76,7 @@ export const {
   useGetCurrentUserQuery,
   useCreateDoctorByMerchantMutation,
   useGetDoctorOptionsQuery,
+  useGetPendingDoctorsQuery,
+  useApproveDoctorMutation,
+  useRejectDoctorMutation,
 } = doctorApi;

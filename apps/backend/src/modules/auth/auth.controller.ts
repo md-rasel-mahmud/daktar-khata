@@ -1,4 +1,12 @@
-import { Controller, Post, Body, HttpCode, HttpStatus, UseGuards } from "@nestjs/common";
+import {
+  Controller,
+  Post,
+  Body,
+  HttpCode,
+  HttpStatus,
+  UseGuards,
+  BadRequestException,
+} from "@nestjs/common";
 import { ThrottlerGuard } from "@nestjs/throttler";
 import { AuthService } from "./auth.service";
 import { Public } from "../../common";
@@ -7,6 +15,7 @@ import { InjectConnection } from "@nestjs/mongoose";
 import { Connection } from "mongoose";
 import { RolesEnum } from "../../constant";
 import { ApiTags, ApiOperation, ApiResponse, ApiBody } from "@nestjs/swagger";
+import { CurrentTenant } from "../../common/decorators/tenant.decorator";
 
 @ApiTags("Authentication")
 @Controller("auth")
@@ -33,8 +42,11 @@ export class AuthController {
     status: 401,
     description: "Invalid credentials",
   })
-  async login(@Body() authDto: AuthDto) {
-    const res = await this.authService.logIn(authDto);
+  async login(
+    @Body() authDto: AuthDto,
+    @CurrentTenant() tenant?: any
+  ) {
+    const res = await this.authService.logIn(authDto, tenant);
 
     return { data: res, message: "Login success" };
   }
@@ -45,7 +57,7 @@ export class AuthController {
   @ApiBody({
     type: RegisterDto,
     description:
-      "Registration details for creating a new user account. Only PATIENT or MERCHANT roles are allowed for self-registration.",
+      "Registration details for creating a new user account (PATIENT, MERCHANT, or DOCTOR).",
   })
   @ApiResponse({
     status: 201,
@@ -55,13 +67,14 @@ export class AuthController {
     status: 400,
     description: "Invalid role or registration data",
   })
-  async signup(@Body() createUserDto: RegisterDto) {
-    if (
-      createUserDto.role &&
-      ![RolesEnum.PATIENT, RolesEnum.MERCHANT].includes(createUserDto.role)
-    ) {
-      throw new Error(
-        "Self-registration is only allowed for PATIENT or MERCHANT"
+  async signup(
+    @Body() createUserDto: RegisterDto,
+    @CurrentTenant() currentTenant?: any
+  ) {
+    const allowedRoles = [RolesEnum.PATIENT, RolesEnum.MERCHANT, RolesEnum.DOCTOR];
+    if (createUserDto.role && !allowedRoles.includes(createUserDto.role)) {
+      throw new BadRequestException(
+        "Self-registration is only allowed for Patient, Clinic Owner, or Doctor"
       );
     }
 
@@ -72,6 +85,7 @@ export class AuthController {
         {
           ...createUserDto,
           role: createUserDto.role || RolesEnum.PATIENT,
+          merchant: createUserDto.merchant || (currentTenant ? currentTenant._id?.toString() : undefined),
         },
         session
       );

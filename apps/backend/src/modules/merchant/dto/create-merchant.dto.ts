@@ -88,21 +88,45 @@ export class CreateMerchantDto extends PersonDto {
   @IsNotEmpty()
   licenseNumber: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
+    description: "Subdomain for tenant (e.g. apollo)",
+    example: "apollo",
+  })
+  @IsString()
+  @IsOptional()
+  subdomain?: string;
+
+  @ApiPropertyOptional({
+    description: "Full domain for tenant",
+    example: "apollo.localhost",
+  })
+  @IsString()
+  @IsOptional()
+  domain?: string;
+
+  @ApiPropertyOptional({
+    description: "Custom domain for tenant",
+    example: "apolloclinic.com",
+  })
+  @IsString()
+  @IsOptional()
+  customDomain?: string;
+
+  @ApiPropertyOptional({
     description: "Date when the subscription started",
     example: "2025-01-01T00:00:00.000Z",
   })
   @IsDateString()
-  @IsNotEmpty()
-  subscriptionStartDate: string;
+  @IsOptional()
+  subscriptionStartDate?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: "Date when the subscription will end",
     example: "2026-01-01T00:00:00.000Z",
   })
   @IsDateString()
-  @IsNotEmpty()
-  subscriptionEndDate: string;
+  @IsOptional()
+  subscriptionEndDate?: string;
 
   @ApiPropertyOptional({
     description: "Total number of beds available in the clinic",

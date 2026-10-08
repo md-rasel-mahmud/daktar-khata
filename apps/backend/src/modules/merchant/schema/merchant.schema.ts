@@ -18,6 +18,16 @@ export class Merchant extends Person {
   @Prop({ type: Types.ObjectId, ref: collectionsName.user, required: false })
   user?: Types.ObjectId;
 
+  // Tenant domain configuration
+  @Prop({ type: String, trim: true, lowercase: true, unique: true, sparse: true })
+  subdomain?: string;
+
+  @Prop({ type: String, trim: true, lowercase: true, unique: true, sparse: true })
+  domain?: string;
+
+  @Prop({ type: String, trim: true, lowercase: true, unique: true, sparse: true })
+  customDomain?: string;
+
   // Merchant specific
   @Prop({ required: true })
   clinicName: string;
@@ -36,18 +46,18 @@ export class Merchant extends Person {
   status: Status;
 
   @Prop({ type: Types.ObjectId, ref: collectionsName.subscription })
-  subscriptionPackage: Types.ObjectId;
+  subscriptionPackage?: Types.ObjectId;
 
-  @Prop({ type: Date, required: true })
-  subscriptionStartDate: Date;
+  @Prop({ type: Date, required: false })
+  subscriptionStartDate?: Date;
 
-  @Prop({ type: Date, required: true })
-  subscriptionEndDate: Date;
+  @Prop({ type: Date, required: false })
+  subscriptionEndDate?: Date;
 
   @Prop({
     type: String,
     enum: SubscriptionStatus,
-    default: SubscriptionStatus.PENDING,
+    default: SubscriptionStatus.DEMO,
   })
   subscriptionStatus: string;
 
@@ -59,3 +69,7 @@ export class Merchant extends Person {
 }
 
 export const MerchantSchema = SchemaFactory.createForClass(Merchant);
+MerchantSchema.index({ subdomain: 1 }, { unique: true, sparse: true });
+MerchantSchema.index({ domain: 1 }, { unique: true, sparse: true });
+MerchantSchema.index({ customDomain: 1 }, { unique: true, sparse: true });
+MerchantSchema.index({ user: 1 });

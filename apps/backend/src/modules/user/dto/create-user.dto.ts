@@ -27,4 +27,20 @@ export class CreateUserDto {
   @IsEnum(RolesEnum)
   @IsOptional()
   role?: RolesEnum;
+
+  @IsOptional()
+  @IsString()
+  name?: string;
+
+  @IsOptional()
+  merchant?: any;
+
+  @IsOptional()
+  clinic?: any;
+
+  @IsOptional()
+  status?: string;
+
+  @IsOptional()
+  isActive?: boolean;
 }

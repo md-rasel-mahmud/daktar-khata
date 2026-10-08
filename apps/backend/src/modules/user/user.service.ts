@@ -62,10 +62,14 @@ export class UserService {
     createUserDto: CreateUserDto,
     session: ClientSession
   ) {
-    const existingUser = await this.getUserByMobile(createUserDto.phone);
+    const query: any = { phone: createUserDto.phone };
+    if (createUserDto.merchant) {
+      query.merchant = createUserDto.merchant;
+    }
+    const existingUser = await this.userModel.findOne(query);
 
     if (existingUser) {
-      throw new BadRequestException("User already exists");
+      throw new BadRequestException("User with this phone number already exists in this clinic");
     }
 
     const user = await this.create(createUserDto as any, session);
@@ -78,12 +82,49 @@ export class UserService {
   async getUserById(userId: Types.ObjectId): Promise<User> {
     return this.userModel.findById(userId).select("-password");
   }
+
   async getUserByAdmin(adminRole: RolesEnum): Promise<User> {
     return this.userModel.findOne({ role: adminRole });
   }
 
   async getUserByMobile(phone: string): Promise<User> {
     return this.userModel.findOne({ phone });
+  }
+
+  async getUserByMobileAndTenant(
+    phone: string,
+    tenantId?: Types.ObjectId
+  ): Promise<User | null> {
+    if (tenantId) {
+      return this.userModel.findOne({
+        phone,
+        $or: [
+          { merchant: tenantId },
+          { role: { $in: [RolesEnum.SUPER_ADMIN, RolesEnum.ADMIN] } },
+        ],
+      });
+    }
+    return this.userModel.findOne({ phone });
+  }
+
+  async listPlatformAdmins(): Promise<User[]> {
+    return this.userModel
+      .find({ role: { $in: [RolesEnum.ADMIN, RolesEnum.SUPER_ADMIN] } })
+      .select("-password")
+      .sort({ createdAt: -1 });
+  }
+
+  async updateAdminStatus(adminId: Types.ObjectId, status: Status): Promise<User> {
+    const admin = await this.userModel.findById(adminId);
+    if (!admin) {
+      throw new BadRequestException("Admin account not found");
+    }
+    if (admin.role === RolesEnum.SUPER_ADMIN) {
+      throw new BadRequestException("Super Admin status cannot be altered");
+    }
+    admin.status = status;
+    admin.isActive = status === Status.ACTIVE;
+    return admin.save();
   }
 
   async getUserCurrentUser(

@@ -13,6 +13,7 @@ export const profileApi = api.injectEndpoints({
     getAllProfiles: builder.query({
       query: (role: RolesEnum) => `doctors`,
       transformResponse: (response) => response.data || [],
+      providesTags: ["Profiles"],
     }),
 
     updateProfile: builder.mutation({

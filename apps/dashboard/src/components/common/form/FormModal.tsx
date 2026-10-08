@@ -13,6 +13,7 @@ import {
   DialogTitle,
 } from "@repo/ui/dialog"
 import { Skeleton } from "@repo/ui/skeleton"
+import { Loader2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { type FC } from "react"
 import {
@@ -104,9 +105,10 @@ const FormModal: FC<FormModalProps> = ({
               className="bg-green-600 hover:bg-green-700"
             >
               {isLoading ? (
-                <>
-                  Loading... <Skeleton className="h-5 w-5" />
-                </>
+                <span className="flex items-center gap-2">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Saving...
+                </span>
               ) : (
                 submitText
               )}

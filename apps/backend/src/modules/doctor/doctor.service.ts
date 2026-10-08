@@ -12,6 +12,7 @@ import { UpdateDoctorDto } from "./dto/update-doctor.dto";
 import { Doctor } from "./schema/doctor.schema";
 import { collectionsName, RolesEnum } from "../../constant";
 import { UserService } from "../user/user.service";
+import { MerchantService } from "../merchant/merchant.service";
 import { IAuthUser } from "../../common";
 
 @Injectable()
@@ -21,6 +22,9 @@ export class DoctorService {
 
     @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
+
+    @Inject(forwardRef(() => MerchantService))
+    private readonly merchantService: MerchantService,
   ) {}
 
   async createDoctorByMerchant(
@@ -31,11 +35,16 @@ export class DoctorService {
     session.startTransaction();
 
     try {
+      // 1. Quota check
+      if (authUser.merchant) {
+        await this.merchantService.checkQuotaLimit(authUser.merchant, "doctor");
+      }
+
       // Check if the user already exists
       const existingUser = await this.findByPhone(createDoctorDto.phone);
 
       if (existingUser) {
-        throw new BadRequestException("Doctor already exists");
+        throw new BadRequestException("Doctor with this phone already exists");
       }
 
       const user = await this.userService.createUserAndRole(
@@ -43,21 +52,25 @@ export class DoctorService {
           phone: createDoctorDto.phone,
           password: createDoctorDto.password,
           role: RolesEnum.DOCTOR,
+          merchant: authUser.merchant,
+          clinic: (createDoctorDto as any).clinic,
         },
         session,
       );
 
-      // Step 2: Create the doctor user
+      // Step 2: Create the doctor record
       const doctor = new this.doctorModel({
         ...createDoctorDto,
         merchant: authUser.merchant,
+        approvalStatus: "APPROVED",
+        approvedAt: new Date(),
+        approvedBy: authUser._id,
       });
 
       doctor.user = user._id;
 
       const savedDoctor = await doctor.save({ session });
 
-      // Commit the transaction
       await session.commitTransaction();
       session.endSession();
 
@@ -66,11 +79,100 @@ export class DoctorService {
         user,
       };
     } catch (error) {
-      // Rollback transaction on failure
       await session.abortTransaction();
       session.endSession();
-      throw error; // Re-throw the error for handling in the controller
+      throw error;
     }
+  }
+
+  async createDoctorSelfSignup(
+    createDoctorDto: any,
+    session: ClientSession,
+  ): Promise<{ profile: Doctor; user: any }> {
+    const existingUser = await this.findByPhone(createDoctorDto.phone);
+    if (existingUser) {
+      throw new BadRequestException("Doctor with this phone number already exists");
+    }
+
+    const user = await this.userService.createUserAndRole(
+      {
+        phone: createDoctorDto.phone,
+        password: createDoctorDto.password,
+        role: RolesEnum.DOCTOR,
+        merchant: createDoctorDto.merchant,
+        clinic: createDoctorDto.clinic,
+      },
+      session,
+    );
+
+    const doctor = new this.doctorModel({
+      ...createDoctorDto,
+      approvalStatus: createDoctorDto.merchant ? "PENDING" : "APPROVED",
+    });
+
+    doctor.user = user._id;
+
+    const savedDoctor = await doctor.save({ session });
+
+    return {
+      profile: savedDoctor,
+      user,
+    };
+  }
+
+  async listPendingForMerchant(merchantId: Types.ObjectId): Promise<Doctor[]> {
+    return this.doctorModel
+      .find({ merchant: merchantId, approvalStatus: "PENDING" })
+      .populate({
+        path: "user",
+        model: collectionsName.user,
+        select: "-password",
+      })
+      .exec();
+  }
+
+  async approveDoctor(
+    merchantId: Types.ObjectId,
+    doctorId: Types.ObjectId,
+    approvedByUserId: Types.ObjectId,
+  ): Promise<Doctor> {
+    // Check quota before approving
+    await this.merchantService.checkQuotaLimit(merchantId, "doctor");
+
+    const doctor = await this.doctorModel.findOneAndUpdate(
+      { _id: doctorId, merchant: merchantId },
+      {
+        approvalStatus: "APPROVED",
+        approvedAt: new Date(),
+        approvedBy: approvedByUserId,
+      },
+      { new: true },
+    );
+
+    if (!doctor) {
+      throw new NotFoundException("Doctor not found in your clinic");
+    }
+
+    return doctor;
+  }
+
+  async rejectDoctor(
+    merchantId: Types.ObjectId,
+    doctorId: Types.ObjectId,
+  ): Promise<Doctor> {
+    const doctor = await this.doctorModel.findOneAndUpdate(
+      { _id: doctorId, merchant: merchantId },
+      {
+        approvalStatus: "REJECTED",
+      },
+      { new: true },
+    );
+
+    if (!doctor) {
+      throw new NotFoundException("Doctor not found in your clinic");
+    }
+
+    return doctor;
   }
 
   async findAll(authUser: IAuthUser): Promise<Doctor[]> {
@@ -95,19 +197,19 @@ export class DoctorService {
       .exec();
   }
 
-  // get options
   async getAllForOptions(
     authUser: IAuthUser,
   ): Promise<{ _id: string; name: string }[]> {
-    console.log("authUser :>> ", authUser);
-    // if (authUser.role === RolesEnum.MERCHANT) {
-    //   return this.doctorModel
-    //     .find({ merchant: authUser.merchant })
-    //     .select("_id name specialization")
-    //     .exec();
-    // }
-
-    return this.doctorModel.find({}).select("_id name specialization").exec();
+    if (authUser?.merchant) {
+      return this.doctorModel
+        .find({ merchant: authUser.merchant, approvalStatus: { $ne: "REJECTED" } })
+        .select("_id name specialization")
+        .exec();
+    }
+    return this.doctorModel
+      .find({ approvalStatus: { $ne: "REJECTED" } })
+      .select("_id name specialization")
+      .exec();
   }
 
   async findOne(id: string): Promise<Doctor> {
@@ -132,6 +234,7 @@ export class DoctorService {
     }
     return doctor;
   }
+
   async findOneByUserIdWithoutPopulate(
     userId: Types.ObjectId,
     selectedField?: string,

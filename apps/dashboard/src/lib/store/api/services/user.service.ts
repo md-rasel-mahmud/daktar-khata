@@ -1,7 +1,5 @@
 // Need to use the React-specific entry point to import createApi
-import { RolesEnum } from "@/enums/role.enum"
 import { api } from "@/lib/store/api"
-import { profileApi } from "@/lib/store/api/services/profile.service"
 
 // Define a service using a base URL and expected endpoints
 export const userApi = api.injectEndpoints({
@@ -9,8 +7,6 @@ export const userApi = api.injectEndpoints({
     getCurrentUser: builder.query({
       query: () => "users/profile",
     }),
-
-
 
     updateCurrentUser: builder.mutation({
       query: ({ body }) => ({
@@ -22,20 +18,45 @@ export const userApi = api.injectEndpoints({
         { body, handleDialogClose },
         { dispatch, queryFulfilled }
       ) {
-        // Optimistically update the cache for the current user
         const updateCurrentUserCacheUpdateResult = dispatch(
-          userApi.util.updateQueryData("getCurrentUser", undefined, (draft) => {
-            Object.assign(draft.data.user, body)
+          userApi.util.updateQueryData("getCurrentUser", undefined, (draft: any) => {
+            if (draft?.data?.user) {
+              Object.assign(draft.data.user, body)
+            }
           })
         )
 
         try {
           await queryFulfilled
-          handleDialogClose()
+          if (handleDialogClose) handleDialogClose()
         } catch {
           updateCurrentUserCacheUpdateResult.undo()
         }
       },
+    }),
+
+    getPlatformAdmins: builder.query<any, void>({
+      query: () => "/users/admins",
+      transformResponse: (response: any) => response?.data || [],
+      providesTags: ["Admins"],
+    }),
+
+    createPlatformAdmin: builder.mutation<any, any>({
+      query: (body) => ({
+        url: "/users/admins",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Admins"],
+    }),
+
+    updateAdminStatus: builder.mutation<any, { id: string; status: string }>({
+      query: ({ id, status }) => ({
+        url: `/users/admins/${id}/status`,
+        method: "PATCH",
+        body: { status },
+      }),
+      invalidatesTags: ["Admins"],
     }),
   }),
 })
@@ -44,4 +65,7 @@ export const userApi = api.injectEndpoints({
 export const {
   useGetCurrentUserQuery,
   useUpdateCurrentUserMutation,
+  useGetPlatformAdminsQuery,
+  useCreatePlatformAdminMutation,
+  useUpdateAdminStatusMutation,
 } = userApi

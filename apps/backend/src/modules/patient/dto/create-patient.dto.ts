@@ -19,6 +19,22 @@ export class CreatePatientDto extends PersonDto {
   @IsNotEmpty()
   user: Types.ObjectId;
 
+  @ApiPropertyOptional({
+    description: "Merchant ID linked with this patient record",
+    example: "652fcf2c4f2b09a4b5a4c2a8",
+  })
+  @IsMongoId()
+  @IsOptional()
+  merchant?: Types.ObjectId;
+
+  @ApiPropertyOptional({
+    description: "Clinic branch ID linked with this patient record",
+    example: "652fcf2c4f2b09a4b5a4c2a8",
+  })
+  @IsMongoId()
+  @IsOptional()
+  clinic?: Types.ObjectId;
+
   @ApiProperty({
     description: "Patient’s blood group",
     example: "O+",

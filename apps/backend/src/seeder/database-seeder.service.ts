@@ -1,9 +1,9 @@
 import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
-import * as bcrypt from "bcrypt";
 import { User } from "../modules/user/schema/user.schema";
-import { RolesEnum } from "../constant";
+import { RolesEnum, collectionsName } from "../constant";
+import { SubscriptionDocument } from "../modules/subscription/subscription.schema";
 
 @Injectable()
 export class DatabaseSeederService implements OnModuleInit {
@@ -11,11 +11,14 @@ export class DatabaseSeederService implements OnModuleInit {
 
   constructor(
     @InjectModel(User.name)
-    private readonly userModel: Model<User>
+    private readonly userModel: Model<User>,
+    @InjectModel(collectionsName.subscription)
+    private readonly subscriptionModel: Model<SubscriptionDocument>
   ) {}
 
   async onModuleInit() {
     await this.seedAdmins();
+    await this.seedSubscriptions();
   }
 
   private async seedAdmins() {
@@ -53,6 +56,60 @@ export class DatabaseSeederService implements OnModuleInit {
         isActive: true,
       });
       this.logger.log("Admin created successfully!");
+    }
+  }
+
+  private async seedSubscriptions() {
+    const planCount = await this.subscriptionModel.countDocuments();
+    if (planCount === 0) {
+      await this.subscriptionModel.create([
+        {
+          planName: "Starter Clinic Plan",
+          description: "Ideal for individual practitioners and small clinics",
+          amount: 1500,
+          monthlyPrice: 1500,
+          halfYearlyPrice: 8000,
+          yearlyPrice: 15000,
+          doctorLimit: 5,
+          patientLimit: 1000,
+          staffLimit: 10,
+          durationInDays: 30,
+          billingCycle: "monthly",
+          status: "ACTIVE",
+          isDeleted: false,
+        },
+        {
+          planName: "Professional Hospital Plan",
+          description: "Full-featured for medium-sized diagnostic centers and clinics",
+          amount: 3000,
+          monthlyPrice: 3000,
+          halfYearlyPrice: 16000,
+          yearlyPrice: 30000,
+          doctorLimit: 15,
+          patientLimit: 5000,
+          staffLimit: 25,
+          durationInDays: 30,
+          billingCycle: "monthly",
+          status: "ACTIVE",
+          isDeleted: false,
+        },
+        {
+          planName: "Enterprise Multi-Specialty Plan",
+          description: "Unlimited scale for large multi-branch hospital chains",
+          amount: 6000,
+          monthlyPrice: 6000,
+          halfYearlyPrice: 32000,
+          yearlyPrice: 60000,
+          doctorLimit: 50,
+          patientLimit: 20000,
+          staffLimit: 100,
+          durationInDays: 30,
+          billingCycle: "monthly",
+          status: "ACTIVE",
+          isDeleted: false,
+        },
+      ]);
+      this.logger.log("Default subscription plans seeded successfully!");
     }
   }
 }

@@ -3,7 +3,6 @@ import {
   IsNumber,
   IsOptional,
   IsString,
-  IsDateString,
   IsEnum,
 } from "class-validator";
 import { ActiveInactiveStatus } from "../../../constant/enums/status.enum";
@@ -13,16 +12,47 @@ export class CreateSubscriptionDto {
   @IsString()
   planName: string;
 
-  @IsNotEmpty()
+  @IsOptional()
+  @IsString()
+  description?: string;
+
+  @IsOptional()
   @IsNumber()
-  amount: number;
+  amount?: number;
 
   @IsNotEmpty()
   @IsNumber()
-  durationInDays?: number;
+  monthlyPrice: number;
+
+  @IsNotEmpty()
+  @IsNumber()
+  halfYearlyPrice: number;
+
+  @IsNotEmpty()
+  @IsNumber()
+  yearlyPrice: number;
+
+  @IsOptional()
+  @IsNumber()
+  doctorLimit?: number = 5;
+
+  @IsOptional()
+  @IsNumber()
+  patientLimit?: number = 1000;
+
+  @IsOptional()
+  @IsNumber()
+  staffLimit?: number = 10;
 
   @IsOptional()
   @IsString()
-  @IsEnum(Object.values(ActiveInactiveStatus))
-  status?: string;
+  billingCycle?: string = "monthly";
+
+  @IsOptional()
+  @IsNumber()
+  durationInDays?: number = 30;
+
+  @IsOptional()
+  @IsEnum(ActiveInactiveStatus)
+  status?: ActiveInactiveStatus = ActiveInactiveStatus.ACTIVE;
 }

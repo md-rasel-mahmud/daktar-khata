@@ -379,6 +379,9 @@ paths:
               clinicName: 652fcf2c4f2b09a4b5a4c2a8
               clinicAddress: 'House #12, Road #5, Rajshahi, Bangladesh'
               licenseNumber: LIC-2025-0345
+              subdomain: apollo
+              domain: apollo.localhost
+              customDomain: apolloclinic.com
               subscriptionStartDate: '2025-01-01T00:00:00.000Z'
               subscriptionEndDate: '2026-01-01T00:00:00.000Z'
               numberOfBeds: 45
@@ -402,7 +405,7 @@ paths:
                 'Authorization': 'Bearer <token>',
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify({\n  "phone": "01712345678",\n  "email": "example@gmail.com",\n  "password": "securePassword123",\n  "role": "USER",\n  "user": "652e0a823a37a1f8e82fdd4b",\n  "clinicName": "652fcf2c4f2b09a4b5a4c2a8",\n  "clinicAddress": "House #12, Road #5, Rajshahi, Bangladesh",\n  "licenseNumber": "LIC-2025-0345",\n  "subscriptionStartDate": "2025-01-01T00:00:00.000Z",\n  "subscriptionEndDate": "2026-01-01T00:00:00.000Z",\n  "numberOfBeds": 45,\n  "servicesOffered": [\n    "Ultrasonography",\n    "Hernia Operation",\n    "Gallstone Surgery"\n  ],\n  "status": "ACTIVE"\n})
+              body: JSON.stringify({\n  "phone": "01712345678",\n  "email": "example@gmail.com",\n  "password": "securePassword123",\n  "role": "USER",\n  "user": "652e0a823a37a1f8e82fdd4b",\n  "clinicName": "652fcf2c4f2b09a4b5a4c2a8",\n  "clinicAddress": "House #12, Road #5, Rajshahi, Bangladesh",\n  "licenseNumber": "LIC-2025-0345",\n  "subdomain": "apollo",\n  "domain": "apollo.localhost",\n  "customDomain": "apolloclinic.com",\n  "subscriptionStartDate": "2025-01-01T00:00:00.000Z",\n  "subscriptionEndDate": "2026-01-01T00:00:00.000Z",\n  "numberOfBeds": 45,\n  "servicesOffered": [\n    "Ultrasonography",\n    "Hernia Operation",\n    "Gallstone Surgery"\n  ],\n  "status": "ACTIVE"\n})
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_20
     get:
@@ -460,6 +463,9 @@ paths:
               clinicName: 652fcf2c4f2b09a4b5a4c2a8
               clinicAddress: 'House #12, Road #5, Rajshahi, Bangladesh'
               licenseNumber: LIC-2025-0345
+              subdomain: apollo
+              domain: apollo.localhost
+              customDomain: apolloclinic.com
               subscriptionStartDate: '2025-01-01T00:00:00.000Z'
               subscriptionEndDate: '2026-01-01T00:00:00.000Z'
               numberOfBeds: 45
@@ -480,7 +486,7 @@ paths:
                 'Authorization': 'Bearer <token>',
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify({\n  "phone": "01712345678",\n  "email": "example@gmail.com",\n  "password": "securePassword123",\n  "role": "USER",\n  "user": "652e0a823a37a1f8e82fdd4b",\n  "clinicName": "652fcf2c4f2b09a4b5a4c2a8",\n  "clinicAddress": "House #12, Road #5, Rajshahi, Bangladesh",\n  "licenseNumber": "LIC-2025-0345",\n  "subscriptionStartDate": "2025-01-01T00:00:00.000Z",\n  "subscriptionEndDate": "2026-01-01T00:00:00.000Z",\n  "numberOfBeds": 45,\n  "servicesOffered": [\n    "Ultrasonography",\n    "Hernia Operation",\n    "Gallstone Surgery"\n  ],\n  "status": "ACTIVE"\n})
+              body: JSON.stringify({\n  "phone": "01712345678",\n  "email": "example@gmail.com",\n  "password": "securePassword123",\n  "role": "USER",\n  "user": "652e0a823a37a1f8e82fdd4b",\n  "clinicName": "652fcf2c4f2b09a4b5a4c2a8",\n  "clinicAddress": "House #12, Road #5, Rajshahi, Bangladesh",\n  "licenseNumber": "LIC-2025-0345",\n  "subdomain": "apollo",\n  "domain": "apollo.localhost",\n  "customDomain": "apolloclinic.com",\n  "subscriptionStartDate": "2025-01-01T00:00:00.000Z",\n  "subscriptionEndDate": "2026-01-01T00:00:00.000Z",\n  "numberOfBeds": 45,\n  "servicesOffered": [\n    "Ultrasonography",\n    "Hernia Operation",\n    "Gallstone Surgery"\n  ],\n  "status": "ACTIVE"\n})
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_25
     delete:
@@ -6421,6 +6427,21 @@ components:
           description: Clinic license or registration number
           example: LIC-2025-0345
           _propertyName: licenseNumber
+        subdomain:
+          type: string
+          description: Subdomain for tenant (e.g. apollo)
+          example: apollo
+          _propertyName: subdomain
+        domain:
+          type: string
+          description: Full domain for tenant
+          example: apollo.localhost
+          _propertyName: domain
+        customDomain:
+          type: string
+          description: Custom domain for tenant
+          example: apolloclinic.com
+          _propertyName: customDomain
         subscriptionStartDate:
           type: string
           description: Date when the subscription started
@@ -6454,8 +6475,6 @@ components:
         - clinicName
         - clinicAddress
         - licenseNumber
-        - subscriptionStartDate
-        - subscriptionEndDate
       example: *ref_19
     UpdateMerchantDto:
       type: object
@@ -6501,6 +6520,21 @@ components:
           description: Clinic license or registration number
           example: LIC-2025-0345
           _propertyName: licenseNumber
+        subdomain:
+          type: string
+          description: Subdomain for tenant (e.g. apollo)
+          example: apollo
+          _propertyName: subdomain
+        domain:
+          type: string
+          description: Full domain for tenant
+          example: apollo.localhost
+          _propertyName: domain
+        customDomain:
+          type: string
+          description: Custom domain for tenant
+          example: apolloclinic.com
+          _propertyName: customDomain
         subscriptionStartDate:
           type: string
           description: Date when the subscription started

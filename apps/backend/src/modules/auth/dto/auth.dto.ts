@@ -184,6 +184,93 @@ export class RegisterDto extends PersonDto {
   servicesOffered?: string[];
 
   @ApiPropertyOptional({
+    description: "Associated merchant/tenant ID",
+  })
+  @IsOptional()
+  @IsString()
+  merchant?: string;
+
+  @ApiPropertyOptional({
+    description: "Associated clinic branch ID",
+  })
+  @IsOptional()
+  @IsString()
+  clinic?: string;
+
+  @ApiPropertyOptional({
+    description: "Subdomain for tenant",
+  })
+  @IsOptional()
+  @IsString()
+  subdomain?: string;
+
+  @ApiPropertyOptional({
+    description: "Domain for tenant",
+  })
+  @IsOptional()
+  @IsString()
+  domain?: string;
+
+  @ApiPropertyOptional({
+    description: "Custom domain for tenant",
+  })
+  @IsOptional()
+  @IsString()
+  customDomain?: string;
+
+  @ApiPropertyOptional({
+    description: "Logo URL for clinic",
+  })
+  @IsOptional()
+  @IsString()
+  clinicLogo?: string;
+
+  // Doctor specific fields
+  @ApiPropertyOptional({
+    description: "Specializations of doctor",
+    type: [String],
+  })
+  @IsOptional()
+  @IsArray()
+  specialization?: string[];
+
+  @ApiPropertyOptional({
+    description: "Designation of doctor",
+  })
+  @IsOptional()
+  @IsString()
+  designation?: string;
+
+  @ApiPropertyOptional({
+    description: "Experience in years",
+  })
+  @IsOptional()
+  @IsNumber()
+  experienceInYears?: number;
+
+  @ApiPropertyOptional({
+    description: "Consultation fee",
+  })
+  @IsOptional()
+  @IsNumber()
+  fee?: number;
+
+  @ApiPropertyOptional({
+    description: "Degrees of doctor",
+  })
+  @IsOptional()
+  @IsArray()
+  degree?: any[];
+
+  @ApiPropertyOptional({
+    description: "Languages spoken",
+    type: [String],
+  })
+  @IsOptional()
+  @IsArray()
+  languages?: string[];
+
+  @ApiPropertyOptional({
     description: "Indicates if the merchant account is active",
     example: Status.ACTIVE,
   })

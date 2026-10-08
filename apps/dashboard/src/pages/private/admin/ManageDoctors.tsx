@@ -15,8 +15,11 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu"
 import { Avatar, AvatarFallback } from "@repo/ui/avatar"
-import { Plus, Edit, Trash2, MoreHorizontal, Calendar } from "lucide-react"
+import { Badge } from "@repo/ui/badge"
+import { Plus, Edit, Trash2, MoreHorizontal, Calendar, Check, X, Clock, UserCheck, Loader2 } from "lucide-react"
 import { toast } from "sonner"
+import { useSelector } from "react-redux"
+import { type RootState } from "@/lib/store/store"
 import {
   useGetAllProfilesQuery,
   useUpdateProfileMutation,
@@ -29,7 +32,12 @@ import { z } from "zod"
 import { Gender } from "@/enums/gender.enums"
 import { type FormInputConfig } from "@/components/common/form/FormInput"
 import { useTranslation } from "react-i18next"
-import { useCreateDoctorByMerchantMutation } from "@/lib/store/api/services/doctor.service"
+import {
+  useCreateDoctorByMerchantMutation,
+  useGetPendingDoctorsQuery,
+  useApproveDoctorMutation,
+  useRejectDoctorMutation,
+} from "@/lib/store/api/services/doctor.service"
 import {
   ClientDataTable,
   type DataTableColumn,
@@ -73,6 +81,36 @@ const ManageDoctors: React.FC = () => {
   const [updateDoctorProfile] = useUpdateProfileMutation()
 
   const [createDoctor] = useCreateDoctorByMerchantMutation()
+
+  const authUser = useSelector((state: RootState) => state.auth.user)
+  const isMerchant = authUser?.user?.role === RolesEnum.MERCHANT
+
+  const { data: pendingDoctors = [] } = useGetPendingDoctorsQuery(undefined, {
+    skip: !isMerchant,
+  })
+  const [approveDoctor, { isLoading: isApproving }] = useApproveDoctorMutation()
+  const [rejectDoctor, { isLoading: isRejecting }] = useRejectDoctorMutation()
+
+  const handleApprove = async (id: string, name: string) => {
+    try {
+      await approveDoctor(id).unwrap()
+      toast.success(`Doctor ${name} approved successfully!`)
+    } catch (err: any) {
+      toast.error(
+        err?.data?.message ||
+          `Failed to approve doctor ${name}. Check subscription doctor limits.`
+      )
+    }
+  }
+
+  const handleReject = async (id: string, name: string) => {
+    try {
+      await rejectDoctor(id).unwrap()
+      toast.success(`Doctor ${name} application rejected.`)
+    } catch (err: any) {
+      toast.error(err?.data?.message || `Failed to reject doctor ${name}.`)
+    }
+  }
 
   // validation schema should be following above Doctor type
   const validationSchema = z.object({
@@ -425,6 +463,85 @@ const ManageDoctors: React.FC = () => {
             Add Doctor
           </Button>
         </div>
+
+        {/* Pending Doctors Section (For Merchants) */}
+        {isMerchant && pendingDoctors && pendingDoctors.length > 0 && (
+          <Card className="border-amber-200 dark:border-amber-900 bg-amber-50/30 dark:bg-amber-950/20">
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Clock className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+                  <CardTitle className="text-lg text-amber-900 dark:text-amber-200">
+                    Pending Doctor Approvals
+                  </CardTitle>
+                </div>
+                <Badge variant="outline" className="border-amber-400 text-amber-700 dark:text-amber-300">
+                  {pendingDoctors.length} Pending
+                </Badge>
+              </div>
+              <CardDescription>
+                These doctors self-registered to join your clinic and require your approval before gaining access.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="divide-y divide-amber-200/50 dark:divide-amber-900/50">
+                {pendingDoctors.map((doc: any) => (
+                  <div
+                    key={doc._id}
+                    className="flex flex-col sm:flex-row sm:items-center justify-between py-3 gap-3"
+                  >
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="font-semibold text-foreground">
+                          {doc.name || "Doctor"}
+                        </span>
+                        {doc.clinic?.name && (
+                          <Badge variant="secondary" className="text-xs">
+                            {doc.clinic.name}
+                          </Badge>
+                        )}
+                      </div>
+                      <div className="text-xs text-muted-foreground flex flex-wrap gap-x-3 gap-y-1">
+                        {doc.email && <span>{doc.email}</span>}
+                        {doc.mobile && <span>{doc.mobile}</span>}
+                        {doc.specialization && (
+                          <span>
+                            Specialization:{" "}
+                            {Array.isArray(doc.specialization)
+                              ? doc.specialization.join(", ")
+                              : String(doc.specialization)}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        size="sm"
+                        variant="default"
+                        className="bg-emerald-600 hover:bg-emerald-700 text-white gap-1"
+                        disabled={isApproving}
+                        onClick={() => handleApprove(doc._id, doc.name)}
+                      >
+                        <Check className="h-4 w-4" />
+                        Approve
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="destructive"
+                        className="gap-1"
+                        disabled={isRejecting}
+                        onClick={() => handleReject(doc._id, doc.name)}
+                      >
+                        <X className="h-4 w-4" />
+                        Reject
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Doctors List */}
         <Card>

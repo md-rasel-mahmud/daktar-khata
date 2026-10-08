@@ -26,7 +26,8 @@ export class PaymentController {
   @Roles(RolesEnum.MERCHANT)
   async initiatePayment(
     @AuthUser() user: IAuthUser,
-    @Param("id") subscriptionId: string
+    @Param("id") subscriptionId: string,
+    @Body("billingCycle") billingCycle?: string
   ) {
     if (user.role !== RolesEnum.MERCHANT && !user.merchant) {
       throw new BadRequestException("Only merchants can proceed the payments");
@@ -43,6 +44,7 @@ export class PaymentController {
       new Types.ObjectId(user.merchant),
       {
         subscriptionId: new Types.ObjectId(subscriptionId),
+        billingCycle: billingCycle || "monthly",
       }
     );
   }

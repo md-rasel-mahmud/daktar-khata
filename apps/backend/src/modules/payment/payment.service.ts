@@ -150,9 +150,11 @@ export class PaymentService {
     {
       subscriptionId,
       paymentId,
+      billingCycle = "monthly",
     }: {
       subscriptionId?: Types.ObjectId;
       paymentId?: Types.ObjectId;
+      billingCycle?: string;
     }
   ) {
     let selectedSubscription = null;
@@ -190,32 +192,39 @@ export class PaymentService {
       merchantId.toString()
     );
 
-    if (
-      merchant.subscriptionStatus === SubscriptionStatus.ACTIVE &&
-      merchant.subscriptionEndDate > new Date()
-    ) {
-      throw new NotFoundException(
-        "Merchant already has an active subscription for this period"
-      );
-    }
-
     if (!merchant)
       throw new NotFoundException("Merchant not found for this payment");
+
+    let durationInDays = 30;
+    let finalAmount = selectedSubscription.monthlyPrice || selectedSubscription.amount || 0;
+
+    if (billingCycle === "half_yearly") {
+      durationInDays = 180;
+      finalAmount = selectedSubscription.halfYearlyPrice || finalAmount * 6;
+    } else if (billingCycle === "yearly") {
+      durationInDays = 360;
+      finalAmount = selectedSubscription.yearlyPrice || finalAmount * 12;
+    } else {
+      durationInDays = selectedSubscription.durationInDays || 30;
+      finalAmount = selectedSubscription.monthlyPrice || selectedSubscription.amount || 0;
+    }
 
     if (!paymentId) {
       transactionId = `TXN_${Date.now()}`;
       paymentRecord = await this.paymentModel.create({
         merchant: merchantId,
         transactionId,
-        amount: selectedSubscription.amount,
+        amount: finalAmount,
         status: PaymentStatus.PENDING,
         subscription: subscriptionId,
+        billingCycle,
+        planDurationDays: durationInDays,
       });
     }
 
     const payment = await this.initiate(
       {
-        amount: selectedSubscription.amount,
+        amount: finalAmount,
         transactionId,
         paymentId: paymentRecord._id.toString(),
       },
@@ -290,7 +299,7 @@ export class PaymentService {
           await this.merchantService.verifyPaymentAndActivateMerchantSubscription(
             paymentRecord.merchant,
             paymentRecord.subscription,
-            subscription?.durationInDays || 30
+            paymentRecord?.planDurationDays || subscription?.durationInDays || 30
           );
 
           console.warn(

@@ -8,8 +8,24 @@ export class Doctor extends Person {
   @Prop({ type: Types.ObjectId, ref: collectionsName.user, required: true })
   user: Types.ObjectId;
 
-  @Prop({ type: Types.ObjectId, ref: collectionsName.merchant, required: true })
-  merchant: Types.ObjectId;
+  @Prop({ type: Types.ObjectId, ref: collectionsName.merchant, required: false })
+  merchant?: Types.ObjectId;
+
+  @Prop({ type: Types.ObjectId, ref: collectionsName.clinic, required: false })
+  clinic?: Types.ObjectId;
+
+  @Prop({
+    type: String,
+    enum: ["PENDING", "APPROVED", "REJECTED"],
+    default: "APPROVED",
+  })
+  approvalStatus: string;
+
+  @Prop({ type: Date, required: false })
+  approvedAt?: Date;
+
+  @Prop({ type: Types.ObjectId, ref: collectionsName.user, required: false })
+  approvedBy?: Types.ObjectId;
 
   @Prop({ type: [String], required: true })
   specialization: string[];
@@ -77,3 +93,6 @@ export class Doctor extends Person {
 }
 
 export const DoctorSchema = SchemaFactory.createForClass(Doctor);
+DoctorSchema.index({ merchant: 1 });
+DoctorSchema.index({ user: 1 });
+DoctorSchema.index({ merchant: 1, approvalStatus: 1 });

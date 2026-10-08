@@ -16,6 +16,20 @@ export class Patient extends Person {
   user: Types.ObjectId;
 
   @Prop({
+    type: Types.ObjectId,
+    ref: collectionsName.merchant,
+    required: false,
+  })
+  merchant?: Types.ObjectId;
+
+  @Prop({
+    type: Types.ObjectId,
+    ref: collectionsName.clinic,
+    required: false,
+  })
+  clinic?: Types.ObjectId;
+
+  @Prop({
     type: String,
     enum: Object.values(BloodGroup),
     required: true,
@@ -36,3 +50,5 @@ export class Patient extends Person {
 }
 
 export const PatientSchema = SchemaFactory.createForClass(Patient);
+PatientSchema.index({ merchant: 1 });
+PatientSchema.index({ user: 1 });

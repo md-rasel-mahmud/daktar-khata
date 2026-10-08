@@ -111,8 +111,9 @@ export class PatientService {
     };
   }
 
-  async findAll(): Promise<Patient[]> {
-    return this.patientModel.find().populate("user", "-password").exec();
+  async findAll(merchantId?: Types.ObjectId): Promise<Patient[]> {
+    const filter = merchantId ? { merchant: merchantId } : {};
+    return this.patientModel.find(filter).populate("user", "-password").exec();
   }
 
   async findDoctorPatients(

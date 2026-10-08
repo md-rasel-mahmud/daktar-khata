@@ -3,6 +3,7 @@ import { PermissionKeyEnum } from "@/enums/permission.enum"
 import {
   Banknote,
   Calendar,
+  CreditCard,
   FileText,
   Home,
   User,
@@ -24,6 +25,12 @@ export const sidebarMenuItems = [
     path: "/merchant/doctors",
     icon: User,
     label: "Doctors",
+    roles: [RolesEnum.MERCHANT],
+  },
+  {
+    path: "/merchant/subscription",
+    icon: CreditCard,
+    label: "Subscription",
     roles: [RolesEnum.MERCHANT],
   },
   {

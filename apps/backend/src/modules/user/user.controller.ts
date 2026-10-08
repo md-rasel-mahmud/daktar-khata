@@ -7,17 +7,14 @@ import {
   Request,
   Patch,
   BadRequestException,
-  Query,
-  Delete,
-  Req,
 } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { Connection, Types } from "mongoose";
-import { UpdateUserDto } from "./dto/update-user.dto";
-import { RolesEnum } from "../../constant";
+import { RolesEnum, Status } from "../../constant";
 import { AuthService } from "../auth/auth.service";
 import { InjectConnection } from "@nestjs/mongoose";
 import { RegisterDto } from "../auth/dto/auth.dto";
+import { CreateUserDto } from "./dto/create-user.dto";
 import { Roles } from "../../common/decorators/roles.decorator";
 
 @Controller("users")
@@ -82,5 +79,30 @@ export class UserController {
     );
 
     return { data: user, message: "User updated successfully" };
+  }
+
+  // Super Admin administration of Platform Admins
+  @Get("/admins")
+  @Roles(RolesEnum.SUPER_ADMIN)
+  async getPlatformAdmins() {
+    const data = await this.userService.listPlatformAdmins();
+    return { data, message: "Platform admins retrieved successfully" };
+  }
+
+  @Post("/admins")
+  @Roles(RolesEnum.SUPER_ADMIN)
+  async createPlatformAdmin(@Body() dto: CreateUserDto) {
+    const data = await this.userService.createAdmin(dto);
+    return { data, message: "Platform admin created successfully" };
+  }
+
+  @Patch("/admins/:id/status")
+  @Roles(RolesEnum.SUPER_ADMIN)
+  async updateAdminStatus(
+    @Param("id") id: string,
+    @Body("status") status: Status
+  ) {
+    const data = await this.userService.updateAdminStatus(new Types.ObjectId(id), status);
+    return { data, message: "Platform admin status updated successfully" };
   }
 }

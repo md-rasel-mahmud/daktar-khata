@@ -3,6 +3,7 @@ export enum Status {
   ACTIVE = "ACTIVE",
   PENDING = "PENDING",
   INACTIVE = "INACTIVE",
+  BANNED = "BANNED",
   EXPIRED = "EXPIRED",
 }
 
@@ -12,9 +13,16 @@ export enum ActiveInactiveStatus {
 }
 
 export enum SubscriptionStatus {
+  DEMO = "DEMO",
   ACTIVE = "ACTIVE",
   EXPIRED = "EXPIRED",
   PENDING = "PENDING",
+}
+
+export enum DoctorApprovalStatus {
+  PENDING = "PENDING",
+  APPROVED = "APPROVED",
+  REJECTED = "REJECTED",
 }
 
 export enum AppointmentStatus {

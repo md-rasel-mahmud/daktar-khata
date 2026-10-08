@@ -47,7 +47,9 @@ export class PatientController {
       );
     }
 
-    return this.patientService.findAll();
+    return this.patientService.findAll(
+      authUser.role === RolesEnum.MERCHANT ? authUser.merchant : undefined
+    );
   }
 
   @Get("doctor")

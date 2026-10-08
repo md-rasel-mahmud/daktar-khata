@@ -11,6 +11,7 @@ import { AuthController } from "./auth.controller";
 import { MerchantModule } from "../merchant/merchant.module";
 import { DoctorModule } from "../doctor/doctor.module";
 import { StaffModule } from "../staff/staff.module";
+import { ClinicModule } from "../clinic/clinic.module";
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { StaffModule } from "../staff/staff.module";
     PatientModule,
     DoctorModule,
     MerchantModule,
+    ClinicModule,
     forwardRef(() => StaffModule),
   ],
   controllers: [AuthController],

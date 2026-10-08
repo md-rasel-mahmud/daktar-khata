@@ -33,4 +33,18 @@ export class CreateClinicDto {
   @IsOptional()
   @IsString()
   contactNumber?: string;
+
+  @ApiPropertyOptional({
+    description: "Is this the main clinic branch",
+    example: true,
+  })
+  @IsOptional()
+  isMainBranch?: boolean;
+
+  @ApiPropertyOptional({
+    description: "Is this clinic branch active",
+    example: true,
+  })
+  @IsOptional()
+  active?: boolean;
 }
