@@ -3,9 +3,11 @@ import { isFulfilled, isRejectedWithValue } from "@reduxjs/toolkit"
 import { type  Middleware  } from "@reduxjs/toolkit"
 import { toast } from "sonner"
 import { router } from "@/routes/router"
+import { logout } from "./slices/auth.slice"
+import { api } from "./api"
 
 export const rtkRequestHandlerMiddleware: Middleware =
-  () => (next) => (action: any) => {
+  ({ dispatch }) => (next) => (action: any) => {
     const requestMethod = action.meta?.baseQueryMeta?.request?.method
 
     if (isRejectedWithValue(action)) {
@@ -18,6 +20,11 @@ export const rtkRequestHandlerMiddleware: Middleware =
           payloadData?.message || "Unauthorized access. Please log in again."
         )
         localStorage.removeItem("token")
+        
+        // Reset the auth state and api cache to prevent infinite redirect loop
+        dispatch(logout())
+        dispatch(api.util.resetApiState())
+
         void router.navigate("/auth/login")
         return next(action)
       }

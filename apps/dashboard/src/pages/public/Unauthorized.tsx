@@ -10,11 +10,8 @@ const Unauthorized: React.FC = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    // remove token from localstorage and clear redux store
-    localStorage.removeItem("token")
-
-    // reset redux api state
-    dispatch(api.util.resetApiState())
+    // Remove the logic that clears the token
+    // Users should not be logged out just because they visited an unauthorized page
   }, [])
 
   return (
