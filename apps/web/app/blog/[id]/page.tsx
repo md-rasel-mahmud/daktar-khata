@@ -1,8 +1,8 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
-import { Navbar } from '@/app/landing/components/navbar'
-import { Footer } from '@/app/landing/components/footer'
+import { LandingNavbar as Navbar } from '../../landing/components/navbar'
+import { LandingFooter as Footer } from '../../landing/components/footer'
 
 const blogs = [
   {
