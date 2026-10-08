@@ -10,9 +10,9 @@ paths:
       x-codeSamples: &ref_0
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/users/profile", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/users/profile", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_0
     patch:
       operationId: UserController_updateCurrentUser
@@ -56,7 +56,7 @@ paths:
       x-codeSamples: &ref_2
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/users/profile", {
+            fetch("http://localhost:7733/api/v1/users/profile", {
               method: "PATCH",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -80,8 +80,8 @@ paths:
       x-codeSamples: &ref_3
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/patients", { method:
-            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            fetch("http://localhost:7733/api/v1/patients", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
             r.json()).then(console.log)
       x-code-samples: *ref_3
   /api/v1/patients/doctor:
@@ -94,9 +94,9 @@ paths:
       x-codeSamples: &ref_4
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/patients/doctor", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/patients/doctor", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_4
   /api/v1/patients/{id}/appointments:
     get:
@@ -113,8 +113,8 @@ paths:
       x-codeSamples: &ref_5
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/patients/{id}/appointments",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            fetch("http://localhost:7733/api/v1/patients/{id}/appointments", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_5
   /api/v1/patients/{id}/medical-records:
@@ -132,7 +132,7 @@ paths:
       x-codeSamples: &ref_6
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/patients/{id}/medical-records",
+            fetch("http://localhost:7733/api/v1/patients/{id}/medical-records",
             { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_6
@@ -151,9 +151,9 @@ paths:
       x-codeSamples: &ref_7
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/patients/{id}", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/patients/{id}", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_7
     patch:
       operationId: PatientController_update
@@ -187,7 +187,7 @@ paths:
       x-codeSamples: &ref_9
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/patients/{id}", {
+            fetch("http://localhost:7733/api/v1/patients/{id}", {
               method: "PATCH",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -210,9 +210,9 @@ paths:
       x-codeSamples: &ref_10
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/patients/{id}", {
-            method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/patients/{id}", { method:
+            "DELETE", headers: { 'Authorization': 'Bearer <token>' } }).then(r
+            => r.json()).then(console.log)
       x-code-samples: *ref_10
   /api/v1/medical-records:
     post:
@@ -244,7 +244,7 @@ paths:
       x-codeSamples: &ref_12
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/medical-records", {
+            fetch("http://localhost:7733/api/v1/medical-records", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -267,9 +267,9 @@ paths:
       x-codeSamples: &ref_13
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/medical-records", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/medical-records", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_13
   /api/v1/medical-records/patient/{patientId}:
     get:
@@ -286,7 +286,7 @@ paths:
       x-codeSamples: &ref_14
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/medical-records/patient/{patientId}",
+            fetch("http://localhost:7733/api/v1/medical-records/patient/{patientId}",
             { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_14
@@ -305,9 +305,9 @@ paths:
       x-codeSamples: &ref_15
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/medical-records/{id}",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/medical-records/{id}", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_15
     patch:
       operationId: MedicalRecordController_update
@@ -332,9 +332,8 @@ paths:
           description: ''
       x-codeSamples: &ref_17
         - lang: fetch
-          source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/medical-records/{id}",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/medical-records/{id}", {
               method: "PATCH",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -357,9 +356,9 @@ paths:
       x-codeSamples: &ref_18
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/medical-records/{id}",
-            { method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/medical-records/{id}", { method:
+            "DELETE", headers: { 'Authorization': 'Bearer <token>' } }).then(r
+            => r.json()).then(console.log)
       x-code-samples: *ref_18
   /api/v1/merchants:
     post:
@@ -397,7 +396,7 @@ paths:
       x-codeSamples: &ref_20
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/merchants", {
+            fetch("http://localhost:7733/api/v1/merchants", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -415,8 +414,8 @@ paths:
       x-codeSamples: &ref_21
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/merchants", { method:
-            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            fetch("http://localhost:7733/api/v1/merchants", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
             r.json()).then(console.log)
       x-code-samples: *ref_21
   /api/v1/merchants/{id}:
@@ -434,9 +433,9 @@ paths:
       x-codeSamples: &ref_22
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/merchants/{id}", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/merchants/{id}", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_22
     patch:
       operationId: MerchantController_update
@@ -475,7 +474,7 @@ paths:
       x-codeSamples: &ref_25
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/merchants/{id}", {
+            fetch("http://localhost:7733/api/v1/merchants/{id}", {
               method: "PATCH",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -498,9 +497,9 @@ paths:
       x-codeSamples: &ref_26
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/merchants/{id}", {
-            method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/merchants/{id}", { method:
+            "DELETE", headers: { 'Authorization': 'Bearer <token>' } }).then(r
+            => r.json()).then(console.log)
       x-code-samples: *ref_26
   /api/v1/doctors:
     post:
@@ -551,7 +550,7 @@ paths:
       x-codeSamples: &ref_28
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/doctors", {
+            fetch("http://localhost:7733/api/v1/doctors", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -569,8 +568,8 @@ paths:
       x-codeSamples: &ref_29
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/doctors", { method:
-            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            fetch("http://localhost:7733/api/v1/doctors", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
             r.json()).then(console.log)
       x-code-samples: *ref_29
   /api/v1/doctors/options:
@@ -583,9 +582,9 @@ paths:
       x-codeSamples: &ref_30
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/doctors/options", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/doctors/options", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_30
   /api/v1/doctors/{id}:
     get:
@@ -602,9 +601,9 @@ paths:
       x-codeSamples: &ref_31
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/doctors/{id}", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/doctors/{id}", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_31
     patch:
       operationId: DoctorController_update
@@ -652,7 +651,7 @@ paths:
       x-codeSamples: &ref_36
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/doctors/{id}", {
+            fetch("http://localhost:7733/api/v1/doctors/{id}", {
               method: "PATCH",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -675,9 +674,9 @@ paths:
       x-codeSamples: &ref_37
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/doctors/{id}", {
-            method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/doctors/{id}", { method:
+            "DELETE", headers: { 'Authorization': 'Bearer <token>' } }).then(r
+            => r.json()).then(console.log)
       x-code-samples: *ref_37
   /api/v1/auth/login:
     post:
@@ -707,7 +706,7 @@ paths:
       x-codeSamples: &ref_39
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/auth/login", {
+            fetch("http://localhost:7733/api/v1/auth/login", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -743,7 +742,7 @@ paths:
       x-codeSamples: &ref_41
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/auth/signup", {
+            fetch("http://localhost:7733/api/v1/auth/signup", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -772,7 +771,7 @@ paths:
       x-codeSamples: &ref_43
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/staff", {
+            fetch("http://localhost:7733/api/v1/staff", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -790,8 +789,8 @@ paths:
       x-codeSamples: &ref_44
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/staff", { method:
-            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            fetch("http://localhost:7733/api/v1/staff", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
             r.json()).then(console.log)
       x-code-samples: *ref_44
   /api/v1/staff/all:
@@ -804,8 +803,8 @@ paths:
       x-codeSamples: &ref_45
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/staff/all", { method:
-            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            fetch("http://localhost:7733/api/v1/staff/all", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
             r.json()).then(console.log)
       x-code-samples: *ref_45
   /api/v1/staff/{id}:
@@ -823,8 +822,8 @@ paths:
       x-codeSamples: &ref_46
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/staff/{id}", { method:
-            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            fetch("http://localhost:7733/api/v1/staff/{id}", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
             r.json()).then(console.log)
       x-code-samples: *ref_46
     patch:
@@ -851,7 +850,7 @@ paths:
       x-codeSamples: &ref_48
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/staff/{id}", {
+            fetch("http://localhost:7733/api/v1/staff/{id}", {
               method: "PATCH",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -874,9 +873,9 @@ paths:
       x-codeSamples: &ref_49
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/staff/{id}", { method:
-            "DELETE", headers: { 'Authorization': 'Bearer <token>' } }).then(r
-            => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/staff/{id}", { method: "DELETE",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_49
   /api/v1/staff/{id}/attendance:
     post:
@@ -902,9 +901,8 @@ paths:
           description: ''
       x-codeSamples: &ref_51
         - lang: fetch
-          source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/staff/{id}/attendance",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/staff/{id}/attendance", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -937,8 +935,8 @@ paths:
       x-codeSamples: &ref_52
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/staff/{id}/attendance",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            fetch("http://localhost:7733/api/v1/staff/{id}/attendance", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_52
   /api/v1/staff/{id}/leave:
@@ -966,7 +964,7 @@ paths:
       x-codeSamples: &ref_54
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/staff/{id}/leave", {
+            fetch("http://localhost:7733/api/v1/staff/{id}/leave", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -994,9 +992,9 @@ paths:
       x-codeSamples: &ref_55
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/staff/{id}/leave", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/staff/{id}/leave", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_55
   /api/v1/staff/{id}/leave/{leaveId}:
     patch:
@@ -1027,9 +1025,8 @@ paths:
           description: ''
       x-codeSamples: &ref_57
         - lang: fetch
-          source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/staff/{id}/leave/{leaveId}",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/staff/{id}/leave/{leaveId}", {
               method: "PATCH",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -1079,7 +1076,7 @@ paths:
       x-codeSamples: &ref_59
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/staff/{id}/payroll", {
+            fetch("http://localhost:7733/api/v1/staff/{id}/payroll", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -1102,9 +1099,9 @@ paths:
       x-codeSamples: &ref_60
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/staff/{id}/payroll", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/staff/{id}/payroll", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_60
   /api/v1/clinic:
     post:
@@ -1130,7 +1127,7 @@ paths:
       x-codeSamples: &ref_62
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/clinic", {
+            fetch("http://localhost:7733/api/v1/clinic", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -1148,8 +1145,8 @@ paths:
       x-codeSamples: &ref_63
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/clinic", { method:
-            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            fetch("http://localhost:7733/api/v1/clinic", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
             r.json()).then(console.log)
       x-code-samples: *ref_63
   /api/v1/clinic/all:
@@ -1162,8 +1159,8 @@ paths:
       x-codeSamples: &ref_64
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/clinic/all", { method:
-            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            fetch("http://localhost:7733/api/v1/clinic/all", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
             r.json()).then(console.log)
       x-code-samples: *ref_64
   /api/v1/clinic/{id}:
@@ -1195,7 +1192,7 @@ paths:
       x-codeSamples: &ref_66
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/clinic/{id}", {
+            fetch("http://localhost:7733/api/v1/clinic/{id}", {
               method: "PUT",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -1218,9 +1215,9 @@ paths:
       x-codeSamples: &ref_67
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/clinic/{id}", {
-            method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/clinic/{id}", { method:
+            "DELETE", headers: { 'Authorization': 'Bearer <token>' } }).then(r
+            => r.json()).then(console.log)
       x-code-samples: *ref_67
   /api/v1/subscription:
     post:
@@ -1242,7 +1239,7 @@ paths:
       x-codeSamples: &ref_69
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/subscription", {
+            fetch("http://localhost:7733/api/v1/subscription", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -1260,9 +1257,9 @@ paths:
       x-codeSamples: &ref_70
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/subscription", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/subscription", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_70
   /api/v1/subscription/{id}:
     delete:
@@ -1279,9 +1276,9 @@ paths:
       x-codeSamples: &ref_71
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/subscription/{id}", {
-            method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/subscription/{id}", { method:
+            "DELETE", headers: { 'Authorization': 'Bearer <token>' } }).then(r
+            => r.json()).then(console.log)
       x-code-samples: *ref_71
   /api/v1/payment/subscription/sslcommerz/{id}:
     post:
@@ -1298,7 +1295,7 @@ paths:
       x-codeSamples: &ref_72
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/payment/subscription/sslcommerz/{id}",
+            fetch("http://localhost:7733/api/v1/payment/subscription/sslcommerz/{id}",
             { method: "POST", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_72
@@ -1317,7 +1314,7 @@ paths:
       x-codeSamples: &ref_73
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/payment/subscription/sslcommerz/repayment/{paymentId}",
+            fetch("http://localhost:7733/api/v1/payment/subscription/sslcommerz/repayment/{paymentId}",
             { method: "PATCH", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_73
@@ -1331,9 +1328,9 @@ paths:
       x-codeSamples: &ref_74
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/payment/merchant", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/payment/merchant", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_74
   /api/v1/payment/success:
     post:
@@ -1345,9 +1342,9 @@ paths:
       x-codeSamples: &ref_75
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/payment/success", {
-            method: "POST", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/payment/success", { method:
+            "POST", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_75
   /api/v1/payment/redirect:
     get:
@@ -1359,9 +1356,9 @@ paths:
       x-codeSamples: &ref_76
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/payment/redirect", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/payment/redirect", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_76
   /api/v1/payment/fail:
     post:
@@ -1373,9 +1370,9 @@ paths:
       x-codeSamples: &ref_77
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/payment/fail", {
-            method: "POST", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/payment/fail", { method: "POST",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_77
   /api/v1/payment/cancel:
     post:
@@ -1387,9 +1384,9 @@ paths:
       x-codeSamples: &ref_78
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/payment/cancel", {
-            method: "POST", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/payment/cancel", { method:
+            "POST", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_78
   /api/v1/merchant-pg:
     post:
@@ -1417,7 +1414,7 @@ paths:
       x-codeSamples: &ref_80
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/merchant-pg", {
+            fetch("http://localhost:7733/api/v1/merchant-pg", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -1435,9 +1432,9 @@ paths:
       x-codeSamples: &ref_81
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/merchant-pg", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/merchant-pg", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_81
     patch:
       operationId: MerchantPGController_update
@@ -1464,7 +1461,7 @@ paths:
       x-codeSamples: &ref_83
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/merchant-pg", {
+            fetch("http://localhost:7733/api/v1/merchant-pg", {
               method: "PATCH",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -1483,9 +1480,9 @@ paths:
       x-codeSamples: &ref_84
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/merchant-pg/all", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/merchant-pg/all", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_84
   /api/v1/merchant-pg/{id}:
     get:
@@ -1502,9 +1499,9 @@ paths:
       x-codeSamples: &ref_85
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/merchant-pg/{id}", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/merchant-pg/{id}", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_85
     delete:
       operationId: MerchantPGController_remove
@@ -1520,9 +1517,9 @@ paths:
       x-codeSamples: &ref_86
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/merchant-pg/{id}", {
-            method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/merchant-pg/{id}", { method:
+            "DELETE", headers: { 'Authorization': 'Bearer <token>' } }).then(r
+            => r.json()).then(console.log)
       x-code-samples: *ref_86
   /api/v1/appointment:
     post:
@@ -1552,7 +1549,7 @@ paths:
       x-codeSamples: &ref_88
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/appointment", {
+            fetch("http://localhost:7733/api/v1/appointment", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -1575,9 +1572,9 @@ paths:
       x-codeSamples: &ref_89
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/appointment", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/appointment", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_89
   /api/v1/appointment/all:
     get:
@@ -1589,9 +1586,9 @@ paths:
       x-codeSamples: &ref_90
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/appointment/all", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/appointment/all", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_90
   /api/v1/appointment/slots/available:
     get:
@@ -1618,8 +1615,8 @@ paths:
       x-codeSamples: &ref_91
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/appointment/slots/available",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            fetch("http://localhost:7733/api/v1/appointment/slots/available", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_91
   /api/v1/appointment/stats:
@@ -1647,9 +1644,9 @@ paths:
       x-codeSamples: &ref_92
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/appointment/stats", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/appointment/stats", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_92
   /api/v1/appointment/{id}:
     get:
@@ -1666,9 +1663,9 @@ paths:
       x-codeSamples: &ref_93
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/appointment/{id}", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/appointment/{id}", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_93
     put:
       operationId: AppointmentController_update
@@ -1702,7 +1699,7 @@ paths:
       x-codeSamples: &ref_95
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/appointment/{id}", {
+            fetch("http://localhost:7733/api/v1/appointment/{id}", {
               method: "PUT",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -1725,9 +1722,9 @@ paths:
       x-codeSamples: &ref_96
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/appointment/{id}", {
-            method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/appointment/{id}", { method:
+            "DELETE", headers: { 'Authorization': 'Bearer <token>' } }).then(r
+            => r.json()).then(console.log)
       x-code-samples: *ref_96
   /api/v1/appointment/{id}/status:
     put:
@@ -1756,9 +1753,8 @@ paths:
           description: ''
       x-codeSamples: &ref_98
         - lang: fetch
-          source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/appointment/{id}/status",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/appointment/{id}/status", {
               method: "PUT",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -1782,7 +1778,7 @@ paths:
       x-codeSamples: &ref_99
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/appointment/{id}/queue-status",
+            fetch("http://localhost:7733/api/v1/appointment/{id}/queue-status",
             { method: "PUT", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_99
@@ -1813,9 +1809,8 @@ paths:
           description: ''
       x-codeSamples: &ref_101
         - lang: fetch
-          source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/appointment/{id}/reschedule",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/appointment/{id}/reschedule", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -1834,9 +1829,9 @@ paths:
       x-codeSamples: &ref_102
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/dashboard/merchant", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/dashboard/merchant", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_102
   /api/v1/dashboard/doctor:
     get:
@@ -1848,9 +1843,9 @@ paths:
       x-codeSamples: &ref_103
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/dashboard/doctor", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/dashboard/doctor", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_103
   /api/v1/dashboard/reception:
     get:
@@ -1862,9 +1857,9 @@ paths:
       x-codeSamples: &ref_104
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/dashboard/reception",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/dashboard/reception", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_104
   /api/v1/dashboard/nurse:
     get:
@@ -1876,9 +1871,9 @@ paths:
       x-codeSamples: &ref_105
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/dashboard/nurse", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/dashboard/nurse", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_105
   /api/v1/dashboard/accountant:
     get:
@@ -1890,9 +1885,9 @@ paths:
       x-codeSamples: &ref_106
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/dashboard/accountant",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/dashboard/accountant", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_106
   /api/v1/dashboard/super-admin:
     get:
@@ -1904,8 +1899,8 @@ paths:
       x-codeSamples: &ref_107
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/dashboard/super-admin",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            fetch("http://localhost:7733/api/v1/dashboard/super-admin", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_107
   /api/v1/income:
@@ -1928,7 +1923,7 @@ paths:
       x-codeSamples: &ref_109
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/income", {
+            fetch("http://localhost:7733/api/v1/income", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -1961,8 +1956,8 @@ paths:
       x-codeSamples: &ref_110
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/income", { method:
-            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            fetch("http://localhost:7733/api/v1/income", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
             r.json()).then(console.log)
       x-code-samples: *ref_110
   /api/v1/income/all:
@@ -1975,8 +1970,8 @@ paths:
       x-codeSamples: &ref_111
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/income/all", { method:
-            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            fetch("http://localhost:7733/api/v1/income/all", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
             r.json()).then(console.log)
       x-code-samples: *ref_111
   /api/v1/income/{id}:
@@ -2004,7 +1999,7 @@ paths:
       x-codeSamples: &ref_113
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/income/{id}", {
+            fetch("http://localhost:7733/api/v1/income/{id}", {
               method: "PATCH",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -2027,9 +2022,9 @@ paths:
       x-codeSamples: &ref_114
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/income/{id}", {
-            method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/income/{id}", { method:
+            "DELETE", headers: { 'Authorization': 'Bearer <token>' } }).then(r
+            => r.json()).then(console.log)
       x-code-samples: *ref_114
   /api/v1/income/sales:
     post:
@@ -2051,7 +2046,7 @@ paths:
       x-codeSamples: &ref_115
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/income/sales", {
+            fetch("http://localhost:7733/api/v1/income/sales", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -2084,9 +2079,9 @@ paths:
       x-codeSamples: &ref_116
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/income/sales", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/income/sales", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_116
   /api/v1/expense:
     post:
@@ -2108,7 +2103,7 @@ paths:
       x-codeSamples: &ref_118
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/expense", {
+            fetch("http://localhost:7733/api/v1/expense", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -2141,8 +2136,8 @@ paths:
       x-codeSamples: &ref_119
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/expense", { method:
-            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            fetch("http://localhost:7733/api/v1/expense", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
             r.json()).then(console.log)
       x-code-samples: *ref_119
   /api/v1/expense/all:
@@ -2155,9 +2150,9 @@ paths:
       x-codeSamples: &ref_120
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/expense/all", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/expense/all", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_120
   /api/v1/expense/{id}:
     patch:
@@ -2184,7 +2179,7 @@ paths:
       x-codeSamples: &ref_122
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/expense/{id}", {
+            fetch("http://localhost:7733/api/v1/expense/{id}", {
               method: "PATCH",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -2207,9 +2202,9 @@ paths:
       x-codeSamples: &ref_123
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/expense/{id}", {
-            method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/expense/{id}", { method:
+            "DELETE", headers: { 'Authorization': 'Bearer <token>' } }).then(r
+            => r.json()).then(console.log)
       x-code-samples: *ref_123
   /api/v1/expense/purchases:
     post:
@@ -2231,7 +2226,7 @@ paths:
       x-codeSamples: &ref_124
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/expense/purchases", {
+            fetch("http://localhost:7733/api/v1/expense/purchases", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -2264,9 +2259,9 @@ paths:
       x-codeSamples: &ref_125
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/expense/purchases", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/expense/purchases", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_125
   /api/v1/finance/dashboard:
     get:
@@ -2288,9 +2283,9 @@ paths:
       x-codeSamples: &ref_126
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/finance/dashboard", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/finance/dashboard", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_126
   /api/v1/finance/monthly-report:
     get:
@@ -2307,8 +2302,8 @@ paths:
       x-codeSamples: &ref_127
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/finance/monthly-report",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            fetch("http://localhost:7733/api/v1/finance/monthly-report", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_127
   /api/v1/finance/net-profit:
@@ -2331,9 +2326,9 @@ paths:
       x-codeSamples: &ref_128
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/finance/net-profit", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/finance/net-profit", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_128
   /api/v1/finance/invoices:
     get:
@@ -2355,9 +2350,9 @@ paths:
       x-codeSamples: &ref_129
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/finance/invoices", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/finance/invoices", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_129
   /api/v1/staff-role-templates:
     get:
@@ -2369,9 +2364,9 @@ paths:
       x-codeSamples: &ref_130
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/staff-role-templates",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/staff-role-templates", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_130
     post:
       operationId: StaffRoleTemplateController_create
@@ -2391,9 +2386,8 @@ paths:
           description: ''
       x-codeSamples: &ref_132
         - lang: fetch
-          source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/staff-role-templates",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/staff-role-templates", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -2426,9 +2420,8 @@ paths:
           description: ''
       x-codeSamples: &ref_134
         - lang: fetch
-          source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/staff-role-templates/{id}",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/staff-role-templates/{id}", {
               method: "PATCH",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -2451,8 +2444,8 @@ paths:
       x-codeSamples: &ref_135
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/staff-role-templates/{id}",
-            { method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
+            fetch("http://localhost:7733/api/v1/staff-role-templates/{id}", {
+            method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_135
   /api/v1/encounter:
@@ -2491,7 +2484,7 @@ paths:
       x-codeSamples: &ref_137
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/encounter", {
+            fetch("http://localhost:7733/api/v1/encounter", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -2515,8 +2508,8 @@ paths:
       x-codeSamples: &ref_138
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/encounter/appointment/{id}",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            fetch("http://localhost:7733/api/v1/encounter/appointment/{id}", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_138
   /api/v1/encounter/patient/{id}:
@@ -2534,8 +2527,8 @@ paths:
       x-codeSamples: &ref_139
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/encounter/patient/{id}",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            fetch("http://localhost:7733/api/v1/encounter/patient/{id}", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_139
   /api/v1/encounter/{id}:
@@ -2579,7 +2572,7 @@ paths:
       x-codeSamples: &ref_141
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/encounter/{id}", {
+            fetch("http://localhost:7733/api/v1/encounter/{id}", {
               method: "PUT",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -2623,7 +2616,7 @@ paths:
       x-codeSamples: &ref_143
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/prescription", {
+            fetch("http://localhost:7733/api/v1/prescription", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -2647,8 +2640,8 @@ paths:
       x-codeSamples: &ref_144
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/prescription/encounter/{id}",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            fetch("http://localhost:7733/api/v1/prescription/encounter/{id}", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_144
   /api/v1/prescription/patient/{id}:
@@ -2666,8 +2659,8 @@ paths:
       x-codeSamples: &ref_145
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/prescription/patient/{id}",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            fetch("http://localhost:7733/api/v1/prescription/patient/{id}", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_145
   /api/v1/prescription/{id}:
@@ -2710,7 +2703,7 @@ paths:
       x-codeSamples: &ref_147
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/prescription/{id}", {
+            fetch("http://localhost:7733/api/v1/prescription/{id}", {
               method: "PUT",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -2734,8 +2727,8 @@ paths:
       x-codeSamples: &ref_148
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/prescription/{id}/status",
-            { method: "PATCH", headers: { 'Authorization': 'Bearer <token>' }
+            fetch("http://localhost:7733/api/v1/prescription/{id}/status", {
+            method: "PATCH", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_148
   /api/v1/test-catalog:
@@ -2766,7 +2759,7 @@ paths:
       x-codeSamples: &ref_150
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/test-catalog", {
+            fetch("http://localhost:7733/api/v1/test-catalog", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -2789,9 +2782,9 @@ paths:
       x-codeSamples: &ref_151
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/test-catalog", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/test-catalog", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_151
   /api/v1/test-catalog/{id}:
     get:
@@ -2808,9 +2801,9 @@ paths:
       x-codeSamples: &ref_152
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/test-catalog/{id}", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/test-catalog/{id}", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_152
     put:
       operationId: TestCatalogController_update
@@ -2844,7 +2837,7 @@ paths:
       x-codeSamples: &ref_154
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/test-catalog/{id}", {
+            fetch("http://localhost:7733/api/v1/test-catalog/{id}", {
               method: "PUT",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -2867,9 +2860,9 @@ paths:
       x-codeSamples: &ref_155
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/test-catalog/{id}", {
-            method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/test-catalog/{id}", { method:
+            "DELETE", headers: { 'Authorization': 'Bearer <token>' } }).then(r
+            => r.json()).then(console.log)
       x-code-samples: *ref_155
   /api/v1/test-order:
     post:
@@ -2899,7 +2892,7 @@ paths:
       x-codeSamples: &ref_157
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/test-order", {
+            fetch("http://localhost:7733/api/v1/test-order", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -2923,8 +2916,8 @@ paths:
       x-codeSamples: &ref_158
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/test-order/encounter/{id}",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            fetch("http://localhost:7733/api/v1/test-order/encounter/{id}", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_158
   /api/v1/test-order/patient/{id}:
@@ -2942,8 +2935,8 @@ paths:
       x-codeSamples: &ref_159
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/test-order/patient/{id}",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            fetch("http://localhost:7733/api/v1/test-order/patient/{id}", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_159
   /api/v1/test-order/{id}/item/{itemIndex}/status:
@@ -2977,7 +2970,7 @@ paths:
       x-codeSamples: &ref_161
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/test-order/{id}/item/{itemIndex}/status",
+            fetch("http://localhost:7733/api/v1/test-order/{id}/item/{itemIndex}/status",
             {
               method: "PATCH",
               headers: {
@@ -3013,7 +3006,7 @@ paths:
       x-codeSamples: &ref_163
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/lab-report", {
+            fetch("http://localhost:7733/api/v1/lab-report", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -3037,8 +3030,8 @@ paths:
       x-codeSamples: &ref_164
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/lab-report/patient/{id}",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            fetch("http://localhost:7733/api/v1/lab-report/patient/{id}", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_164
   /api/v1/lab-report/{id}/approve:
@@ -3056,8 +3049,8 @@ paths:
       x-codeSamples: &ref_165
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/lab-report/{id}/approve",
-            { method: "PATCH", headers: { 'Authorization': 'Bearer <token>' }
+            fetch("http://localhost:7733/api/v1/lab-report/{id}/approve", {
+            method: "PATCH", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_165
   /api/v1/ward:
@@ -3083,7 +3076,7 @@ paths:
       x-codeSamples: &ref_167
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/ward", {
+            fetch("http://localhost:7733/api/v1/ward", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -3106,8 +3099,8 @@ paths:
       x-codeSamples: &ref_168
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/ward", { method:
-            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            fetch("http://localhost:7733/api/v1/ward", { method: "GET", headers:
+            { 'Authorization': 'Bearer <token>' } }).then(r =>
             r.json()).then(console.log)
       x-code-samples: *ref_168
   /api/v1/ward/{id}:
@@ -3125,8 +3118,8 @@ paths:
       x-codeSamples: &ref_169
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/ward/{id}", { method:
-            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            fetch("http://localhost:7733/api/v1/ward/{id}", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
             r.json()).then(console.log)
       x-code-samples: *ref_169
     put:
@@ -3156,7 +3149,7 @@ paths:
       x-codeSamples: &ref_171
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/ward/{id}", {
+            fetch("http://localhost:7733/api/v1/ward/{id}", {
               method: "PUT",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -3179,9 +3172,9 @@ paths:
       x-codeSamples: &ref_172
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/ward/{id}", { method:
-            "DELETE", headers: { 'Authorization': 'Bearer <token>' } }).then(r
-            => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/ward/{id}", { method: "DELETE",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_172
   /api/v1/room:
     post:
@@ -3208,7 +3201,7 @@ paths:
       x-codeSamples: &ref_174
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/room", {
+            fetch("http://localhost:7733/api/v1/room", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -3236,8 +3229,8 @@ paths:
       x-codeSamples: &ref_175
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/room", { method:
-            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            fetch("http://localhost:7733/api/v1/room", { method: "GET", headers:
+            { 'Authorization': 'Bearer <token>' } }).then(r =>
             r.json()).then(console.log)
       x-code-samples: *ref_175
   /api/v1/room/{id}:
@@ -3255,8 +3248,8 @@ paths:
       x-codeSamples: &ref_176
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/room/{id}", { method:
-            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            fetch("http://localhost:7733/api/v1/room/{id}", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
             r.json()).then(console.log)
       x-code-samples: *ref_176
     put:
@@ -3288,7 +3281,7 @@ paths:
       x-codeSamples: &ref_178
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/room/{id}", {
+            fetch("http://localhost:7733/api/v1/room/{id}", {
               method: "PUT",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -3311,9 +3304,9 @@ paths:
       x-codeSamples: &ref_179
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/room/{id}", { method:
-            "DELETE", headers: { 'Authorization': 'Bearer <token>' } }).then(r
-            => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/room/{id}", { method: "DELETE",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_179
   /api/v1/bed:
     post:
@@ -3339,7 +3332,7 @@ paths:
       x-codeSamples: &ref_181
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/bed", {
+            fetch("http://localhost:7733/api/v1/bed", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -3377,8 +3370,8 @@ paths:
       x-codeSamples: &ref_182
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/bed", { method: "GET",
-            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            fetch("http://localhost:7733/api/v1/bed", { method: "GET", headers:
+            { 'Authorization': 'Bearer <token>' } }).then(r =>
             r.json()).then(console.log)
       x-code-samples: *ref_182
   /api/v1/bed/{id}:
@@ -3396,8 +3389,8 @@ paths:
       x-codeSamples: &ref_183
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/bed/{id}", { method:
-            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            fetch("http://localhost:7733/api/v1/bed/{id}", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
             r.json()).then(console.log)
       x-code-samples: *ref_183
     put:
@@ -3428,7 +3421,7 @@ paths:
       x-codeSamples: &ref_185
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/bed/{id}", {
+            fetch("http://localhost:7733/api/v1/bed/{id}", {
               method: "PUT",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -3452,9 +3445,9 @@ paths:
       x-codeSamples: &ref_186
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/bed/{id}/status", {
-            method: "PATCH", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/bed/{id}/status", { method:
+            "PATCH", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_186
   /api/v1/bed-allocation:
     post:
@@ -3479,7 +3472,7 @@ paths:
       x-codeSamples: &ref_188
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/bed-allocation", {
+            fetch("http://localhost:7733/api/v1/bed-allocation", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -3503,8 +3496,8 @@ paths:
       x-codeSamples: &ref_189
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/bed-allocation/{id}/release",
-            { method: "POST", headers: { 'Authorization': 'Bearer <token>' }
+            fetch("http://localhost:7733/api/v1/bed-allocation/{id}/release", {
+            method: "POST", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_189
   /api/v1/bed-allocation/{id}/transfer:
@@ -3532,9 +3525,8 @@ paths:
           description: ''
       x-codeSamples: &ref_191
         - lang: fetch
-          source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/bed-allocation/{id}/transfer",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/bed-allocation/{id}/transfer", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -3558,8 +3550,8 @@ paths:
       x-codeSamples: &ref_192
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/bed-allocation/patient/{id}",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            fetch("http://localhost:7733/api/v1/bed-allocation/patient/{id}", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_192
   /api/v1/admission:
@@ -3594,7 +3586,7 @@ paths:
       x-codeSamples: &ref_194
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/admission", {
+            fetch("http://localhost:7733/api/v1/admission", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -3627,8 +3619,8 @@ paths:
       x-codeSamples: &ref_195
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/admission", { method:
-            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            fetch("http://localhost:7733/api/v1/admission", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
             r.json()).then(console.log)
       x-code-samples: *ref_195
   /api/v1/admission/{id}:
@@ -3646,9 +3638,9 @@ paths:
       x-codeSamples: &ref_196
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/admission/{id}", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/admission/{id}", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_196
   /api/v1/admission/patient/{id}:
     get:
@@ -3665,8 +3657,8 @@ paths:
       x-codeSamples: &ref_197
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/admission/patient/{id}",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            fetch("http://localhost:7733/api/v1/admission/patient/{id}", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_197
   /api/v1/admission/{id}/status:
@@ -3684,8 +3676,8 @@ paths:
       x-codeSamples: &ref_198
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/admission/{id}/status",
-            { method: "PATCH", headers: { 'Authorization': 'Bearer <token>' }
+            fetch("http://localhost:7733/api/v1/admission/{id}/status", {
+            method: "PATCH", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_198
   /api/v1/admission/{id}/discharge:
@@ -3713,9 +3705,8 @@ paths:
           description: ''
       x-codeSamples: &ref_200
         - lang: fetch
-          source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/admission/{id}/discharge",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/admission/{id}/discharge", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -3754,7 +3745,7 @@ paths:
       x-codeSamples: &ref_202
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/service-catalog", {
+            fetch("http://localhost:7733/api/v1/service-catalog", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -3787,9 +3778,9 @@ paths:
       x-codeSamples: &ref_203
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/service-catalog", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/service-catalog", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_203
   /api/v1/service-catalog/{id}:
     get:
@@ -3806,9 +3797,9 @@ paths:
       x-codeSamples: &ref_204
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/service-catalog/{id}",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/service-catalog/{id}", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_204
     put:
       operationId: ServiceCatalogController_update
@@ -3843,9 +3834,8 @@ paths:
           description: ''
       x-codeSamples: &ref_206
         - lang: fetch
-          source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/service-catalog/{id}",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/service-catalog/{id}", {
               method: "PUT",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -3868,9 +3858,9 @@ paths:
       x-codeSamples: &ref_207
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/service-catalog/{id}",
-            { method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/service-catalog/{id}", { method:
+            "DELETE", headers: { 'Authorization': 'Bearer <token>' } }).then(r
+            => r.json()).then(console.log)
       x-code-samples: *ref_207
   /api/v1/invoice:
     post:
@@ -3912,7 +3902,7 @@ paths:
       x-codeSamples: &ref_209
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/invoice", {
+            fetch("http://localhost:7733/api/v1/invoice", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -3950,8 +3940,8 @@ paths:
       x-codeSamples: &ref_210
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/invoice", { method:
-            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            fetch("http://localhost:7733/api/v1/invoice", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
             r.json()).then(console.log)
       x-code-samples: *ref_210
   /api/v1/invoice/patient/{patientId}:
@@ -3969,8 +3959,8 @@ paths:
       x-codeSamples: &ref_211
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/invoice/patient/{patientId}",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            fetch("http://localhost:7733/api/v1/invoice/patient/{patientId}", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_211
   /api/v1/invoice/{id}:
@@ -3988,9 +3978,9 @@ paths:
       x-codeSamples: &ref_212
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/invoice/{id}", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/invoice/{id}", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_212
   /api/v1/invoice/{id}/payment:
     post:
@@ -4020,9 +4010,8 @@ paths:
           description: ''
       x-codeSamples: &ref_214
         - lang: fetch
-          source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/invoice/{id}/payment",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/invoice/{id}/payment", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -4057,9 +4046,8 @@ paths:
           description: ''
       x-codeSamples: &ref_216
         - lang: fetch
-          source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/invoice/{id}/refund",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/invoice/{id}/refund", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -4093,9 +4081,8 @@ paths:
           description: ''
       x-codeSamples: &ref_218
         - lang: fetch
-          source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/invoice/{id}/status",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/invoice/{id}/status", {
               method: "PATCH",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -4131,7 +4118,7 @@ paths:
       x-codeSamples: &ref_220
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/commission-rule", {
+            fetch("http://localhost:7733/api/v1/commission-rule", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -4164,9 +4151,9 @@ paths:
       x-codeSamples: &ref_221
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/commission-rule", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/commission-rule", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_221
   /api/v1/commission-rule/{id}:
     get:
@@ -4183,9 +4170,9 @@ paths:
       x-codeSamples: &ref_222
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/commission-rule/{id}",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/commission-rule/{id}", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_222
     put:
       operationId: CommissionRuleController_update
@@ -4217,9 +4204,8 @@ paths:
           description: ''
       x-codeSamples: &ref_224
         - lang: fetch
-          source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/commission-rule/{id}",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/commission-rule/{id}", {
               method: "PUT",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -4242,9 +4228,9 @@ paths:
       x-codeSamples: &ref_225
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/commission-rule/{id}",
-            { method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/commission-rule/{id}", { method:
+            "DELETE", headers: { 'Authorization': 'Bearer <token>' } }).then(r
+            => r.json()).then(console.log)
       x-code-samples: *ref_225
   /api/v1/commission-record:
     post:
@@ -4276,7 +4262,7 @@ paths:
       x-codeSamples: &ref_227
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/commission-record", {
+            fetch("http://localhost:7733/api/v1/commission-record", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -4314,9 +4300,9 @@ paths:
       x-codeSamples: &ref_228
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/commission-record", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/commission-record", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_228
   /api/v1/commission-record/generate-from-invoice/{invoiceId}:
     post:
@@ -4333,7 +4319,7 @@ paths:
       x-codeSamples: &ref_229
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/commission-record/generate-from-invoice/{invoiceId}",
+            fetch("http://localhost:7733/api/v1/commission-record/generate-from-invoice/{invoiceId}",
             { method: "POST", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_229
@@ -4352,7 +4338,7 @@ paths:
       x-codeSamples: &ref_230
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/commission-record/doctor/{doctorId}",
+            fetch("http://localhost:7733/api/v1/commission-record/doctor/{doctorId}",
             { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_230
@@ -4371,8 +4357,8 @@ paths:
       x-codeSamples: &ref_231
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/commission-record/{id}",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            fetch("http://localhost:7733/api/v1/commission-record/{id}", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_231
   /api/v1/commission-record/{id}/status:
@@ -4402,7 +4388,7 @@ paths:
       x-codeSamples: &ref_233
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/commission-record/{id}/status",
+            fetch("http://localhost:7733/api/v1/commission-record/{id}/status",
             {
               method: "PATCH",
               headers: {
@@ -4446,7 +4432,7 @@ paths:
       x-codeSamples: &ref_235
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/operation", {
+            fetch("http://localhost:7733/api/v1/operation", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -4484,8 +4470,8 @@ paths:
       x-codeSamples: &ref_236
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/operation", { method:
-            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            fetch("http://localhost:7733/api/v1/operation", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
             r.json()).then(console.log)
       x-code-samples: *ref_236
   /api/v1/operation/patient/{patientId}:
@@ -4503,7 +4489,7 @@ paths:
       x-codeSamples: &ref_237
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/operation/patient/{patientId}",
+            fetch("http://localhost:7733/api/v1/operation/patient/{patientId}",
             { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_237
@@ -4522,7 +4508,7 @@ paths:
       x-codeSamples: &ref_238
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/operation/admission/{admissionId}",
+            fetch("http://localhost:7733/api/v1/operation/admission/{admissionId}",
             { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_238
@@ -4541,9 +4527,9 @@ paths:
       x-codeSamples: &ref_239
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/operation/{id}", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/operation/{id}", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_239
     put:
       operationId: OperationController_update
@@ -4582,7 +4568,7 @@ paths:
       x-codeSamples: &ref_242
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/operation/{id}", {
+            fetch("http://localhost:7733/api/v1/operation/{id}", {
               method: "PUT",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -4616,9 +4602,8 @@ paths:
           description: ''
       x-codeSamples: &ref_244
         - lang: fetch
-          source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/operation/{id}/status",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/operation/{id}/status", {
               method: "PATCH",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -4658,9 +4643,8 @@ paths:
           description: ''
       x-codeSamples: &ref_246
         - lang: fetch
-          source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/operation/{id}/pre-op",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/operation/{id}/pre-op", {
               method: "PATCH",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -4700,9 +4684,8 @@ paths:
           description: ''
       x-codeSamples: &ref_248
         - lang: fetch
-          source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/operation/{id}/notes",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/operation/{id}/notes", {
               method: "PATCH",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -4740,7 +4723,7 @@ paths:
       x-codeSamples: &ref_250
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/nursing-task", {
+            fetch("http://localhost:7733/api/v1/nursing-task", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -4788,9 +4771,9 @@ paths:
       x-codeSamples: &ref_251
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/nursing-task", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/nursing-task", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_251
   /api/v1/nursing-task/admission/{admissionId}:
     get:
@@ -4807,7 +4790,7 @@ paths:
       x-codeSamples: &ref_252
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/nursing-task/admission/{admissionId}",
+            fetch("http://localhost:7733/api/v1/nursing-task/admission/{admissionId}",
             { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_252
@@ -4826,9 +4809,9 @@ paths:
       x-codeSamples: &ref_253
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/nursing-task/{id}", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/nursing-task/{id}", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_253
   /api/v1/nursing-task/{id}/status:
     patch:
@@ -4857,9 +4840,8 @@ paths:
           description: ''
       x-codeSamples: &ref_255
         - lang: fetch
-          source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/nursing-task/{id}/status",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/nursing-task/{id}/status", {
               method: "PATCH",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -4898,9 +4880,8 @@ paths:
           description: ''
       x-codeSamples: &ref_257
         - lang: fetch
-          source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/nursing-task/{id}/vitals",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/nursing-task/{id}/vitals", {
               method: "PATCH",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -4936,9 +4917,8 @@ paths:
           description: ''
       x-codeSamples: &ref_259
         - lang: fetch
-          source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/medication-administration",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/medication-administration", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -4981,8 +4961,8 @@ paths:
       x-codeSamples: &ref_260
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/medication-administration",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            fetch("http://localhost:7733/api/v1/medication-administration", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_260
   /api/v1/medication-administration/admission/{admissionId}:
@@ -5000,7 +4980,7 @@ paths:
       x-codeSamples: &ref_261
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/medication-administration/admission/{admissionId}",
+            fetch("http://localhost:7733/api/v1/medication-administration/admission/{admissionId}",
             { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_261
@@ -5019,7 +4999,7 @@ paths:
       x-codeSamples: &ref_262
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/medication-administration/patient/{patientId}",
+            fetch("http://localhost:7733/api/v1/medication-administration/patient/{patientId}",
             { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_262
@@ -5038,7 +5018,7 @@ paths:
       x-codeSamples: &ref_263
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/medication-administration/{id}",
+            fetch("http://localhost:7733/api/v1/medication-administration/{id}",
             { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_263
@@ -5071,7 +5051,7 @@ paths:
       x-codeSamples: &ref_265
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/medication-administration/{id}/administer",
+            fetch("http://localhost:7733/api/v1/medication-administration/{id}/administer",
             {
               method: "PATCH",
               headers: {
@@ -5126,7 +5106,7 @@ paths:
       x-codeSamples: &ref_267
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/discharge-summary", {
+            fetch("http://localhost:7733/api/v1/discharge-summary", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -5150,7 +5130,7 @@ paths:
       x-codeSamples: &ref_268
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/discharge-summary/admission/{admissionId}",
+            fetch("http://localhost:7733/api/v1/discharge-summary/admission/{admissionId}",
             { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_268
@@ -5169,7 +5149,7 @@ paths:
       x-codeSamples: &ref_269
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/discharge-summary/patient/{patientId}",
+            fetch("http://localhost:7733/api/v1/discharge-summary/patient/{patientId}",
             { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_269
@@ -5188,8 +5168,8 @@ paths:
       x-codeSamples: &ref_270
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/discharge-summary/{id}",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            fetch("http://localhost:7733/api/v1/discharge-summary/{id}", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_270
     put:
@@ -5240,9 +5220,8 @@ paths:
           description: ''
       x-codeSamples: &ref_272
         - lang: fetch
-          source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/discharge-summary/{id}",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/discharge-summary/{id}", {
               method: "PUT",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -5276,7 +5255,7 @@ paths:
       x-codeSamples: &ref_274
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/supplier", {
+            fetch("http://localhost:7733/api/v1/supplier", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -5304,8 +5283,8 @@ paths:
       x-codeSamples: &ref_275
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/supplier", { method:
-            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            fetch("http://localhost:7733/api/v1/supplier", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
             r.json()).then(console.log)
       x-code-samples: *ref_275
   /api/v1/supplier/{id}:
@@ -5323,9 +5302,9 @@ paths:
       x-codeSamples: &ref_276
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/supplier/{id}", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/supplier/{id}", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_276
     put:
       operationId: SupplierController_update
@@ -5356,7 +5335,7 @@ paths:
       x-codeSamples: &ref_278
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/supplier/{id}", {
+            fetch("http://localhost:7733/api/v1/supplier/{id}", {
               method: "PUT",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -5379,9 +5358,9 @@ paths:
       x-codeSamples: &ref_279
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/supplier/{id}", {
-            method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/supplier/{id}", { method:
+            "DELETE", headers: { 'Authorization': 'Bearer <token>' } }).then(r
+            => r.json()).then(console.log)
       x-code-samples: *ref_279
   /api/v1/inventory-item:
     post:
@@ -5411,7 +5390,7 @@ paths:
       x-codeSamples: &ref_281
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/inventory-item", {
+            fetch("http://localhost:7733/api/v1/inventory-item", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -5449,9 +5428,9 @@ paths:
       x-codeSamples: &ref_282
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/inventory-item", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/inventory-item", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_282
   /api/v1/inventory-item/low-stock:
     get:
@@ -5468,8 +5447,8 @@ paths:
       x-codeSamples: &ref_283
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/inventory-item/low-stock",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            fetch("http://localhost:7733/api/v1/inventory-item/low-stock", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_283
   /api/v1/inventory-item/{id}:
@@ -5487,9 +5466,9 @@ paths:
       x-codeSamples: &ref_284
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/inventory-item/{id}",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/inventory-item/{id}", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_284
     put:
       operationId: InventoryItemController_update
@@ -5522,9 +5501,8 @@ paths:
           description: ''
       x-codeSamples: &ref_286
         - lang: fetch
-          source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/inventory-item/{id}",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/inventory-item/{id}", {
               method: "PUT",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -5547,9 +5525,9 @@ paths:
       x-codeSamples: &ref_287
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/inventory-item/{id}",
-            { method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/inventory-item/{id}", { method:
+            "DELETE", headers: { 'Authorization': 'Bearer <token>' } }).then(r
+            => r.json()).then(console.log)
       x-code-samples: *ref_287
   /api/v1/stock-transaction:
     post:
@@ -5582,7 +5560,7 @@ paths:
       x-codeSamples: &ref_289
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/stock-transaction", {
+            fetch("http://localhost:7733/api/v1/stock-transaction", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -5630,9 +5608,9 @@ paths:
       x-codeSamples: &ref_290
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/stock-transaction", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/stock-transaction", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_290
   /api/v1/stock-transaction/item/{itemId}:
     get:
@@ -5649,7 +5627,7 @@ paths:
       x-codeSamples: &ref_291
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/stock-transaction/item/{itemId}",
+            fetch("http://localhost:7733/api/v1/stock-transaction/item/{itemId}",
             { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_291
@@ -5668,8 +5646,8 @@ paths:
       x-codeSamples: &ref_292
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/stock-transaction/{id}",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            fetch("http://localhost:7733/api/v1/stock-transaction/{id}", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_292
   /api/v1/payroll/generate-cycle:
@@ -5692,9 +5670,8 @@ paths:
           description: ''
       x-codeSamples: &ref_294
         - lang: fetch
-          source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/payroll/generate-cycle",
-            {
+          source: |-
+            fetch("http://localhost:7733/api/v1/payroll/generate-cycle", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -5723,7 +5700,7 @@ paths:
       x-codeSamples: &ref_295
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/payroll", {
+            fetch("http://localhost:7733/api/v1/payroll", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -5766,8 +5743,8 @@ paths:
       x-codeSamples: &ref_296
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/payroll", { method:
-            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            fetch("http://localhost:7733/api/v1/payroll", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
             r.json()).then(console.log)
       x-code-samples: *ref_296
   /api/v1/payroll/staff/{staffId}:
@@ -5785,8 +5762,8 @@ paths:
       x-codeSamples: &ref_297
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/payroll/staff/{staffId}",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            fetch("http://localhost:7733/api/v1/payroll/staff/{staffId}", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_297
   /api/v1/payroll/{id}:
@@ -5804,9 +5781,9 @@ paths:
       x-codeSamples: &ref_298
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/payroll/{id}", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/payroll/{id}", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_298
     put:
       operationId: PayrollController_update
@@ -5841,7 +5818,7 @@ paths:
       x-codeSamples: &ref_300
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/payroll/{id}", {
+            fetch("http://localhost:7733/api/v1/payroll/{id}", {
               method: "PUT",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -5865,9 +5842,9 @@ paths:
       x-codeSamples: &ref_301
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/payroll/{id}/approve",
-            { method: "PATCH", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/payroll/{id}/approve", { method:
+            "PATCH", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_301
   /api/v1/payroll/{id}/pay:
     patch:
@@ -5897,7 +5874,7 @@ paths:
       x-codeSamples: &ref_303
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/payroll/{id}/pay", {
+            fetch("http://localhost:7733/api/v1/payroll/{id}/pay", {
               method: "PATCH",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -5937,7 +5914,7 @@ paths:
       x-codeSamples: &ref_305
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/notification", {
+            fetch("http://localhost:7733/api/v1/notification", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -5965,9 +5942,9 @@ paths:
       x-codeSamples: &ref_306
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/notification", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/notification", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_306
   /api/v1/notification/unread-count:
     get:
@@ -5979,8 +5956,8 @@ paths:
       x-codeSamples: &ref_307
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/notification/unread-count",
-            { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            fetch("http://localhost:7733/api/v1/notification/unread-count", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_307
   /api/v1/notification/mark-all-read:
@@ -5993,8 +5970,8 @@ paths:
       x-codeSamples: &ref_308
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/notification/mark-all-read",
-            { method: "PATCH", headers: { 'Authorization': 'Bearer <token>' }
+            fetch("http://localhost:7733/api/v1/notification/mark-all-read", {
+            method: "PATCH", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_308
   /api/v1/notification/{id}/read:
@@ -6012,8 +5989,8 @@ paths:
       x-codeSamples: &ref_309
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/notification/{id}/read",
-            { method: "PATCH", headers: { 'Authorization': 'Bearer <token>' }
+            fetch("http://localhost:7733/api/v1/notification/{id}/read", {
+            method: "PATCH", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_309
   /api/v1/notification/{id}:
@@ -6031,9 +6008,9 @@ paths:
       x-codeSamples: &ref_310
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/notification/{id}", {
-            method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/notification/{id}", { method:
+            "DELETE", headers: { 'Authorization': 'Bearer <token>' } }).then(r
+            => r.json()).then(console.log)
       x-code-samples: *ref_310
   /api/v1/audit-log:
     post:
@@ -6063,7 +6040,7 @@ paths:
       x-codeSamples: &ref_312
         - lang: fetch
           source: |-
-            fetch("https://daktar-khata.vercel.app/api/v1/audit-log", {
+            fetch("http://localhost:7733/api/v1/audit-log", {
               method: "POST",
               headers: {
                 'Authorization': 'Bearer <token>',
@@ -6116,8 +6093,8 @@ paths:
       x-codeSamples: &ref_313
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/audit-log", { method:
-            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            fetch("http://localhost:7733/api/v1/audit-log", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
             r.json()).then(console.log)
       x-code-samples: *ref_313
   /api/v1/audit-log/entity/{entityType}/{entityId}:
@@ -6140,7 +6117,7 @@ paths:
       x-codeSamples: &ref_314
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/audit-log/entity/{entityType}/{entityId}",
+            fetch("http://localhost:7733/api/v1/audit-log/entity/{entityType}/{entityId}",
             { method: "GET", headers: { 'Authorization': 'Bearer <token>' }
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_314
@@ -6159,9 +6136,9 @@ paths:
       x-codeSamples: &ref_315
         - lang: fetch
           source: >-
-            fetch("https://daktar-khata.vercel.app/api/v1/audit-log/{id}", {
-            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
-            }).then(r => r.json()).then(console.log)
+            fetch("http://localhost:7733/api/v1/audit-log/{id}", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
       x-code-samples: *ref_315
 info:
   title: ClinicFlow API
