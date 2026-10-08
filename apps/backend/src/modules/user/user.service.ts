@@ -37,7 +37,7 @@ export class UserService {
     private readonly configService: ConfigService<AppConfigType>,
 
     private readonly jwtService: JwtService
-  ) {}
+  ) { }
 
   async generateJwtToken(payload: any) {
     const accessToken = this.jwtService.sign(payload, {
@@ -88,7 +88,7 @@ export class UserService {
 
   async getUserCurrentUser(
     requestUser: RequestedUserType
-  ): Promise<Patient | Doctor | Merchant> {
+  ): Promise<Patient | Doctor | Merchant | { user: User }> {
     if (requestUser.role === RolesEnum.PATIENT) {
       return await this.patientService.findOneByUserId(requestUser._id);
     } else if (requestUser.role === RolesEnum.MERCHANT) {
