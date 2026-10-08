@@ -44,7 +44,7 @@ export function HeroSection() {
 
           {/* CTA Buttons */}
           <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
-            <Link href="http://localhost:7722" target="_blank" rel="noopener noreferrer">
+            <Link href={process.env.NEXT_PUBLIC_DASHBOARD_URL || "http://localhost:7722"} target="_blank" rel="noopener noreferrer">
               <Button size="lg" className="text-base cursor-pointer">
                 Get Started Free
                 <ArrowRight className="ml-2 h-4 w-4" />

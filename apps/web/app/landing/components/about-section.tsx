@@ -71,7 +71,7 @@ export function AboutSection() {
             <span className="text-muted-foreground">Made with care for the healthcare community</span>
           </div>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="http://localhost:7722/auth/signup" target="_blank" rel="noopener noreferrer">
+            <a href={process.env.NEXT_PUBLIC_DASHBOARD_URL + "/auth/signup" || "http://localhost:7722/auth/signup"} target="_blank" rel="noopener noreferrer">
               <Button size="lg" className="cursor-pointer">
                 Start Free Trial
               </Button>
