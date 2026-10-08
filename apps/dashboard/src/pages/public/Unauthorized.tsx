@@ -4,6 +4,7 @@ import { Button } from "@repo/ui/button"
 import { useNavigate } from "react-router"
 import { useDispatch } from "react-redux"
 import { api } from "@/lib/store/api"
+import { logout } from "@/lib/store/slices/auth.slice"
 
 const Unauthorized: React.FC = () => {
   const navigate = useNavigate()
@@ -12,6 +13,11 @@ const Unauthorized: React.FC = () => {
   useEffect(() => {
     // Remove the logic that clears the token
     // Users should not be logged out just because they visited an unauthorized page
+    localStorage.removeItem("token")
+
+    // Reset the auth state and api cache to prevent infinite redirect loop
+    dispatch(logout())
+    dispatch(api.util.resetApiState())
   }, [])
 
   return (
