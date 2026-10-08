@@ -9,6 +9,7 @@ const AdminAppointments = lazy(
 const AdminDashboard = lazy(() => import("@/pages/private/admin/Dashboard"))
 const ManageDoctors = lazy(() => import("@/pages/private/admin/ManageDoctors"))
 const ManageUsers = lazy(() => import("@/pages/private/admin/ManageUsers"))
+const SuperAdminDashboard = lazy(() => import("@/pages/private/admin/SuperAdminDashboard"))
 const DoctorAppointmentsPage = lazy(
   () => import("@/pages/private/doctor/DoctorAppointmentsPage")
 )
@@ -232,9 +233,11 @@ export const privateRoutes = [
     requiredPermissions: [PermissionKeyEnum.FINANCE_READ],
   },
 
+
+
   {
     path: "/admin",
-    element: withSuspense(<AdminDashboard />),
+    element: withSuspense(<SuperAdminDashboard />),
     allowRoutes: [RolesEnum.SUPER_ADMIN, RolesEnum.ADMIN],
   },
   {

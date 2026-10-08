@@ -91,7 +91,7 @@ export class DashboardController {
   }
 
   @Get("super-admin")
-  @Roles(RolesEnum.SUPER_ADMIN)
+  @Roles(RolesEnum.SUPER_ADMIN, RolesEnum.ADMIN)
   async superAdmin() {
     return this.dashboardService.superAdminStats();
   }

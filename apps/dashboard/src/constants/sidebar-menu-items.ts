@@ -16,9 +16,7 @@ export const sidebarMenuItems = [
     icon: Home,
     label: "Dashboard",
     roles: [
-      RolesEnum.ADMIN,
       RolesEnum.MERCHANT,
-      RolesEnum.SUPER_ADMIN,
       RolesEnum.STAFF,
     ],
   },
@@ -26,16 +24,14 @@ export const sidebarMenuItems = [
     path: "/merchant/doctors",
     icon: User,
     label: "Doctors",
-    roles: [RolesEnum.ADMIN, RolesEnum.MERCHANT, RolesEnum.SUPER_ADMIN],
+    roles: [RolesEnum.MERCHANT],
   },
   {
     path: "/merchant/appointments",
     icon: Calendar,
     label: "Appointments",
     roles: [
-      RolesEnum.ADMIN,
       RolesEnum.MERCHANT,
-      RolesEnum.SUPER_ADMIN,
       RolesEnum.STAFF,
     ],
   },
@@ -44,9 +40,7 @@ export const sidebarMenuItems = [
     icon: Users,
     label: "HRM",
     roles: [
-      RolesEnum.ADMIN,
       RolesEnum.MERCHANT,
-      RolesEnum.SUPER_ADMIN,
       RolesEnum.STAFF,
     ],
     permissions: [PermissionKeyEnum.STAFF_READ],
@@ -56,9 +50,7 @@ export const sidebarMenuItems = [
         icon: UserCog,
         label: "Staff Directory",
         roles: [
-          RolesEnum.ADMIN,
           RolesEnum.MERCHANT,
-          RolesEnum.SUPER_ADMIN,
           RolesEnum.STAFF,
         ],
         permissions: [PermissionKeyEnum.STAFF_READ],
@@ -68,9 +60,7 @@ export const sidebarMenuItems = [
         icon: Calendar,
         label: "Attendance",
         roles: [
-          RolesEnum.ADMIN,
           RolesEnum.MERCHANT,
-          RolesEnum.SUPER_ADMIN,
           RolesEnum.STAFF,
         ],
         permissions: [PermissionKeyEnum.STAFF_ATTENDANCE],
@@ -80,9 +70,7 @@ export const sidebarMenuItems = [
         icon: FileText,
         label: "Leaves",
         roles: [
-          RolesEnum.ADMIN,
           RolesEnum.MERCHANT,
-          RolesEnum.SUPER_ADMIN,
           RolesEnum.STAFF,
         ],
         permissions: [PermissionKeyEnum.STAFF_LEAVE],
@@ -92,9 +80,7 @@ export const sidebarMenuItems = [
         icon: Banknote,
         label: "Payroll",
         roles: [
-          RolesEnum.ADMIN,
           RolesEnum.MERCHANT,
-          RolesEnum.SUPER_ADMIN,
           RolesEnum.STAFF,
         ],
         permissions: [PermissionKeyEnum.STAFF_PAYROLL],
@@ -104,9 +90,7 @@ export const sidebarMenuItems = [
         icon: UserCog,
         label: "Role Templates",
         roles: [
-          RolesEnum.ADMIN,
           RolesEnum.MERCHANT,
-          RolesEnum.SUPER_ADMIN,
           RolesEnum.STAFF,
         ],
         permissions: [PermissionKeyEnum.STAFF_READ],
@@ -118,9 +102,7 @@ export const sidebarMenuItems = [
     icon: Banknote,
     label: "Accounts",
     roles: [
-      RolesEnum.ADMIN,
       RolesEnum.MERCHANT,
-      RolesEnum.SUPER_ADMIN,
       RolesEnum.STAFF,
     ],
     permissions: [PermissionKeyEnum.FINANCE_READ],
@@ -130,9 +112,7 @@ export const sidebarMenuItems = [
         icon: Banknote,
         label: "Purchases",
         roles: [
-          RolesEnum.ADMIN,
           RolesEnum.MERCHANT,
-          RolesEnum.SUPER_ADMIN,
           RolesEnum.STAFF,
         ],
         permissions: [PermissionKeyEnum.PURCHASE_READ],
@@ -142,9 +122,7 @@ export const sidebarMenuItems = [
         icon: Banknote,
         label: "Sales",
         roles: [
-          RolesEnum.ADMIN,
           RolesEnum.MERCHANT,
-          RolesEnum.SUPER_ADMIN,
           RolesEnum.STAFF,
         ],
         permissions: [PermissionKeyEnum.SALE_READ],
@@ -154,9 +132,7 @@ export const sidebarMenuItems = [
         icon: FileText,
         label: "Invoices",
         roles: [
-          RolesEnum.ADMIN,
           RolesEnum.MERCHANT,
-          RolesEnum.SUPER_ADMIN,
           RolesEnum.STAFF,
         ],
         permissions: [PermissionKeyEnum.INVOICE_READ],
@@ -168,9 +144,7 @@ export const sidebarMenuItems = [
     icon: FileText,
     label: "Financial Reports",
     roles: [
-      RolesEnum.ADMIN,
       RolesEnum.MERCHANT,
-      RolesEnum.SUPER_ADMIN,
       RolesEnum.STAFF,
     ],
     permissions: [PermissionKeyEnum.FINANCE_READ],
@@ -179,7 +153,7 @@ export const sidebarMenuItems = [
     path: "/merchant/finance",
     icon: Banknote,
     label: "Finance Overview",
-    roles: [RolesEnum.ADMIN, RolesEnum.MERCHANT, RolesEnum.SUPER_ADMIN],
+    roles: [RolesEnum.MERCHANT],
   },
 
   {
@@ -211,44 +185,44 @@ export const sidebarMenuItems = [
     path: "/doctor",
     icon: Home,
     label: "Dashboard",
-    roles: [RolesEnum.ADMIN, RolesEnum.DOCTOR],
+    roles: [RolesEnum.DOCTOR],
   },
   {
     path: "/doctor/patients",
     icon: Users,
     label: "Patients",
-    roles: [RolesEnum.ADMIN, RolesEnum.DOCTOR, RolesEnum.SUPER_ADMIN],
+    roles: [RolesEnum.DOCTOR],
   },
   {
     path: "/doctor/appointments",
     icon: Calendar,
     label: "Appointments",
-    roles: [RolesEnum.ADMIN, RolesEnum.DOCTOR],
+    roles: [RolesEnum.DOCTOR],
   },
 
   {
     path: "/patient",
     icon: Home,
     label: "Dashboard",
-    roles: [RolesEnum.ADMIN, RolesEnum.PATIENT],
+    roles: [RolesEnum.PATIENT],
   },
   {
     path: "/patient/appointments",
     icon: Calendar,
     label: "Appointments",
-    roles: [RolesEnum.ADMIN, RolesEnum.PATIENT],
+    roles: [RolesEnum.PATIENT],
   },
   {
     path: "/patient/records",
     icon: FileText,
     label: "Medical Records",
-    roles: [RolesEnum.ADMIN, RolesEnum.PATIENT, RolesEnum.SUPER_ADMIN],
+    roles: [RolesEnum.PATIENT],
   },
   {
     path: "/staff",
     icon: Home,
     label: "Dashboard",
-    roles: [RolesEnum.ADMIN, RolesEnum.STAFF],
+    roles: [RolesEnum.STAFF],
   },
 
   {
