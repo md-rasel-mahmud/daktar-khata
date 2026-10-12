@@ -31,10 +31,10 @@ import { DoctorSchema } from "../modules/doctor/schema/doctor.schema";
       provide: APP_GUARD,
       useClass: PermissionsGuard,
     },
-    {
-      provide: APP_GUARD,
-      useClass: TenantGuard,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: TenantGuard,
+    // },
   ],
   exports: [MongooseModule],
 })

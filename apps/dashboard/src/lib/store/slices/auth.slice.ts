@@ -59,10 +59,10 @@ const authSlice = createSlice({
 
     logout: (state) => {
       state.user = null
+      state.token = null
       state.isLoading = false
 
       localStorage.removeItem("token")
-      // Optionally, you can add more logic here, like clearing tokens or redirecting
     },
 
     resetUser: (state) => {

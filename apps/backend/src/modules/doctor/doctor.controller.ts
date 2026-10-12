@@ -54,7 +54,7 @@ export class DoctorController {
   @Get("pending")
   @Roles(RolesEnum.MERCHANT)
   async listPending(@AuthUser() authUser: IAuthUser) {
-    return this.doctorService.listPendingForMerchant(authUser.merchant);
+    return this.doctorService.listPendingForMerchant(authUser.merchant, authUser.clinic);
   }
 
   @Patch(":id/approve")

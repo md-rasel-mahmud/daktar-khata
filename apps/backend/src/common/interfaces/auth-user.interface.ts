@@ -5,6 +5,7 @@ export interface IAuthUser {
   admin?: Types.ObjectId;
   role?: string;
   merchant?: Types.ObjectId;
+  clinic?: Types.ObjectId;
   phone?: string;
   email?: string;
   permissions?: string[];

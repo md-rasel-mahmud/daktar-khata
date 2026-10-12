@@ -6,6 +6,7 @@ import {
   SidebarTrigger,
 } from "@repo/ui/sidebar"
 import { HeaderControls } from "@/components/header-controls"
+import { ClinicSwitcher } from "@/components/ClinicSwitcher"
 import { useTranslation } from "react-i18next"
 import { SubscriptionWarningBanner } from "@/components/subscription/SubscriptionWarningBanner"
 
@@ -18,11 +19,13 @@ const DashboardLayout = () => {
 
       <SidebarInset className="h-svh min-w-0 overflow-y-auto">
         <header className="sticky top-0 z-40 flex h-14 shrink-0 items-center justify-between gap-2 border-b bg-card/95 px-4 backdrop-blur supports-backdrop-filter:bg-card/80 md:px-6">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 sm:gap-3">
             <SidebarTrigger />
-            <div className="text-sm text-muted-foreground">
+            <div className="text-sm font-medium text-muted-foreground hidden sm:block">
               {t("dashboard")}
             </div>
+            <div className="hidden sm:block h-4 w-[1px] bg-border" />
+            <ClinicSwitcher />
           </div>
 
           <HeaderControls />

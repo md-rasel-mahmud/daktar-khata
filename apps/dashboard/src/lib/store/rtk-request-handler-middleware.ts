@@ -11,21 +11,30 @@ export const rtkRequestHandlerMiddleware: Middleware =
     const requestMethod = action.meta?.baseQueryMeta?.request?.method
 
     if (isRejectedWithValue(action)) {
-      const payloadData = (action.payload as { data?: any })?.data
-      const statusCode = payloadData?.code
+      const payload = action.payload as any
+      const payloadData = payload?.data
+      const statusCode =
+        payloadData?.code ??
+        payloadData?.statusCode ??
+        payload?.status ??
+        payload?.originalStatus
+
+      const isUnauthorized = statusCode === 401 || statusCode === "401"
 
       // IF RESPONSE IS UNAUTHORIZED, CLEAR TOKEN AND REDIRECT TO LOGIN PAGE
-      if (statusCode === 401 && window.location.pathname !== "/auth/login") {
-        toast.error(
-          payloadData?.message || "Unauthorized access. Please log in again."
-        )
+      if (isUnauthorized) {
         localStorage.removeItem("token")
-        
+
         // Reset the auth state and api cache to prevent infinite redirect loop
         dispatch(logout())
         dispatch(api.util.resetApiState())
 
-        void router.navigate("/auth/login")
+        if (window.location.pathname !== "/auth/login") {
+          toast.error(
+            payloadData?.message || "Unauthorized access. Please log in again."
+          )
+          void router.navigate("/auth/login", { replace: true })
+        }
         return next(action)
       }
 

@@ -38,8 +38,9 @@ export const MerchantSubscriptionPage: React.FC = () => {
   const [billingCycle, setBillingCycle] = useState<BillingCycle>("monthly")
   const [selectedPlanId, setSelectedPlanId] = useState<string>("")
 
-  const { data: plans = [], isLoading: isLoadingPlans } =
+  const { data: rawPlans = [], isLoading: isLoadingPlans } =
     useGetPublicSubscriptionPlansQuery()
+  const plans = Array.isArray(rawPlans) ? rawPlans : (rawPlans as any)?.data || []
   const { data: profileData, isLoading: isLoadingProfile } =
     useGetCurrentUserQuery(undefined)
 

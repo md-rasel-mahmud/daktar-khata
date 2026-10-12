@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model, Types } from "mongoose";
+import { ClientSession, Model, Types } from "mongoose";
 import { collectionsName } from "../../constant";
 import { Clinic, ClinicDocument } from "./schema/clinic.schema";
 import { CreateClinicDto } from "./dto/create-clinic.dto";
@@ -13,9 +13,13 @@ export class ClinicService {
     private readonly clinicModel: Model<ClinicDocument>
   ) {}
 
-  async createForMerchant(merchantId: Types.ObjectId, dto: CreateClinicDto) {
+  async createForMerchant(
+    merchantId: Types.ObjectId,
+    dto: CreateClinicDto,
+    session?: ClientSession
+  ) {
     const created = new this.clinicModel({ ...dto, merchant: merchantId });
-    return created.save();
+    return created.save({ session });
   }
 
   async updateForMerchant(

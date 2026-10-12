@@ -91,6 +91,16 @@ export const privateRoutes = [
     allowRoutes: [RolesEnum.SUPER_ADMIN, RolesEnum.ADMIN, RolesEnum.MERCHANT],
   },
   {
+    path: "/merchant/patients",
+    element: withSuspense(<ManageUsers />),
+    allowRoutes: [
+      RolesEnum.SUPER_ADMIN,
+      RolesEnum.ADMIN,
+      RolesEnum.MERCHANT,
+      RolesEnum.STAFF,
+    ],
+  },
+  {
     path: "/merchant/subscription",
     element: withSuspense(<MerchantSubscriptionPage />),
     allowRoutes: [RolesEnum.SUPER_ADMIN, RolesEnum.ADMIN, RolesEnum.MERCHANT],

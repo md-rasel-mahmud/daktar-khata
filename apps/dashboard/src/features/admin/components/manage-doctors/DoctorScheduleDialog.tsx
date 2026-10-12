@@ -16,6 +16,24 @@ type DoctorScheduleDialogProps = {
   doctor: Doctor | null
 }
 
+function formatTime12h(timeStr?: string): string {
+  if (!timeStr) return ""
+  const [h, m] = timeStr.split(":").map(Number)
+  if (isNaN(h) || isNaN(m)) return timeStr
+  const period = h >= 12 ? "PM" : "AM"
+  const displayHour = h % 12 || 12
+  return `${String(displayHour).padStart(2, "0")}:${String(m).padStart(2, "0")} ${period}`
+}
+
+function formatScheduleTime(startTime: string, endTime: string): string {
+  const startFmt = formatTime12h(startTime)
+  const endFmt = formatTime12h(endTime)
+  const [sh, sm] = startTime.split(":").map(Number)
+  const [eh, em] = endTime.split(":").map(Number)
+  const isOvernight = sh * 60 + sm > eh * 60 + em
+  return `${startFmt} - ${endFmt}${isOvernight ? " (Overnight)" : ""}`
+}
+
 const DoctorScheduleDialog: React.FC<DoctorScheduleDialogProps> = ({
   open,
   onOpenChange,
@@ -46,7 +64,7 @@ const DoctorScheduleDialog: React.FC<DoctorScheduleDialogProps> = ({
                 </div>
 
                 <p className="flex items-center gap-1 text-sm text-muted-foreground">
-                  <Clock size={15} /> {slot.startTime} - {slot.endTime}
+                  <Clock size={15} /> {formatScheduleTime(slot.startTime, slot.endTime)}
                 </p>
               </div>
             </div>

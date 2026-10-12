@@ -75,7 +75,7 @@ export class AppointmentService {
       const transactionId = `TXN_${Date.now()}`;
 
       // Calculate serial number
-      const reqDate = new Date(dto.appointmentDate);
+      const reqDate = this.parseDateString(dto.appointmentDate);
       const startOfDay = new Date(reqDate);
       startOfDay.setHours(0, 0, 0, 0);
       const endOfDay = new Date(reqDate);
@@ -93,6 +93,7 @@ export class AppointmentService {
         [
           {
             ...dto,
+            appointmentDate: this.parseDateString(dto.appointmentDate),
             merchant: doctor.merchant,
             paymentStatus,
             transactionId,
@@ -242,6 +243,13 @@ export class AppointmentService {
     return this.appointmentModel.find().populate("doctor patient");
   }
 
+  async listForMerchant(merchantId?: Types.ObjectId, clinicId?: Types.ObjectId) {
+    const filter: any = {};
+    if (merchantId) filter.merchant = new Types.ObjectId(merchantId);
+    if (clinicId && Types.ObjectId.isValid(clinicId)) filter.clinic = new Types.ObjectId(clinicId);
+    return this.appointmentModel.find(filter).populate("doctor patient");
+  }
+
   async updatePaymentStatus(appointmentId: Types.ObjectId, status: string) {
     const validStatuses = ["PENDING", "COMPLETED", "FAILED"];
     const normalizedStatus = status.toUpperCase();
@@ -291,6 +299,20 @@ export class AppointmentService {
    * Get available slots for a doctor on a specific date
    * Generates time slots based on doctor's schedule
    */
+  /**
+   * Helper to parse date string (YYYY-MM-DD) into local Date without UTC offset shifting
+   */
+  private parseDateString(dateStr: string): Date {
+    const parts = dateStr.split("-").map(Number);
+    if (parts.length === 3 && !isNaN(parts[0]) && !isNaN(parts[1]) && !isNaN(parts[2])) {
+      return new Date(parts[0], parts[1] - 1, parts[2]);
+    }
+    return new Date(dateStr);
+  }
+
+  /**
+   * Get available slots for a doctor on a specific date
+   */
   async getAvailableSlots(
     doctorId: string,
     appointmentDate: string,
@@ -299,7 +321,7 @@ export class AppointmentService {
     const doctor = await this.doctorService.findOne(doctorId);
     if (!doctor) throw new NotFoundException("Doctor not found");
 
-    const date = new Date(appointmentDate);
+    const date = this.parseDateString(appointmentDate);
     const dayName = this.getDayName(date);
 
     // Find doctor's schedule for this day
@@ -311,6 +333,7 @@ export class AppointmentService {
       return {
         date: appointmentDate,
         slots: [],
+        availableSlots: [],
         message: "Doctor is not available on this day",
       };
     }
@@ -345,6 +368,7 @@ export class AppointmentService {
 
     return {
       date: appointmentDate,
+      slots: availableSlots,
       availableSlots,
       bookedSlots: Array.from(bookedSlots),
       totalSlots: slots.length,
@@ -366,30 +390,34 @@ export class AppointmentService {
     const [startHour, startMin] = startTime.split(":").map(Number);
     const [endHour, endMin] = endTime.split(":").map(Number);
 
-    let currentHour = startHour;
-    let currentMin = startMin;
-    const endTotalMin = endHour * 60 + endMin;
+    if (isNaN(startHour) || isNaN(startMin) || isNaN(endHour) || isNaN(endMin)) {
+      return slots;
+    }
 
-    while (currentHour * 60 + currentMin < endTotalMin) {
-      const slotStart = this.formatTime(currentHour, currentMin);
-      const nextMin = currentMin + durationMinutes;
-      let nextHour = currentHour;
+    const startTotalMin = startHour * 60 + startMin;
+    let endTotalMin = endHour * 60 + endMin;
 
-      if (nextMin >= 60) {
-        nextHour += Math.floor(nextMin / 60);
-        currentMin = nextMin % 60;
-      } else {
-        currentMin = nextMin;
-      }
+    // Handle overnight shifts spanning across midnight (e.g. 15:07 to 03:07 or 20:00 to 02:00)
+    if (endTotalMin < startTotalMin) {
+      endTotalMin += 24 * 60;
+    } else if (endTotalMin === startTotalMin) {
+      return slots;
+    }
 
-      if (nextHour > endHour || (nextHour === endHour && currentMin > endMin)) {
-        break;
-      }
+    let currentMinCursor = startTotalMin;
 
-      const slotEnd = this.formatTime(nextHour, currentMin);
+    while (currentMinCursor + durationMinutes <= endTotalMin) {
+      const slotStartHour = Math.floor(currentMinCursor / 60) % 24;
+      const slotStartMin = currentMinCursor % 60;
+      const slotStart = this.formatTime(slotStartHour, slotStartMin);
+
+      const nextMinCursor = currentMinCursor + durationMinutes;
+      const slotEndHour = Math.floor(nextMinCursor / 60) % 24;
+      const slotEndMin = nextMinCursor % 60;
+      const slotEnd = this.formatTime(slotEndHour, slotEndMin);
+
       slots.push(`${slotStart} - ${slotEnd}`);
-
-      currentHour = nextHour;
+      currentMinCursor = nextMinCursor;
     }
 
     return slots;
@@ -428,7 +456,7 @@ export class AppointmentService {
     appointmentDate: string,
     appointmentSlot: string,
   ): Promise<boolean> {
-    const date = new Date(appointmentDate);
+    const date = this.parseDateString(appointmentDate);
     const startOfDay = new Date(date);
     startOfDay.setHours(0, 0, 0, 0);
     const endOfDay = new Date(date);

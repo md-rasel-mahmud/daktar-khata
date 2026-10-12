@@ -61,7 +61,7 @@ export const profileApi = api.injectEndpoints({
     }),
 
     updateSelfProfile: builder.mutation({
-      query: (body) => ({
+      query: ({ body }) => ({
         url: "users/profile",
         method: "PATCH",
         body,

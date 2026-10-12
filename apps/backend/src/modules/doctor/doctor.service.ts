@@ -25,7 +25,7 @@ export class DoctorService {
 
     @Inject(forwardRef(() => MerchantService))
     private readonly merchantService: MerchantService,
-  ) {}
+  ) { }
 
   async createDoctorByMerchant(
     createDoctorDto: CreateDoctorDto,
@@ -47,13 +47,15 @@ export class DoctorService {
         throw new BadRequestException("Doctor with this phone already exists");
       }
 
+      const clinicId = (createDoctorDto as any).clinic || authUser.clinic;
+
       const user = await this.userService.createUserAndRole(
         {
           phone: createDoctorDto.phone,
           password: createDoctorDto.password,
           role: RolesEnum.DOCTOR,
           merchant: authUser.merchant,
-          clinic: (createDoctorDto as any).clinic,
+          clinic: clinicId,
         },
         session,
       );
@@ -62,6 +64,7 @@ export class DoctorService {
       const doctor = new this.doctorModel({
         ...createDoctorDto,
         merchant: authUser.merchant,
+        clinic: clinicId,
         approvalStatus: "APPROVED",
         approvedAt: new Date(),
         approvedBy: authUser._id,
@@ -120,14 +123,26 @@ export class DoctorService {
     };
   }
 
-  async listPendingForMerchant(merchantId: Types.ObjectId): Promise<Doctor[]> {
+  async listPendingForMerchant(
+    merchantId: Types.ObjectId,
+    clinicId?: Types.ObjectId,
+  ): Promise<Doctor[]> {
+    if (!merchantId) return [];
+    const filter: any = {
+      merchant: new Types.ObjectId(merchantId),
+      approvalStatus: "PENDING",
+    };
+    if (clinicId && Types.ObjectId.isValid(clinicId)) {
+      filter.clinic = new Types.ObjectId(clinicId);
+    }
     return this.doctorModel
-      .find({ merchant: merchantId, approvalStatus: "PENDING" })
+      .find(filter)
       .populate({
         path: "user",
         model: collectionsName.user,
         select: "-password",
       })
+      .populate("clinic", "name address")
       .exec();
   }
 
@@ -177,13 +192,19 @@ export class DoctorService {
 
   async findAll(authUser: IAuthUser): Promise<Doctor[]> {
     if (authUser.role === RolesEnum.MERCHANT) {
+      if (!authUser.merchant) return [];
+      const filter: any = { merchant: new Types.ObjectId(authUser.merchant) };
+      if (authUser.clinic && Types.ObjectId.isValid(authUser.clinic)) {
+        filter.clinic = new Types.ObjectId(authUser.clinic);
+      }
       return this.doctorModel
-        .find({ merchant: authUser.merchant })
+        .find(filter)
         .populate({
           path: "user",
           model: collectionsName.user,
           select: "-password",
         })
+        .populate("clinic", "name address")
         .exec();
     }
 
@@ -194,6 +215,7 @@ export class DoctorService {
         model: collectionsName.user,
         select: "-password",
       })
+      .populate("clinic", "name address")
       .exec();
   }
 

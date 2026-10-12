@@ -30,7 +30,7 @@ export class AuthService {
     private readonly doctorService: DoctorService,
     private readonly clinicService: ClinicService,
     private readonly configService: ConfigService<AppConfigType>,
-  ) {}
+  ) { }
 
   async logIn(authDto: AuthDto, resolvedTenant?: any) {
     const tenantId = resolvedTenant ? resolvedTenant._id : undefined;
@@ -105,6 +105,17 @@ export class AuthService {
         throw new NotAcceptableException("Merchant profile not found");
       }
       jwtPayload.merchant = merchantRecord._id;
+
+      // Assign default clinic for merchant
+      const clinics = await this.clinicService.listForMerchant(merchantRecord._id);
+      const defaultClinic = clinics.find((c: any) => c.isMainBranch) || clinics[0];
+      if (defaultClinic) {
+        jwtPayload.clinic = defaultClinic._id;
+        if (!user.clinic) {
+          await this.userService.updateUserById(user._id, { clinic: defaultClinic._id });
+          user.clinic = defaultClinic._id;
+        }
+      }
     } else if (user.merchant) {
       jwtPayload.merchant = user.merchant;
       if (!merchantRecord) {
@@ -118,7 +129,7 @@ export class AuthService {
       jwtPayload.merchantStatus = merchantRecord.status;
     }
 
-    if (user.clinic) {
+    if (user.clinic && !jwtPayload.clinic) {
       jwtPayload.clinic = user.clinic;
     }
 
@@ -211,8 +222,8 @@ export class AuthService {
         const domain = createUserDto.domain
           ? createUserDto.domain.trim().toLowerCase()
           : subdomain
-          ? `${subdomain}.localhost`
-          : undefined;
+            ? `${subdomain}.localhost`
+            : undefined;
 
         const merchantDto: CreateMerchantDto = {
           name: createUserDto.name,
@@ -241,11 +252,6 @@ export class AuthService {
           session,
         );
 
-        // Update user's merchant reference
-        await this.userService.updateUserById(user._id, {
-          merchant: (merchantRecord as any)._id,
-        });
-
         // Create initial clinic / branch
         const initialClinic = await this.clinicService.createForMerchant(
           (merchantRecord as any)._id,
@@ -256,17 +262,33 @@ export class AuthService {
             contactNumber: createUserDto.phone,
             isMainBranch: true,
             active: true,
-          }
+          },
+          session
         );
 
+        // Update user's merchant and clinic reference
+        await this.userService.updateUserById(user._id, {
+          merchant: (merchantRecord as any)._id,
+          clinic: (initialClinic as any)._id,
+        }, session);
+        user.clinic = (initialClinic as any)._id;
+
+        const merchantObj = (merchantRecord as any)?.toObject
+          ? (merchantRecord as any).toObject()
+          : merchantRecord;
+        const clinicObj = (initialClinic as any)?.toObject
+          ? (initialClinic as any).toObject()
+          : initialClinic;
+
         profile = {
-          ...merchantRecord,
-          clinic: initialClinic,
+          ...merchantObj,
+          clinic: clinicObj,
         };
 
         jwtPayload._id = user._id;
         jwtPayload.role = user.role;
         jwtPayload.merchant = (merchantRecord as any)._id;
+        jwtPayload.clinic = (initialClinic as any)._id;
         jwtPayload.subscriptionStatus = SubscriptionStatus.DEMO;
         jwtPayload.subscriptionEndDate = demoEndDate;
       } else if (createUserDto.role === RolesEnum.DOCTOR) {

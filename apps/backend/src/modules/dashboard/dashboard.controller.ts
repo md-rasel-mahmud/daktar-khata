@@ -23,7 +23,10 @@ export class DashboardController {
     if (!merchantId) {
       throw new BadRequestException("Merchant ID is required");
     }
-    return this.dashboardService.getMerchantDashboard(merchantId);
+    const clinicId = user.clinic
+      ? new Types.ObjectId(user.clinic)
+      : undefined;
+    return this.dashboardService.getMerchantDashboard(merchantId, clinicId);
   }
 
   @Get("doctor")

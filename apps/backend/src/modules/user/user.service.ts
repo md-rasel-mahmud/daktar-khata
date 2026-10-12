@@ -245,14 +245,15 @@ export class UserService {
   // update user
   async updateUserById(
     userId: Types.ObjectId,
-    updateUserDto: UpdateUserDto
+    updateUserDto: UpdateUserDto,
+    session?: ClientSession
   ): Promise<User> {
     return this.userModel.findByIdAndUpdate(userId, updateUserDto, {
       new: true,
-    });
+    }).session(session);
   }
 
   async deleteUser(userId: Types.ObjectId): Promise<User> {
-    return this.userModel.findByIdAndDelete(userId);
+    return this.userModel.findByIdAndDelete(userId)
   }
 }

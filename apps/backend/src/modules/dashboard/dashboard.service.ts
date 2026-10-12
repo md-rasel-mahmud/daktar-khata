@@ -66,28 +66,32 @@ export class DashboardService {
     return { startOfDay, endOfDay };
   }
 
-  async getMerchantDashboard(merchantId: Types.ObjectId) {
+  async getMerchantDashboard(
+    merchantId: Types.ObjectId,
+    clinicId?: Types.ObjectId,
+  ) {
     const { startOfDay, endOfDay } = this.getTodayBounds();
 
+    const baseFilter: any = { merchant: new Types.ObjectId(merchantId) };
+    if (clinicId && Types.ObjectId.isValid(clinicId)) {
+      baseFilter.clinic = new Types.ObjectId(clinicId);
+    }
+
     // 1. Patient & Clinic Volume
-    const totalPatients = await this.patientModel.countDocuments({
-      merchant: merchantId,
-      isActive: true,
-    });
+    const totalPatients = await this.patientModel.countDocuments(baseFilter);
     const totalDoctors = await this.doctorModel.countDocuments({
-      merchant: merchantId,
-      isActive: true,
+      ...baseFilter,
+      approvalStatus: { $ne: "REJECTED" },
     });
     const totalStaff = await this.staffModel.countDocuments({
-      merchant: merchantId,
+      ...baseFilter,
       active: true,
     });
 
     // 2. Today's Appointments & Queue
     const todayAppointmentsTotal = await this.appointmentModel.countDocuments({
-      merchant: merchantId,
+      ...baseFilter,
       appointmentDate: { $gte: startOfDay, $lte: endOfDay },
-      isActive: true,
     });
 
     const [
@@ -98,59 +102,48 @@ export class DashboardService {
       inConsultationQueue,
     ] = await Promise.all([
       this.appointmentModel.countDocuments({
-        merchant: merchantId,
+        ...baseFilter,
         appointmentDate: { $gte: startOfDay, $lte: endOfDay },
         status: AppointmentStatus.CONFIRMED,
-        isActive: true,
       }),
       this.appointmentModel.countDocuments({
-        merchant: merchantId,
+        ...baseFilter,
         appointmentDate: { $gte: startOfDay, $lte: endOfDay },
         status: AppointmentStatus.COMPLETED,
-        isActive: true,
       }),
       this.appointmentModel.countDocuments({
-        merchant: merchantId,
+        ...baseFilter,
         appointmentDate: { $gte: startOfDay, $lte: endOfDay },
         status: AppointmentStatus.CANCELLED,
-        isActive: true,
       }),
       this.appointmentModel.countDocuments({
-        merchant: merchantId,
+        ...baseFilter,
         appointmentDate: { $gte: startOfDay, $lte: endOfDay },
         queueStatus: QueueStatus.WAITING,
-        isActive: true,
       }),
       this.appointmentModel.countDocuments({
-        merchant: merchantId,
+        ...baseFilter,
         appointmentDate: { $gte: startOfDay, $lte: endOfDay },
         queueStatus: QueueStatus.IN_CONSULTATION,
-        isActive: true,
       }),
     ]);
 
     // 3. Inpatient & Bed Occupancy
     const activeAdmissions = await this.admissionModel.countDocuments({
-      merchant: merchantId,
+      ...baseFilter,
       status: {
         $in: [AdmissionStatus.ADMITTED, AdmissionStatus.ON_TREATMENT],
       },
-      isActive: true,
     });
 
-    const totalBeds = await this.bedModel.countDocuments({
-      merchant: merchantId,
-      isActive: true,
-    });
+    const totalBeds = await this.bedModel.countDocuments(baseFilter);
     const occupiedBeds = await this.bedModel.countDocuments({
-      merchant: merchantId,
+      ...baseFilter,
       status: BedStatus.OCCUPIED,
-      isActive: true,
     });
     const availableBeds = await this.bedModel.countDocuments({
-      merchant: merchantId,
+      ...baseFilter,
       status: BedStatus.AVAILABLE,
-      isActive: true,
     });
     const occupancyRate =
       totalBeds > 0 ? Math.round((occupiedBeds / totalBeds) * 100) : 0;

@@ -72,14 +72,20 @@ export const SuperAdminDashboard: React.FC = () => {
   const isSuperAdmin = currentRole === RolesEnum.SUPER_ADMIN
 
   // Merchant state
-  const { data: merchants = [], isLoading: isLoadingMerchants } =
+  const { data: merchantsData = [], isLoading: isLoadingMerchants } =
     useGetAggregatedMerchantsQuery()
+  const merchants = Array.isArray(merchantsData)
+    ? merchantsData
+    : (merchantsData as any)?.data || []
   const [updateMerchantStatus] = useUpdateMerchantStatusMutation()
   const [merchantSearch, setMerchantSearch] = useState("")
 
   // Subscription state
-  const { data: plans = [], isLoading: isLoadingPlans } =
+  const { data: plansData = [], isLoading: isLoadingPlans } =
     useGetAllSubscriptionPlansQuery()
+  const plans = Array.isArray(plansData)
+    ? plansData
+    : (plansData as any)?.data || []
   const [createPlan, { isLoading: isCreatingPlan }] =
     useCreateSubscriptionPlanMutation()
   const [updatePlan, { isLoading: isUpdatingPlan }] =
@@ -102,8 +108,11 @@ export const SuperAdminDashboard: React.FC = () => {
   })
 
   // Platform Admins state (Super Admin only)
-  const { data: platformAdmins = [], isLoading: isLoadingAdmins } =
+  const { data: platformAdminsData = [], isLoading: isLoadingAdmins } =
     useGetPlatformAdminsQuery(undefined, { skip: !isSuperAdmin })
+  const platformAdmins = Array.isArray(platformAdminsData)
+    ? platformAdminsData
+    : (platformAdminsData as any)?.data || []
   const [createAdmin, { isLoading: isCreatingAdmin }] =
     useCreatePlatformAdminMutation()
   const [updateAdminStatus] = useUpdateAdminStatusMutation()
@@ -208,7 +217,7 @@ export const SuperAdminDashboard: React.FC = () => {
     }
   }
 
-  const filteredMerchants = merchants.filter((m: any) => {
+  const filteredMerchants = (Array.isArray(merchants) ? merchants : []).filter((m: any) => {
     if (!merchantSearch) return true
     const q = merchantSearch.toLowerCase()
     return (
@@ -367,15 +376,15 @@ export const SuperAdminDashboard: React.FC = () => {
                           m.status === "ACTIVE"
                             ? "bg-emerald-100 text-emerald-800 border-emerald-200"
                             : m.status === "BANNED"
-                            ? "bg-red-100 text-red-800 border-red-200"
-                            : "bg-amber-100 text-amber-800 border-amber-200"
+                              ? "bg-red-100 text-red-800 border-red-200"
+                              : "bg-amber-100 text-amber-800 border-amber-200"
 
                         const subStatusColor =
                           m.subscriptionStatus === "ACTIVE"
                             ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/20"
                             : m.subscriptionStatus === "DEMO"
-                            ? "bg-blue-500/10 text-blue-600 border-blue-500/20"
-                            : "bg-red-500/10 text-red-600 border-red-500/20"
+                              ? "bg-blue-500/10 text-blue-600 border-blue-500/20"
+                              : "bg-red-500/10 text-red-600 border-red-500/20"
 
                         return (
                           <tr key={m._id} className="hover:bg-muted/40 transition-colors">

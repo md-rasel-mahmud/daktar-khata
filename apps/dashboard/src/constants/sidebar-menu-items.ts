@@ -28,6 +28,15 @@ export const sidebarMenuItems = [
     roles: [RolesEnum.MERCHANT],
   },
   {
+    path: "/merchant/patients",
+    icon: Users,
+    label: "Patients",
+    roles: [
+      RolesEnum.MERCHANT,
+      RolesEnum.STAFF,
+    ],
+  },
+  {
     path: "/merchant/subscription",
     icon: CreditCard,
     label: "Subscription",

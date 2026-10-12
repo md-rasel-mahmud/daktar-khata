@@ -4,14 +4,17 @@ export const subscriptionApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getPublicSubscriptionPlans: builder.query<any[], void>({
       query: () => "/subscription/plans",
+      transformResponse: (response: any) => response?.data || response || [],
       providesTags: ["Subscriptions"],
     }),
     getAllSubscriptionPlans: builder.query<any[], void>({
       query: () => "/subscription",
+      transformResponse: (response: any) => response?.data || response || [],
       providesTags: ["Subscriptions"],
     }),
     getSubscriptionById: builder.query<any, string>({
       query: (id) => `/subscription/${id}`,
+      transformResponse: (response: any) => response?.data || response,
       providesTags: ["Subscriptions"],
     }),
     createSubscriptionPlan: builder.mutation<any, any>({

@@ -111,9 +111,15 @@ export class PatientService {
     };
   }
 
-  async findAll(merchantId?: Types.ObjectId): Promise<Patient[]> {
-    const filter = merchantId ? { merchant: merchantId } : {};
-    return this.patientModel.find(filter).populate("user", "-password").exec();
+  async findAll(merchantId?: Types.ObjectId, clinicId?: Types.ObjectId): Promise<Patient[]> {
+    const filter: any = {};
+    if (merchantId) filter.merchant = new Types.ObjectId(merchantId);
+    if (clinicId && Types.ObjectId.isValid(clinicId)) filter.clinic = new Types.ObjectId(clinicId);
+    return this.patientModel
+      .find(filter)
+      .populate("user", "-password")
+      .populate("clinic", "name address")
+      .exec();
   }
 
   async findDoctorPatients(

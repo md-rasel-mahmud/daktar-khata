@@ -68,6 +68,10 @@ export class AppointmentController {
       return this.appointmentService.listForPatient(user._id);
     }
 
+    if (user.role === RolesEnum.MERCHANT) {
+      return this.appointmentService.listForMerchant(user.merchant, user.clinic);
+    }
+
     return this.appointmentService.listAll();
   }
 

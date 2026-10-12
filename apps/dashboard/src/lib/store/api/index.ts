@@ -36,6 +36,11 @@ const baseQuery = fetchBaseQuery({
       if (storedTenant && !headers.has("x-tenant-domain")) {
         headers.set("x-tenant-domain", storedTenant)
       }
+
+      const storedClinic = localStorage.getItem("daktar_khata_selected_clinic_id")
+      if (storedClinic && !headers.has("x-clinic-id")) {
+        headers.set("x-clinic-id", storedClinic)
+      }
     }
 
     return headers

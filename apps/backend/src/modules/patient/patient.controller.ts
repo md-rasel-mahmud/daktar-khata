@@ -48,7 +48,8 @@ export class PatientController {
     }
 
     return this.patientService.findAll(
-      authUser.role === RolesEnum.MERCHANT ? authUser.merchant : undefined
+      authUser.role === RolesEnum.MERCHANT ? authUser.merchant : undefined,
+      authUser.role === RolesEnum.MERCHANT ? authUser.clinic : undefined
     );
   }
 

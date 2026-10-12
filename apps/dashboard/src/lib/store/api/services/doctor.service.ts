@@ -16,7 +16,7 @@ export const doctorApi = api.injectEndpoints({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["PendingDoctors", "DoctorOptions"],
+      invalidatesTags: ["PendingDoctors", "DoctorOptions", "Profiles"],
       async onQueryStarted(
         { body, handleDialogClose },
         { dispatch, queryFulfilled },
@@ -68,6 +68,15 @@ export const doctorApi = api.injectEndpoints({
       }),
       invalidatesTags: ["PendingDoctors", "DoctorOptions", "Profiles"],
     }),
+
+    updateDoctor: builder.mutation({
+      query: ({ id, body }) => ({
+        url: `/doctors/${id}`,
+        method: "PATCH",
+        body,
+      }),
+      invalidatesTags: ["Profiles", "DoctorOptions"],
+    }),
   }),
 });
 
@@ -75,6 +84,7 @@ export const doctorApi = api.injectEndpoints({
 export const {
   useGetCurrentUserQuery,
   useCreateDoctorByMerchantMutation,
+  useUpdateDoctorMutation,
   useGetDoctorOptionsQuery,
   useGetPendingDoctorsQuery,
   useApproveDoctorMutation,

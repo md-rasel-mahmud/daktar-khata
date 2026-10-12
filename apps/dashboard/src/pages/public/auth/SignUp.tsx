@@ -243,11 +243,10 @@ export const SignUp: React.FC = () => {
               setSignupType("PATIENT")
               setSelectedClinicId("")
             }}
-            className={`flex flex-col items-center gap-2 rounded-xl border p-4 text-center transition-all ${
-              signupType === "PATIENT"
+            className={`flex flex-col items-center gap-2 rounded-xl border p-4 text-center transition-all ${signupType === "PATIENT"
                 ? "border-primary bg-primary/10 shadow-sm"
                 : "border-border bg-card hover:border-primary/50"
-            }`}
+              }`}
           >
             <div className={`rounded-full p-2.5 ${signupType === "PATIENT" ? "bg-primary text-white" : "bg-muted text-muted-foreground"}`}>
               <User className="h-6 w-6" />
@@ -266,11 +265,10 @@ export const SignUp: React.FC = () => {
               setSignupType("MERCHANT")
               setSelectedClinicId("")
             }}
-            className={`flex flex-col items-center gap-2 rounded-xl border p-4 text-center transition-all ${
-              signupType === "MERCHANT"
+            className={`flex flex-col items-center gap-2 rounded-xl border p-4 text-center transition-all ${signupType === "MERCHANT"
                 ? "border-primary bg-primary/10 shadow-sm"
                 : "border-border bg-card hover:border-primary/50"
-            }`}
+              }`}
           >
             <div className={`rounded-full p-2.5 ${signupType === "MERCHANT" ? "bg-primary text-white" : "bg-muted text-muted-foreground"}`}>
               <Building2 className="h-6 w-6" />
@@ -294,11 +292,10 @@ export const SignUp: React.FC = () => {
               setSignupType("DOCTOR")
               setSelectedClinicId("")
             }}
-            className={`flex flex-col items-center gap-2 rounded-xl border p-4 text-center transition-all ${
-              signupType === "DOCTOR"
+            className={`flex flex-col items-center gap-2 rounded-xl border p-4 text-center transition-all ${signupType === "DOCTOR"
                 ? "border-primary bg-primary/10 shadow-sm"
                 : "border-border bg-card hover:border-primary/50"
-            }`}
+              }`}
           >
             <div className={`rounded-full p-2.5 ${signupType === "DOCTOR" ? "bg-primary text-white" : "bg-muted text-muted-foreground"}`}>
               <Stethoscope className="h-6 w-6" />
@@ -451,7 +448,7 @@ export const SignUp: React.FC = () => {
                           className="rounded-r-none"
                           {...register("subdomain")}
                         />
-                        <span className="flex h-9 items-center rounded-r-md border border-l-0 bg-muted px-3 text-xs text-muted-foreground">
+                        <span className="flex h-8 items-center rounded-r-md border border-l-0 bg-muted px-3 text-xs text-muted-foreground">
                           .localhost
                         </span>
                       </div>
@@ -627,11 +624,10 @@ export const SignUp: React.FC = () => {
                           <div
                             key={clinic._id}
                             onClick={() => setSelectedClinicId(clinic._id)}
-                            className={`flex cursor-pointer items-start gap-3 rounded-lg border p-3 text-left transition-all ${
-                              isSelected
+                            className={`flex cursor-pointer items-start gap-3 rounded-lg border p-3 text-left transition-all ${isSelected
                                 ? "border-primary bg-primary/10 shadow-sm"
                                 : "border-border hover:border-primary/50"
-                            }`}
+                              }`}
                           >
                             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-muted text-primary">
                               {clinic.logo ? (

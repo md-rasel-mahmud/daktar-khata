@@ -22,7 +22,8 @@ import { useSelector } from "react-redux"
 import { type RootState } from "@/lib/store/store"
 import {
   useGetAllProfilesQuery,
-  useUpdateProfileMutation,
+  useUpdateSelfProfileMutation,
+
 } from "@/lib/store/api/services/profile.service"
 import { RolesEnum } from "@/enums/role.enum"
 import { type Doctor } from "@/types/doctor.type"
@@ -34,6 +35,7 @@ import { type FormInputConfig } from "@/components/common/form/FormInput"
 import { useTranslation } from "react-i18next"
 import {
   useCreateDoctorByMerchantMutation,
+  useUpdateDoctorMutation,
   useGetPendingDoctorsQuery,
   useApproveDoctorMutation,
   useRejectDoctorMutation,
@@ -78,9 +80,8 @@ const ManageDoctors: React.FC = () => {
   // RTK HOOKS
   const { data } = useGetAllProfilesQuery<{ data: Doctor[] }>(RolesEnum.DOCTOR)
 
-  const [updateDoctorProfile] = useUpdateProfileMutation()
-
   const [createDoctor] = useCreateDoctorByMerchantMutation()
+  const [updateDoctor] = useUpdateDoctorMutation()
 
   const authUser = useSelector((state: RootState) => state.auth.user)
   const isMerchant = authUser?.user?.role === RolesEnum.MERCHANT
@@ -98,7 +99,7 @@ const ManageDoctors: React.FC = () => {
     } catch (err: any) {
       toast.error(
         err?.data?.message ||
-          `Failed to approve doctor ${name}. Check subscription doctor limits.`
+        `Failed to approve doctor ${name}. Check subscription doctor limits.`
       )
     }
   }
@@ -114,17 +115,25 @@ const ManageDoctors: React.FC = () => {
 
   // validation schema should be following above Doctor type
   const validationSchema = z.object({
+    _id: z.string().optional(),
     name: z.string().min(2, "Name must be at least 2 characters"),
-    email: z.email("Invalid email address").optional(),
+    email: z
+      .string()
+      .email("Invalid email address")
+      .optional()
+      .or(z.literal("")),
     mobile: z
       .string()
       .regex(
         BD_MOBILE_NO_REGEX, // bangladeshi mobile number regex
         "Mobile number must be a valid Bangladeshi number"
       )
-      .optional(),
+      .optional()
+      .or(z.literal("")),
+    password: z.string().optional(),
     address: z.string().optional(),
     note: z.string().optional(),
+    gender: z.string().optional(),
     specialization: z
       .array(z.string().min(2, "Specialization must be at least 2 characters"))
       .or(
@@ -135,43 +144,50 @@ const ManageDoctors: React.FC = () => {
               .min(2, "Specialization must be at least 2 characters"),
           })
         )
-      ),
+      )
+      .optional(),
     designation: z.string().min(2, "Designation must be at least 2 characters"),
-    experienceInYears: z.number().min(0, "Experience cannot be negative"),
-    hospitals: z.array(
-      z.object({
-        hospitalName: z
-          .string()
-          .min(2, "Hospital name must be at least 2 characters"),
-        chamberAddress: z
-          .string()
-          .min(2, "Chamber address must be at least 2 characters"),
-        location: z.string().min(2, "Location must be at least 2 characters"),
-      })
-    ),
-    degree: z.array(
-      z.object({
-        name: z.string().min(2, "Degree name must be at least 2 characters"),
-        university: z
-          .string()
-          .min(2, "University must be at least 2 characters"),
-        year: z
-          .number()
-          .min(1900, "Year must be a valid year")
-          .max(new Date().getFullYear(), "Year cannot be in the future"),
-      })
-    ),
-    languages: z.array(
-      z.string().min(2, "Language must be at least 2 characters")
-    ),
-    fee: z.number().min(0, "Fee cannot be negative"),
-    schedules: z.array(
-      z.object({
-        days: z.array(z.string().min(3, "Day must be at least 3 characters")),
-        startTime: z.string().min(5, "Start time must be in HH:mm format"),
-        endTime: z.string().min(5, "End time must be in HH:mm format"),
-      })
-    ),
+    experienceInYears: z.coerce.number().min(0, "Experience cannot be negative").default(0),
+    fee: z.coerce.number().min(0, "Fee cannot be negative").default(500),
+    hospitals: z
+      .array(
+        z.object({
+          hospitalName: z
+            .string()
+            .min(2, "Hospital name must be at least 2 characters"),
+          chamberAddress: z
+            .string()
+            .min(2, "Chamber address must be at least 2 characters"),
+          location: z.string().min(2, "Location must be at least 2 characters"),
+        })
+      )
+      .optional(),
+    degree: z
+      .array(
+        z.object({
+          name: z.string().min(2, "Degree name must be at least 2 characters"),
+          university: z
+            .string()
+            .min(2, "University must be at least 2 characters"),
+          year: z
+            .number()
+            .min(1900, "Year must be a valid year")
+            .max(new Date().getFullYear(), "Year cannot be in the future"),
+        })
+      )
+      .optional(),
+    languages: z
+      .array(z.string().min(2, "Language must be at least 2 characters"))
+      .optional(),
+    schedules: z
+      .array(
+        z.object({
+          days: z.array(z.string().min(3, "Day must be at least 3 characters")),
+          startTime: z.string().min(5, "Start time must be in HH:mm format"),
+          endTime: z.string().min(5, "End time must be in HH:mm format"),
+        })
+      )
+      .optional(),
   })
 
   type FormValues = z.infer<typeof validationSchema>
@@ -180,15 +196,17 @@ const ManageDoctors: React.FC = () => {
     name: "",
     email: "",
     mobile: "",
+    password: "",
     address: "",
     note: "",
     specialization: [],
-    designation: "",
-    experienceInYears: 0,
+    designation: "Consultant",
+    experienceInYears: 1,
+    gender: Gender.MALE,
     hospitals: [],
-    degree: [],
+    degree: [{ name: "MBBS", university: "Medical College", year: 2020 }],
     languages: [],
-    fee: 0,
+    fee: 500,
     schedules: [],
   }
 
@@ -203,8 +221,6 @@ const ManageDoctors: React.FC = () => {
     resolver: zodResolver(validationSchema),
     mode: "all",
   })
-
-  console.log("errors :>> ", errors)
 
   const {
     append: scheduleAppend,
@@ -246,11 +262,6 @@ const ManageDoctors: React.FC = () => {
 
   const handleDeleteDoctor = useCallback(
     (doctorId: string) => {
-      // toast({
-      //   title: "Doctor Removed",
-      //   description: `Doctor ${doctorId} has been removed from the system.`,
-      // })
-
       toast.success(`Doctor ${doctorId} has been removed from the system.`)
     },
     [toast]
@@ -259,18 +270,43 @@ const ManageDoctors: React.FC = () => {
   const handleViewSchedule = useCallback(
     (doctor: typeof currentDoctorSchedule) => {
       setCurrentDoctorSchedule(doctor)
-
-      console.log("doctor", doctor)
       setIsViewScheduleDialogOpen(true)
     },
     []
   )
 
+  const handleOpenAddDoctor = useCallback(() => {
+    reset(DOCTOR_DEFAULT_VALUES)
+    setIsEditForm(false)
+    setIsAddOrEditDoctorDialogOpen(true)
+  }, [reset])
+
   const handleEditDoctor = useCallback(
-    (doctor: Doctor) => {
-      reset(doctor)
-      setIsAddOrEditDoctorDialogOpen(true)
+    (doctor: any) => {
+      // Normalize specialization for form (expecting array of { value: string })
+      const rawSpecs = Array.isArray(doctor.specialization)
+        ? doctor.specialization
+        : doctor.specialization
+        ? [doctor.specialization]
+        : []
+
+      const formattedSpecs = rawSpecs.map((spec: any) =>
+        typeof spec === "string" ? { value: spec } : spec
+      )
+
+      reset({
+        ...DOCTOR_DEFAULT_VALUES,
+        ...doctor,
+        _id: doctor._id,
+        mobile: doctor.mobile || doctor.phone || "",
+        password: "",
+        specialization: formattedSpecs,
+        fee: doctor.fee ?? 500,
+        experienceInYears: doctor.experienceInYears ?? 0,
+        schedules: doctor.schedules || [],
+      })
       setIsEditForm(true)
+      setIsAddOrEditDoctorDialogOpen(true)
     },
     [reset]
   )
@@ -306,7 +342,7 @@ const ManageDoctors: React.FC = () => {
         cell: (doctor) => (
           <div>
             <p>{doctor.email}</p>
-            <p className="text-sm text-muted-foreground">{doctor.mobile}</p>
+            <p className="text-sm text-muted-foreground">{doctor.mobile || (doctor as any).phone}</p>
           </div>
         ),
       },
@@ -358,26 +394,72 @@ const ManageDoctors: React.FC = () => {
     [handleViewSchedule, handleEditDoctor, handleDeleteDoctor]
   )
 
-  const handleAddOrEditDoctorSubmit = (data: FieldValues) => {
-    // In a real app, we would send data to an API
+  const handleAddOrEditDoctorSubmit = async (data: FieldValues) => {
+    try {
+      // Format specializations to array of strings
+      const rawSpecs = data.specialization || []
+      const stringSpecs: string[] = rawSpecs
+        .map((item: any) =>
+          typeof item === "string" ? item.trim() : item?.value?.trim()
+        )
+        .filter((s: string) => !!s)
 
-    if (isEditForm) {
-      const body = {
-        ...data,
+      const finalSpecialization =
+        stringSpecs.length > 0 ? stringSpecs : ["General Physician"]
+
+      const doctorData: any = {
+        name: data.name,
+        email: data.email || undefined,
+        phone: data.mobile || data.phone,
+        mobile: data.mobile || data.phone,
+        gender: data.gender || Gender.MALE,
+        address: data.address || "",
+        note: data.note || "",
+        designation: data.designation || "Doctor",
+        experienceInYears: Number(data.experienceInYears) || 0,
+        fee: Number(data.fee) || 500,
+        specialization: finalSpecialization,
+        schedules: data.schedules || [],
+        degree:
+          data.degree && data.degree.length > 0
+            ? data.degree
+            : [{ name: "MBBS", university: "Medical College", year: 2020 }],
       }
 
-      delete body._id // Remove _id if present, as it should not be sent in the update
-      delete body.password // Password should not be updated unless explicitly set
+      if (isEditForm) {
+        const docId = data._id
+        if (!docId) {
+          toast.error("Doctor ID is missing for update")
+          return
+        }
 
-      updateDoctorProfile({
-        body: data,
-        handleDialogClose: setIsAddOrEditDoctorDialogOpen,
-      })
-    } else {
-      createDoctor({
-        body: { ...data, role: RolesEnum.DOCTOR },
-        handleDialogClose: setIsAddOrEditDoctorDialogOpen,
-      })
+        await updateDoctor({
+          id: docId,
+          body: doctorData,
+        }).unwrap()
+
+        toast.success("Doctor updated successfully!")
+        setIsAddOrEditDoctorDialogOpen(false)
+        reset(DOCTOR_DEFAULT_VALUES)
+      } else {
+        doctorData.password = data.password || "Doctor@1234"
+        await createDoctor({
+          body: doctorData,
+        }).unwrap()
+
+        toast.success("Doctor created successfully!")
+        setIsAddOrEditDoctorDialogOpen(false)
+        reset(DOCTOR_DEFAULT_VALUES)
+      }
+    } catch (err: any) {
+      const msg =
+        err?.data?.message ||
+        (Array.isArray(err?.data?.data)
+          ? err?.data?.data?.map((d: any) => d.message).join(", ")
+          : null) ||
+        err?.message ||
+        "Failed to save doctor"
+      toast.error(msg)
     }
   }
 
@@ -400,8 +482,51 @@ const ManageDoctors: React.FC = () => {
       name: "mobile",
       label: t("phone number"),
       type: "text",
-      placeholder: "Enter phone number",
+      placeholder: "e.g. 017xxxxxxxx",
       required: true,
+    },
+    ...(!isEditForm
+      ? [
+          {
+            name: "password",
+            label: t("login password"),
+            type: "password" as const,
+            placeholder: "Enter password for doctor login (min 6 chars)",
+            required: false,
+          },
+        ]
+      : []),
+    {
+      name: "fee",
+      label: t("consultation fee (BDT)"),
+      type: "number",
+      placeholder: "500",
+      required: true,
+    },
+    {
+      name: "designation",
+      label: t("designation"),
+      type: "text",
+      placeholder: "e.g. Consultant Cardiologist",
+      required: true,
+    },
+    {
+      name: "experienceInYears",
+      label: t("years of experience"),
+      type: "number",
+      placeholder: "e.g. 5",
+      required: true,
+    },
+    {
+      name: "gender",
+      label: t("gender"),
+      type: "select",
+      placeholder: "Select gender",
+      required: true,
+      options: Object.values(Gender).map((gender) => ({
+        value: gender,
+        label: gender,
+      })),
     },
     {
       name: "address",
@@ -419,31 +544,6 @@ const ManageDoctors: React.FC = () => {
       required: false,
       className: "col-span-2 lg:col-span-3",
     },
-    {
-      name: "designation",
-      label: t("designation"),
-      type: "text",
-      placeholder: "Enter designation",
-      required: true,
-    },
-    {
-      name: "experienceInYears",
-      label: t("years of experience"),
-      type: "number",
-      placeholder: "Enter years of experience",
-      required: true,
-    },
-    {
-      name: "gender",
-      label: t("gender"),
-      type: "select",
-      placeholder: "Select gender",
-      required: true,
-      options: Object.values(Gender).map((gender) => ({
-        value: gender,
-        label: gender,
-      })),
-    },
   ]
 
   return (
@@ -458,7 +558,7 @@ const ManageDoctors: React.FC = () => {
               View and manage all doctors in the clinic.
             </p>
           </div>
-          <Button onClick={() => setIsAddOrEditDoctorDialogOpen(true)}>
+          <Button onClick={handleOpenAddDoctor}>
             <Plus className="mr-2 h-4 w-4" />
             Add Doctor
           </Button>

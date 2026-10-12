@@ -28,14 +28,60 @@ import {
   CommandItem,
 } from "@repo/ui/command"
 import { Check, ChevronsUpDown, PlusCircle, Trash2 } from "lucide-react"
-import type {
-  FieldArrayWithId,
-  SubmitHandler,
-  UseFieldArrayAppend,
-  UseFieldArrayRemove,
-  UseFormHandleSubmit,
-  UseFormRegister,
+import {
+  useWatch,
+  type FieldArrayWithId,
+  type SubmitHandler,
+  type UseFieldArrayAppend,
+  type UseFieldArrayRemove,
+  type UseFormHandleSubmit,
+  type UseFormRegister,
 } from "react-hook-form"
+
+function formatTime12h(timeStr?: string): string {
+  if (!timeStr) return ""
+  const [h, m] = timeStr.split(":").map(Number)
+  if (isNaN(h) || isNaN(m)) return timeStr
+  const period = h >= 12 ? "PM" : "AM"
+  const displayHour = h % 12 || 12
+  return `${String(displayHour).padStart(2, "0")}:${String(m).padStart(2, "0")} ${period}`
+}
+
+const ScheduleTimePreview: React.FC<{
+  control: Control<FieldValues>
+  index: number
+}> = ({ control, index }) => {
+  const startTime = useWatch({ control, name: `schedules.${index}.startTime` })
+  const endTime = useWatch({ control, name: `schedules.${index}.endTime` })
+
+  if (!startTime || !endTime) return null
+
+  const [sh, sm] = (startTime || "").split(":").map(Number)
+  const [eh, em] = (endTime || "").split(":").map(Number)
+  if (isNaN(sh) || isNaN(sm) || isNaN(eh) || isNaN(em)) return null
+
+  const isOvernight = sh * 60 + sm > eh * 60 + em
+  const isZero = sh * 60 + sm === eh * 60 + em
+
+  return (
+    <div className="text-xs text-muted-foreground pt-1">
+      {isZero ? (
+        <span className="text-destructive font-medium">Start and end time cannot be identical</span>
+      ) : (
+        <span>
+          Time: <strong className="text-foreground">{formatTime12h(startTime)}</strong> to{" "}
+          <strong className="text-foreground">{formatTime12h(endTime)}</strong>
+          {isOvernight && (
+            <span className="ml-1.5 font-medium text-amber-600 dark:text-amber-400">
+              (Overnight / spans next day)
+            </span>
+          )}
+        </span>
+      )}
+    </div>
+  )
+}
+
 const DAYS = [
   "Monday",
   "Tuesday",
@@ -124,93 +170,96 @@ const DoctorAddEditDialog: React.FC<DoctorAddEditDialogProps> = ({
               {scheduleFields.map((scheduleField, index) => (
                 <div
                   key={scheduleField.id}
-                  className="flex items-end justify-between space-x-2"
+                  className="rounded-md border p-2 space-y-1 bg-muted/20"
                 >
-                  <div className="flex-1 space-y-2">
-                    <Label>Day</Label>
+                  <div className="flex items-end justify-between space-x-2">
+                    <div className="flex-1 space-y-2">
+                      <Label>Day</Label>
 
-                    <Controller
-                      control={control}
-                      name={`schedules.${index}.days`}
-                      render={({ field }) => {
-                        const value: string[] = field.value || []
+                      <Controller
+                        control={control}
+                        name={`schedules.${index}.days`}
+                        render={({ field }) => {
+                          const value: string[] = field.value || []
 
-                        const toggleDay = (day: string) => {
-                          if (value.includes(day)) {
-                            field.onChange(value.filter((d) => d !== day))
-                          } else {
-                            field.onChange([...value, day])
+                          const toggleDay = (day: string) => {
+                            if (value.includes(day)) {
+                              field.onChange(value.filter((d) => d !== day))
+                            } else {
+                              field.onChange([...value, day])
+                            }
                           }
-                        }
 
-                        return (
-                          <Popover>
-                            <PopoverTrigger
-                              className="inline-flex h-8 w-full items-center justify-between rounded-lg border border-input bg-background px-2.5 text-sm"
-                              aria-label="Select days"
-                            >
-                              {value.length ? value.join(", ") : "Select days"}
-                              <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
-                            </PopoverTrigger>
+                          return (
+                            <Popover>
+                              <PopoverTrigger
+                                className="inline-flex h-8 w-full items-center justify-between rounded-lg border border-input bg-background px-2.5 text-sm"
+                                aria-label="Select days"
+                              >
+                                {value.length ? value.join(", ") : "Select days"}
+                                <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
+                              </PopoverTrigger>
 
-                            <PopoverContent className="w-full p-0">
-                              <Command>
-                                <CommandInput placeholder="Search day..." />
+                              <PopoverContent className="w-full p-0">
+                                <Command>
+                                  <CommandInput placeholder="Search day..." />
 
-                                <CommandGroup>
-                                  {DAYS.map((day) => (
-                                    <CommandItem
-                                      key={day}
-                                      onSelect={() => toggleDay(day)}
-                                    >
-                                      {day}
+                                  <CommandGroup>
+                                    {DAYS.map((day) => (
+                                      <CommandItem
+                                        key={day}
+                                        onSelect={() => toggleDay(day)}
+                                      >
+                                        {day}
 
-                                      <Check
-                                        className={`ml-auto h-4 w-4 ${
-                                          value.includes(day)
-                                            ? "opacity-100"
-                                            : "opacity-0"
-                                        }`}
-                                      />
-                                    </CommandItem>
-                                  ))}
-                                </CommandGroup>
-                              </Command>
-                            </PopoverContent>
-                          </Popover>
-                        )
-                      }}
-                    />
+                                        <Check
+                                          className={`ml-auto h-4 w-4 ${
+                                            value.includes(day)
+                                              ? "opacity-100"
+                                              : "opacity-0"
+                                          }`}
+                                        />
+                                      </CommandItem>
+                                    ))}
+                                  </CommandGroup>
+                                </Command>
+                              </PopoverContent>
+                            </Popover>
+                          )
+                        }}
+                      />
+                    </div>
+
+                    <div className="flex-1 space-y-2">
+                      <Label htmlFor={`schedules.${index}.startTime`}>
+                        Start Time
+                      </Label>
+                      <Input
+                        id={`schedules.${index}.startTime`}
+                        type="time"
+                        {...register(`schedules.${index}.startTime`)}
+                      />
+                    </div>
+                    <div className="flex-1 space-y-2">
+                      <Label htmlFor={`schedules.${index}.endTime`}>
+                        End Time
+                      </Label>
+                      <Input
+                        id={`schedules.${index}.endTime`}
+                        type="time"
+                        {...register(`schedules.${index}.endTime`)}
+                      />
+                    </div>
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="icon"
+                      onClick={() => scheduleRemove(index)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
                   </div>
-
-                  <div className="flex-1 space-y-2">
-                    <Label htmlFor={`schedules.${index}.startTime`}>
-                      Start Time
-                    </Label>
-                    <Input
-                      id={`schedules.${index}.startTime`}
-                      type="time"
-                      {...register(`schedules.${index}.startTime`)}
-                    />
-                  </div>
-                  <div className="flex-1 space-y-2">
-                    <Label htmlFor={`schedules.${index}.endTime`}>
-                      End Time
-                    </Label>
-                    <Input
-                      id={`schedules.${index}.endTime`}
-                      type="time"
-                      {...register(`schedules.${index}.endTime`)}
-                    />
-                  </div>
-                  <Button
-                    type="button"
-                    variant="destructive"
-                    size="icon"
-                    onClick={() => scheduleRemove(index)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
+                  <ScheduleTimePreview control={control} index={index} />
                 </div>
               ))}
 

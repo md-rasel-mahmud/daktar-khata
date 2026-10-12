@@ -20,9 +20,10 @@ import {
 import { APP_CONFIG } from "@/config/app.config"
 import { useLoginMutation } from "@/lib/store/api/services/auth.service"
 
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 import { RolesEnum } from "@/enums/role.enum"
 import { type RootState } from "@/lib/store/store"
+import { resetUser } from "@/lib/store/slices/auth.slice"
 
 type LoginFormValues = {
   phone: string
@@ -35,8 +36,13 @@ const LOGIN_DEFAULT_VALUES: LoginFormValues = {
 }
 
 const Login: React.FC = () => {
+  const dispatch = useDispatch()
   const [loginMutation, { isLoading }] = useLoginMutation()
   const currentUser = useSelector((state: RootState) => state.auth.user)
+  const reduxToken = useSelector((state: RootState) => state.auth.token)
+  const token =
+    reduxToken ||
+    (typeof window !== "undefined" ? localStorage.getItem("token") : null)
 
   const loginValidationSchema = z.object({
     phone: z.string().min(1, "Phone number is required"),
@@ -76,20 +82,28 @@ const Login: React.FC = () => {
   }
 
   useEffect(() => {
-    if (currentUser) {
-      if (currentUser?.user.role === RolesEnum.SUPER_ADMIN) {
-        navigate("/admin")
-      } else if (currentUser?.user.role === RolesEnum.DOCTOR) {
-        navigate("/doctor")
-      } else if (currentUser?.user.role === RolesEnum.MERCHANT) {
-        navigate("/merchant")
-      } else if (currentUser?.user.role === RolesEnum.PATIENT) {
-        navigate("/patient")
-      } else if (currentUser?.user.role === RolesEnum.STAFF) {
-        navigate("/staff")
+    // If no token exists, ensure any residual user state is cleared to avoid ghost redirect loops
+    if (!token && currentUser) {
+      dispatch(resetUser())
+      return
+    }
+
+    // Only redirect if a valid session exists with both token and role
+    if (token && currentUser?.user?.role) {
+      const role = currentUser.user.role
+      if (role === RolesEnum.SUPER_ADMIN || role === RolesEnum.ADMIN) {
+        navigate("/admin", { replace: true })
+      } else if (role === RolesEnum.DOCTOR) {
+        navigate("/doctor", { replace: true })
+      } else if (role === RolesEnum.MERCHANT) {
+        navigate("/merchant", { replace: true })
+      } else if (role === RolesEnum.PATIENT) {
+        navigate("/patient", { replace: true })
+      } else if (role === RolesEnum.STAFF) {
+        navigate("/staff", { replace: true })
       }
     }
-  }, [currentUser])
+  }, [currentUser, token, navigate, dispatch])
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-muted/30 px-4">

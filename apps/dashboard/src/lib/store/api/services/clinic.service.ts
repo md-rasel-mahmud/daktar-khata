@@ -5,10 +5,12 @@ export const clinicApi = api.injectEndpoints({
     getPublicClinics: builder.query<any[], string | void>({
       query: (merchantId) =>
         merchantId ? `/clinic/public-list?merchantId=${merchantId}` : "/clinic/public-list",
+      transformResponse: (response: any) => response?.data || response || [],
       providesTags: ["Clinics"],
     }),
     getMyClinics: builder.query<any[], void>({
       query: () => "/clinic",
+      transformResponse: (response: any) => response?.data || response || [],
       providesTags: ["Clinics"],
     }),
     createClinic: builder.mutation<any, any>({
