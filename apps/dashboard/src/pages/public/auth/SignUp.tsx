@@ -120,18 +120,18 @@ export const SignUp: React.FC = () => {
         path: ["clinicName"],
       }
     )
-    .refine(
-      (data) => {
-        if (signupType === "MERCHANT") {
-          return !!data.subdomain && /^[a-z0-9-]+$/.test(data.subdomain)
-        }
-        return true
-      },
-      {
-        message: t("A valid subdomain slug is required (e.g. apollo-clinic)"),
-        path: ["subdomain"],
-      }
-    )
+  // .refine(
+  //   (data) => {
+  //     if (signupType === "MERCHANT") {
+  //       return !!data.subdomain && /^[a-z0-9-]+$/.test(data.subdomain)
+  //     }
+  //     return true
+  //   },
+  //   {
+  //     message: t("A valid subdomain slug is required (e.g. apollo-clinic)"),
+  //     path: ["subdomain"],
+  //   }
+  // )
 
   const {
     register,
@@ -244,8 +244,8 @@ export const SignUp: React.FC = () => {
               setSelectedClinicId("")
             }}
             className={`flex flex-col items-center gap-2 rounded-xl border p-4 text-center transition-all ${signupType === "PATIENT"
-                ? "border-primary bg-primary/10 shadow-sm"
-                : "border-border bg-card hover:border-primary/50"
+              ? "border-primary bg-primary/10 shadow-sm"
+              : "border-border bg-card hover:border-primary/50"
               }`}
           >
             <div className={`rounded-full p-2.5 ${signupType === "PATIENT" ? "bg-primary text-white" : "bg-muted text-muted-foreground"}`}>
@@ -266,8 +266,8 @@ export const SignUp: React.FC = () => {
               setSelectedClinicId("")
             }}
             className={`flex flex-col items-center gap-2 rounded-xl border p-4 text-center transition-all ${signupType === "MERCHANT"
-                ? "border-primary bg-primary/10 shadow-sm"
-                : "border-border bg-card hover:border-primary/50"
+              ? "border-primary bg-primary/10 shadow-sm"
+              : "border-border bg-card hover:border-primary/50"
               }`}
           >
             <div className={`rounded-full p-2.5 ${signupType === "MERCHANT" ? "bg-primary text-white" : "bg-muted text-muted-foreground"}`}>
@@ -293,8 +293,8 @@ export const SignUp: React.FC = () => {
               setSelectedClinicId("")
             }}
             className={`flex flex-col items-center gap-2 rounded-xl border p-4 text-center transition-all ${signupType === "DOCTOR"
-                ? "border-primary bg-primary/10 shadow-sm"
-                : "border-border bg-card hover:border-primary/50"
+              ? "border-primary bg-primary/10 shadow-sm"
+              : "border-border bg-card hover:border-primary/50"
               }`}
           >
             <div className={`rounded-full p-2.5 ${signupType === "DOCTOR" ? "bg-primary text-white" : "bg-muted text-muted-foreground"}`}>
@@ -439,7 +439,7 @@ export const SignUp: React.FC = () => {
                       )}
                     </div>
 
-                    <div className="space-y-1.5">
+                    {/* <div className="space-y-1.5">
                       <Label htmlFor="subdomain">{t("Tenant Subdomain")} *</Label>
                       <div className="flex items-center">
                         <Input
@@ -457,9 +457,9 @@ export const SignUp: React.FC = () => {
                           {errors.subdomain.message as string}
                         </p>
                       )}
-                    </div>
+                    </div> */}
 
-                    <div className="space-y-1.5 sm:col-span-2">
+                    <div className="space-y-1.5">
                       <Label htmlFor="clinicAddress">{t("Clinic Address")} *</Label>
                       <Input
                         id="clinicAddress"
@@ -625,8 +625,8 @@ export const SignUp: React.FC = () => {
                             key={clinic._id}
                             onClick={() => setSelectedClinicId(clinic._id)}
                             className={`flex cursor-pointer items-start gap-3 rounded-lg border p-3 text-left transition-all ${isSelected
-                                ? "border-primary bg-primary/10 shadow-sm"
-                                : "border-border hover:border-primary/50"
+                              ? "border-primary bg-primary/10 shadow-sm"
+                              : "border-border hover:border-primary/50"
                               }`}
                           >
                             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-muted text-primary">

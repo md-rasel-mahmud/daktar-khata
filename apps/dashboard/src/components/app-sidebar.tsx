@@ -71,6 +71,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       }))
   }, [currentRole, hasRequiredPermissions, location.pathname])
 
+  console.log('authUser', authUser)
+
   const sidebarUser = React.useMemo(
     () => ({
       name: authUser?.profile?.name || "User",

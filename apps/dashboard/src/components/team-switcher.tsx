@@ -148,9 +148,11 @@ export function TeamSwitcher({ teams }: TeamSwitcherProps) {
       <SidebarMenu>
         <SidebarMenuItem>
           <SidebarMenuButton size="lg" className="cursor-default">
-            <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground overflow-hidden">
+            <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary/10 text-sidebar-primary-foreground overflow-hidden">
               {fallbackLogo}
             </div>
+
+
             <div className="grid flex-1 text-left text-sm leading-tight min-w-0">
               <span className="truncate font-semibold">{fallbackName}</span>
               <span className="truncate text-xs text-muted-foreground">
@@ -162,7 +164,7 @@ export function TeamSwitcher({ teams }: TeamSwitcherProps) {
       </SidebarMenu>
     )
   }
-
+  console.log('activeClinic', activeClinic)
   const hasMultipleClinics = normalizedClinics.length > 1
 
   return (
@@ -170,7 +172,6 @@ export function TeamSwitcher({ teams }: TeamSwitcherProps) {
       <SidebarMenuItem>
         <DropdownMenu>
           <DropdownMenuTrigger
-            disabled={!hasMultipleClinics}
             render={
               <SidebarMenuButton
                 size="lg"
