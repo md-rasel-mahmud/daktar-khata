@@ -23,7 +23,7 @@ export class I18nInterceptor<T> implements NestInterceptor<T, Response<T>> {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const ctx = context.switchToHttp();
     const response = ctx.getResponse<express.Response>();
-    const i18n = I18nContext.current();
+    const i18n = I18nContext.current(context) || I18nContext.current();
 
     return next.handle().pipe(
       map((data) => {
@@ -34,10 +34,18 @@ export class I18nInterceptor<T> implements NestInterceptor<T, Response<T>> {
             message: data.message,
           };
 
-          if (data.message)
-            returnValue.message = i18n
-              .t(`${i18n.lang}.${data.message}`)
-              .replace(/en\.|bn\./g, ''); //remove en. and bn. if the translated value not found
+          if (data.message) {
+            try {
+              if (i18n && i18n.lang && typeof i18n.t === 'function') {
+                const translated = i18n.t(`${i18n.lang}.${data.message}`);
+                if (typeof translated === 'string') {
+                  returnValue.message = translated.replace(/^(en\.|bn\.)/, '');
+                }
+              }
+            } catch {
+              returnValue.message = data.message;
+            }
+          }
           return returnValue;
         } else {
           return {

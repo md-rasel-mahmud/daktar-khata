@@ -52,7 +52,7 @@ export class UserService {
 
   async create(
     createUserDto: CreateUserDto,
-    session: ClientSession
+    session?: ClientSession
   ): Promise<User> {
     const user = new this.userModel(createUserDto);
     return user.save({ session });

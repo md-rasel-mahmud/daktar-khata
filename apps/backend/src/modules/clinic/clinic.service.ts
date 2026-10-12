@@ -11,7 +11,7 @@ export class ClinicService {
   constructor(
     @InjectModel(collectionsName.clinic)
     private readonly clinicModel: Model<ClinicDocument>
-  ) {}
+  ) { }
 
   async createForMerchant(
     merchantId: Types.ObjectId,
