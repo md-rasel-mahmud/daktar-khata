@@ -16,7 +16,6 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@repo/ui/sidebar"
-import { IconLayoutRows } from "@tabler/icons-react"
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const location = useLocation()
@@ -82,21 +81,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     [authUser]
   )
 
-  const teams = React.useMemo(
-    () => [
-      {
-        name: "Daktar Khata",
-        logo: <IconLayoutRows />,
-        plan: currentRole || "User",
-      },
-    ],
-    [currentRole]
-  )
-
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={teams} />
+        <TeamSwitcher />
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={navMainItems} />

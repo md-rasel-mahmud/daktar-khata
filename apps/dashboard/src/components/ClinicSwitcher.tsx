@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useSelector, useDispatch } from "react-redux"
 import { Building2 } from "lucide-react"
@@ -14,13 +14,21 @@ import { api } from "@/lib/store/api"
 import { RolesEnum } from "@/enums/role.enum"
 import { type RootState } from "@/lib/store/store"
 
+const SELECTED_CLINIC_KEY = "daktar_khata_selected_clinic_id"
+
+interface Clinic {
+  _id: string
+  name: string
+  isMainBranch?: boolean
+}
+
 export const ClinicSwitcher: React.FC = () => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
+
   const authUser = useSelector((state: RootState) => state.auth.user)
   const role = authUser?.user?.role
 
-  // Only merchants and staff need to switch clinics in their multi-branch dashboard
   const isMerchantOrStaff =
     role === RolesEnum.MERCHANT || role === RolesEnum.STAFF
 
@@ -28,53 +36,64 @@ export const ClinicSwitcher: React.FC = () => {
     skip: !isMerchantOrStaff,
   })
 
-  const [selectedClinicId, setSelectedClinicId] = React.useState<string>(() => {
-    if (typeof window !== "undefined") {
-      return localStorage.getItem("daktar_khata_selected_clinic_id") || ""
-    }
-    return ""
+  const [selectedClinicId, setSelectedClinicId] = useState<string>(() => {
+    if (typeof window === "undefined") return ""
+
+    return localStorage.getItem(SELECTED_CLINIC_KEY) || ""
   })
 
-  // Sync initial clinic selection when clinics load
-  useEffect(() => {
-    if (!clinics || clinics.length === 0) return
+  const normalizedClinics = clinics as Clinic[]
 
-    const stored =
+  // Resolve the selected clinic using its ID.
+  const selectedClinic = useMemo(
+    () =>
+      normalizedClinics.find(
+        (clinic) => String(clinic._id) === selectedClinicId
+      ),
+    [normalizedClinics, selectedClinicId]
+  )
+
+  // Restore the saved clinic or select the main branch by default.
+  useEffect(() => {
+    if (!normalizedClinics.length) return
+
+    const storedClinicId =
       typeof window !== "undefined"
-        ? localStorage.getItem("daktar_khata_selected_clinic_id")
+        ? localStorage.getItem(SELECTED_CLINIC_KEY)
         : null
 
-    const clinicExists = stored && clinics.some((c: any) => c._id === stored)
+    const storedClinic = normalizedClinics.find(
+      (clinic) => String(clinic._id) === storedClinicId
+    )
 
-    if (clinicExists) {
-      if (selectedClinicId !== stored) {
-        setSelectedClinicId(stored)
-      }
-    } else {
-      // Pick main branch or first clinic
-      const defaultClinic =
-        clinics.find((c: any) => c.isMainBranch) || clinics[0]
-      if (defaultClinic?._id) {
-        setSelectedClinicId(defaultClinic._id)
-        if (typeof window !== "undefined") {
-          localStorage.setItem(
-            "daktar_khata_selected_clinic_id",
-            defaultClinic._id
-          )
-        }
-      }
+    const defaultClinic =
+      storedClinic ||
+      normalizedClinics.find((clinic) => clinic.isMainBranch) ||
+      normalizedClinics[0]
+
+    const defaultClinicId = String(defaultClinic._id)
+
+    if (selectedClinicId !== defaultClinicId) {
+      setSelectedClinicId(defaultClinicId)
     }
-  }, [clinics])
+
+    if (
+      typeof window !== "undefined" &&
+      storedClinicId !== defaultClinicId
+    ) {
+      localStorage.setItem(SELECTED_CLINIC_KEY, defaultClinicId)
+    }
+  }, [normalizedClinics, selectedClinicId])
 
   const handleClinicChange = (clinicId: string) => {
     if (!clinicId || clinicId === selectedClinicId) return
 
     setSelectedClinicId(clinicId)
+
     if (typeof window !== "undefined") {
-      localStorage.setItem("daktar_khata_selected_clinic_id", clinicId)
+      localStorage.setItem(SELECTED_CLINIC_KEY, clinicId)
     }
 
-    // Invalidate queries so that all clinic-scoped data refreshes instantly
     dispatch(
       api.util.invalidateTags([
         "Appointments",
@@ -88,20 +107,38 @@ export const ClinicSwitcher: React.FC = () => {
     )
   }
 
-  if (!isMerchantOrStaff || isLoading || clinics.length === 0) {
+  if (!isMerchantOrStaff || isLoading || !normalizedClinics.length) {
     return null
   }
 
   return (
-    <div className="flex items-center gap-1.5">
-      <Building2 className="h-4 w-4 text-muted-foreground shrink-0 hidden sm:inline-block" />
-      <Select value={selectedClinicId} onValueChange={handleClinicChange}>
-        <SelectTrigger className="h-8 min-w-[140px] max-w-[220px] text-xs font-medium bg-muted/40 hover:bg-muted/70">
-          <SelectValue placeholder={t("Select Clinic")} />
+    <div className="flex min-w-0 items-center gap-1.5">
+      <Building2 className="hidden h-4 w-4 shrink-0 text-muted-foreground sm:inline-block" />
+
+      <Select
+        value={selectedClinicId}
+        onValueChange={handleClinicChange}
+      >
+        <SelectTrigger className="h-8 min-w-[140px] max-w-[220px] bg-muted/40 text-xs font-medium hover:bg-muted/70">
+          <SelectValue placeholder={t("Select Clinic")}>
+            {selectedClinic ? (
+              <span className="block truncate">
+                {selectedClinic.name}
+                {selectedClinic.isMainBranch ? ` (${t("Main")})` : ""}
+              </span>
+            ) : (
+              t("Select Clinic")
+            )}
+          </SelectValue>
         </SelectTrigger>
+
         <SelectContent align="start">
-          {clinics.map((clinic: any) => (
-            <SelectItem key={clinic._id} value={clinic._id} className="text-xs">
+          {normalizedClinics.map((clinic) => (
+            <SelectItem
+              key={clinic._id}
+              value={String(clinic._id)}
+              className="text-xs"
+            >
               <span className="truncate">
                 {clinic.name}
                 {clinic.isMainBranch ? ` (${t("Main")})` : ""}

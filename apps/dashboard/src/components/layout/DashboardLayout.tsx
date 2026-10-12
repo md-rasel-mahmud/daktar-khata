@@ -6,7 +6,6 @@ import {
   SidebarTrigger,
 } from "@repo/ui/sidebar"
 import { HeaderControls } from "@/components/header-controls"
-import { ClinicSwitcher } from "@/components/ClinicSwitcher"
 import { useTranslation } from "react-i18next"
 import { SubscriptionWarningBanner } from "@/components/subscription/SubscriptionWarningBanner"
 
@@ -24,11 +23,24 @@ const DashboardLayout = () => {
             <div className="text-sm font-medium text-muted-foreground hidden sm:block">
               {t("dashboard")}
             </div>
-            <div className="hidden sm:block h-4 w-[1px] bg-border" />
-            <ClinicSwitcher />
           </div>
 
-          <HeaderControls />
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
+              <img
+                src="/favicon.ico"
+                alt="Daktar Khata"
+                className="size-6 rounded-md object-contain"
+              />
+              <span className="hidden sm:inline-block text-sm font-bold tracking-tight text-foreground">
+                Daktar Khata
+              </span>
+            </div>
+
+            <div className="hidden sm:block h-4 w-[1px] bg-border" />
+
+            <HeaderControls />
+          </div>
         </header>
 
         <SubscriptionWarningBanner />

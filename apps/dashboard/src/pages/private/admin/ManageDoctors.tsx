@@ -147,8 +147,8 @@ const ManageDoctors: React.FC = () => {
       )
       .optional(),
     designation: z.string().min(2, "Designation must be at least 2 characters"),
-    experienceInYears: z.coerce.number().min(0, "Experience cannot be negative").default(0),
-    fee: z.coerce.number().min(0, "Fee cannot be negative").default(500),
+    experienceInYears: z.number().min(0, "Experience cannot be negative"),
+    fee: z.number().min(0, "Fee cannot be negative"),
     hospitals: z
       .array(
         z.object({
