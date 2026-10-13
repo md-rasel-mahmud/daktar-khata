@@ -164,7 +164,6 @@ export function TeamSwitcher({ teams }: TeamSwitcherProps) {
       </SidebarMenu>
     )
   }
-  console.log('activeClinic', activeClinic)
   const hasMultipleClinics = normalizedClinics.length > 1
 
   return (

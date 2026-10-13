@@ -23,6 +23,9 @@ interface AuthState {
       dob?: string // ISO date string
       profileType: RolesEnum
       address?: string
+      subscriptionStatus?: string
+      subscriptionEndDate?: string
+      clinicName?: string
     }
   }
   token?: string | null

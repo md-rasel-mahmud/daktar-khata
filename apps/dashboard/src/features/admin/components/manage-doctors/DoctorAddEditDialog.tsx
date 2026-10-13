@@ -27,10 +27,11 @@ import {
   CommandInput,
   CommandItem,
 } from "@repo/ui/command"
-import { Check, ChevronsUpDown, PlusCircle, Trash2 } from "lucide-react"
+import { Check, ChevronsUpDown, Loader2, PlusCircle, Trash2 } from "lucide-react"
 import {
   useWatch,
   type FieldArrayWithId,
+  type FieldErrors,
   type SubmitHandler,
   type UseFieldArrayAppend,
   type UseFieldArrayRemove,
@@ -105,11 +106,13 @@ type SpecializationInput = {
 type DoctorAddEditDialogProps = {
   open: boolean
   isEditForm: boolean
+  isSubmitting?: boolean
   onOpenChange: (open: boolean) => void
   handleSubmit: UseFormHandleSubmit<FieldValues>
   onSubmit: SubmitHandler<FieldValues>
   control: Control<FieldValues>
   register: UseFormRegister<FieldValues>
+  errors?: FieldErrors<FieldValues>
   formData: FormInputConfig[]
   scheduleFields: FieldArrayWithId<FieldValues, "schedules", "id">[]
   scheduleAppend: UseFieldArrayAppend<FieldValues, "schedules">
@@ -123,11 +126,13 @@ type DoctorAddEditDialogProps = {
 const DoctorAddEditDialog: React.FC<DoctorAddEditDialogProps> = ({
   open,
   isEditForm,
+  isSubmitting = false,
   onOpenChange,
   handleSubmit,
   onSubmit,
   control,
   register,
+  errors,
   formData,
   scheduleFields,
   scheduleAppend,
@@ -263,20 +268,28 @@ const DoctorAddEditDialog: React.FC<DoctorAddEditDialogProps> = ({
                 </div>
               ))}
 
-              <Button
-                type="button"
-                variant="outline"
-                className="border-primary text-primary hover:bg-primary/20 hover:text-primary"
-                onClick={() =>
-                  scheduleAppend({
-                    days: [],
-                    startTime: "",
-                    endTime: "",
-                  } as ScheduleInput)
-                }
-              >
-                <PlusCircle /> Add Schedule
-              </Button>
+              <div className="flex items-center gap-3">
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="border-primary text-primary hover:bg-primary/20 hover:text-primary"
+                  onClick={() =>
+                    scheduleAppend({
+                      days: [],
+                      startTime: "",
+                      endTime: "",
+                    } as ScheduleInput)
+                  }
+                >
+                  <PlusCircle className="mr-1 h-4 w-4" /> Add Schedule
+                </Button>
+                {errors?.schedules && (
+                  <span className="text-xs text-destructive font-medium">
+                    {(errors.schedules as any)?.message ||
+                      (Array.isArray(errors.schedules) && "Please fill in all schedule details")}
+                  </span>
+                )}
+              </div>
             </div>
 
             <h6 className="font-bold md:col-span-2 lg:col-span-3">
@@ -291,7 +304,7 @@ const DoctorAddEditDialog: React.FC<DoctorAddEditDialogProps> = ({
                 >
                   <Input
                     id={`specialization.${index}`}
-                    placeholder="Enter specialization"
+                    placeholder="Enter specialization (e.g. Cardiology)"
                     {...register(`specialization.${index}.value`)}
                   />
                   <Button
@@ -305,24 +318,39 @@ const DoctorAddEditDialog: React.FC<DoctorAddEditDialogProps> = ({
                 </div>
               ))}
 
-              <Button
-                type="button"
-                variant="outline"
-                className="border-primary text-primary hover:bg-primary/20 hover:text-primary"
-                onClick={() =>
-                  specializationAppend({
-                    value: "",
-                  } as SpecializationInput)
-                }
-              >
-                <PlusCircle /> Add Specialization
-              </Button>
+              <div className="flex items-center gap-3">
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="border-primary text-primary hover:bg-primary/20 hover:text-primary"
+                  onClick={() =>
+                    specializationAppend({
+                      value: "",
+                    } as SpecializationInput)
+                  }
+                >
+                  <PlusCircle className="mr-1 h-4 w-4" /> Add Specialization
+                </Button>
+                {errors?.specialization && (
+                  <span className="text-xs text-destructive font-medium">
+                    {(errors.specialization as any)?.message ||
+                      (Array.isArray(errors.specialization) && "Please provide valid specializations (min 2 chars)")}
+                  </span>
+                )}
+              </div>
             </div>
           </div>
 
           <DialogFooter>
-            <Button type="submit">
-              {isEditForm ? "Update Doctor" : "Add Doctor"}
+            <Button type="submit" disabled={isSubmitting}>
+              {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {isSubmitting
+                ? isEditForm
+                  ? "Updating..."
+                  : "Adding..."
+                : isEditForm
+                  ? "Update Doctor"
+                  : "Add Doctor"}
             </Button>
           </DialogFooter>
         </form>

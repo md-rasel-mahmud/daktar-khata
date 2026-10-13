@@ -62,14 +62,15 @@ export class UserService {
     createUserDto: CreateUserDto,
     session: ClientSession
   ) {
-    const query: any = { phone: createUserDto.phone };
+    const phone = createUserDto.phone?.trim();
+    const query: any = { phone };
     if (createUserDto.merchant) {
       query.merchant = createUserDto.merchant;
     }
     const existingUser = await this.userModel.findOne(query);
 
     if (existingUser) {
-      throw new BadRequestException("User with this phone number already exists in this clinic");
+      throw new BadRequestException("A user with this phone number already exists in this clinic");
     }
 
     const user = await this.create(createUserDto as any, session);

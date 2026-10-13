@@ -30,10 +30,12 @@ import {
 import { useGetCurrentUserQuery } from "@/lib/store/api/services/user.service"
 import { toast } from "sonner"
 import { format } from "date-fns"
+import type { RootState } from "@/lib/store/store"
+import { useSelector } from "react-redux"
 
 type BillingCycle = "monthly" | "half_yearly" | "yearly"
 
-export const MerchantSubscriptionPage: React.FC = () => {
+export const reduxProfileSubscriptionPage: React.FC = () => {
   const { t } = useTranslation()
   const [billingCycle, setBillingCycle] = useState<BillingCycle>("monthly")
   const [selectedPlanId, setSelectedPlanId] = useState<string>("")
@@ -43,23 +45,26 @@ export const MerchantSubscriptionPage: React.FC = () => {
   const plans = Array.isArray(rawPlans) ? rawPlans : (rawPlans as any)?.data || []
   const { data: profileData, isLoading: isLoadingProfile } =
     useGetCurrentUserQuery(undefined)
+  const reduxProfile = useSelector((state: RootState) => state.auth.user.profile)
 
   const [initiatePayment, { isLoading: isInitiatingPayment }] =
     useInitiateSubscriptionPaymentMutation()
 
-  const merchant =
-    profileData?.data?.user?.merchant ||
-    profileData?.data?.merchant ||
-    profileData?.data
+  // const reduxProfile =
+  //   profileData?.data?.user?.reduxProfile ||
+  //   profileData?.data?.reduxProfile ||
+  //   profileData?.data
 
-  const subscriptionStatus = merchant?.subscriptionStatus || "DEMO"
-  const subscriptionEndDate = merchant?.subscriptionEndDate
+
+  const subscriptionStatus = reduxProfile?.subscriptionStatus || "DEMO"
+  const subscriptionEndDate = reduxProfile?.subscriptionEndDate
+
 
   const daysLeft = subscriptionEndDate
     ? Math.ceil(
-        (new Date(subscriptionEndDate).getTime() - new Date().getTime()) /
-          (1000 * 60 * 60 * 24)
-      )
+      (new Date(subscriptionEndDate).getTime() - new Date().getTime()) /
+      (1000 * 60 * 60 * 24)
+    )
     : 0
 
   const handleSubscribe = async (planId: string) => {
@@ -102,7 +107,7 @@ export const MerchantSubscriptionPage: React.FC = () => {
   return (
     <div className="fadeIn space-y-8">
       {/* Current Subscription Status Banner */}
-      <Card className="border-primary/20 bg-gradient-to-r from-primary/10 via-primary/5 to-background shadow-sm">
+      <Card className="border-primary/20 bg-linear-to-r from-primary/10 via-primary/5 to-background shadow-sm">
         <CardContent className="flex flex-wrap items-center justify-between gap-4 p-6">
           <div className="flex items-center gap-4">
             <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary text-white shadow-sm">
@@ -111,15 +116,15 @@ export const MerchantSubscriptionPage: React.FC = () => {
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="text-xl font-bold tracking-tight">
-                  {merchant?.clinicName || t("My Clinic")}
+                  {reduxProfile?.clinicName || t("My Clinic")}
                 </h2>
                 <Badge
                   variant={
                     subscriptionStatus === "ACTIVE"
                       ? "default"
                       : subscriptionStatus === "DEMO"
-                      ? "secondary"
-                      : "destructive"
+                        ? "secondary"
+                        : "destructive"
                   }
                   className="capitalize font-semibold"
                 >
@@ -175,11 +180,10 @@ export const MerchantSubscriptionPage: React.FC = () => {
             <button
               type="button"
               onClick={() => setBillingCycle("monthly")}
-              className={`rounded-lg px-4 py-2 text-sm font-semibold transition-all ${
-                billingCycle === "monthly"
-                  ? "bg-background text-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
+              className={`rounded-lg px-4 py-2 text-sm font-semibold transition-all ${billingCycle === "monthly"
+                ? "bg-background text-foreground shadow-sm"
+                : "text-muted-foreground hover:text-foreground"
+                }`}
             >
               {t("Monthly (30 Days)")}
             </button>
@@ -187,11 +191,10 @@ export const MerchantSubscriptionPage: React.FC = () => {
             <button
               type="button"
               onClick={() => setBillingCycle("half_yearly")}
-              className={`flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-semibold transition-all ${
-                billingCycle === "half_yearly"
-                  ? "bg-background text-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
+              className={`flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-semibold transition-all ${billingCycle === "half_yearly"
+                ? "bg-background text-foreground shadow-sm"
+                : "text-muted-foreground hover:text-foreground"
+                }`}
             >
               {t("6 Months (180 Days)")}
               <Badge variant="secondary" className="text-[10px] bg-primary/20 text-primary">
@@ -202,11 +205,10 @@ export const MerchantSubscriptionPage: React.FC = () => {
             <button
               type="button"
               onClick={() => setBillingCycle("yearly")}
-              className={`flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-semibold transition-all ${
-                billingCycle === "yearly"
-                  ? "bg-background text-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
+              className={`flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-semibold transition-all ${billingCycle === "yearly"
+                ? "bg-background text-foreground shadow-sm"
+                : "text-muted-foreground hover:text-foreground"
+                }`}
             >
               {t("Yearly (360 Days)")}
               <Badge variant="secondary" className="text-[10px] bg-emerald-100 text-emerald-800">
@@ -250,11 +252,10 @@ export const MerchantSubscriptionPage: React.FC = () => {
             return (
               <Card
                 key={plan._id}
-                className={`relative flex flex-col justify-between transition-all hover:shadow-lg ${
-                  isPopular
-                    ? "border-primary shadow-md ring-1 ring-primary"
-                    : "border-border"
-                }`}
+                className={`relative flex flex-col justify-between transition-all hover:shadow-lg ${isPopular
+                  ? "border-primary shadow-md ring-1 ring-primary"
+                  : "border-border"
+                  }`}
               >
                 {isPopular && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2">
@@ -358,4 +359,4 @@ export const MerchantSubscriptionPage: React.FC = () => {
   )
 }
 
-export default MerchantSubscriptionPage
+export default reduxProfileSubscriptionPage

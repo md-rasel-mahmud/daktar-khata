@@ -16,6 +16,16 @@ import {
 } from "@repo/ui/dropdown-menu"
 import { Avatar, AvatarFallback } from "@repo/ui/avatar"
 import { Badge } from "@repo/ui/badge"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@repo/ui/alert-dialog"
 import { Plus, Edit, Trash2, MoreHorizontal, Calendar, Check, X, Clock, UserCheck, Loader2 } from "lucide-react"
 import { toast } from "sonner"
 import { useSelector } from "react-redux"
@@ -36,6 +46,7 @@ import { useTranslation } from "react-i18next"
 import {
   useCreateDoctorByMerchantMutation,
   useUpdateDoctorMutation,
+  useDeleteDoctorMutation,
   useGetPendingDoctorsQuery,
   useApproveDoctorMutation,
   useRejectDoctorMutation,
@@ -80,8 +91,13 @@ const ManageDoctors: React.FC = () => {
   // RTK HOOKS
   const { data } = useGetAllProfilesQuery<{ data: Doctor[] }>(RolesEnum.DOCTOR)
 
-  const [createDoctor] = useCreateDoctorByMerchantMutation()
-  const [updateDoctor] = useUpdateDoctorMutation()
+  const [createDoctor, { isLoading: isCreatingDoctor }] = useCreateDoctorByMerchantMutation()
+  const [updateDoctor, { isLoading: isUpdatingDoctor }] = useUpdateDoctorMutation()
+  const [deleteDoctor, { isLoading: isDeletingDoctor }] = useDeleteDoctorMutation()
+
+  const [doctorToDelete, setDoctorToDelete] = useState<{ id: string; name: string } | null>(null)
+
+  const isSubmittingDoctor = isCreatingDoctor || isUpdatingDoctor
 
   const authUser = useSelector((state: RootState) => state.auth.user)
   const isMerchant = authUser?.user?.role === RolesEnum.MERCHANT
@@ -113,42 +129,48 @@ const ManageDoctors: React.FC = () => {
     }
   }
 
-  // validation schema should be following above Doctor type
+  // validation schema strictly matching backend CreateDoctorDto and Doctor model
   const validationSchema = z.object({
     _id: z.string().optional(),
-    name: z.string().min(2, "Name must be at least 2 characters"),
+    name: z.string().trim().min(2, "Name must be at least 2 characters"),
     email: z
       .string()
+      .trim()
       .email("Invalid email address")
       .optional()
       .or(z.literal("")),
     mobile: z
       .string()
+      .trim()
       .regex(
         BD_MOBILE_NO_REGEX, // bangladeshi mobile number regex
-        "Mobile number must be a valid Bangladeshi number"
-      )
+        "Mobile number must be a valid Bangladeshi number (e.g. 017xxxxxxxx or +88017xxxxxxxx)"
+      ),
+    password: z
+      .string()
+      .min(6, "Password must be at least 6 characters")
       .optional()
       .or(z.literal("")),
-    password: z.string().optional(),
     address: z.string().optional(),
     note: z.string().optional(),
-    gender: z.string().optional(),
+    gender: z.enum(Gender),
     specialization: z
-      .array(z.string().min(2, "Specialization must be at least 2 characters"))
-      .or(
-        z.array(
-          z.object({
-            value: z
-              .string()
-              .min(2, "Specialization must be at least 2 characters"),
-          })
-        )
+      .array(
+        z.object({
+          value: z.string().trim().min(2, "Specialization name must be at least 2 characters"),
+        })
       )
-      .optional(),
-    designation: z.string().min(2, "Designation must be at least 2 characters"),
-    experienceInYears: z.number().min(0, "Experience cannot be negative"),
-    fee: z.number().min(0, "Fee cannot be negative"),
+      .min(1, "At least one specialization is required"),
+    designation: z
+      .string()
+      .trim()
+      .min(2, "Designation is required and must be at least 2 characters"),
+    experienceInYears: z
+      .number({ error: "Experience must be a number" })
+      .min(0, "Experience cannot be negative"),
+    fee: z
+      .number({ error: "Experience must be a number" })
+      .min(0, "Fee cannot be negative"),
     hospitals: z
       .array(
         z.object({
@@ -182,12 +204,12 @@ const ManageDoctors: React.FC = () => {
     schedules: z
       .array(
         z.object({
-          days: z.array(z.string().min(3, "Day must be at least 3 characters")),
-          startTime: z.string().min(5, "Start time must be in HH:mm format"),
-          endTime: z.string().min(5, "End time must be in HH:mm format"),
+          days: z.array(z.string()).min(1, "Please select at least one day"),
+          startTime: z.string().min(1, "Start time is required"),
+          endTime: z.string().min(1, "End time is required"),
         })
       )
-      .optional(),
+      .min(1, "At least one schedule is required"),
   })
 
   type FormValues = z.infer<typeof validationSchema>
@@ -199,7 +221,7 @@ const ManageDoctors: React.FC = () => {
     password: "",
     address: "",
     note: "",
-    specialization: [],
+    specialization: [{ value: "" }],
     designation: "Consultant",
     experienceInYears: 1,
     gender: Gender.MALE,
@@ -207,7 +229,13 @@ const ManageDoctors: React.FC = () => {
     degree: [{ name: "MBBS", university: "Medical College", year: 2020 }],
     languages: [],
     fee: 500,
-    schedules: [],
+    schedules: [
+      {
+        days: ["Sunday", "Tuesday", "Thursday"],
+        startTime: "09:00",
+        endTime: "14:00",
+      },
+    ],
   }
 
   const {
@@ -219,7 +247,7 @@ const ManageDoctors: React.FC = () => {
   } = useForm<FormValues>({
     defaultValues: DOCTOR_DEFAULT_VALUES,
     resolver: zodResolver(validationSchema),
-    mode: "all",
+    mode: "onTouched",
   })
 
   const {
@@ -260,12 +288,31 @@ const ManageDoctors: React.FC = () => {
     )
   }, [doctors, searchQuery])
 
-  const handleDeleteDoctor = useCallback(
-    (doctorId: string) => {
-      toast.success(`Doctor ${doctorId} has been removed from the system.`)
+  const handlePromptDeleteDoctor = useCallback(
+    (doctor: Doctor) => {
+      setDoctorToDelete({
+        id: doctor._id,
+        name: doctor.name,
+      })
     },
-    [toast]
+    []
   )
+
+  const handleConfirmDeleteDoctor = useCallback(async () => {
+    if (!doctorToDelete?.id) return
+
+    try {
+      await deleteDoctor(doctorToDelete.id).unwrap()
+      toast.success(`Doctor ${doctorToDelete.name} has been deleted successfully!`)
+      setDoctorToDelete(null)
+    } catch (err: any) {
+      const msg =
+        err?.data?.message ||
+        err?.message ||
+        `Failed to delete doctor ${doctorToDelete.name}`
+      toast.error(msg)
+    }
+  }, [deleteDoctor, doctorToDelete])
 
   const handleViewSchedule = useCallback(
     (doctor: typeof currentDoctorSchedule) => {
@@ -287,8 +334,8 @@ const ManageDoctors: React.FC = () => {
       const rawSpecs = Array.isArray(doctor.specialization)
         ? doctor.specialization
         : doctor.specialization
-        ? [doctor.specialization]
-        : []
+          ? [doctor.specialization]
+          : []
 
       const formattedSpecs = rawSpecs.map((spec: any) =>
         typeof spec === "string" ? { value: spec } : spec
@@ -380,8 +427,8 @@ const ManageDoctors: React.FC = () => {
               </DropdownMenuItem>
 
               <DropdownMenuItem
-                className="text-red-600"
-                onClick={() => handleDeleteDoctor(doctor._id || doctor.name)}
+                className="text-red-600 focus:text-red-600"
+                onClick={() => handlePromptDeleteDoctor(doctor)}
               >
                 <Trash2 className="mr-2 h-4 w-4" />
                 Delete
@@ -391,7 +438,7 @@ const ManageDoctors: React.FC = () => {
         ),
       },
     ],
-    [handleViewSchedule, handleEditDoctor, handleDeleteDoctor]
+    [handleViewSchedule, handleEditDoctor, handlePromptDeleteDoctor]
   )
 
   const handleAddOrEditDoctorSubmit = async (data: FieldValues) => {
@@ -487,14 +534,14 @@ const ManageDoctors: React.FC = () => {
     },
     ...(!isEditForm
       ? [
-          {
-            name: "password",
-            label: t("login password"),
-            type: "password" as const,
-            placeholder: "Enter password for doctor login (min 6 chars)",
-            required: false,
-          },
-        ]
+        {
+          name: "password",
+          label: t("login password"),
+          type: "password" as const,
+          placeholder: "Enter password for doctor login (min 6 chars)",
+          required: false,
+        },
+      ]
       : []),
     {
       name: "fee",
@@ -678,11 +725,13 @@ const ManageDoctors: React.FC = () => {
       <DoctorAddEditDialog
         open={isAddOrEditDoctorDialogOpen}
         isEditForm={isEditForm}
+        isSubmitting={isSubmittingDoctor}
         onOpenChange={setIsAddOrEditDoctorDialogOpen}
         handleSubmit={handleSubmit as never}
         onSubmit={handleAddOrEditDoctorSubmit}
         control={control as never}
         register={register as never}
+        errors={errors as never}
         formData={formData}
         scheduleFields={scheduleFields as never}
         scheduleAppend={scheduleAppend as never}
@@ -698,8 +747,53 @@ const ManageDoctors: React.FC = () => {
         onOpenChange={setIsViewScheduleDialogOpen}
         doctor={currentDoctorSchedule}
       />
+
+      <AlertDialog
+        open={Boolean(doctorToDelete)}
+        onOpenChange={(open) => {
+          if (!open && !isDeletingDoctor) {
+            setDoctorToDelete(null)
+          }
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Doctor?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete{" "}
+              <strong className="text-foreground">
+                {doctorToDelete?.name || "this doctor"}
+              </strong>
+              ? This action will permanently remove the doctor&apos;s profile and login account. This cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isDeletingDoctor}>
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              disabled={isDeletingDoctor}
+              onClick={(e) => {
+                e.preventDefault()
+                handleConfirmDeleteDoctor()
+              }}
+            >
+              {isDeletingDoctor ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Deleting...
+                </>
+              ) : (
+                "Delete"
+              )}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   )
 }
 
 export default ManageDoctors
+

@@ -1,8 +1,9 @@
 import React, { useCallback, useMemo, useState } from "react"
-import { addDays, format, isAfter, isSameDay } from "date-fns"
+import { addDays, endOfDay, format, isAfter, isSameDay, startOfDay } from "date-fns"
+import { type DateRange } from "react-day-picker"
+import { FilterX } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import { Button } from "@repo/ui/button"
-import { Calendar } from "@repo/ui/calendar"
 import { Badge } from "@repo/ui/badge"
 import {
   Card,
@@ -11,6 +12,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/card"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@repo/ui/select"
+import { DateRangePicker } from "@/components/common/DateRangePicker"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/tabs"
 import { toast } from "sonner"
 import AppointmentStatusBadge from "@/components/common/AppointmentStatusBadge"
@@ -22,6 +31,7 @@ import {
   useGetAppointmentsQuery,
   useUpdateAppointmentStatusMutation,
 } from "@/lib/store/api/services/appointment.service"
+import { useGetDoctorOptionsQuery } from "@/lib/store/api/services/doctor.service"
 import {
   AppointmentDetailsDialog,
   CompleteAppointmentDialog,
@@ -47,10 +57,12 @@ interface AppointmentModel {
   problemDescription?: string
   status: AppointmentStatus
   patient?: {
+    _id?: string
     name?: string
     mobile?: string
   } | null
   doctor?: {
+    _id?: string
     name?: string
     specialization?: string[]
   } | null
@@ -63,6 +75,7 @@ interface AppointmentRow {
   slot: string
   patientName: string
   patientMobile: string
+  doctorId: string
   doctorName: string
   doctorSpecialization: string
   reasonFor: string
@@ -82,7 +95,21 @@ const MerchantAppointmentsPage: React.FC = () => {
   const [updateStatus, { isLoading: updateLoading }] =
     useUpdateAppointmentStatusMutation()
 
+  const { data: doctorsData = [] } = useGetDoctorOptionsQuery(undefined)
+  const doctorOptions = useMemo(() => {
+    const list = Array.isArray(doctorsData) ? doctorsData : []
+    return list.map((doc: any) => ({
+      id: String(doc._id || doc.id || ""),
+      name: String(doc.name || t("unknown doctor")),
+      specialization: Array.isArray(doc.specialization)
+        ? doc.specialization.join(", ")
+        : doc.specialization || "",
+    }))
+  }, [doctorsData, t])
+
   const [date, setDate] = useState<Date | undefined>(new Date())
+  const [selectedDoctorId, setSelectedDoctorId] = useState<string>("all")
+  const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined)
   const [selectedAppointment, setSelectedAppointment] =
     useState<AppointmentModel | null>(null)
   const [isCompleteDialogOpen, setIsCompleteDialogOpen] = useState(false)
@@ -97,6 +124,7 @@ const MerchantAppointmentsPage: React.FC = () => {
       slot: appointment.appointmentSlot,
       patientName: appointment.patient?.name || t("unknown patient"),
       patientMobile: appointment.patient?.mobile || t("not available"),
+      doctorId: appointment.doctor?._id ? String(appointment.doctor._id) : "",
       doctorName: appointment.doctor?.name || t("not assigned"),
       doctorSpecialization: appointment.doctor?.specialization?.length
         ? appointment.doctor.specialization.join(", ")
@@ -111,18 +139,53 @@ const MerchantAppointmentsPage: React.FC = () => {
     [t]
   )
 
+  const filteredAppointments = useMemo(() => {
+    return typedAppointments.filter((appointment) => {
+      // Doctor filter
+      if (selectedDoctorId !== "all") {
+        const apptDoctorId = appointment.doctor?._id
+          ? String(appointment.doctor._id)
+          : ""
+        const apptDoctorName = (appointment.doctor?.name || "").trim().toLowerCase()
+        const selectedDoctor = doctorOptions.find((d) => d.id === selectedDoctorId)
+        const matchId = apptDoctorId && apptDoctorId === selectedDoctorId
+        const matchName =
+          selectedDoctor &&
+          apptDoctorName &&
+          apptDoctorName === selectedDoctor.name.trim().toLowerCase()
+        if (!matchId && !matchName) {
+          return false
+        }
+      }
+
+      // Date range filter
+      if (dateRange?.from) {
+        if (!appointment.appointmentDate) return false
+        const apptDate = new Date(appointment.appointmentDate)
+        const fromDate = startOfDay(dateRange.from)
+        const toDate = dateRange.to ? endOfDay(dateRange.to) : endOfDay(dateRange.from)
+
+        if (apptDate < fromDate || apptDate > toDate) {
+          return false
+        }
+      }
+
+      return true
+    })
+  }, [typedAppointments, selectedDoctorId, dateRange, doctorOptions])
+
   const selectedDateRows = useMemo(() => {
     const appointmentsForSelectedDate = date
-      ? typedAppointments.filter((appointment) =>
-          isSameDay(new Date(appointment.appointmentDate), date)
-        )
+      ? filteredAppointments.filter((appointment) =>
+        isSameDay(new Date(appointment.appointmentDate), date)
+      )
       : []
 
     return appointmentsForSelectedDate.map(mapToRow)
-  }, [date, typedAppointments, mapToRow])
+  }, [date, filteredAppointments, mapToRow])
 
   const upcomingRows = useMemo(() => {
-    return typedAppointments
+    return filteredAppointments
       .filter(
         (appointment) =>
           isAfter(
@@ -136,10 +199,10 @@ const MerchantAppointmentsPage: React.FC = () => {
           new Date(b.appointmentDate).getTime()
       )
       .map(mapToRow)
-  }, [typedAppointments, mapToRow])
+  }, [filteredAppointments, mapToRow])
 
   const pastRows = useMemo(() => {
-    return typedAppointments
+    return filteredAppointments
       .filter(
         (appointment) =>
           !isAfter(
@@ -153,7 +216,7 @@ const MerchantAppointmentsPage: React.FC = () => {
           new Date(a.appointmentDate).getTime()
       )
       .map(mapToRow)
-  }, [typedAppointments, mapToRow])
+  }, [filteredAppointments, mapToRow])
 
   const handleOpenDetails = useCallback((row: AppointmentRow) => {
     setSelectedAppointment(row.raw)
@@ -193,6 +256,13 @@ const MerchantAppointmentsPage: React.FC = () => {
       })
     }
   }, [selectedAppointment, updateStatus, prescription, toast, t])
+
+  const hasActiveFilters = selectedDoctorId !== "all" || Boolean(dateRange?.from)
+
+  const handleResetFilters = useCallback(() => {
+    setSelectedDoctorId("all")
+    setDateRange(undefined)
+  }, [])
 
   const apiColumns = useMemo<DataTableColumn<AppointmentRow>[]>(
     () => [
@@ -255,8 +325,35 @@ const MerchantAppointmentsPage: React.FC = () => {
             ? format(new Date(row.createdAt), "MMM dd, yyyy hh:mm a")
             : t("not available"),
       },
+      {
+        id: "actions",
+        header: t("actions"),
+        headerClassName: "text-right",
+        className: "text-right",
+        cell: (row) => {
+          const canComplete =
+            row.status === "PENDING" || row.status === "CONFIRMED"
+
+          return (
+            <div className="inline-flex gap-2">
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => handleOpenDetails(row)}
+              >
+                {t("details")}
+              </Button>
+              {canComplete ? (
+                <Button size="sm" onClick={() => handleOpenComplete(row)}>
+                  {t("complete")}
+                </Button>
+              ) : null}
+            </div>
+          )
+        },
+      },
     ],
-    [t]
+    [handleOpenComplete, handleOpenDetails, t]
   )
 
   const makeActionColumns = useCallback(
@@ -266,68 +363,68 @@ const MerchantAppointmentsPage: React.FC = () => {
       completeLabel?: string
       conditionalComplete?: boolean
     }): DataTableColumn<AppointmentRow>[] => [
-      {
-        id: "patient",
-        header: t("patient"),
-        sortable: true,
-        sortValue: (row) => row.patientName,
-        cell: (row) => <span className="font-medium">{row.patientName}</span>,
-      },
-      {
-        id: "doctor",
-        header: t("doctor"),
-        sortable: true,
-        sortValue: (row) => row.doctorName,
-        cell: (row) => row.doctorName,
-      },
-      {
-        id: "date",
-        header: t("date"),
-        sortable: true,
-        sortValue: (row) => row.date,
-        cell: (row) => format(new Date(row.date), "MMM dd, yyyy"),
-      },
-      { id: "slot", header: t("slot"), cell: (row) => row.slot },
-      { id: "reason", header: t("reason"), cell: (row) => row.reasonFor },
-      {
-        id: "payment",
-        header: t("payment"),
-        cell: (row) => `${row.paymentMethod} / ${row.paymentStatus}`,
-      },
-      {
-        id: "status",
-        header: t("status"),
-        cell: (row) => <AppointmentStatusBadge status={row.status} />,
-      },
-      {
-        id: "actions",
-        header: t("actions"),
-        headerClassName: "text-right",
-        className: "text-right",
-        cell: (row) => {
-          const canComplete = options.conditionalComplete
-            ? row.status === "PENDING" || row.status === "CONFIRMED"
-            : options.showComplete
-
-          return (
-            <div className="inline-flex gap-2">
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => handleOpenDetails(row)}
-              >
-                {options.detailsLabel}
-              </Button>
-              {canComplete ? (
-                <Button size="sm" onClick={() => handleOpenComplete(row)}>
-                  {options.completeLabel || t("complete")}
-                </Button>
-              ) : null}
-            </div>
-          )
+        {
+          id: "patient",
+          header: t("patient"),
+          sortable: true,
+          sortValue: (row) => row.patientName,
+          cell: (row) => <span className="font-medium">{row.patientName}</span>,
         },
-      },
-    ],
+        {
+          id: "doctor",
+          header: t("doctor"),
+          sortable: true,
+          sortValue: (row) => row.doctorName,
+          cell: (row) => row.doctorName,
+        },
+        {
+          id: "date",
+          header: t("date"),
+          sortable: true,
+          sortValue: (row) => row.date,
+          cell: (row) => format(new Date(row.date), "MMM dd, yyyy"),
+        },
+        { id: "slot", header: t("slot"), cell: (row) => row.slot },
+        { id: "reason", header: t("reason"), cell: (row) => row.reasonFor },
+        {
+          id: "payment",
+          header: t("payment"),
+          cell: (row) => `${row.paymentMethod} / ${row.paymentStatus}`,
+        },
+        {
+          id: "status",
+          header: t("status"),
+          cell: (row) => <AppointmentStatusBadge status={row.status} />,
+        },
+        {
+          id: "actions",
+          header: t("actions"),
+          headerClassName: "text-right",
+          className: "text-right",
+          cell: (row) => {
+            const canComplete = options.conditionalComplete
+              ? row.status === "PENDING" || row.status === "CONFIRMED"
+              : options.showComplete
+
+            return (
+              <div className="inline-flex gap-2">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => handleOpenDetails(row)}
+                >
+                  {options.detailsLabel}
+                </Button>
+                {canComplete ? (
+                  <Button size="sm" onClick={() => handleOpenComplete(row)}>
+                    {options.completeLabel || t("complete")}
+                  </Button>
+                ) : null}
+              </div>
+            )
+          },
+        },
+      ],
     [handleOpenComplete, handleOpenDetails, t]
   )
 
@@ -361,16 +458,91 @@ const MerchantAppointmentsPage: React.FC = () => {
     [makeActionColumns, t]
   )
 
+  const selectedDoctor = doctorOptions.find((d) => d.id === selectedDoctorId)
+
   return (
     <>
       <div className="fadeIn space-y-6">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">
-            {t("my appointments")}
+            {t("appointments")}
           </h1>
           <p className="text-muted-foreground">
             {t("view and manage your appointment schedule")}
           </p>
+        </div>
+
+        {/* Filter Controls */}
+        <div className="flex flex-col gap-3 rounded-lg border bg-card p-4 shadow-xs sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-wrap items-center gap-3">
+            {/* Doctor Filter */}
+            <div className="flex min-w-[200px] flex-col gap-1.5 sm:w-60">
+              <span className="text-xs font-medium text-muted-foreground">
+                {t("doctor")}
+              </span>
+              <Select
+                value={selectedDoctorId}
+                onValueChange={(val) => setSelectedDoctorId(val || "all")}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder={t("all doctors")}>
+                    {selectedDoctor ? selectedDoctor.name : t("all doctors")}
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent align="start">
+                  <SelectItem value="all">
+                    <span>{t("all doctors")}</span>
+                  </SelectItem>
+                  {doctorOptions.map((doctor) => (
+                    <SelectItem key={doctor.id} value={doctor.id}>
+                      <span className="truncate">{doctor.name}</span>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Date Range Filter */}
+            <div className="flex flex-col gap-1.5">
+              <span className="text-xs font-medium text-muted-foreground">
+                {t("date range")}
+              </span>
+              <DateRangePicker
+                value={dateRange}
+                onChange={setDateRange}
+                placeholder={t("select date range")}
+                className="min-w-[240px]"
+              />
+            </div>
+
+            {/* Reset Filters Button */}
+            {hasActiveFilters && (
+              <div className="flex flex-col justify-end">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleResetFilters}
+                  className="mt-auto h-9 gap-1.5 text-xs text-muted-foreground hover:text-foreground"
+                >
+                  <FilterX className="h-4 w-4" />
+                  {t("clear filters")}
+                </Button>
+              </div>
+            )}
+          </div>
+
+          {/* Active Filter Counter / Info */}
+          <div className="flex items-center gap-2 self-end sm:self-auto text-xs text-muted-foreground">
+            <span>
+              {t("total appointments")}:{" "}
+              <strong className="text-foreground">
+                {filteredAppointments.length}
+              </strong>
+              {filteredAppointments.length !== typedAppointments.length && (
+                <span> / {typedAppointments.length}</span>
+              )}
+            </span>
+          </div>
         </div>
 
         {appointmentsLoading && (
@@ -390,7 +562,7 @@ const MerchantAppointmentsPage: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <ClientDataTable
-                  data={typedAppointments.map(mapToRow)}
+                  data={filteredAppointments.map(mapToRow)}
                   columns={apiColumns}
                   getRowId={(row) => row.id}
                   searchPlaceholder={t("search appointments")}
@@ -405,111 +577,6 @@ const MerchantAppointmentsPage: React.FC = () => {
                   initialPageSize={10}
                   defaultSort={{ columnId: "date", direction: "desc" }}
                 />
-              </CardContent>
-            </Card>
-
-            <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-              <Card className="lg:col-span-1">
-                <CardHeader>
-                  <CardTitle className="text-lg">{t("calendar")}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <Calendar
-                    mode="single"
-                    selected={date}
-                    onSelect={setDate}
-                    className="rounded-md border"
-                  />
-                </CardContent>
-              </Card>
-
-              <Card className="lg:col-span-2">
-                <CardHeader>
-                  <CardTitle>
-                    {t("appointments for date", {
-                      date: date ? format(date, "MMM dd, yyyy") : t("today"),
-                    })}
-                  </CardTitle>
-                  <CardDescription>
-                    {t("appointments count", {
-                      count: selectedDateRows.length,
-                    })}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <ClientDataTable
-                    data={selectedDateRows}
-                    columns={selectedDateColumns}
-                    getRowId={(row) => row.id}
-                    searchPlaceholder={t("search selected date appointments")}
-                    searchKeys={[
-                      (row) => row.patientName,
-                      (row) => row.doctorName,
-                      (row) => row.reasonFor,
-                    ]}
-                    emptyMessage={t("no appointments scheduled for this date")}
-                    pageSizeOptions={[5, 10]}
-                    initialPageSize={5}
-                    defaultSort={{ columnId: "date", direction: "asc" }}
-                  />
-                </CardContent>
-              </Card>
-            </div>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>{t("all appointments")}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Tabs defaultValue="upcoming">
-                  <TabsList className="mb-4">
-                    <TabsTrigger value="upcoming">
-                      {t("upcoming")}
-                      {upcomingRows.length > 0 && (
-                        <Badge variant="secondary" className="ml-2">
-                          {upcomingRows.length}
-                        </Badge>
-                      )}
-                    </TabsTrigger>
-                    <TabsTrigger value="past">{t("past")}</TabsTrigger>
-                  </TabsList>
-
-                  <TabsContent value="upcoming" className="space-y-4">
-                    <ClientDataTable
-                      data={upcomingRows}
-                      columns={upcomingColumns}
-                      getRowId={(row) => row.id}
-                      searchPlaceholder={t("search upcoming appointments")}
-                      searchKeys={[
-                        (row) => row.patientName,
-                        (row) => row.doctorName,
-                        (row) => row.reasonFor,
-                      ]}
-                      emptyMessage={t("no upcoming appointments")}
-                      pageSizeOptions={[5, 10]}
-                      initialPageSize={5}
-                      defaultSort={{ columnId: "date", direction: "asc" }}
-                    />
-                  </TabsContent>
-
-                  <TabsContent value="past" className="space-y-4">
-                    <ClientDataTable
-                      data={pastRows}
-                      columns={pastColumns}
-                      getRowId={(row) => row.id}
-                      searchPlaceholder={t("search past appointments")}
-                      searchKeys={[
-                        (row) => row.patientName,
-                        (row) => row.doctorName,
-                        (row) => row.reasonFor,
-                      ]}
-                      emptyMessage={t("no past appointments")}
-                      pageSizeOptions={[5, 10]}
-                      initialPageSize={5}
-                      defaultSort={{ columnId: "date", direction: "desc" }}
-                    />
-                  </TabsContent>
-                </Tabs>
               </CardContent>
             </Card>
           </>

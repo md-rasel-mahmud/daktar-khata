@@ -75,7 +75,15 @@ export const doctorApi = api.injectEndpoints({
         method: "PATCH",
         body,
       }),
-      invalidatesTags: ["Profiles", "DoctorOptions"],
+      invalidatesTags: ["Profiles", "DoctorOptions", "PendingDoctors"],
+    }),
+
+    deleteDoctor: builder.mutation<any, string>({
+      query: (id) => ({
+        url: `/doctors/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Profiles", "DoctorOptions", "PendingDoctors"],
     }),
   }),
 });
@@ -85,6 +93,7 @@ export const {
   useGetCurrentUserQuery,
   useCreateDoctorByMerchantMutation,
   useUpdateDoctorMutation,
+  useDeleteDoctorMutation,
   useGetDoctorOptionsQuery,
   useGetPendingDoctorsQuery,
   useApproveDoctorMutation,

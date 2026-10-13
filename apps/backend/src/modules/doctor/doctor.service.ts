@@ -40,18 +40,27 @@ export class DoctorService {
         await this.merchantService.checkQuotaLimit(authUser.merchant, "doctor");
       }
 
-      // Check if the user already exists
-      const existingUser = await this.findByPhone(createDoctorDto.phone);
+      const phone = (createDoctorDto.phone || (createDoctorDto as any).mobile)?.trim();
+      if (!phone) {
+        throw new BadRequestException("Phone number is required");
+      }
 
+      // Check if user or doctor already exists with this phone
+      const existingUser = await this.userService.getUserByMobile(phone);
       if (existingUser) {
-        throw new BadRequestException("Doctor with this phone already exists");
+        throw new BadRequestException("A user with this phone number already exists");
+      }
+
+      const existingDoctor = await this.findByPhone(phone);
+      if (existingDoctor) {
+        throw new BadRequestException("Doctor with this phone number already exists");
       }
 
       const clinicId = (createDoctorDto as any).clinic || authUser.clinic;
 
       const user = await this.userService.createUserAndRole(
         {
-          phone: createDoctorDto.phone,
+          phone,
           password: createDoctorDto.password,
           role: RolesEnum.DOCTOR,
           merchant: authUser.merchant,
@@ -60,9 +69,11 @@ export class DoctorService {
         session,
       );
 
-      // Step 2: Create the doctor record
+      // Step 2: Create the doctor record (ensure both mobile and phone are set for Person schema)
       const doctor = new this.doctorModel({
         ...createDoctorDto,
+        phone,
+        mobile: phone,
         merchant: authUser.merchant,
         clinic: clinicId,
         approvalStatus: "APPROVED",
@@ -92,14 +103,24 @@ export class DoctorService {
     createDoctorDto: any,
     session: ClientSession,
   ): Promise<{ profile: Doctor; user: any }> {
-    const existingUser = await this.findByPhone(createDoctorDto.phone);
+    const phone = (createDoctorDto.phone || createDoctorDto.mobile)?.trim();
+    if (!phone) {
+      throw new BadRequestException("Phone number is required");
+    }
+
+    const existingUser = await this.userService.getUserByMobile(phone);
     if (existingUser) {
+      throw new BadRequestException("A user with this phone number already exists");
+    }
+
+    const existingDoctor = await this.findByPhone(phone);
+    if (existingDoctor) {
       throw new BadRequestException("Doctor with this phone number already exists");
     }
 
     const user = await this.userService.createUserAndRole(
       {
-        phone: createDoctorDto.phone,
+        phone,
         password: createDoctorDto.password,
         role: RolesEnum.DOCTOR,
         merchant: createDoctorDto.merchant,
@@ -110,6 +131,8 @@ export class DoctorService {
 
     const doctor = new this.doctorModel({
       ...createDoctorDto,
+      phone,
+      mobile: phone,
       approvalStatus: createDoctorDto.merchant ? "PENDING" : "APPROVED",
     });
 
@@ -271,15 +294,67 @@ export class DoctorService {
     return doctor;
   }
 
-  async findByPhone(phone: string): Promise<Doctor> {
-    return this.doctorModel.findOne({ phone }).populate({
-      path: "user",
-      model: collectionsName.user,
-      select: "-password",
-    });
+  async findByPhone(phone: string): Promise<Doctor | null> {
+    const trimmedPhone = phone?.trim();
+    if (!trimmedPhone) return null;
+    return this.doctorModel
+      .findOne({
+        $or: [{ mobile: trimmedPhone }, { phone: trimmedPhone }],
+      })
+      .populate({
+        path: "user",
+        model: collectionsName.user,
+        select: "-password",
+      });
   }
 
   async update(id: string, updateDoctorDto: UpdateDoctorDto): Promise<Doctor> {
+    const existingDoctor = await this.doctorModel.findById(id);
+    if (!existingDoctor) {
+      throw new NotFoundException("Doctor not found for update");
+    }
+
+    const newPhone = (updateDoctorDto.phone || (updateDoctorDto as any).mobile)?.trim();
+    if (newPhone) {
+      // Check if another user already has this phone
+      const phoneOwner = await this.userService.getUserByMobile(newPhone);
+      if (
+        phoneOwner &&
+        phoneOwner._id.toString() !== existingDoctor.user?.toString()
+      ) {
+        throw new BadRequestException(
+          "Another user with this phone number already exists",
+        );
+      }
+
+      // Check if another doctor already has this phone
+      const doctorOwner = await this.findByPhone(newPhone);
+      if (
+        doctorOwner &&
+        doctorOwner._id.toString() !== existingDoctor._id.toString()
+      ) {
+        throw new BadRequestException(
+          "Another doctor with this phone number already exists",
+        );
+      }
+
+      // Sync user model phone if doctor has a user
+      if (existingDoctor.user) {
+        await this.userService.updateUserById(
+          existingDoctor.user as Types.ObjectId,
+          {
+            phone: newPhone,
+            ...(updateDoctorDto.email ? { email: updateDoctorDto.email } : {}),
+            ...(updateDoctorDto.name ? { name: updateDoctorDto.name } : {}),
+          },
+        );
+      }
+
+      // Ensure both mobile and phone are updated on doctor model
+      updateDoctorDto.phone = newPhone;
+      (updateDoctorDto as any).mobile = newPhone;
+    }
+
     const updated = await this.doctorModel
       .findByIdAndUpdate(id, updateDoctorDto, { new: true })
       .populate({
@@ -294,10 +369,16 @@ export class DoctorService {
   }
 
   async remove(id: string): Promise<void> {
-    const result = await this.doctorModel.findByIdAndDelete(id);
-
-    if (!result) {
+    const doctor = await this.doctorModel.findById(id);
+    if (!doctor) {
       throw new NotFoundException("Doctor not found for delete");
     }
+
+    // Delete associated user if exists
+    if (doctor.user) {
+      await this.userService.deleteUser(doctor.user as Types.ObjectId);
+    }
+
+    await this.doctorModel.findByIdAndDelete(id);
   }
 }

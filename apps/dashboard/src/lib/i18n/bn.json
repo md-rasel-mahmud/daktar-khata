@@ -318,5 +318,10 @@
   "basic_information": "মৌলিক তথ্য",
   "basic_info_description": "আপনার ব্যক্তিগত বিবরণ আপডেট করুন",
   "select_gender": "লিঙ্গ নির্বাচন করুন",
-  "saving": "সংরক্ষণ করা হচ্ছে..."
+  "saving": "সংরক্ষণ করা হচ্ছে...",
+  "all doctors": "সকল ডাক্তার",
+  "date range": "তারিখের সীমা",
+  "select date range": "তারিখের সীমা নির্বাচন করুন",
+  "clear filters": "ফিল্টার মুছুন",
+  "total appointments": "মোট অ্যাপয়েন্টমেন্ট"
 }

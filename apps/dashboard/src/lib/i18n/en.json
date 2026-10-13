@@ -317,5 +317,10 @@
   "manage_your_profile_information": "Manage your profile information",
   "basic_information": "Basic Information",
   "basic_info_description": "Update your personal details",
-  "select_gender": "Select gender"
+  "select_gender": "Select gender",
+  "all doctors": "All Doctors",
+  "date range": "Date Range",
+  "select date range": "Select date range",
+  "clear filters": "Clear Filters",
+  "total appointments": "Total Appointments"
 }
