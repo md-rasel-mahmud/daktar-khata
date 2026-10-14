@@ -19,13 +19,13 @@ export class Merchant extends Person {
   user?: Types.ObjectId;
 
   // Tenant domain configuration
-  @Prop({ type: String, trim: true, lowercase: true, unique: true, sparse: true })
+  @Prop({ type: String, trim: true, lowercase: true, sparse: true })
   subdomain?: string;
 
-  @Prop({ type: String, trim: true, lowercase: true, unique: true, sparse: true })
+  @Prop({ type: String, trim: true, lowercase: true, sparse: true })
   domain?: string;
 
-  @Prop({ type: String, trim: true, lowercase: true, unique: true, sparse: true })
+  @Prop({ type: String, trim: true, lowercase: true, sparse: true })
   customDomain?: string;
 
   // Merchant specific
@@ -69,7 +69,7 @@ export class Merchant extends Person {
 }
 
 export const MerchantSchema = SchemaFactory.createForClass(Merchant);
-MerchantSchema.index({ subdomain: 1 }, { unique: true, sparse: true });
-MerchantSchema.index({ domain: 1 }, { unique: true, sparse: true });
-MerchantSchema.index({ customDomain: 1 }, { unique: true, sparse: true });
+MerchantSchema.index({ subdomain: 1 }, { sparse: true });
+MerchantSchema.index({ domain: 1 }, { sparse: true });
+MerchantSchema.index({ customDomain: 1 }, { sparse: true });
 MerchantSchema.index({ user: 1 });
