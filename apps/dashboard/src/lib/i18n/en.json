@@ -652,6 +652,15 @@
   "patient_create_failed": "Failed to create patient.",
   "create_new_patient": "Register New Patient",
   "add_patient": "Add Patient",
-  "save_patient": "Register Patient",
-  "select_existing_patient": "Existing Patient"
+  "select_existing_patient": "Existing Patient",
+  "collect_payment": "Collect Payment",
+  "pay_online": "Pay Online",
+  "due_payment_required": "Due Payment Required",
+  "due_payment_required_to_download": "Full payment is required to download or print this report.",
+  "payment_due_alert_title": "Payment Required to Download Official Report",
+  "payment_due_alert_desc": "This diagnostic investigation has an unpaid balance. Official lab reports with verified values and downloadable PDF documents are accessible once your bill is fully settled.",
+  "login_to_pay_online": "Sign In to Settle Bill Online",
+  "my_invoices_payments": "My Invoices & Online Payments",
+  "patient_invoices_desc": "View clinical bills, settlement status, and pay dues instantly to access your test reports.",
+  "all_patients": "All Patients"
 }

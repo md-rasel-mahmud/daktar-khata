@@ -3363,6 +3363,8 @@ paths:
                   testName: string
                   price: 0
                   notes: string
+              paidAmount: 0
+              paymentStatus: string
             examples:
               default:
                 value: *ref_181
@@ -3378,7 +3380,7 @@ paths:
                 'Authorization': 'Bearer <token>',
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify({\n  "patient": "string",\n  "doctor": "string",\n  "referringDoctorName": "string",\n  "isWalkIn": true,\n  "merchant": "string",\n  "encounter": "string",\n  "items": [\n    {\n      "test": "string",\n      "testName": "string",\n      "price": 0,\n      "notes": "string"\n    }\n  ]\n})
+              body: JSON.stringify({\n  "patient": "string",\n  "doctor": "string",\n  "referringDoctorName": "string",\n  "isWalkIn": true,\n  "merchant": "string",\n  "encounter": "string",\n  "items": [\n    {\n      "test": "string",\n      "testName": "string",\n      "price": 0,\n      "notes": "string"\n    }\n  ],\n  "paidAmount": 0,\n  "paymentStatus": "string"\n})
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_182
     get:
@@ -3394,6 +3396,26 @@ paths:
           in: query
           schema:
             type: string
+        - name: patient
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: search
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: page
+          required: true
+          in: query
+          schema:
+            type: number
+        - name: limit
+          required: true
+          in: query
+          schema:
+            type: number
       responses:
         '200':
           description: ''
@@ -4212,6 +4234,26 @@ paths:
           schema:
             type: string
         - name: merchant
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: patient
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: search
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: page
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: limit
           required: true
           in: query
           schema:
@@ -8563,6 +8605,12 @@ components:
           items:
             $ref: '#/components/schemas/TestOrderItemDto'
           _propertyName: items
+        paidAmount:
+          type: number
+          _propertyName: paidAmount
+        paymentStatus:
+          type: string
+          _propertyName: paymentStatus
       required:
         - patient
         - items

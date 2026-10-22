@@ -1,9 +1,28 @@
-import React, { useState } from "react"
+import React from "react"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 import { UserPlus, X, Loader2 } from "lucide-react"
 import { Button } from "@repo/ui/button"
 import { useCreatePatientMutation } from "@/lib/store/api/services/patient.service"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { z } from "zod"
+
+export const quickPatientSchema = z.object({
+  name: z.string().trim().min(2, "Name must be at least 2 characters"),
+  phone: z
+    .string()
+    .trim()
+    .min(10, "Phone number must be at least 10 digits")
+    .regex(/^[0-9+ -]+$/, "Please enter a valid phone number"),
+  gender: z.enum(["MALE", "FEMALE", "OTHER"]),
+  bloodGroup: z.string(),
+  age: z.string().trim().optional(),
+  address: z.string().trim().optional(),
+  emergencyContact: z.string().trim().optional(),
+})
+
+export type QuickPatientFormData = z.infer<typeof quickPatientSchema>
 
 interface QuickPatientModalProps {
   isOpen: boolean
@@ -19,52 +38,51 @@ export const QuickPatientModal: React.FC<QuickPatientModalProps> = ({
   const { t } = useTranslation()
   const [createPatient, { isLoading }] = useCreatePatientMutation()
 
-  const [formData, setFormData] = useState({
-    name: "",
-    phone: "",
-    gender: "MALE",
-    bloodGroup: "O+",
-    age: "",
-    address: "",
-    emergencyContact: "",
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<QuickPatientFormData>({
+    resolver: zodResolver(quickPatientSchema),
+    defaultValues: {
+      name: "",
+      phone: "",
+      gender: "MALE",
+      bloodGroup: "O+",
+      age: "",
+      address: "",
+      emergencyContact: "",
+    },
   })
 
   if (!isOpen) return null
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!formData.name.trim() || !formData.phone.trim()) {
-      toast.error(t("fill_required_fields"))
-      return
-    }
-
+  const onSubmit = async (data: QuickPatientFormData) => {
     try {
       const result = await createPatient({
-        name: formData.name.trim(),
-        phone: formData.phone.trim(),
-        gender: formData.gender,
-        bloodGroup: formData.bloodGroup,
-        age: formData.age ? formData.age.trim() : undefined,
-        address: formData.address ? formData.address.trim() : undefined,
-        emergencyContact: formData.emergencyContact ? formData.emergencyContact.trim() : undefined,
+        name: data.name.trim(),
+        phone: data.phone.trim(),
+        gender: data.gender,
+        bloodGroup: data.bloodGroup,
+        age: data.age?.trim() || undefined,
+        address: data.address?.trim() || undefined,
+        emergencyContact: data.emergencyContact?.trim() || undefined,
       }).unwrap()
 
       const createdPatient = result?.data || result
-      toast.success(t("patient_created_success"))
+      toast.success(t("patient_created_success") || "Patient registered successfully!")
       onSuccess?.(createdPatient)
+      reset()
       onClose()
-      setFormData({
-        name: "",
-        phone: "",
-        gender: "MALE",
-        bloodGroup: "O+",
-        age: "",
-        address: "",
-        emergencyContact: "",
-      })
     } catch (err: any) {
-      toast.error(err?.data?.message || t("patient_create_failed"))
+      toast.error(err?.data?.message || t("patient_create_failed") || "Failed to create patient")
     }
+  }
+
+  const handleClose = () => {
+    reset()
+    onClose()
   }
 
   return (
@@ -86,26 +104,29 @@ export const QuickPatientModal: React.FC<QuickPatientModalProps> = ({
           </div>
           <button
             type="button"
-            onClick={onClose}
+            onClick={handleClose}
             className="p-1 rounded-full text-muted-foreground hover:bg-muted transition"
           >
             <X className="h-4 w-4" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-3.5">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-3.5">
           <div>
             <label className="block text-xs font-semibold mb-1">
               {t("patient_name_label")} <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
-              required
               placeholder="e.g. Rahim Ahmed"
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+              {...register("name")}
+              className={`w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary ${
+                errors.name ? "border-red-500 ring-1 ring-red-500" : ""
+              }`}
             />
+            {errors.name && (
+              <p className="text-xs text-red-500 mt-1">{errors.name.message}</p>
+            )}
           </div>
 
           <div>
@@ -114,12 +135,18 @@ export const QuickPatientModal: React.FC<QuickPatientModalProps> = ({
             </label>
             <input
               type="tel"
-              required
               placeholder="017XXXXXXXX"
-              value={formData.phone}
-              onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-              className="w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+              {...register("phone")}
+              className={`w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary ${
+                errors.phone ? "border-red-500 ring-1 ring-red-500" : ""
+              }`}
             />
+            {errors.phone && (
+              <p className="text-xs text-red-500 mt-1">{errors.phone.message}</p>
+            )}
+            <p className="text-[11px] text-muted-foreground mt-0.5">
+              Initial password for patient will be this phone number
+            </p>
           </div>
 
           <div className="grid grid-cols-3 gap-2.5">
@@ -128,8 +155,7 @@ export const QuickPatientModal: React.FC<QuickPatientModalProps> = ({
                 {t("patient_gender_label")}
               </label>
               <select
-                value={formData.gender}
-                onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
+                {...register("gender")}
                 className="w-full px-2.5 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 <option value="MALE">Male</option>
@@ -143,8 +169,7 @@ export const QuickPatientModal: React.FC<QuickPatientModalProps> = ({
                 {t("patient_blood_group_label")}
               </label>
               <select
-                value={formData.bloodGroup}
-                onChange={(e) => setFormData({ ...formData, bloodGroup: e.target.value })}
+                {...register("bloodGroup")}
                 className="w-full px-2.5 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 <option value="A+">A+</option>
@@ -165,8 +190,7 @@ export const QuickPatientModal: React.FC<QuickPatientModalProps> = ({
               <input
                 type="text"
                 placeholder="e.g. 32"
-                value={formData.age}
-                onChange={(e) => setFormData({ ...formData, age: e.target.value })}
+                {...register("age")}
                 className="w-full px-2.5 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
               />
             </div>
@@ -179,8 +203,7 @@ export const QuickPatientModal: React.FC<QuickPatientModalProps> = ({
             <input
               type="text"
               placeholder="e.g. Road 12, Dhanmondi, Dhaka"
-              value={formData.address}
-              onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+              {...register("address")}
               className="w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
@@ -192,8 +215,7 @@ export const QuickPatientModal: React.FC<QuickPatientModalProps> = ({
             <input
               type="tel"
               placeholder="e.g. 018XXXXXXXX"
-              value={formData.emergencyContact}
-              onChange={(e) => setFormData({ ...formData, emergencyContact: e.target.value })}
+              {...register("emergencyContact")}
               className="w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
@@ -202,7 +224,7 @@ export const QuickPatientModal: React.FC<QuickPatientModalProps> = ({
             <Button
               type="button"
               variant="outline"
-              onClick={onClose}
+              onClick={handleClose}
               disabled={isLoading}
               className="rounded-xl"
             >

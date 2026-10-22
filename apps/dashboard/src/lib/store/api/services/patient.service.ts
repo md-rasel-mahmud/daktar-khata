@@ -87,6 +87,38 @@ export const patientApi = api.injectEndpoints({
       }),
       invalidatesTags: ["Patients"],
     }),
+
+    // Invoices for a specific patient
+    getPatientInvoices: builder.query({
+      query: (patientId: string) => `invoice/patient/${patientId}`,
+      transformResponse: (response: any) => response.data || response || [],
+      providesTags: ["Invoices"],
+    }),
+
+    // Get invoices with optional patient/status filter
+    getAllInvoices: builder.query({
+      query: (params?: { patient?: string; merchant?: string; status?: string; search?: string }) => {
+        const queryParams = new URLSearchParams()
+        if (params?.patient) queryParams.append("patient", params.patient)
+        if (params?.merchant) queryParams.append("merchant", params.merchant)
+        if (params?.status) queryParams.append("status", params.status)
+        if (params?.search) queryParams.append("search", params.search)
+        const qs = queryParams.toString()
+        return qs ? `invoice?${qs}` : "invoice"
+      },
+      transformResponse: (response: any) => response.data || response || [],
+      providesTags: ["Invoices"],
+    }),
+
+    // Record invoice payment
+    recordInvoicePayment: builder.mutation({
+      query: ({ invoiceId, body }: { invoiceId: string; body: { amount: number; method: string; transactionId?: string; note?: string } }) => ({
+        url: `invoice/${invoiceId}/payment`,
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Invoices", "TestOrders"],
+    }),
   }),
 })
 
@@ -101,4 +133,7 @@ export const {
   useUpdateMedicalRecordMutation,
   useDeleteMedicalRecordMutation,
   useCreatePatientMutation,
+  useGetPatientInvoicesQuery,
+  useGetAllInvoicesQuery,
+  useRecordInvoicePaymentMutation,
 } = patientApi

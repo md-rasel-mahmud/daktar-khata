@@ -56,17 +56,44 @@ export interface AdmissionItem {
 export const admissionApi = api.injectEndpoints({
   endpoints: (builder) => ({
     // Admissions
-    getAdmissions: builder.query<AdmissionItem[], { status?: string; doctor?: string; merchant?: string } | void>({
+    getAdmissions: builder.query<
+      { data: AdmissionItem[]; total: number; page: number; limit: number; totalPages: number },
+      {
+        status?: string
+        doctor?: string
+        merchant?: string
+        patient?: string
+        search?: string
+        page?: number
+        limit?: number
+      } | void
+    >({
       query: (arg) => {
-        const params = (typeof arg === "object" && arg !== null ? arg : {}) as { status?: string; doctor?: string; merchant?: string }
+        const params = (typeof arg === "object" && arg !== null ? arg : {}) as any
         const queryParams = new URLSearchParams()
         if (params.status) queryParams.append("status", params.status)
         if (params.doctor) queryParams.append("doctor", params.doctor)
         if (params.merchant) queryParams.append("merchant", params.merchant)
+        if (params.patient) queryParams.append("patient", params.patient)
+        if (params.search) queryParams.append("search", params.search)
+        if (params.page) queryParams.append("page", String(params.page))
+        if (params.limit) queryParams.append("limit", String(params.limit))
         const qs = queryParams.toString()
         return qs ? `admission?${qs}` : "admission"
       },
-      transformResponse: (response: any) => response.data || response || [],
+      transformResponse: (response: any) => {
+        if (response && Array.isArray(response.data) && typeof response.total === "number") {
+          return response
+        }
+        const arr = Array.isArray(response) ? response : response?.data || []
+        return {
+          data: arr,
+          total: arr.length,
+          page: 1,
+          limit: arr.length || 10,
+          totalPages: 1,
+        }
+      },
       providesTags: ["Admissions"],
     }),
 

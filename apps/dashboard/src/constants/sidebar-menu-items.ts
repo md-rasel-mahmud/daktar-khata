@@ -318,6 +318,12 @@ export const sidebarMenuItems = [
     roles: [RolesEnum.PATIENT],
   },
   {
+    path: "/patient/invoices",
+    icon: CreditCard,
+    label: "Invoices & Payments",
+    roles: [RolesEnum.PATIENT],
+  },
+  {
     path: "/staff",
     icon: Home,
     label: "Dashboard",

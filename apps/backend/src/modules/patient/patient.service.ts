@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import { InjectModel } from "@nestjs/mongoose";
-import { ClientSession, Model, Types } from "mongoose";
+import { InjectConnection, InjectModel } from "@nestjs/mongoose";
+import { ClientSession, Connection, Model, Types } from "mongoose";
 import { CreatePatientDto } from "./dto/create-patient.dto";
 import { CreateQuickPatientDto } from "./dto/create-quick-patient.dto";
 import { UpdatePatientDto } from "./dto/update-patient.dto";
@@ -34,6 +34,7 @@ type MedicalRecordView = {
 @Injectable()
 export class PatientService {
   constructor(
+    @InjectConnection() private readonly connection: Connection,
     @InjectModel(collectionsName.patient) private patientModel: Model<Patient>,
     @InjectModel(collectionsName.appointment)
     private readonly appointmentModel: Model<AppointmentDocument>,
@@ -52,73 +53,84 @@ export class PatientService {
   }
 
   async createQuickPatient(authUser: IAuthUser, dto: CreateQuickPatientDto): Promise<Patient> {
-    const merchantId = authUser.merchant ? new Types.ObjectId(authUser.merchant) : undefined;
-    const clinicId = authUser.clinic ? new Types.ObjectId(authUser.clinic) : undefined;
-    const cleanPhone = dto.phone.trim();
+    const session = await this.connection.startSession();
+    try {
+      session.startTransaction();
 
-    // Check if patient already exists by mobile
-    let existingPatient = await this.patientModel.findOne({
-      $or: [
-        { mobile: cleanPhone },
-      ],
-      ...(merchantId ? { merchant: merchantId } : {}),
-    });
+      const merchantId = authUser.merchant ? new Types.ObjectId(authUser.merchant) : undefined;
+      const clinicId = authUser.clinic ? new Types.ObjectId(authUser.clinic) : undefined;
+      const cleanPhone = dto.phone.trim();
 
-    if (existingPatient) {
-      return existingPatient;
-    }
+      // Check if patient already exists by mobile
+      let existingPatient = await this.patientModel.findOne({
+        mobile: cleanPhone,
+        ...(merchantId ? { merchant: merchantId } : {}),
+      }).session(session);
 
-    // Check or create user
-    let user = await this.userModel.findOne({
-      phone: cleanPhone,
-      ...(merchantId ? { merchant: merchantId } : {}),
-    });
+      if (existingPatient) {
+        await session.commitTransaction();
+        return existingPatient;
+      }
 
-    if (!user) {
-      const defaultPassword = "DK@" + (cleanPhone.slice(-4) || "1234");
-      user = new this.userModel({
-        name: dto.name.trim(),
+      // Check or create user - initial password is the patient's phone number
+      let user = await this.userModel.findOne({
         phone: cleanPhone,
-        password: defaultPassword,
-        role: RolesEnum.PATIENT,
+        ...(merchantId ? { merchant: merchantId } : {}),
+      }).session(session);
+
+      if (!user) {
+        user = new this.userModel({
+          name: dto.name.trim(),
+          phone: cleanPhone,
+          password: cleanPhone, // Initial password is phone number
+          role: RolesEnum.PATIENT,
+          merchant: merchantId,
+          clinic: clinicId,
+          status: Status.ACTIVE,
+          isActive: true,
+        });
+        await user.save({ session });
+      }
+
+      // Check if patient already linked to this user
+      existingPatient = await this.patientModel.findOne({
+        user: user._id,
+        ...(merchantId ? { merchant: merchantId } : {}),
+      }).session(session);
+
+      if (existingPatient) {
+        await session.commitTransaction();
+        return existingPatient;
+      }
+
+      const bloodGroupValues = Object.values(BloodGroup);
+      const selectedBloodGroup = bloodGroupValues.includes(dto.bloodGroup as any)
+        ? (dto.bloodGroup as BloodGroup)
+        : BloodGroup.O_POSITIVE;
+
+      const newPatient = new this.patientModel({
+        name: dto.name.trim(),
+        mobile: cleanPhone,
+        gender: dto.gender || Gender.MALE,
+        bloodGroup: selectedBloodGroup,
+        address: dto.address?.trim() || undefined,
+        emergencyContact: dto.emergencyContact?.trim() || undefined,
+        note: dto.age ? `Age: ${dto.age}` : undefined,
+        status: Status.ACTIVE,
+        user: user._id,
         merchant: merchantId,
         clinic: clinicId,
-        status: Status.ACTIVE,
-        isActive: true,
       });
-      await user.save();
+
+      const saved = await newPatient.save({ session });
+      await session.commitTransaction();
+      return saved;
+    } catch (error) {
+      await session.abortTransaction();
+      throw error;
+    } finally {
+      session.endSession();
     }
-
-    // Check if patient already linked to this user
-    existingPatient = await this.patientModel.findOne({
-      user: user._id,
-      ...(merchantId ? { merchant: merchantId } : {}),
-    });
-
-    if (existingPatient) {
-      return existingPatient;
-    }
-
-    const bloodGroupValues = Object.values(BloodGroup);
-    const selectedBloodGroup = bloodGroupValues.includes(dto.bloodGroup as any)
-      ? (dto.bloodGroup as BloodGroup)
-      : BloodGroup.O_POSITIVE;
-
-    const newPatient = new this.patientModel({
-      name: dto.name.trim(),
-      mobile: cleanPhone,
-      gender: dto.gender || Gender.MALE,
-      bloodGroup: selectedBloodGroup,
-      address: dto.address?.trim() || undefined,
-      emergencyContact: dto.emergencyContact?.trim() || undefined,
-      note: dto.age ? `Age: ${dto.age}` : undefined,
-      status: Status.ACTIVE,
-      user: user._id,
-      merchant: merchantId,
-      clinic: clinicId,
-    });
-
-    return await newPatient.save();
   }
 
   private async findPatientByIdentifier(identifier: string): Promise<Patient> {

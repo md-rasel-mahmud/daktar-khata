@@ -88,7 +88,16 @@ export class LabReportService {
       throw new NotFoundException("No lab report found matching the provided details");
     }
 
-    return matched;
+    const testOrder = matched.testOrder as any;
+    const dueAmount = testOrder?.dueAmount ?? 0;
+    const isPaid = testOrder ? (testOrder.paymentStatus === "PAID" || dueAmount <= 0) : true;
+
+    return {
+      ...(matched.toObject ? matched.toObject() : matched),
+      isPaid,
+      dueAmount,
+      canDownload: isPaid,
+    };
   }
 
   async approve(id: string, userId: Types.ObjectId) {

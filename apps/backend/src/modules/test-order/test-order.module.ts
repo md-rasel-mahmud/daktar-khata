@@ -7,10 +7,13 @@ import { collectionsName } from "../../constant";
 import { DoctorModule } from "../doctor/doctor.module";
 import { QueueModule } from "../queue/queue.module";
 
+import { PatientSchema } from "../patient/schema/patient.schema";
+
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: collectionsName.testOrder, schema: TestOrderSchema },
+      { name: collectionsName.patient, schema: PatientSchema },
     ]),
     DoctorModule,
     QueueModule,

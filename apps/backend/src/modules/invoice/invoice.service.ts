@@ -7,6 +7,7 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Model, Types } from "mongoose";
 import { collectionsName } from "../../constant";
 import { InvoiceDocument } from "./schema/invoice.schema";
+import { PatientDocument } from "../patient/schema/patient.schema";
 import { CreateInvoiceDto } from "./dto/create-invoice.dto";
 import { RecordPaymentDto } from "./dto/record-payment.dto";
 import { RecordRefundDto } from "./dto/record-refund.dto";
@@ -18,6 +19,8 @@ export class InvoiceService {
   constructor(
     @InjectModel(collectionsName.invoice)
     private readonly invoiceModel: Model<InvoiceDocument>,
+    @InjectModel(collectionsName.patient)
+    private readonly patientModel: Model<PatientDocument>,
   ) {}
 
   private generateInvoiceNumber(): string {
@@ -242,14 +245,33 @@ export class InvoiceService {
   }
 
   async findByPatient(patientId: string, merchantId?: string) {
+    if (!Types.ObjectId.isValid(patientId)) {
+      throw new BadRequestException("Invalid patient ID");
+    }
+
+    const targetPatientId = new Types.ObjectId(patientId);
+    const matchingPatients = await this.patientModel
+      .find({
+        $or: [{ _id: targetPatientId }, { user: targetPatientId }],
+      })
+      .select("_id");
+
+    const patientIds =
+      matchingPatients.length > 0
+        ? matchingPatients.map((p) => p._id)
+        : [targetPatientId];
+
     const filter: any = {
-      patient: new Types.ObjectId(patientId),
+      patient: { $in: patientIds },
       isActive: true,
     };
-    if (merchantId) filter.merchant = new Types.ObjectId(merchantId);
+    if (merchantId && Types.ObjectId.isValid(merchantId)) {
+      filter.merchant = new Types.ObjectId(merchantId);
+    }
 
     return this.invoiceModel
       .find(filter)
+      .populate("patient", "name phone mobile")
       .populate("doctor", "name")
       .sort({ createdAt: -1 });
   }

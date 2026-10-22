@@ -14,6 +14,7 @@ import { DoctorService } from "../doctor/doctor.service";
 import { BedDocument } from "../bed/schema/bed.schema";
 import { BedAllocationDocument } from "../bed-allocation/schema/bed-allocation.schema";
 import { InvoiceDocument } from "../invoice/schema/invoice.schema";
+import { Patient } from "../patient/schema/patient.schema";
 import { InvoiceStatus } from "../../constant/enums/status.enum";
 
 @Injectable()
@@ -27,6 +28,8 @@ export class AdmissionService {
     private readonly allocationModel: Model<BedAllocationDocument>,
     @InjectModel(collectionsName.invoice)
     private readonly invoiceModel: Model<InvoiceDocument>,
+    @InjectModel(collectionsName.patient)
+    private readonly patientModel: Model<Patient>,
     @InjectConnection() private readonly connection: Connection,
     private readonly doctorService: DoctorService,
   ) {}
@@ -103,19 +106,101 @@ export class AdmissionService {
     }
   }
 
-  async findAll(status?: string, doctorId?: string, merchantId?: string) {
+  async findAll(options?: {
+    status?: string;
+    doctorId?: string;
+    merchantId?: string;
+    patientId?: string;
+    search?: string;
+    page?: number;
+    limit?: number;
+  }) {
+    const { status, doctorId, merchantId, patientId, search, page, limit } = options || {};
     const filter: any = {};
     if (status) filter.status = status;
-    if (doctorId) filter.doctor = new Types.ObjectId(doctorId);
-    if (merchantId) filter.merchant = new Types.ObjectId(merchantId);
-    return this.admissionModel
-      .find(filter)
-      .sort({ admissionDate: -1 })
-      .populate("patient", "name phone")
-      .populate("doctor", "name specialization")
-      .populate("ward", "name")
-      .populate("room", "name")
-      .populate("bed", "bedNumber");
+    if (doctorId && Types.ObjectId.isValid(doctorId)) filter.doctor = new Types.ObjectId(doctorId);
+    if (merchantId && Types.ObjectId.isValid(merchantId)) filter.merchant = new Types.ObjectId(merchantId);
+    if (patientId && Types.ObjectId.isValid(patientId)) filter.patient = new Types.ObjectId(patientId);
+
+    if (search && search.trim()) {
+      const q = search.trim();
+      const searchOr: any[] = [];
+
+      // 1. Search patient by name or phone
+      const matchingPatients = await this.patientModel
+        .find({
+          $or: [
+            { name: { $regex: q, $options: "i" } },
+            { mobile: { $regex: q, $options: "i" } },
+          ],
+        })
+        .select("_id")
+        .limit(50);
+
+      const patientIds = matchingPatients.map((p) => p._id);
+      if (patientIds.length > 0) {
+        searchOr.push({ patient: { $in: patientIds } });
+      }
+
+      // 2. Search invoice by invoiceNumber linked to admission
+      const matchingInvoices = await this.invoiceModel
+        .find({
+          invoiceNumber: { $regex: q, $options: "i" },
+          admission: { $exists: true, $ne: null },
+        })
+        .select("admission")
+        .limit(50);
+
+      const admissionIdsFromInvoice = matchingInvoices
+        .map((inv: any) => inv.admission)
+        .filter(Boolean);
+      if (admissionIdsFromInvoice.length > 0) {
+        searchOr.push({ _id: { $in: admissionIdsFromInvoice } });
+      }
+
+      // 3. Match admission ID directly if valid ObjectId
+      if (Types.ObjectId.isValid(q)) {
+        searchOr.push({ _id: new Types.ObjectId(q) });
+      }
+
+      if (searchOr.length > 0) {
+        filter.$or = searchOr;
+      } else {
+        return {
+          data: [],
+          total: 0,
+          page: page || 1,
+          limit: limit || 10,
+          totalPages: 0,
+        };
+      }
+    }
+
+    const pageNum = page && page > 0 ? page : 1;
+    const limitNum = limit && limit > 0 ? Math.min(100, limit) : 10;
+    const skip = (pageNum - 1) * limitNum;
+
+    const [data, total] = await Promise.all([
+      this.admissionModel
+        .find(filter)
+        .sort({ admissionDate: -1 })
+        .skip(skip)
+        .limit(limitNum)
+        .populate("patient", "name mobile phone gender bloodGroup")
+        .populate("doctor", "name specialization")
+        .populate("ward", "name")
+        .populate("room", "name")
+        .populate("bed", "bedNumber"),
+      this.admissionModel.countDocuments(filter),
+    ]);
+
+    return {
+      data,
+      total,
+      page: pageNum,
+      limit: limitNum,
+      totalPages: Math.ceil(total / limitNum) || 1,
+    };
   }
 
   async findOne(id: string) {

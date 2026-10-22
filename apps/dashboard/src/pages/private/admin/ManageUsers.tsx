@@ -17,7 +17,7 @@ import {
 } from "@repo/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar"
 import { Badge } from "@repo/ui/badge"
-import { MoreHorizontal, UserCheck, UserX, Loader2, UserPlus } from "lucide-react"
+import { MoreHorizontal, UserCheck, UserX, Loader2, UserPlus, CreditCard } from "lucide-react"
 import { useGetPatientsQuery } from "@/lib/store/api/services/patient.service"
 import { toast } from "sonner"
 import { format } from "date-fns"
@@ -26,6 +26,7 @@ import {
   type DataTableColumn,
 } from "@/components/common/table"
 import { QuickPatientModal } from "@/components/modals/QuickPatientModal"
+import { CollectPaymentModal } from "@/components/modals/CollectPaymentModal"
 
 type PatientRow = any;
 
@@ -33,6 +34,7 @@ const ManageUsers: React.FC = () => {
   const { t } = useTranslation()
   const [searchQuery, setSearchQuery] = useState("")
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
+  const [selectedPatientForPayment, setSelectedPatientForPayment] = useState<any>(null)
   const { data: patients = [], isLoading, isError } = useGetPatientsQuery(undefined)
 
   const filteredPatients = useMemo(() => {
@@ -82,7 +84,7 @@ const ManageUsers: React.FC = () => {
             </Avatar>
             <div>
               <p className="font-medium">{patient.name || `${patient.firstName} ${patient.lastName}`}</p>
-              <p className="text-sm text-muted-foreground">{patient.id || patient._id}</p>
+              {/* <p className="text-sm text-muted-foreground">{patient.id || patient._id}</p> */}
             </div>
           </div>
         ),
@@ -152,6 +154,13 @@ const ManageUsers: React.FC = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>{t("actions")}</DropdownMenuLabel>
+              <DropdownMenuItem
+                className="text-emerald-600 font-semibold focus:text-emerald-700"
+                onClick={() => setSelectedPatientForPayment(patient)}
+              >
+                <CreditCard className="mr-2 h-4 w-4" />
+                {t("collect_payment") || "Collect Payment"}
+              </DropdownMenuItem>
               <DropdownMenuItem onClick={() => handleActivateUser(patient.id || patient._id)}>
                 <UserCheck className="mr-2 h-4 w-4" />
                 {t("activate")}
@@ -229,6 +238,12 @@ const ManageUsers: React.FC = () => {
       <QuickPatientModal
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
+      />
+
+      <CollectPaymentModal
+        isOpen={Boolean(selectedPatientForPayment)}
+        onClose={() => setSelectedPatientForPayment(null)}
+        patient={selectedPatientForPayment}
       />
     </div>
   )

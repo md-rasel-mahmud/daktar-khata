@@ -67,4 +67,14 @@ export class CreateTestOrderDto {
   @ValidateNested({ each: true })
   @Type(() => TestOrderItemDto)
   items: TestOrderItemDto[];
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsNumber()
+  paidAmount?: number;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  paymentStatus?: string;
 }

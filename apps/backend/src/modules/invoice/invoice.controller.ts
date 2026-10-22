@@ -112,6 +112,7 @@ export class InvoiceController {
     RolesEnum.MERCHANT,
     RolesEnum.ADMIN,
     RolesEnum.SUPER_ADMIN,
+    RolesEnum.PATIENT,
   )
   async recordPayment(
     @AuthUser() user: IAuthUser,

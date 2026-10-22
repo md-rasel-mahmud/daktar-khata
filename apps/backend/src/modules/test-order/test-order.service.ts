@@ -8,11 +8,15 @@ import { TestOrderStatus } from "../../constant/enums/status.enum";
 import { DoctorService } from "../doctor/doctor.service";
 import { QueueGateway } from "../queue/queue.gateway";
 
+import { Patient } from "../patient/schema/patient.schema";
+
 @Injectable()
 export class TestOrderService {
   constructor(
     @InjectModel(collectionsName.testOrder)
     private readonly testOrderModel: Model<TestOrderDocument>,
+    @InjectModel(collectionsName.patient)
+    private readonly patientModel: Model<Patient>,
     private readonly doctorService: DoctorService,
     private readonly queueGateway: QueueGateway,
   ) {}
@@ -57,6 +61,11 @@ export class TestOrderService {
     const tokenNumber = todayCount + 1;
     const orderNumber = this.generateOrderNumber();
 
+    const totalAmount = dto.items.reduce((s, itm) => s + (itm.price || 0), 0);
+    const paidAmount = typeof dto.paidAmount === "number" ? dto.paidAmount : totalAmount;
+    const dueAmount = Math.max(0, totalAmount - paidAmount);
+    const paymentStatus = dueAmount === 0 ? "PAID" : paidAmount > 0 ? "PARTIALLY_PAID" : "DUE";
+
     const order = await this.testOrderModel.create({
       ...dto,
       orderNumber,
@@ -66,6 +75,9 @@ export class TestOrderService {
       patient: new Types.ObjectId(dto.patient),
       doctor: doctorDoc ? doctorDoc._id : null,
       referringDoctorName: dto.referringDoctorName || "",
+      paidAmount,
+      dueAmount,
+      paymentStatus,
       ...(dto.encounter && { encounter: new Types.ObjectId(dto.encounter) }),
       items: dto.items.map((item) => ({
         ...item,
@@ -84,7 +96,15 @@ export class TestOrderService {
     return order;
   }
 
-  async findAll(merchantId?: string, status?: string) {
+  async findAll(options?: {
+    merchantId?: string;
+    status?: string;
+    patientId?: string;
+    search?: string;
+    page?: number;
+    limit?: number;
+  }) {
+    const { merchantId, status, patientId, search, page, limit } = options || {};
     const filter: any = {};
     if (merchantId && Types.ObjectId.isValid(merchantId)) {
       filter.merchant = new Types.ObjectId(merchantId);
@@ -92,11 +112,62 @@ export class TestOrderService {
     if (status) {
       filter.status = status;
     }
-    return this.testOrderModel
-      .find(filter)
-      .sort({ createdAt: -1 })
-      .populate("patient", "name mobile gender bloodGroup")
-      .populate("doctor", "name specialization");
+    if (patientId && Types.ObjectId.isValid(patientId)) {
+      filter.patient = new Types.ObjectId(patientId);
+    }
+
+    if (search && search.trim()) {
+      const q = search.trim();
+      const searchOr: any[] = [];
+
+      searchOr.push({ orderNumber: { $regex: q, $options: "i" } });
+      searchOr.push({ tokenNumber: { $regex: q, $options: "i" } });
+      searchOr.push({ referringDoctorName: { $regex: q, $options: "i" } });
+
+      const matchingPatients = await this.patientModel
+        .find({
+          $or: [
+            { name: { $regex: q, $options: "i" } },
+            { mobile: { $regex: q, $options: "i" } },
+          ],
+        })
+        .select("_id")
+        .limit(50);
+
+      const patientIds = matchingPatients.map((p) => p._id);
+      if (patientIds.length > 0) {
+        searchOr.push({ patient: { $in: patientIds } });
+      }
+
+      if (Types.ObjectId.isValid(q)) {
+        searchOr.push({ _id: new Types.ObjectId(q) });
+      }
+
+      filter.$or = searchOr;
+    }
+
+    const pageNum = page && page > 0 ? page : 1;
+    const limitNum = limit && limit > 0 ? Math.min(100, limit) : 10;
+    const skip = (pageNum - 1) * limitNum;
+
+    const [data, total] = await Promise.all([
+      this.testOrderModel
+        .find(filter)
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limitNum)
+        .populate("patient", "name mobile gender bloodGroup")
+        .populate("doctor", "name specialization"),
+      this.testOrderModel.countDocuments(filter),
+    ]);
+
+    return {
+      data,
+      total,
+      page: pageNum,
+      limit: limitNum,
+      totalPages: Math.ceil(total / limitNum) || 1,
+    };
   }
 
   async getByEncounter(encounterId: string) {

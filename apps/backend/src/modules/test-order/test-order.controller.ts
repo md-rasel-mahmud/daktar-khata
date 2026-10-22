@@ -49,9 +49,20 @@ export class TestOrderController {
     @AuthUser() user: IAuthUser,
     @Query("merchant") merchantId?: string,
     @Query("status") status?: string,
+    @Query("patient") patientId?: string,
+    @Query("search") search?: string,
+    @Query("page") page?: number,
+    @Query("limit") limit?: number,
   ) {
     const targetMerchant = user.merchant ? user.merchant.toString() : merchantId;
-    return this.testOrderService.findAll(targetMerchant, status);
+    return this.testOrderService.findAll({
+      merchantId: targetMerchant,
+      status,
+      patientId,
+      search,
+      page: page ? Number(page) : 1,
+      limit: limit ? Number(limit) : 10,
+    });
   }
 
   @Public()

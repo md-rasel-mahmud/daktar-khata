@@ -89,11 +89,25 @@ export class AdmissionController {
     RolesEnum.SUPER_ADMIN,
   )
   async findAll(
+    @AuthUser() user: IAuthUser,
     @Query("status") status?: string,
     @Query("doctor") doctorId?: string,
     @Query("merchant") merchantId?: string,
+    @Query("patient") patientId?: string,
+    @Query("search") search?: string,
+    @Query("page") page?: string,
+    @Query("limit") limit?: string,
   ) {
-    return this.admissionService.findAll(status, doctorId, merchantId);
+    const targetMerchant = user.merchant ? user.merchant.toString() : merchantId;
+    return this.admissionService.findAll({
+      status,
+      doctorId,
+      merchantId: targetMerchant,
+      patientId,
+      search,
+      page: page ? parseInt(page, 10) : undefined,
+      limit: limit ? parseInt(limit, 10) : undefined,
+    });
   }
 
   @Get(":id")

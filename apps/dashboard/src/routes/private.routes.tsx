@@ -30,6 +30,9 @@ const PatientDashboard = lazy(() => import("@/pages/private/patient/Dashboard"))
 const PatientMedicalRecords = lazy(
   () => import("@/pages/private/patient/MedicalRecords")
 )
+const PatientInvoicesPage = lazy(
+  () => import("@/pages/private/patient/PatientInvoicesPage")
+)
 const Profile = lazy(() => import("@/pages/private/Profile"))
 const MerchantAppointmentsPage = lazy(
   () => import("@/pages/private/merchant/MerchantAppointmentsPage")
@@ -415,6 +418,11 @@ export const privateRoutes = [
   {
     path: "/patient/services",
     element: withSuspense(<ClinicServicesPage />),
+    allowRoutes: [RolesEnum.SUPER_ADMIN, RolesEnum.ADMIN, RolesEnum.PATIENT],
+  },
+  {
+    path: "/patient/invoices",
+    element: withSuspense(<PatientInvoicesPage />),
     allowRoutes: [RolesEnum.SUPER_ADMIN, RolesEnum.ADMIN, RolesEnum.PATIENT],
   },
 

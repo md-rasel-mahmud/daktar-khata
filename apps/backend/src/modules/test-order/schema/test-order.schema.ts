@@ -64,6 +64,19 @@ export class TestOrder {
     default: TestOrderStatus.ORDERED,
   })
   status: string;
+
+  @Prop({ type: Number, default: 0 })
+  paidAmount: number;
+
+  @Prop({ type: Number, default: 0 })
+  dueAmount: number;
+
+  @Prop({
+    type: String,
+    enum: ["PAID", "DUE", "PARTIALLY_PAID"],
+    default: "PAID",
+  })
+  paymentStatus: string;
 }
 
 export const TestOrderSchema = SchemaFactory.createForClass(TestOrder);

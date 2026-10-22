@@ -10,6 +10,8 @@ import {
   Download,
   ShieldCheck,
   Stethoscope,
+  Lock,
+  AlertTriangle,
 } from "lucide-react"
 import { printHtmlDocument, downloadDocumentAsPdf } from "@/components/common/print"
 
@@ -121,7 +123,18 @@ export default function PublicReportDownload() {
     </div>
   `
 
+  const isLocked = Boolean(
+    reportData &&
+      (reportData.canDownload === false ||
+        reportData.isPaid === false ||
+        (typeof reportData.dueAmount === "number" && reportData.dueAmount > 0))
+  )
+
   const handlePrintA4 = () => {
+    if (isLocked) {
+      toast.error(t("due_payment_required_to_download") || "Full payment is required to print this laboratory report.")
+      return
+    }
     printHtmlDocument({
       title: `LabReport-${reportData?.reportNumber || token}-${reportData?.patient?.name || "Patient"}`,
       mode: "A4",
@@ -130,6 +143,10 @@ export default function PublicReportDownload() {
   }
 
   const handleDownloadPdf = () => {
+    if (isLocked) {
+      toast.error(t("due_payment_required_to_download") || "Full payment is required to download this laboratory report.")
+      return
+    }
     downloadDocumentAsPdf({
       title: `LabReport-${reportData?.reportNumber || token}-${reportData?.patient?.name || "Patient"}.pdf`,
       mode: "A4",
@@ -228,22 +245,60 @@ export default function PublicReportDownload() {
               </div>
 
               <div className="flex items-center gap-2 print:hidden">
-                <button
-                  onClick={handleDownloadPdf}
-                  className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-300 hover:bg-slate-100 text-slate-800 font-bold text-xs transition"
-                >
-                  <Download className="h-4 w-4" />
-                  {t("download_pdf")}
-                </button>
-                <button
-                  onClick={handlePrintA4}
-                  className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs shadow transition"
-                >
-                  <Printer className="h-4 w-4" />
-                  {t("print_a4")}
-                </button>
+                {isLocked ? (
+                  <div className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-700 font-bold text-xs">
+                    <Lock className="h-4 w-4" />
+                    <span>{t("due_payment_required") || "Due Payment Required"}</span>
+                  </div>
+                ) : (
+                  <>
+                    <button
+                      onClick={handleDownloadPdf}
+                      className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-300 hover:bg-slate-100 text-slate-800 font-bold text-xs transition"
+                    >
+                      <Download className="h-4 w-4" />
+                      {t("download_pdf")}
+                    </button>
+                    <button
+                      onClick={handlePrintA4}
+                      className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs shadow transition"
+                    >
+                      <Printer className="h-4 w-4" />
+                      {t("print_a4")}
+                    </button>
+                  </>
+                )}
               </div>
             </div>
+
+            {/* Unpaid Due Alert Banner */}
+            {isLocked && (
+              <div className="my-5 p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 flex items-start gap-3">
+                <AlertTriangle className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
+                <div className="text-xs space-y-1.5">
+                  <div className="font-bold text-sm text-amber-950">
+                    {t("payment_due_alert_title") || "Payment Required to Download Official Report"}
+                  </div>
+                  <p className="text-amber-800 leading-relaxed">
+                    {t("payment_due_alert_desc") ||
+                      "This diagnostic investigation has an unpaid balance. Official lab reports with verified values and downloadable PDF documents are accessible once your bill is fully settled."}
+                    {reportData.dueAmount !== undefined && (
+                      <span className="font-bold ml-1 text-amber-950">
+                        Remaining Due: ৳{reportData.dueAmount}
+                      </span>
+                    )}
+                  </p>
+                  <div className="pt-1">
+                    <a
+                      href="/auth/login"
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs shadow-sm transition"
+                    >
+                      {t("login_to_pay_online") || "Sign In to Settle Bill Online"}
+                    </a>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Patient & Order Metadata */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 my-6 text-xs p-4 rounded-2xl bg-slate-50 border border-slate-100">
@@ -283,9 +338,21 @@ export default function PublicReportDownload() {
                 <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
                   {t("clinical_findings")}
                 </h4>
-                <div className="p-5 rounded-2xl bg-slate-50/80 border border-slate-200 text-sm text-slate-800 whitespace-pre-line leading-relaxed font-mono">
-                  {reportData.findings || "Normal findings observed."}
-                </div>
+                {isLocked ? (
+                  <div className="p-6 rounded-2xl bg-slate-50/80 border border-slate-200 text-center text-xs text-muted-foreground flex flex-col items-center justify-center gap-2">
+                    <Lock className="h-6 w-6 text-amber-500" />
+                    <span className="font-semibold text-slate-700">
+                      Detailed laboratory values and verified pathologist notes are locked.
+                    </span>
+                    <span className="text-[11px] text-slate-500">
+                      Please clear the pending invoice at counter or via patient portal.
+                    </span>
+                  </div>
+                ) : (
+                  <div className="p-5 rounded-2xl bg-slate-50/80 border border-slate-200 text-sm text-slate-800 whitespace-pre-line leading-relaxed font-mono">
+                    {reportData.findings || "Normal findings observed."}
+                  </div>
+                )}
               </div>
 
               {reportData.conclusion && (

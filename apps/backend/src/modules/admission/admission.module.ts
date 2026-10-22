@@ -6,6 +6,7 @@ import { AdmissionSchema } from "./schema/admission.schema";
 import { BedSchema } from "../bed/schema/bed.schema";
 import { BedAllocationSchema } from "../bed-allocation/schema/bed-allocation.schema";
 import { InvoiceSchema } from "../invoice/schema/invoice.schema";
+import { PatientSchema } from "../patient/schema/patient.schema";
 import { collectionsName } from "../../constant";
 import { DoctorModule } from "../doctor/doctor.module";
 
@@ -16,6 +17,7 @@ import { DoctorModule } from "../doctor/doctor.module";
       { name: collectionsName.bed, schema: BedSchema },
       { name: collectionsName.bedAllocation, schema: BedAllocationSchema },
       { name: collectionsName.invoice, schema: InvoiceSchema },
+      { name: collectionsName.patient, schema: PatientSchema },
     ]),
     DoctorModule,
   ],
