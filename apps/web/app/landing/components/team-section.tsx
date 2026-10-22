@@ -1,16 +1,15 @@
 "use client"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar"
-import { Button } from "@repo/ui/button"
 import { Badge } from "@repo/ui/badge"
 import { Card, CardContent } from "@repo/ui/card"
 import { CardDecorator } from "@/components/card-decorator"
 import { Github, Linkedin, Globe } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { API_BASE_URL } from '@/lib/api'
 
-
-const team = [
+const fallbackTeam = [
   {
-    id: 1,
     name: 'Dr. Nahid Hasan',
     role: 'Founder & CEO',
     description: 'Practicing physician turned builder, automating clinic workflows across Bangladesh.',
@@ -23,7 +22,6 @@ const team = [
     }
   },
   {
-    id: 2,
     name: 'Dr. Farhana Akter',
     role: 'Co-founder & Clinical Success',
     description: 'Leads onboarding and ensures every doctor gets real value from day one.',
@@ -36,7 +34,6 @@ const team = [
     }
   },
   {
-    id: 3,
     name: 'Sohel Rana',
     role: 'Engineering Lead',
     description: 'Brings 10+ years of platform engineering to keep Daktar Khata fast and reliable.',
@@ -49,7 +46,6 @@ const team = [
     }
   },
   {
-    id: 4,
     name: 'Nusrat Jahan',
     role: 'Product Designer',
     description: 'Designs the simple, warm interfaces doctors actually enjoy using.',
@@ -62,7 +58,6 @@ const team = [
     }
   },
   {
-    id: 5,
     name: 'Rakibul Islam',
     role: 'Backend Engineer',
     description: 'Owns the khata — billing, records, and the data doctors trust every day.',
@@ -75,7 +70,6 @@ const team = [
     }
   },
   {
-    id: 6,
     name: 'Tanzina Rahman',
     role: 'Customer Success',
     description: 'Makes sure clinics, receptionists, and doctors all get the help they need.',
@@ -90,6 +84,32 @@ const team = [
 ]
 
 export function TeamSection() {
+  const [teamMembers, setTeamMembers] = useState(fallbackTeam)
+  const [title, setTitle] = useState('Meet the people behind Daktar Khata')
+  const [subtitle, setSubtitle] = useState(
+    'A team of healthcare practitioners, engineers, and designers working to give every clinic a simpler way to run its practice.'
+  )
+
+  useEffect(() => {
+    async function fetchTeam() {
+      try {
+        const res = await fetch(`${API_BASE_URL}/landing-content`, { cache: 'no-store' })
+        if (res.ok) {
+          const json = await res.json()
+          const data = json?.data || json
+          if (data?.teamTitle) setTitle(data.teamTitle)
+          if (data?.teamSubtitle) setSubtitle(data.teamSubtitle)
+          if (Array.isArray(data?.team) && data.team.length > 0) {
+            setTeamMembers(data.team)
+          }
+        }
+      } catch (err) {
+        // Fallback
+      }
+    }
+    fetchTeam()
+  }, [])
+
   return (
     <section id="team" className="py-24 sm:py-32">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -99,82 +119,94 @@ export function TeamSection() {
             Our Team
           </Badge>
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-6">
-            Meet the people behind Daktar Khata
+            {title}
           </h2>
           <p className="text-lg text-muted-foreground mb-8">
-            A team of healthcare practitioners, engineers, and designers working to give every clinic a simpler way to run its practice.
+            {subtitle}
           </p>
         </div>
 
         {/* Team Grid */}
         <div className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 xl:grid-cols-4">
-          {team.map((member) => (
-            <Card key={member.id} className="shadow-xs py-2">
-              <CardContent className="p-4">
-                <div className="text-center">
-                  {/* Avatar */}
-                  <div className="flex justify-center mb-4">
-                    <CardDecorator>
-                      <Avatar className="h-24 w-24 border shadow-lg">
-                        <AvatarImage
-                          src={member.image}
-                          alt={member.name}
-                          className="object-cover"
-                        />
-                        <AvatarFallback className="text-lg font-semibold">
-                          {member.fallback}
-                        </AvatarFallback>
-                      </Avatar>
-                    </CardDecorator>
+          {teamMembers.map((member, idx) => {
+            const initials = member.name
+              ? member.name.split(' ').map((n) => n[0]).join('').slice(0, 2)
+              : 'DK'
+
+            return (
+              <Card key={idx} className="shadow-xs py-2">
+                <CardContent className="p-4">
+                  <div className="text-center">
+                    {/* Avatar */}
+                    <div className="flex justify-center mb-4">
+                      <CardDecorator>
+                        <Avatar className="h-24 w-24 border shadow-lg">
+                          <AvatarImage
+                            src={member.image}
+                            alt={member.name}
+                            className="object-cover"
+                          />
+                          <AvatarFallback className="text-lg font-semibold">
+                            {initials}
+                          </AvatarFallback>
+                        </Avatar>
+                      </CardDecorator>
+                    </div>
+
+                    {/* Name and Role */}
+                    <h3 className="text-lg font-semibold text-foreground mb-1">
+                      {member.name}
+                    </h3>
+                    <p className="text-sm font-medium text-primary mb-3">
+                      {member.role}
+                    </p>
+
+                    {/* Description */}
+                    <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
+                      {member.description}
+                    </p>
+
+                    {/* Social Links */}
+                    <div className="flex items-center justify-center gap-3">
+                      {member.social?.linkedin && (
+                        <a
+                          href={member.social.linkedin}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={`${member.name} LinkedIn`}
+                          className="inline-flex size-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-primary"
+                        >
+                          <Linkedin className="h-4 w-4" />
+                        </a>
+                      )}
+                      {member.social?.github && (
+                        <a
+                          href={member.social.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={`${member.name} GitHub`}
+                          className="inline-flex size-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-primary"
+                        >
+                          <Github className="h-4 w-4" />
+                        </a>
+                      )}
+                      {member.social?.website && (
+                        <a
+                          href={member.social.website}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={`${member.name} Website`}
+                          className="inline-flex size-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-primary"
+                        >
+                          <Globe className="h-4 w-4" />
+                        </a>
+                      )}
+                    </div>
                   </div>
-
-                  {/* Name and Role */}
-                  <h3 className="text-lg font-semibold text-foreground mb-1">
-                    {member.name}
-                  </h3>
-                  <p className="text-sm font-medium text-primary mb-3">
-                    {member.role}
-                  </p>
-
-                  {/* Description */}
-                  <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
-                    {member.description}
-                  </p>
-
-                  {/* Social Links */}
-                  <div className="flex items-center justify-center gap-3">
-                    <a
-                      href={member.social.linkedin}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`${member.name} LinkedIn`}
-                      className="inline-flex size-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-primary"
-                    >
-                      <Linkedin className="h-4 w-4" />
-                    </a>
-                    <a
-                      href={member.social.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`${member.name} GitHub`}
-                      className="inline-flex size-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-primary"
-                    >
-                      <Github className="h-4 w-4" />
-                    </a>
-                    <a
-                      href={member.social.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`${member.name} Website`}
-                      className="inline-flex size-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-primary"
-                    >
-                      <Globe className="h-4 w-4" />
-                    </a>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                </CardContent>
+              </Card>
+            )
+          })}
         </div>
       </div>
     </section>

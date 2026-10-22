@@ -42,4 +42,7 @@ export const collectionsName = {
   stockTransaction: "StockTransaction",
   payroll: "Payroll",
   notification: "Notification",
+  blog: "Blog",
+  contactMessage: "ContactMessage",
+  landingContent: "LandingContent",
 };

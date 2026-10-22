@@ -27,11 +27,16 @@ import {
 import { useGetMerchantDashboardQuery } from "@/lib/store/api/services/dashboard.service"
 import { useGetAppointmentsQuery } from "@/lib/store/api/services/appointment.service"
 import { Skeleton } from "@repo/ui/skeleton"
+import { useSelector } from "react-redux"
+import type { RootState } from "@/lib/store/store"
+import { DashboardGreeting } from "@/components/common/DashboardGreeting"
 
 const AdminDashboard: React.FC = () => {
   const { t } = useTranslation()
   const { data: dashboardData, isLoading: isDashboardLoading } = useGetMerchantDashboardQuery()
   const { data: appointmentsData, isLoading: isAppointmentsLoading } = useGetAppointmentsQuery(undefined)
+
+  const profile = useSelector((state: RootState) => state.auth.user?.profile)
 
   const overview = dashboardData?.overview || {}
   const appointmentsStats = dashboardData?.appointments || {}
@@ -106,14 +111,8 @@ const AdminDashboard: React.FC = () => {
 
   return (
     <div className="fadeIn space-y-6">
-      <div className="flex flex-col gap-1">
-        <h1 className="text-3xl font-bold tracking-tight">
-          {t("admin_dashboard", "Clinic Admin Dashboard")}
-        </h1>
-        <p className="text-muted-foreground">
-          {t("welcome_back_clinic_overview", "Live operational metrics, finances, queue, and clinical capacity.")}
-        </p>
-      </div>
+      {profile && <DashboardGreeting profile={profile} />}
+
 
       {/* Primary KPI Stats */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">

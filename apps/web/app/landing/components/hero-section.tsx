@@ -6,8 +6,34 @@ import { ArrowRight, Play, Star } from 'lucide-react'
 import { Button } from "@repo/ui/button"
 import { Badge } from "@repo/ui/badge"
 import { DotPattern } from '@/components/dot-pattern'
+import { useEffect, useState } from 'react'
+import { API_BASE_URL } from '@/lib/api'
 
 export function HeroSection() {
+  const [badgeText, setBadgeText] = useState('Tailored for the Modern Patient')
+  const [heroTitle, setHeroTitle] = useState('Run Your Clinic with One Simple Khata')
+  const [heroSubtitle, setHeroSubtitle] = useState(
+    'Daktar Khata is the clinic management platform for doctors, clinics, and hospitals. Keep patient records, appointments, prescriptions, and earnings in one place — beautifully simple, multi-tenant by design.'
+  )
+
+  useEffect(() => {
+    async function fetchHero() {
+      try {
+        const res = await fetch(`${API_BASE_URL}/landing-content`, { cache: 'no-store' })
+        if (res.ok) {
+          const json = await res.json()
+          const data = json?.data || json
+          if (data?.heroBadge) setBadgeText(data.heroBadge)
+          if (data?.heroTitle) setHeroTitle(data.heroTitle)
+          if (data?.heroSubtitle) setHeroSubtitle(data.heroSubtitle)
+        }
+      } catch (err) {
+        // Fallback
+      }
+    }
+    fetchHero()
+  }, [])
+
   return (
     <section id="hero" className="relative overflow-hidden bg-gradient-to-b from-background to-background/80 pt-16 sm:pt-20 pb-16">
       {/* Background Pattern */}
@@ -22,24 +48,19 @@ export function HeroSection() {
           <div className="mb-8 flex justify-center">
             <Badge variant="outline" className="px-4 py-2 border-foreground">
               <Star className="w-3 h-3 mr-2 fill-current" />
-              Tailored for the Modern Patient
+              {badgeText}
               <ArrowRight className="w-3 h-3 ml-2" />
             </Badge>
           </div>
 
           {/* Main Headline */}
           <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-6xl lg:text-7xl">
-            Run Your Clinic with
-            <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-              {" "}One Simple Khata{" "}
-            </span>
+            {heroTitle}
           </h1>
 
           {/* Subheading */}
           <p className="mx-auto mb-10 max-w-2xl text-lg text-muted-foreground sm:text-xl">
-            Daktar Khata is the clinic management platform for doctors, clinics,
-            and hospitals. Keep patient records, appointments, prescriptions,
-            and earnings in one place — beautifully simple, multi-tenant by design.
+            {heroSubtitle}
           </p>
 
           {/* CTA Buttons */}

@@ -32,7 +32,7 @@ paths:
               bloodGroup: O+
               emergencyContact: '01787654321'
               medicalHistory: Diabetes, Hypertension
-              currentMedications: &ref_332
+              currentMedications: &ref_350
                 - Paracetamol
                 - Insulin
               lastVisited: '2025-02-15T00:00:00.000Z'
@@ -42,7 +42,7 @@ paths:
               subscriptionStartDate: '2025-01-01T00:00:00.000Z'
               subscriptionEndDate: '2026-01-01T00:00:00.000Z'
               numberOfBeds: active
-              servicesOffered: &ref_333
+              servicesOffered: &ref_351
                 - Ultrasonography
                 - Hernia Operation
                 - Gallstone Surgery
@@ -252,7 +252,7 @@ paths:
               bloodGroup: O+
               emergencyContact: '+8801712345678'
               medicalHistory: Diabetes, High Blood Pressure
-              currentMedications: &ref_334
+              currentMedications: &ref_352
                 - Metformin
                 - Atorvastatin
               lastVisited: '2025-02-15T00:00:00.000Z'
@@ -308,7 +308,7 @@ paths:
               appointmentId: 6530a2c44cb2dbd2a1111111
               date: '2025-10-20T10:30:00.000Z'
               diagnosis: Mild hypertension
-              prescription: &ref_335
+              prescription: &ref_353
                 - Lisinopril 10mg once daily
               notes: Reduce sodium intake and monitor BP twice a week.
               followUpDate: '2025-11-20T10:30:00.000Z'
@@ -6217,7 +6217,7 @@ paths:
                 10:00 AM.
               entityType: Appointment
               entityId: 64e7c3b2f1a2b3c4d5e6f7a9
-              metadata: &ref_343
+              metadata: &ref_361
                 appointmentId: 64e7c3b2f1a2b3c4d5e6f7a9
             examples:
               default:
@@ -6340,9 +6340,9 @@ paths:
               action: PATIENT_RECORD_UPDATE
               entityType: Patient
               entityId: 64e7c3b2f1a2b3c4d5e6f7a8
-              previousValue: &ref_344
+              previousValue: &ref_362
                 phone: '+8801700000000'
-              newValue: &ref_345
+              newValue: &ref_363
                 phone: '+8801711111111'
               clinic: 64e7c3b2f1a2b3c4d5e6f7a9
             examples:
@@ -6454,6 +6454,321 @@ paths:
             "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
             r.json()).then(console.log)
       x-code-samples: *ref_331
+  /api/v1/blogs:
+    post:
+      operationId: BlogController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBlogDto'
+            example: &ref_332 {}
+            examples:
+              default:
+                value: *ref_332
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_333
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/blogs", {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_333
+    get:
+      operationId: BlogController_findAll
+      parameters:
+        - name: all
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: limit
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_334
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/blogs", { method: "GET",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
+      x-code-samples: *ref_334
+  /api/v1/blogs/{slugOrId}:
+    get:
+      operationId: BlogController_findOne
+      parameters:
+        - name: slugOrId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_335
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/blogs/{slugOrId}", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
+      x-code-samples: *ref_335
+  /api/v1/blogs/{id}:
+    put:
+      operationId: BlogController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateBlogDto'
+            example: &ref_336 {}
+            examples:
+              default:
+                value: *ref_336
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_337
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/blogs/{id}", {
+              method: "PUT",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_337
+    patch:
+      operationId: BlogController_patch
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateBlogDto'
+            example: *ref_336
+            examples:
+              default:
+                value: *ref_336
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_338
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/blogs/{id}", {
+              method: "PATCH",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_338
+    delete:
+      operationId: BlogController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_339
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/blogs/{id}", { method: "DELETE",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
+      x-code-samples: *ref_339
+  /api/v1/contact-messages:
+    post:
+      operationId: ContactMessageController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateContactMessageDto'
+            example: &ref_340 {}
+            examples:
+              default:
+                value: *ref_340
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_341
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/contact-messages", {
+              method: "POST",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_341
+    get:
+      operationId: ContactMessageController_findAll
+      parameters:
+        - name: status
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_342
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/contact-messages", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
+      x-code-samples: *ref_342
+  /api/v1/contact-messages/{id}:
+    get:
+      operationId: ContactMessageController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_343
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/contact-messages/{id}", {
+            method: "GET", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_343
+    delete:
+      operationId: ContactMessageController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_344
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/contact-messages/{id}", {
+            method: "DELETE", headers: { 'Authorization': 'Bearer <token>' }
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_344
+  /api/v1/contact-messages/{id}/status:
+    patch:
+      operationId: ContactMessageController_updateStatus
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateContactMessageStatusDto'
+            example: &ref_345 {}
+            examples:
+              default:
+                value: *ref_345
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_346
+        - lang: fetch
+          source: |-
+            fetch("http://localhost:7733/api/v1/contact-messages/{id}/status", {
+              method: "PATCH",
+              headers: {
+                'Authorization': 'Bearer <token>',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({})
+            }).then(r => r.json()).then(console.log)
+      x-code-samples: *ref_346
+  /api/v1/landing-content:
+    get:
+      operationId: LandingContentController_get
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_347
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/landing-content", { method:
+            "GET", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
+      x-code-samples: *ref_347
+    put:
+      operationId: LandingContentController_update
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      x-codeSamples: &ref_348
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/landing-content", { method:
+            "PUT", headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
+      x-code-samples: *ref_348
+  /api/v1/upload/image:
+    post:
+      operationId: UploadController_uploadImage
+      parameters: []
+      responses:
+        '201':
+          description: ''
+      x-codeSamples: &ref_349
+        - lang: fetch
+          source: >-
+            fetch("http://localhost:7733/api/v1/upload/image", { method: "POST",
+            headers: { 'Authorization': 'Bearer <token>' } }).then(r =>
+            r.json()).then(console.log)
+      x-code-samples: *ref_349
 info:
   title: ClinicFlow API
   description: ClinicFlow backend API documentation
@@ -6523,7 +6838,7 @@ components:
           description: Medical history or past health conditions
           _propertyName: medicalHistory
         currentMedications:
-          example: *ref_332
+          example: *ref_350
           description: List of current medications
           type: array
           items:
@@ -6567,7 +6882,7 @@ components:
           _propertyName: numberOfBeds
         servicesOffered:
           description: List of services offered by the clinic
-          example: *ref_333
+          example: *ref_351
           type: array
           items:
             type: string
@@ -6683,7 +6998,7 @@ components:
           _propertyName: medicalHistory
         currentMedications:
           description: List of current medications the patient is taking
-          example: *ref_334
+          example: *ref_352
           type: array
           items:
             type: string
@@ -6725,7 +7040,7 @@ components:
           _propertyName: diagnosis
         prescription:
           description: List of prescribed medicines or instructions
-          example: *ref_335
+          example: *ref_353
           type: array
           items:
             type: string
@@ -6774,7 +7089,7 @@ components:
           _propertyName: password
         role:
           type: string
-          enum: &ref_336
+          enum: &ref_354
             - USER
             - ADMIN
             - DOCTOR
@@ -6874,7 +7189,7 @@ components:
           _propertyName: password
         role:
           type: string
-          enum: *ref_336
+          enum: *ref_354
           description: Role of the user. Only PATIENT or MERCHANT allowed for signup
           _propertyName: role
         user:
@@ -7065,7 +7380,7 @@ components:
         role:
           type: string
           description: User role (defaults to DOCTOR)
-          enum: &ref_337
+          enum: &ref_355
             - USER
             - ADMIN
             - DOCTOR
@@ -7157,7 +7472,7 @@ components:
         role:
           type: string
           description: User role (defaults to DOCTOR)
-          enum: *ref_337
+          enum: *ref_355
           example: DOCTOR
           _propertyName: role
         merchant:
@@ -7444,7 +7759,7 @@ components:
           type: string
           description: Reason for the appointment
           example: CHECK_UP
-          enum: &ref_338
+          enum: &ref_356
             - CHECK_UP
             - CONSULTATION
             - FOLLOW_UP
@@ -7499,7 +7814,7 @@ components:
           type: string
           description: Reason for the appointment
           example: CHECK_UP
-          enum: *ref_338
+          enum: *ref_356
           _propertyName: reasonFor
         problemDescription:
           type: string
@@ -8115,7 +8430,7 @@ components:
           _propertyName: name
         category:
           type: string
-          enum: &ref_339
+          enum: &ref_357
             - CONSULTATION
             - TEST
             - ADMISSION
@@ -8175,7 +8490,7 @@ components:
           _propertyName: name
         category:
           type: string
-          enum: *ref_339
+          enum: *ref_357
           default: SERVICE
           _propertyName: category
         description:
@@ -8396,7 +8711,7 @@ components:
           _propertyName: service
         commissionType:
           type: string
-          enum: &ref_340
+          enum: &ref_358
             - PERCENTAGE
             - FIXED_AMOUNT
             - NONE
@@ -8436,7 +8751,7 @@ components:
           _propertyName: service
         commissionType:
           type: string
-          enum: *ref_340
+          enum: *ref_358
           example: PERCENTAGE
           _propertyName: commissionType
         commissionValue:
@@ -8577,7 +8892,7 @@ components:
           _propertyName: anesthesiaType
         status:
           type: string
-          enum: &ref_341
+          enum: &ref_359
             - PLANNED
             - SCHEDULED
             - ADMITTED
@@ -8649,7 +8964,7 @@ components:
           _propertyName: anesthesiaType
         status:
           type: string
-          enum: *ref_341
+          enum: *ref_359
           default: PLANNED
           _propertyName: status
         scheduledStartTime:
@@ -9140,7 +9455,7 @@ components:
           _propertyName: genericName
         category:
           type: string
-          enum: &ref_342
+          enum: &ref_360
             - MEDICINE
             - INJECTION
             - BANDAGE
@@ -9192,7 +9507,7 @@ components:
           _propertyName: genericName
         category:
           type: string
-          enum: *ref_342
+          enum: *ref_360
           example: MEDICINE
           _propertyName: category
         unit:
@@ -9408,7 +9723,7 @@ components:
           _propertyName: entityId
         metadata:
           type: object
-          example: *ref_343
+          example: *ref_361
           _propertyName: metadata
       required:
         - recipient
@@ -9454,11 +9769,11 @@ components:
           _propertyName: entityId
         previousValue:
           type: object
-          example: *ref_344
+          example: *ref_362
           _propertyName: previousValue
         newValue:
           type: object
-          example: *ref_345
+          example: *ref_363
           _propertyName: newValue
         clinic:
           type: string
@@ -9469,3 +9784,19 @@ components:
         - entityType
         - entityId
       example: *ref_327
+    CreateBlogDto:
+      type: object
+      properties: {}
+      example: *ref_332
+    UpdateBlogDto:
+      type: object
+      properties: {}
+      example: *ref_336
+    CreateContactMessageDto:
+      type: object
+      properties: {}
+      example: *ref_340
+    UpdateContactMessageStatusDto:
+      type: object
+      properties: {}
+      example: *ref_345

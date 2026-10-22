@@ -9,3 +9,5 @@ export * from "./expense/expense.module";
 export * from "./finance/finance.module";
 export * from "./staff-role-template/staff-role-template.module";
 export * from "./medical-records/medical-record.module";
+export * from "./blog/blog.module";
+export * from "./contact-message/contact-message.module";

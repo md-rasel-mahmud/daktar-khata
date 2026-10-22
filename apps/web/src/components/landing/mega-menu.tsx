@@ -1,104 +1,105 @@
 "use client"
 
 import {
-  Shield,
+  ShieldCheck,
   BarChart3,
-  Database,
+  Stethoscope,
   Building2,
-  Rocket,
-  Settings,
-  Zap,
-  Package,
-  Layout,
-  Crown,
-  Palette
+  CalendarCheck,
+  FileText,
+  CreditCard,
+  Users,
+  Bed,
+  HeartPulse,
+  Receipt,
+  Clock
 } from 'lucide-react'
 
 const menuSections = [
   {
-    title: 'Browse Products',
+    title: 'Clinical Solutions',
     items: [
       {
-        title: 'Free Blocks',
-        description: 'Essential UI components and sections',
-        icon: Package,
-        href: '#free-blocks'
+        title: 'Appointments & Scheduling',
+        description: 'Multi-slot doctor calendar with live queue control',
+        icon: CalendarCheck,
+        href: '#features'
       },
       {
-        title: 'Premium Templates',
-        description: 'Complete page templates and layouts',
-        icon: Crown,
-        href: '#premium-templates'
+        title: 'Digital Prescriptions',
+        description: 'Printable templates, diagnosis records, and medicine lists',
+        icon: FileText,
+        href: '#features'
       },
       {
-        title: 'Admin Dashboards',
-        description: 'Full-featured dashboard solutions',
-        icon: BarChart3,
-        href: '#admin-dashboards'
+        title: 'Patient Medical Records',
+        description: 'Longitudinal histories, past visits, and lab test reports',
+        icon: Users,
+        href: '#features'
       },
       {
-        title: 'Landing Pages',
-        description: 'Marketing and product landing templates',
-        icon: Layout,
-        href: '#landing-pages'
+        title: 'OT & Inpatient Admissions',
+        description: 'Bed allocations, admission khata, and surgery planning',
+        icon: Bed,
+        href: '#features'
       }
     ]
   },
   {
-    title: 'Categories',
+    title: 'Clinic Administration',
     items: [
       {
-        title: 'E-commerce',
-        description: 'Online store admin panels and components',
+        title: 'Daily Khata & Billing',
+        description: 'Consultation fees, test billing, and patient invoices',
+        icon: CreditCard,
+        href: '#features'
+      },
+      {
+        title: 'Multi-Branch Management',
+        description: 'Switch between clinics and diagnostic desks seamlessly',
         icon: Building2,
-        href: '#ecommerce'
+        href: '#about'
       },
       {
-        title: 'SaaS Dashboards',
-        description: 'Application admin interfaces',
-        icon: Rocket,
-        href: '#saas-dashboards'
+        title: 'Doctor Commission Tracking',
+        description: 'Automated rules for OPD, tests, and operation shares',
+        icon: Receipt,
+        href: '#features'
       },
       {
-        title: 'Analytics',
-        description: 'Data visualization and reporting templates',
-        icon: BarChart3,
-        href: '#analytics'
-      },
-      {
-        title: 'Authentication',
-        description: 'Login, signup, and user management pages',
-        icon: Shield,
-        href: '#authentication'
+        title: 'Staff Roles & HR Attendance',
+        description: 'Granular permissions for nurses, billing staff, and admins',
+        icon: ShieldCheck,
+        href: '#features'
       }
     ]
   },
   {
-    title: 'Resources',
+    title: 'Platform & Insights',
     items: [
       {
-        title: 'Documentation',
-        description: 'Integration guides and setup instructions',
-        icon: Database,
-        href: '#docs'
+        title: 'Financial Reports',
+        description: 'Income, expense, and daily collection balance sheets',
+        icon: BarChart3,
+        href: '#pricing'
       },
       {
-        title: 'Component Showcase',
-        description: 'Interactive preview of all components',
-        icon: Palette,
-        href: '#showcase'
+        title: 'Live Consultation Queue',
+        description: 'Prevent reception bottlenecks with token-based queues',
+        icon: Clock,
+        href: '#features'
       },
       {
-        title: 'GitHub Repository',
-        description: 'Open source foundation and community',
-        icon: Settings,
-        href: '#github'
+        title: 'SaaS Subscription Plans',
+        description: 'Flexible starter, clinic, and hospital packages',
+        icon: HeartPulse,
+        href: '#pricing'
       },
       {
-        title: 'Design System',
-        description: 'shadcn/ui standards and customization',
-        icon: Zap,
-        href: '#design-system'
+        title: 'Medical Blog & Guides',
+        description: 'Insights on clinic transformation and digital records',
+        icon: Stethoscope,
+        href: '#blog'
       }
     ]
   }
@@ -106,30 +107,30 @@ const menuSections = [
 
 export function MegaMenu() {
   return (
-    <div className="w-[700px] max-w-[95vw] p-4 sm:p-6 lg:p-8 bg-background">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-12">
+    <div className="w-[720px] max-w-[95vw] p-4 sm:p-6 lg:p-8 bg-background">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-10">
         {menuSections.map((section) => (
-          <div key={section.title} className="space-y-4 lg:space-y-6">
+          <div key={section.title} className="space-y-4 lg:space-y-5">
             {/* Section Header */}
-            <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
+            <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
               {section.title}
             </h3>
 
             {/* Section Links */}
-            <div className="space-y-3 lg:space-y-4">
+            <div className="space-y-2 lg:space-y-3">
               {section.items.map((item) => (
                 <a
                   key={item.title}
                   href={item.href}
-                  className="group block space-y-1 lg:space-y-2 hover:bg-accent rounded-md p-2 lg:p-3 -mx-2 lg:-mx-3 transition-colors my-0"
+                  className="group block space-y-1 hover:bg-accent rounded-lg p-2.5 -mx-2.5 transition-colors"
                 >
-                  <div className="flex items-center gap-2 lg:gap-3">
-                    <item.icon className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
-                    <span className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">
+                  <div className="flex items-center gap-2.5">
+                    <item.icon className="w-4 h-4 text-primary shrink-0" />
+                    <span className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors">
                       {item.title}
                     </span>
                   </div>
-                  <p className="text-xs text-muted-foreground leading-relaxed ml-6 lg:ml-7">
+                  <p className="text-xs text-muted-foreground leading-relaxed pl-6.5">
                     {item.description}
                   </p>
                 </a>

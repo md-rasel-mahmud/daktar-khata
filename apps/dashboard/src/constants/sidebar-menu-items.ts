@@ -9,6 +9,9 @@ import {
   User,
   UserCog,
   Users,
+  BookOpen,
+  MessageSquare,
+  LayoutTemplate,
 } from "lucide-react"
 
 export const sidebarMenuItems = [
@@ -194,6 +197,24 @@ export const sidebarMenuItems = [
     path: "/admin/appointments",
     icon: Calendar,
     label: "Appointments",
+    roles: [RolesEnum.ADMIN, RolesEnum.SUPER_ADMIN],
+  },
+  {
+    path: "/admin/blogs",
+    icon: BookOpen,
+    label: "Blogs",
+    roles: [RolesEnum.ADMIN, RolesEnum.SUPER_ADMIN],
+  },
+  {
+    path: "/admin/inquiries",
+    icon: MessageSquare,
+    label: "Inquiries",
+    roles: [RolesEnum.ADMIN, RolesEnum.SUPER_ADMIN],
+  },
+  {
+    path: "/admin/landing-content",
+    icon: LayoutTemplate,
+    label: "Landing Content",
     roles: [RolesEnum.ADMIN, RolesEnum.SUPER_ADMIN],
   },
 

@@ -1,8 +1,10 @@
 "use client"
 
 import { Card } from "@repo/ui/card"
+import { useEffect, useState } from 'react'
+import { API_BASE_URL } from '@/lib/api'
 
-// Simple icon component for company logos
+// Simple icon component for fallback company logos
 const SimpleIcon = ({ iconSlug, size = 24 }: { iconSlug: string; size?: number }) => {
   const iconMap = {
     shopify:
@@ -43,29 +45,53 @@ const SimpleIcon = ({ iconSlug, size = 24 }: { iconSlug: string; size?: number }
   )
 }
 
-// Tech companies data
-const techCompanies = [
-  { name: 'Shopify', id: 'shopify' },
-  { name: 'Netflix', id: 'netflix' },
-  { name: 'Spotify', id: 'spotify' },
-  { name: 'Airbnb', id: 'airbnb' },
-  { name: 'Dropbox', id: 'dropbox' },
-  { name: 'Stripe', id: 'stripe' },
-  { name: 'Google', id: 'google' },
-  { name: 'Apple', id: 'apple' },
-  { name: 'Meta', id: 'meta' },
-  { name: 'Tesla', id: 'tesla' },
-  { name: 'Salesforce', id: 'salesforce' },
-  { name: 'GitHub', id: 'github' },
-] as const
+// Fallback companies data
+const fallbackCompanies = [
+  { name: 'Shopify', logo: 'shopify' },
+  { name: 'Netflix', logo: 'netflix' },
+  { name: 'Spotify', logo: 'spotify' },
+  { name: 'Airbnb', logo: 'airbnb' },
+  { name: 'Dropbox', logo: 'dropbox' },
+  { name: 'Stripe', logo: 'stripe' },
+  { name: 'Google', logo: 'google' },
+  { name: 'Apple', logo: 'apple' },
+  { name: 'Meta', logo: 'meta' },
+  { name: 'Tesla', logo: 'tesla' },
+  { name: 'Salesforce', logo: 'salesforce' },
+  { name: 'GitHub', logo: 'github' },
+]
 
 export function LogoCarousel() {
+  const [partners, setPartners] = useState(fallbackCompanies)
+  const [title, setTitle] = useState('Trusted by leading companies worldwide')
+
+  useEffect(() => {
+    async function fetchPartners() {
+      try {
+        const res = await fetch(`${API_BASE_URL}/landing-content`, { cache: 'no-store' })
+        if (res.ok) {
+          const json = await res.json()
+          const data = json?.data || json
+          if (data?.partnersTitle) {
+            setTitle(data.partnersTitle)
+          }
+          if (Array.isArray(data?.partners) && data.partners.length > 0) {
+            setPartners(data.partners)
+          }
+        }
+      } catch (err) {
+        // Fallback
+      }
+    }
+    fetchPartners()
+  }, [])
+
   return (
     <section className="pb-12 sm:pb-16 lg:pb-20 pt-12">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <p className="text-sm font-medium text-muted-foreground mb-8">
-            Trusted by leading companies worldwide
+            {title}
           </p>
 
           {/* Logo Carousel with Fade Effect */}
@@ -80,33 +106,55 @@ export function LogoCarousel() {
             <div className="overflow-hidden">
               <div className="flex animate-logo-scroll space-x-8 sm:space-x-12">
                 {/* First set of logos */}
-                {techCompanies.map((company, index) => (
-                  <Card
-                    key={`first-${index}`}
-                    className="flex-shrink-0 flex items-center justify-center h-16 w-40 opacity-60 hover:opacity-100 transition-opacity duration-300 border-0 shadow-none bg-transparent"
-                  >
-                    <div className="flex items-center gap-3">
-                      <SimpleIcon iconSlug={company.id} size={28} />
-                      <span className="text-foreground text-lg font-semibold whitespace-nowrap">
-                        {company.name}
-                      </span>
-                    </div>
-                  </Card>
-                ))}
+                {partners.map((company, index) => {
+                  const isUrl = company.logo?.startsWith('http') || company.logo?.startsWith('/')
+                  return (
+                    <Card
+                      key={`first-${index}`}
+                      className="flex-shrink-0 flex items-center justify-center h-16 px-4 opacity-60 hover:opacity-100 transition-opacity duration-300 border-0 shadow-none bg-transparent"
+                    >
+                      <div className="flex items-center gap-3">
+                        {isUrl ? (
+                          <img
+                            src={company.logo}
+                            alt={company.name}
+                            className="h-7 w-auto object-contain max-w-[100px]"
+                          />
+                        ) : (
+                          <SimpleIcon iconSlug={company.logo} size={28} />
+                        )}
+                        <span className="text-foreground text-lg font-semibold whitespace-nowrap">
+                          {company.name}
+                        </span>
+                      </div>
+                    </Card>
+                  )
+                })}
                 {/* Second set for seamless loop - identical to first */}
-                {techCompanies.map((company, index) => (
-                  <Card
-                    key={`second-${index}`}
-                    className="flex-shrink-0 flex items-center justify-center h-16 w-40 opacity-60 hover:opacity-100 transition-opacity duration-300 border-0 shadow-none bg-transparent"
-                  >
-                    <div className="flex items-center gap-3">
-                      <SimpleIcon iconSlug={company.id} size={28} />
-                      <span className="text-foreground text-lg font-semibold whitespace-nowrap">
-                        {company.name}
-                      </span>
-                    </div>
-                  </Card>
-                ))}
+                {partners.map((company, index) => {
+                  const isUrl = company.logo?.startsWith('http') || company.logo?.startsWith('/')
+                  return (
+                    <Card
+                      key={`second-${index}`}
+                      className="flex-shrink-0 flex items-center justify-center h-16 px-4 opacity-60 hover:opacity-100 transition-opacity duration-300 border-0 shadow-none bg-transparent"
+                    >
+                      <div className="flex items-center gap-3">
+                        {isUrl ? (
+                          <img
+                            src={company.logo}
+                            alt={company.name}
+                            className="h-7 w-auto object-contain max-w-[100px]"
+                          />
+                        ) : (
+                          <SimpleIcon iconSlug={company.logo} size={28} />
+                        )}
+                        <span className="text-foreground text-lg font-semibold whitespace-nowrap">
+                          {company.name}
+                        </span>
+                      </div>
+                    </Card>
+                  )
+                })}
               </div>
             </div>
           </div>

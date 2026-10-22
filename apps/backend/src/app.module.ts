@@ -52,6 +52,10 @@ import { StockTransactionModule } from "./modules/stock-transaction/stock-transa
 import { PayrollModule } from "./modules/payroll/payroll.module";
 import { NotificationModule } from "./modules/notification/notification.module";
 import { AuditLogModule } from "./modules/audit-log/audit-log.module";
+import { BlogModule } from "./modules/blog/blog.module";
+import { ContactMessageModule } from "./modules/contact-message/contact-message.module";
+import { LandingContentModule } from "./modules/landing-content/landing-content.module";
+import { UploadModule } from "./modules/upload/upload.module";
 
 @Module({
   imports: [
@@ -132,6 +136,10 @@ import { AuditLogModule } from "./modules/audit-log/audit-log.module";
     PayrollModule,
     NotificationModule,
     AuditLogModule,
+    BlogModule,
+    ContactMessageModule,
+    LandingContentModule,
+    UploadModule,
   ],
   controllers: [],
   providers: [DatabaseSeederService],

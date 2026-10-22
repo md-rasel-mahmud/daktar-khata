@@ -10,6 +10,13 @@ const AdminDashboard = lazy(() => import("@/pages/private/admin/Dashboard"))
 const ManageDoctors = lazy(() => import("@/pages/private/admin/ManageDoctors"))
 const ManageUsers = lazy(() => import("@/pages/private/admin/ManageUsers"))
 const SuperAdminDashboard = lazy(() => import("@/pages/private/admin/SuperAdminDashboard"))
+const ManageBlogs = lazy(() => import("@/pages/private/admin/ManageBlogs"))
+const ManageContactMessages = lazy(
+  () => import("@/pages/private/admin/ManageContactMessages")
+)
+const ManageLandingContent = lazy(
+  () => import("@/pages/private/admin/ManageLandingContent")
+)
 const DoctorAppointmentsPage = lazy(
   () => import("@/pages/private/doctor/DoctorAppointmentsPage")
 )
@@ -284,6 +291,21 @@ export const privateRoutes = [
   {
     path: "/admin/appointments",
     element: withSuspense(<AdminAppointments />),
+    allowRoutes: [RolesEnum.SUPER_ADMIN, RolesEnum.ADMIN],
+  },
+  {
+    path: "/admin/blogs",
+    element: withSuspense(<ManageBlogs />),
+    allowRoutes: [RolesEnum.SUPER_ADMIN, RolesEnum.ADMIN],
+  },
+  {
+    path: "/admin/inquiries",
+    element: withSuspense(<ManageContactMessages />),
+    allowRoutes: [RolesEnum.SUPER_ADMIN, RolesEnum.ADMIN],
+  },
+  {
+    path: "/admin/landing-content",
+    element: withSuspense(<ManageLandingContent />),
     allowRoutes: [RolesEnum.SUPER_ADMIN, RolesEnum.ADMIN],
   },
   {

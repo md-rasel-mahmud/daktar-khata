@@ -74,6 +74,9 @@ export const api = createApi({
     "Admins",
     "PendingDoctors",
     "Profiles",
+    "Blogs",
+    "ContactMessages",
+    "LandingContent",
   ],
   endpoints: () => ({}),
 })

@@ -24,12 +24,34 @@ async function bootstrap() {
   app.use("/api/v1/payment/success", express.raw({ type: "*/*" }));
   app.use("/api/v1/payment/fail", express.raw({ type: "*/*" }));
   app.use("/api/v1/payment/cancel", express.raw({ type: "*/*" }));
+
+  // Static files for uploaded images
+  const uploadsDir = path.join(process.cwd(), "uploads");
+  if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+  }
+  app.use("/uploads", express.static(uploadsDir));
   const allowedOrigins = process.env.FRONTEND_URL
     ? process.env.FRONTEND_URL.split(",")
-    : ["http://localhost:7722", "http://localhost:7733"];
+    : [
+        "http://localhost:7722",
+        "http://localhost:7733",
+        "http://localhost:7711",
+      ];
 
   app.enableCors({
-    origin: allowedOrigins,
+    origin: (origin, callback) => {
+      // allow requests with no origin (like mobile apps, curl, server-to-server)
+      if (!origin) return callback(null, true);
+      if (
+        allowedOrigins.includes(origin) ||
+        /^http:\/\/localhost:\d+$/.test(origin) ||
+        /\.localhost:\d+$/.test(origin)
+      ) {
+        return callback(null, true);
+      }
+      return callback(null, true); // permissive in dev / multi-tenant
+    },
     credentials: true,
   });
   app.setGlobalPrefix("api/v1"); //route prefix
