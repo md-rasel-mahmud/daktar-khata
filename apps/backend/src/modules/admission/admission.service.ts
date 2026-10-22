@@ -9,13 +9,17 @@ import { collectionsName } from "../../constant";
 import { AdmissionDocument } from "./schema/admission.schema";
 import { CreateAdmissionDto } from "./dto/create-admission.dto";
 import { DischargeDto } from "./dto/discharge.dto";
-import { AdmissionStatus, BedStatus } from "../../constant/enums/status.enum";
+import {
+  AdmissionStatus,
+  BedStatus,
+  InvoiceStatus,
+  ServiceCategory,
+} from "../../constant/enums/status.enum";
 import { DoctorService } from "../doctor/doctor.service";
 import { BedDocument } from "../bed/schema/bed.schema";
 import { BedAllocationDocument } from "../bed-allocation/schema/bed-allocation.schema";
 import { InvoiceDocument } from "../invoice/schema/invoice.schema";
 import { Patient } from "../patient/schema/patient.schema";
-import { InvoiceStatus } from "../../constant/enums/status.enum";
 
 @Injectable()
 export class AdmissionService {
@@ -95,6 +99,44 @@ export class AdmissionService {
           { session },
         );
       }
+
+      // Auto-create initial admission invoice so invoice is ready for advance payment or charges
+      const invoiceNumber = `INV-ADM-${Date.now().toString(36).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`;
+      await this.invoiceModel.create(
+        [
+          {
+            invoiceNumber,
+            patient: new Types.ObjectId(dto.patient),
+            doctor: doctorDoc ? doctorDoc._id : null,
+            admission: admission._id,
+            merchant: targetMerchant,
+            status: InvoiceStatus.ISSUED,
+            issuedDate: new Date(),
+            lineItems: [
+              {
+                serviceName: "Inpatient Admission & Care Fee",
+                category: ServiceCategory.ADMISSION,
+                quantity: 1,
+                unitPrice: 500,
+                discount: 0,
+                tax: 0,
+                total: 500,
+              },
+            ],
+            subtotal: 500,
+            totalDiscount: 0,
+            totalTax: 0,
+            grandTotal: 500,
+            paidAmount: 0,
+            dueAmount: 500,
+            refundAmount: 0,
+            paymentHistory: [],
+            refundHistory: [],
+            isActive: true,
+          },
+        ],
+        { session },
+      );
 
       await session.commitTransaction();
       return admission;
@@ -267,8 +309,123 @@ export class AdmissionService {
         }
       }
 
+      // Calculate stay duration in days
+      const admissionTime = admission.admissionDate
+        ? new Date(admission.admissionDate).getTime()
+        : Date.now();
+      const dischargeTime = Date.now();
+      const daysStayed = Math.max(
+        1,
+        Math.ceil((dischargeTime - admissionTime) / (1000 * 60 * 60 * 24)),
+      );
+
+      const dailyBedCharge =
+        typeof dto.dailyBedCharge === "number" ? dto.dailyBedCharge : 500;
+      const admissionFee =
+        typeof dto.admissionFee === "number" ? dto.admissionFee : 500;
+
+      // Check for existing invoice for this admission
+      let invoice = await this.invoiceModel
+        .findOne({
+          admission: admission._id,
+          status: { $ne: InvoiceStatus.CANCELLED },
+        })
+        .session(session);
+
+      if (!invoice) {
+        const invoiceNumber = `INV-ADM-${Date.now().toString(36).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`;
+        const lineItems: any[] = [];
+
+        if (dailyBedCharge > 0) {
+          lineItems.push({
+            serviceName: `Hospital Bed & Stay Charge (${daysStayed} day${daysStayed > 1 ? "s" : ""})`,
+            category: ServiceCategory.BED,
+            quantity: daysStayed,
+            unitPrice: dailyBedCharge,
+            discount: 0,
+            tax: 0,
+            total: daysStayed * dailyBedCharge,
+          });
+        }
+
+        if (admissionFee > 0) {
+          lineItems.push({
+            serviceName: "Inpatient Admission & Care Fee",
+            category: ServiceCategory.ADMISSION,
+            quantity: 1,
+            unitPrice: admissionFee,
+            discount: 0,
+            tax: 0,
+            total: admissionFee,
+          });
+        }
+
+        const subtotal = lineItems.reduce((s, itm) => s + itm.total, 0);
+
+        const [createdInvoice] = await this.invoiceModel.create(
+          [
+            {
+              invoiceNumber,
+              patient: admission.patient,
+              doctor: admission.doctor || null,
+              admission: admission._id,
+              merchant: admission.merchant,
+              status: InvoiceStatus.ISSUED,
+              issuedDate: new Date(),
+              lineItems,
+              subtotal,
+              totalDiscount: 0,
+              totalTax: 0,
+              grandTotal: subtotal,
+              paidAmount: 0,
+              dueAmount: subtotal,
+              refundAmount: 0,
+              paymentHistory: [],
+              refundHistory: [],
+              isActive: true,
+            },
+          ],
+          { session },
+        );
+        invoice = createdInvoice;
+      } else {
+        // Invoice already exists from daily charges; ensure stay charges are added
+        const hasBedCharge = invoice.lineItems.some(
+          (itm: any) => itm.category === ServiceCategory.BED,
+        );
+        if (!hasBedCharge && dailyBedCharge > 0) {
+          invoice.lineItems.push({
+            serviceName: `Hospital Bed & Stay Charge (${daysStayed} day${daysStayed > 1 ? "s" : ""})`,
+            category: ServiceCategory.BED,
+            quantity: daysStayed,
+            unitPrice: dailyBedCharge,
+            discount: 0,
+            tax: 0,
+            total: daysStayed * dailyBedCharge,
+          });
+        }
+
+        invoice.subtotal = invoice.lineItems.reduce(
+          (s: number, itm: any) => s + itm.total,
+          0,
+        );
+        invoice.grandTotal = invoice.subtotal;
+        invoice.dueAmount = Math.max(
+          0,
+          invoice.grandTotal - (invoice.paidAmount || 0),
+        );
+        if (invoice.dueAmount === 0 && invoice.grandTotal > 0) {
+          invoice.status = InvoiceStatus.PAID;
+        } else if ((invoice.paidAmount || 0) > 0) {
+          invoice.status = InvoiceStatus.PARTIALLY_PAID;
+        } else {
+          invoice.status = InvoiceStatus.ISSUED;
+        }
+        await invoice.save({ session });
+      }
+
       await session.commitTransaction();
-      return { message: "Patient discharged successfully", admission };
+      return { message: "Patient discharged successfully", admission, invoice };
     } catch (error) {
       await session.abortTransaction();
       throw error;

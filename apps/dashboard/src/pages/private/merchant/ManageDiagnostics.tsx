@@ -7,7 +7,14 @@ import {
 } from "@/lib/store/api/services/diagnostics.service"
 import type { TestOrder } from "@/lib/store/api/services/diagnostics.service"
 import { useGetTestCatalogQuery } from "@/lib/store/api/services/service-catalog.service"
-import { useGetPatientsQuery } from "@/lib/store/api/services/patient.service"
+import {
+  useGetPatientsQuery,
+  useCreatePatientMutation,
+} from "@/lib/store/api/services/patient.service"
+import {
+  quickPatientSchema,
+  type QuickPatientFormData,
+} from "@/components/modals/QuickPatientModal"
 import { toast } from "sonner"
 import {
   TestTube,
@@ -35,8 +42,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 
 const walkInOrderSchema = z.object({
-  patient: z.string().min(1, "Please select a patient"),
-  referringDoctorName: z.string().trim(),
+  patient: z.string().optional(),
+  referringDoctorName: z.string().trim().optional(),
   paidAmount: z.number().optional(),
 })
 
@@ -79,7 +86,9 @@ export default function ManageDiagnostics() {
     : (patientsData as any)?.data || []
 
   const [createOrder, { isLoading: isCreating }] = useCreateTestOrderMutation()
+  const [createPatient, { isLoading: isCreatingPatient }] = useCreatePatientMutation()
   const [updateStatus] = useUpdateTestOrderItemStatusMutation()
+  const [patientTab, setPatientTab] = useState<"select" | "create">("select")
 
   const {
     register,
@@ -94,6 +103,24 @@ export default function ManageDiagnostics() {
       patient: "",
       referringDoctorName: "Self / Walk-in",
       paidAmount: 0,
+    },
+  })
+
+  const {
+    register: registerQuickPatient,
+    handleSubmit: handleQuickPatientFormSubmit,
+    reset: resetQuickPatient,
+    formState: { errors: quickPatientErrors },
+  } = useForm<QuickPatientFormData>({
+    resolver: zodResolver(quickPatientSchema),
+    defaultValues: {
+      name: "",
+      phone: "",
+      gender: "MALE",
+      bloodGroup: "O+",
+      age: "",
+      address: "",
+      emergencyContact: "",
     },
   })
 
@@ -116,6 +143,40 @@ export default function ManageDiagnostics() {
       return
     }
 
+    let finalPatientId = data.patient
+
+    if (patientTab === "create") {
+      let createdPatientId = ""
+      await handleQuickPatientFormSubmit(async (patientFormData) => {
+        try {
+          const newPatientRes = await createPatient({
+            name: patientFormData.name.trim(),
+            phone: patientFormData.phone.trim(),
+            gender: patientFormData.gender,
+            bloodGroup: patientFormData.bloodGroup,
+            age: patientFormData.age?.trim() || undefined,
+            address: patientFormData.address?.trim() || undefined,
+            emergencyContact:
+              patientFormData.emergencyContact?.trim() || undefined,
+          }).unwrap()
+
+          const createdPatient = newPatientRes?.data || newPatientRes
+          createdPatientId = createdPatient?._id || createdPatient?.id
+        } catch (err: any) {
+          toast.error(err?.data?.message || t("patient_create_failed"))
+          throw err
+        }
+      })()
+
+      finalPatientId = createdPatientId
+      if (!finalPatientId) return
+    }
+
+    if (!finalPatientId) {
+      toast.error(t("select_patient_req") || "Please select or create a patient")
+      return
+    }
+
     try {
       const items = selectedTestObjects.map((tItem) => ({
         test: tItem._id,
@@ -124,7 +185,7 @@ export default function ManageDiagnostics() {
       }))
 
       const res = await createOrder({
-        patient: data.patient,
+        patient: finalPatientId,
         referringDoctorName: data.referringDoctorName || "Self / Walk-in",
         isWalkIn: true,
         paidAmount:
@@ -137,6 +198,8 @@ export default function ManageDiagnostics() {
       setSelectedReceipt(res)
       setSelectedTestIds([])
       reset()
+      resetQuickPatient()
+      setPatientTab("select")
       refetch()
     } catch (err: any) {
       toast.error(err?.data?.message || t("order_create_failed"))
@@ -202,6 +265,8 @@ export default function ManageDiagnostics() {
         <button
           onClick={() => {
             reset()
+            resetQuickPatient()
+            setPatientTab("select")
             setSelectedTestIds([])
             setIsOrderModalOpen(true)
           }}
@@ -468,27 +533,174 @@ export default function ManageDiagnostics() {
             </h2>
 
             <form onSubmit={handleSubmit(onConfirmCreateOrder)} className="space-y-4">
+              {/* Patient Selection Tabs: Existing vs Quick Add */}
               <div>
                 <label className="block text-xs font-semibold mb-1">
-                  {t("select_patient")} <span className="text-red-500">*</span>
+                  {t("patient")} <span className="text-red-500">*</span>
                 </label>
-                <select
-                  {...register("patient")}
-                  className={`w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary ${
-                    errors.patient ? "border-red-500" : ""
-                  }`}
-                >
-                  <option value="">{t("choose_patient")}</option>
-                  {patientsList.map((p: any) => (
-                    <option key={p._id} value={p._id}>
-                      {p.name} — {p.mobile || p.phone} ({p.gender || "N/A"})
-                    </option>
-                  ))}
-                </select>
-                {errors.patient && (
-                  <p className="text-xs text-red-500 mt-1">
-                    {errors.patient.message}
-                  </p>
+
+                <div className="flex items-center gap-2 p-1 bg-muted/60 rounded-2xl border mb-3">
+                  <button
+                    type="button"
+                    onClick={() => setPatientTab("select")}
+                    className={`flex-1 py-1.5 text-xs font-semibold rounded-xl transition ${
+                      patientTab === "select"
+                        ? "bg-background text-foreground shadow-sm"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    {t("select_existing_patient") || "Select Existing Patient"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPatientTab("create")}
+                    className={`flex-1 py-1.5 text-xs font-semibold rounded-xl transition flex items-center justify-center gap-1.5 ${
+                      patientTab === "create"
+                        ? "bg-primary text-primary-foreground shadow-sm"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    <Plus className="h-3.5 w-3.5" />
+                    {t("quick_add_patient") || "Quick Add Patient"}
+                  </button>
+                </div>
+
+                {patientTab === "select" ? (
+                  <div>
+                    <select
+                      {...register("patient")}
+                      className={`w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary ${
+                        errors.patient ? "border-red-500" : ""
+                      }`}
+                    >
+                      <option value="">{t("choose_patient")}</option>
+                      {patientsList.map((p: any) => (
+                        <option key={p._id} value={p._id}>
+                          {p.name} — {p.mobile || p.phone} ({p.gender || "N/A"})
+                        </option>
+                      ))}
+                    </select>
+                    {errors.patient && (
+                      <p className="text-xs text-red-500 mt-1">
+                        {errors.patient.message}
+                      </p>
+                    )}
+                  </div>
+                ) : (
+                  <div className="space-y-3 p-3.5 rounded-2xl border bg-muted/30">
+                    <div className="grid grid-cols-2 gap-2.5">
+                      <div>
+                        <label className="block text-[11px] font-semibold mb-1">
+                          {t("patient_name_label") || "Full Name"}{" "}
+                          <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="e.g. Rahim Ahmed"
+                          {...registerQuickPatient("name")}
+                          className={`w-full px-2.5 py-1.5 rounded-xl border bg-background text-xs focus:outline-none focus:ring-2 focus:ring-primary ${
+                            quickPatientErrors.name ? "border-red-500" : ""
+                          }`}
+                        />
+                        {quickPatientErrors.name && (
+                          <p className="text-[10px] text-red-500 mt-0.5">
+                            {quickPatientErrors.name.message}
+                          </p>
+                        )}
+                      </div>
+                      <div>
+                        <label className="block text-[11px] font-semibold mb-1">
+                          {t("patient_phone_label") || "Phone Number"}{" "}
+                          <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="tel"
+                          placeholder="017XXXXXXXX"
+                          {...registerQuickPatient("phone")}
+                          className={`w-full px-2.5 py-1.5 rounded-xl border bg-background text-xs focus:outline-none focus:ring-2 focus:ring-primary ${
+                            quickPatientErrors.phone ? "border-red-500" : ""
+                          }`}
+                        />
+                        {quickPatientErrors.phone && (
+                          <p className="text-[10px] text-red-500 mt-0.5">
+                            {quickPatientErrors.phone.message}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-2">
+                      <div>
+                        <label className="block text-[11px] font-semibold mb-1">
+                          {t("patient_gender_label") || "Gender"}
+                        </label>
+                        <select
+                          {...registerQuickPatient("gender")}
+                          className="w-full px-2 py-1.5 rounded-xl border bg-background text-xs focus:outline-none focus:ring-2 focus:ring-primary"
+                        >
+                          <option value="MALE">Male</option>
+                          <option value="FEMALE">Female</option>
+                          <option value="OTHER">Other</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-semibold mb-1">
+                          {t("patient_blood_group_label") || "Blood Group"}
+                        </label>
+                        <select
+                          {...registerQuickPatient("bloodGroup")}
+                          className="w-full px-2 py-1.5 rounded-xl border bg-background text-xs focus:outline-none focus:ring-2 focus:ring-primary"
+                        >
+                          <option value="A+">A+</option>
+                          <option value="A-">A-</option>
+                          <option value="B+">B+</option>
+                          <option value="B-">B-</option>
+                          <option value="AB+">AB+</option>
+                          <option value="AB-">AB-</option>
+                          <option value="O+">O+</option>
+                          <option value="O-">O-</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-semibold mb-1">
+                          {t("patient_age_label") || "Age"}
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="e.g. 35"
+                          {...registerQuickPatient("age")}
+                          className="w-full px-2 py-1.5 rounded-xl border bg-background text-xs focus:outline-none focus:ring-2 focus:ring-primary"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2.5">
+                      <div>
+                        <label className="block text-[11px] font-semibold mb-1">
+                          {t("patient_address_label") || "Address"}
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="e.g. Dhanmondi, Dhaka"
+                          {...registerQuickPatient("address")}
+                          className="w-full px-2.5 py-1.5 rounded-xl border bg-background text-xs focus:outline-none focus:ring-2 focus:ring-primary"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[11px] font-semibold mb-1">
+                          {t("patient_emergency_contact_label") || "Emergency Contact"}
+                        </label>
+                        <input
+                          type="tel"
+                          placeholder="e.g. 018XXXXXXXX"
+                          {...registerQuickPatient("emergencyContact")}
+                          className="w-full px-2.5 py-1.5 rounded-xl border bg-background text-xs focus:outline-none focus:ring-2 focus:ring-primary"
+                        />
+                      </div>
+                    </div>
+                  </div>
                 )}
               </div>
 

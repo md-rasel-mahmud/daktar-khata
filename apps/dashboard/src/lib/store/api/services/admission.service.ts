@@ -82,10 +82,26 @@ export const admissionApi = api.injectEndpoints({
         return qs ? `admission?${qs}` : "admission"
       },
       transformResponse: (response: any) => {
-        if (response && Array.isArray(response.data) && typeof response.total === "number") {
-          return response
+        const payload =
+          response?.data &&
+          typeof response.data === "object" &&
+          !Array.isArray(response.data) &&
+          Array.isArray(response.data.data)
+            ? response.data
+            : response
+
+        if (
+          payload &&
+          Array.isArray(payload.data) &&
+          typeof payload.total === "number"
+        ) {
+          return payload
         }
-        const arr = Array.isArray(response) ? response : response?.data || []
+        const arr = Array.isArray(payload)
+          ? payload
+          : Array.isArray(payload?.data)
+            ? payload.data
+            : []
         return {
           data: arr,
           total: arr.length,
@@ -127,13 +143,23 @@ export const admissionApi = api.injectEndpoints({
       invalidatesTags: ["Admissions", "Beds"],
     }),
 
-    dischargePatient: builder.mutation<any, { id: string; body: { dischargeNotes?: string } }>({
+    dischargePatient: builder.mutation<
+      any,
+      {
+        id: string
+        body: {
+          dischargeNotes?: string
+          admissionFee?: number
+          dailyBedCharge?: number
+        }
+      }
+    >({
       query: ({ id, body }) => ({
         url: `admission/${id}/discharge`,
         method: "POST",
         body,
       }),
-      invalidatesTags: ["Admissions", "Beds"],
+      invalidatesTags: ["Admissions", "Beds", "Invoices"],
     }),
 
     addAdmissionDailyCharge: builder.mutation<any, { id: string; body: { serviceName: string; category?: string; quantity?: number; unitPrice: number; notes?: string } }>({

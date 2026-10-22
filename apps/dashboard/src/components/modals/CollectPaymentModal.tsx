@@ -1,12 +1,21 @@
 import React, { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
-import { CreditCard, X, Loader2, CheckCircle2, AlertCircle, FileText } from "lucide-react"
+import {
+  CreditCard,
+  X,
+  Loader2,
+  CheckCircle2,
+  AlertCircle,
+  FileText,
+  Plus,
+} from "lucide-react"
 import { Button } from "@repo/ui/button"
 import { Badge } from "@repo/ui/badge"
 import {
   useGetPatientInvoicesQuery,
   useRecordInvoicePaymentMutation,
+  useCreateInvoiceMutation,
 } from "@/lib/store/api/services/patient.service"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -47,8 +56,14 @@ export const CollectPaymentModal: React.FC<CollectPaymentModalProps> = ({
 
   const [recordPayment, { isLoading: isSubmitting }] =
     useRecordInvoicePaymentMutation()
+  const [createInvoice, { isLoading: isCreatingInvoice }] =
+    useCreateInvoiceMutation()
 
   const [selectedInvoiceId, setSelectedInvoiceId] = useState<string>("")
+  const [isQuickBillOpen, setIsQuickBillOpen] = useState(false)
+  const [quickServiceName, setQuickServiceName] = useState("Doctor Consultation / Hospital Service")
+  const [quickAmount, setQuickAmount] = useState<number>(500)
+  const [quickMethod, setQuickMethod] = useState<"CASH" | "BKASH" | "NAGAD" | "CARD" | "BANK_TRANSFER">("CASH")
 
   const activeInvoices = invoices.filter(
     (inv: any) => inv.status !== "CANCELLED" && inv.status !== "REFUNDED"
@@ -114,6 +129,37 @@ export const CollectPaymentModal: React.FC<CollectPaymentModalProps> = ({
     }
   }
 
+  const handleQuickCreateAndPay = async () => {
+    if (!patientId) return
+    if (quickAmount <= 0) {
+      toast.error("Please enter a valid amount")
+      return
+    }
+
+    try {
+      await createInvoice({
+        patient: patientId,
+        lineItems: [
+          {
+            serviceName: quickServiceName.trim() || "Doctor Consultation / Hospital Service",
+            category: "SERVICE",
+            quantity: 1,
+            unitPrice: quickAmount,
+          },
+        ],
+        paidAmount: quickAmount,
+        paymentMethod: quickMethod,
+        notes: "Direct payment collected by merchant",
+      }).unwrap()
+
+      toast.success("Invoice created and payment recorded successfully!")
+      refetch()
+      onClose()
+    } catch (err: any) {
+      toast.error(err?.data?.message || "Failed to create invoice")
+    }
+  }
+
   const handleClose = () => {
     reset()
     setSelectedInvoiceId("")
@@ -158,9 +204,80 @@ export const CollectPaymentModal: React.FC<CollectPaymentModalProps> = ({
                 <span>Loading invoices...</span>
               </div>
             ) : activeInvoices.length === 0 ? (
-              <div className="p-4 rounded-2xl bg-muted/40 border text-center text-xs text-muted-foreground">
-                <AlertCircle className="h-4 w-4 mx-auto mb-1 text-amber-500" />
-                No unpaid or active invoices found for this patient.
+              <div className="space-y-3">
+                <div className="p-3.5 rounded-2xl bg-muted/40 border text-center text-xs text-muted-foreground">
+                  <AlertCircle className="h-4 w-4 mx-auto mb-1 text-amber-500" />
+                  No unpaid or active invoices found for this patient.
+                </div>
+
+                {/* Direct payment / Quick invoice card */}
+                <div className="p-4 rounded-2xl border bg-primary/5 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-foreground flex items-center gap-1.5">
+                      <Plus className="h-3.5 w-3.5 text-primary" />
+                      Create Direct Invoice & Collect Payment
+                    </span>
+                    <Badge variant="outline" className="text-[10px]">Instant</Badge>
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-semibold mb-1">
+                      Service / Bill Description
+                    </label>
+                    <input
+                      type="text"
+                      value={quickServiceName}
+                      onChange={(e) => setQuickServiceName(e.target.value)}
+                      placeholder="Doctor Consultation / Inpatient Service"
+                      className="w-full px-2.5 py-1.5 rounded-xl border bg-background text-xs focus:outline-none focus:ring-2 focus:ring-primary"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <label className="block text-[11px] font-semibold mb-1">
+                        Amount (৳)
+                      </label>
+                      <input
+                        type="number"
+                        min="1"
+                        value={quickAmount}
+                        onChange={(e) => setQuickAmount(Number(e.target.value))}
+                        className="w-full px-2.5 py-1.5 rounded-xl border bg-background text-xs focus:outline-none focus:ring-2 focus:ring-primary"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-semibold mb-1">
+                        Payment Method
+                      </label>
+                      <select
+                        value={quickMethod}
+                        onChange={(e: any) => setQuickMethod(e.target.value)}
+                        className="w-full px-2 py-1.5 rounded-xl border bg-background text-xs focus:outline-none focus:ring-2 focus:ring-primary"
+                      >
+                        <option value="CASH">Cash</option>
+                        <option value="BKASH">bKash</option>
+                        <option value="NAGAD">Nagad</option>
+                        <option value="CARD">Card</option>
+                        <option value="BANK_TRANSFER">Bank Transfer</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <Button
+                    type="button"
+                    disabled={isCreatingInvoice || quickAmount <= 0}
+                    onClick={handleQuickCreateAndPay}
+                    className="w-full py-2 rounded-xl text-xs font-bold bg-primary text-primary-foreground hover:bg-primary/90 flex items-center justify-center gap-1.5 shadow"
+                  >
+                    {isCreatingInvoice ? (
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    ) : (
+                      <CheckCircle2 className="h-3.5 w-3.5" />
+                    )}
+                    Generate Invoice & Collect ৳{quickAmount}
+                  </Button>
+                </div>
               </div>
             ) : (
               <div className="space-y-2 max-h-48 overflow-y-auto pr-1">

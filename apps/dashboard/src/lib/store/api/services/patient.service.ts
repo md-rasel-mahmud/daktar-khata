@@ -119,6 +119,16 @@ export const patientApi = api.injectEndpoints({
       }),
       invalidatesTags: ["Invoices", "TestOrders"],
     }),
+
+    // Create new invoice directly
+    createInvoice: builder.mutation({
+      query: (body: any) => ({
+        url: "invoice",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Invoices"],
+    }),
   }),
 })
 
@@ -136,4 +146,5 @@ export const {
   useGetPatientInvoicesQuery,
   useGetAllInvoicesQuery,
   useRecordInvoicePaymentMutation,
+  useCreateInvoiceMutation,
 } = patientApi

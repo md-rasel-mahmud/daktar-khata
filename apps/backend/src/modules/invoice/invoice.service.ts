@@ -12,7 +12,8 @@ import { CreateInvoiceDto } from "./dto/create-invoice.dto";
 import { RecordPaymentDto } from "./dto/record-payment.dto";
 import { RecordRefundDto } from "./dto/record-refund.dto";
 import { UpdateInvoiceStatusDto } from "./dto/update-invoice-status.dto";
-import { InvoiceStatus } from "../../constant/enums/status.enum";
+import { InvoiceStatus, ServiceCategory } from "../../constant/enums/status.enum";
+import { AdmissionDocument } from "../admission/schema/admission.schema";
 
 @Injectable()
 export class InvoiceService {
@@ -21,6 +22,8 @@ export class InvoiceService {
     private readonly invoiceModel: Model<InvoiceDocument>,
     @InjectModel(collectionsName.patient)
     private readonly patientModel: Model<PatientDocument>,
+    @InjectModel(collectionsName.admission)
+    private readonly admissionModel: Model<AdmissionDocument>,
   ) {}
 
   private generateInvoiceNumber(): string {
@@ -260,6 +263,82 @@ export class InvoiceService {
       matchingPatients.length > 0
         ? matchingPatients.map((p) => p._id)
         : [targetPatientId];
+
+    // Auto-reconcile any admission that does not have an active invoice
+    try {
+      const admissions = await this.admissionModel.find({
+        patient: { $in: patientIds },
+        ...(merchantId && Types.ObjectId.isValid(merchantId)
+          ? { merchant: new Types.ObjectId(merchantId) }
+          : {}),
+      });
+
+      for (const adm of admissions) {
+        const existingInv = await this.invoiceModel.findOne({
+          admission: adm._id,
+          status: { $ne: InvoiceStatus.CANCELLED },
+        });
+
+        if (!existingInv) {
+          const admissionTime = adm.admissionDate
+            ? new Date(adm.admissionDate).getTime()
+            : Date.now();
+          const dischargeTime = adm.actualDischargeDate
+            ? new Date(adm.actualDischargeDate).getTime()
+            : Date.now();
+          const daysStayed = Math.max(
+            1,
+            Math.ceil((dischargeTime - admissionTime) / (1000 * 60 * 60 * 24)),
+          );
+          const invoiceNumber = this.generateInvoiceNumber();
+
+          const lineItems = [
+            {
+              serviceName: `Hospital Stay & Bed Charge (${daysStayed} day${daysStayed > 1 ? "s" : ""})`,
+              category: ServiceCategory.BED,
+              quantity: daysStayed,
+              unitPrice: 500,
+              discount: 0,
+              tax: 0,
+              total: daysStayed * 500,
+            },
+            {
+              serviceName: "Inpatient Admission & Care Fee",
+              category: ServiceCategory.ADMISSION,
+              quantity: 1,
+              unitPrice: 500,
+              discount: 0,
+              tax: 0,
+              total: 500,
+            },
+          ];
+          const subtotal = daysStayed * 500 + 500;
+
+          await this.invoiceModel.create({
+            invoiceNumber,
+            patient: adm.patient,
+            doctor: adm.doctor || null,
+            admission: adm._id,
+            merchant: adm.merchant,
+            status: InvoiceStatus.ISSUED,
+            issuedDate: adm.admissionDate || new Date(),
+            lineItems,
+            subtotal,
+            totalDiscount: 0,
+            totalTax: 0,
+            grandTotal: subtotal,
+            paidAmount: 0,
+            dueAmount: subtotal,
+            refundAmount: 0,
+            paymentHistory: [],
+            refundHistory: [],
+            isActive: true,
+          });
+        }
+      }
+    } catch {
+      // Do not block query on auto-reconciliation error
+    }
 
     const filter: any = {
       patient: { $in: patientIds },

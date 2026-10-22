@@ -4380,6 +4380,8 @@ paths:
               $ref: '#/components/schemas/DischargeDto'
             example: &ref_232
               dischargeNotes: string
+              admissionFee: 0
+              dailyBedCharge: 0
             examples:
               default:
                 value: *ref_232
@@ -4395,7 +4397,7 @@ paths:
                 'Authorization': 'Bearer <token>',
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify({\n  "dischargeNotes": "string"\n})
+              body: JSON.stringify({\n  "dischargeNotes": "string",\n  "admissionFee": 0,\n  "dailyBedCharge": 0\n})
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_233
   /api/v1/service-catalog:
@@ -8841,6 +8843,12 @@ components:
         dischargeNotes:
           type: string
           _propertyName: dischargeNotes
+        admissionFee:
+          type: number
+          _propertyName: admissionFee
+        dailyBedCharge:
+          type: number
+          _propertyName: dailyBedCharge
       example: *ref_232
     CreateServiceCatalogDto:
       type: object

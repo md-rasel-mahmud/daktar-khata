@@ -37,11 +37,13 @@ import {
   ChevronLeft,
   ChevronRight,
   Loader2,
+  CreditCard,
 } from "lucide-react"
 import {
   InvoicePrintModal,
   type InvoicePrintData,
 } from "@/components/common/print"
+import { CollectPaymentModal } from "@/components/modals/CollectPaymentModal"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
@@ -100,6 +102,13 @@ export default function ManageAdmissions() {
   const [selectedAdmissionForDischarge, setSelectedAdmissionForDischarge] =
     useState<AdmissionItem | null>(null)
   const [dischargeNotes, setDischargeNotes] = useState("")
+  const [dischargeAdmissionFee, setDischargeAdmissionFee] = useState<number>(500)
+  const [dischargeDailyBedCharge, setDischargeDailyBedCharge] = useState<number>(500)
+  const [collectPaymentAfterDischarge, setCollectPaymentAfterDischarge] = useState<boolean>(true)
+
+  // Direct payment modal state
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false)
+  const [selectedPatientForPayment, setSelectedPatientForPayment] = useState<any>(null)
 
   // Quick Ward modal state
   const [isQuickWardModalOpen, setIsQuickWardModalOpen] = useState(false)
@@ -215,8 +224,8 @@ export default function ManageAdmissions() {
     watchedRoom
       ? { roomId: watchedRoom, status: "AVAILABLE" }
       : watchedWard
-      ? { wardId: watchedWard, status: "AVAILABLE" }
-      : { status: "AVAILABLE" }
+        ? { wardId: watchedWard, status: "AVAILABLE" }
+        : { status: "AVAILABLE" }
   )
 
   const [createAdmission, { isLoading: isCreatingAdmission }] =
@@ -278,7 +287,7 @@ export default function ManageAdmissions() {
           1,
           Math.ceil(
             (new Date().getTime() - new Date(adm.admissionDate).getTime()) /
-              (1000 * 60 * 60 * 24)
+            (1000 * 60 * 60 * 24)
           )
         )
         const dailyCharge = adm.bed?.dailyCharge || 500
@@ -300,9 +309,8 @@ export default function ManageAdmissions() {
           },
           lineItems: [
             {
-              serviceName: `Bed & Ward Charges (${daysAdmitted} Day(s) - Bed #${
-                adm.bed?.bedNumber || "N/A"
-              })`,
+              serviceName: `Bed & Ward Charges (${daysAdmitted} Day(s) - Bed #${adm.bed?.bedNumber || "N/A"
+                })`,
               category: "ACCOMMODATION",
               quantity: daysAdmitted,
               unitPrice: dailyCharge,
@@ -429,9 +437,16 @@ export default function ManageAdmissions() {
     if (!selectedAdmissionForDischarge) return
 
     try {
+      const patientForPayment = selectedAdmissionForDischarge.patient
+      const shouldCollect = collectPaymentAfterDischarge
+
       await dischargePatient({
         id: selectedAdmissionForDischarge._id,
-        body: { dischargeNotes },
+        body: {
+          dischargeNotes,
+          admissionFee: dischargeAdmissionFee,
+          dailyBedCharge: dischargeDailyBedCharge,
+        },
       }).unwrap()
 
       toast.success(t("discharge_success_msg"))
@@ -439,10 +454,17 @@ export default function ManageAdmissions() {
       setSelectedAdmissionForDischarge(null)
       setDischargeNotes("")
       refetch()
+
+      if (shouldCollect && patientForPayment) {
+        setSelectedPatientForPayment(patientForPayment)
+        setIsPaymentModalOpen(true)
+      }
     } catch (err: any) {
       toast.error(err?.data?.message || t("failed"))
     }
   }
+
+  console.log('admissions', admissions)
 
   return (
     <div className="space-y-6">
@@ -594,14 +616,13 @@ export default function ManageAdmissions() {
                     </td>
                     <td className="px-5 py-4">
                       <span
-                        className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-bold ${
-                          adm.status === "ADMITTED" ||
-                          adm.status === "ON_TREATMENT"
+                        className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-bold ${adm.status === "ADMITTED" ||
+                            adm.status === "ON_TREATMENT"
                             ? "bg-emerald-500/20 text-emerald-600"
                             : adm.status === "DISCHARGED"
-                            ? "bg-slate-500/20 text-slate-600"
-                            : "bg-amber-500/20 text-amber-600"
-                        }`}
+                              ? "bg-slate-500/20 text-slate-600"
+                              : "bg-amber-500/20 text-amber-600"
+                          }`}
                       >
                         {adm.status}
                       </span>
@@ -639,6 +660,23 @@ export default function ManageAdmissions() {
                             </button>
                           </>
                         )}
+                        <button
+                          onClick={() => {
+                            setSelectedPatientForPayment(adm.patient)
+                            setIsPaymentModalOpen(true)
+                          }}
+                          className={`px-2.5 py-1.5 rounded-lg border transition flex items-center gap-1 text-xs font-semibold ${
+                            adm.status === "DISCHARGED"
+                              ? "border-emerald-500/40 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-950/40 dark:text-emerald-300"
+                              : "hover:bg-muted text-muted-foreground hover:text-foreground"
+                          }`}
+                          title={t("collect_payment") || "Collect Payment"}
+                        >
+                          <CreditCard className="h-3.5 w-3.5 text-emerald-600" />
+                          <span className="hidden sm:inline">
+                            {t("payment") || "Payment"}
+                          </span>
+                        </button>
                         <button
                           onClick={() => handleOpenAdmissionInvoice(adm)}
                           className="px-2.5 py-1.5 rounded-lg border hover:bg-muted text-muted-foreground hover:text-foreground transition flex items-center gap-1 text-xs font-semibold"
@@ -718,22 +756,20 @@ export default function ManageAdmissions() {
                     <button
                       type="button"
                       onClick={() => setPatientTab("select")}
-                      className={`px-3 py-1 rounded-lg font-medium transition ${
-                        patientTab === "select"
+                      className={`px-3 py-1 rounded-lg font-medium transition ${patientTab === "select"
                           ? "bg-background text-foreground shadow-sm"
                           : "text-muted-foreground hover:text-foreground"
-                      }`}
+                        }`}
                     >
                       {t("select_existing_patient")}
                     </button>
                     <button
                       type="button"
                       onClick={() => setPatientTab("create")}
-                      className={`px-3 py-1 rounded-lg font-medium transition flex items-center gap-1 ${
-                        patientTab === "create"
+                      className={`px-3 py-1 rounded-lg font-medium transition flex items-center gap-1 ${patientTab === "create"
                           ? "bg-background text-foreground shadow-sm"
                           : "text-muted-foreground hover:text-foreground"
-                      }`}
+                        }`}
                     >
                       <UserPlus className="h-3.5 w-3.5" />
                       {t("quick_add_patient")}
@@ -771,9 +807,8 @@ export default function ManageAdmissions() {
                           type="text"
                           placeholder="e.g. Rahim Ahmed"
                           {...registerQuickPatient("name")}
-                          className={`w-full px-2.5 py-1.5 rounded-xl border bg-background text-xs focus:outline-none focus:ring-2 focus:ring-primary ${
-                            quickPatientErrors.name ? "border-red-500" : ""
-                          }`}
+                          className={`w-full px-2.5 py-1.5 rounded-xl border bg-background text-xs focus:outline-none focus:ring-2 focus:ring-primary ${quickPatientErrors.name ? "border-red-500" : ""
+                            }`}
                         />
                         {quickPatientErrors.name && (
                           <p className="text-[10px] text-red-500 mt-0.5">
@@ -790,9 +825,8 @@ export default function ManageAdmissions() {
                           type="tel"
                           placeholder="017XXXXXXXX"
                           {...registerQuickPatient("phone")}
-                          className={`w-full px-2.5 py-1.5 rounded-xl border bg-background text-xs focus:outline-none focus:ring-2 focus:ring-primary ${
-                            quickPatientErrors.phone ? "border-red-500" : ""
-                          }`}
+                          className={`w-full px-2.5 py-1.5 rounded-xl border bg-background text-xs focus:outline-none focus:ring-2 focus:ring-primary ${quickPatientErrors.phone ? "border-red-500" : ""
+                            }`}
                         />
                         {quickPatientErrors.phone && (
                           <p className="text-[10px] text-red-500 mt-0.5">
@@ -957,9 +991,8 @@ export default function ManageAdmissions() {
                 <select
                   value={watchedBed || ""}
                   onChange={(e) => setAdmissionValue("bed", e.target.value)}
-                  className={`w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary font-bold text-emerald-600 ${
-                    admissionErrors.bed ? "border-red-500" : ""
-                  }`}
+                  className={`w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary font-bold text-emerald-600 ${admissionErrors.bed ? "border-red-500" : ""
+                    }`}
                 >
                   <option value="">{t("choose_bed")}</option>
                   {beds.map((b) => (
@@ -1064,9 +1097,8 @@ export default function ManageAdmissions() {
                   type="text"
                   placeholder="Inj. Ceftriaxone / Normal Saline"
                   {...registerCharge("serviceName")}
-                  className={`w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary ${
-                    chargeErrors.serviceName ? "border-red-500" : ""
-                  }`}
+                  className={`w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary ${chargeErrors.serviceName ? "border-red-500" : ""
+                    }`}
                 />
                 {chargeErrors.serviceName && (
                   <p className="text-xs text-red-500 mt-1">
@@ -1084,9 +1116,8 @@ export default function ManageAdmissions() {
                     type="number"
                     min="1"
                     {...registerCharge("quantity", { valueAsNumber: true })}
-                    className={`w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary ${
-                      chargeErrors.quantity ? "border-red-500" : ""
-                    }`}
+                    className={`w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary ${chargeErrors.quantity ? "border-red-500" : ""
+                      }`}
                   />
                   {chargeErrors.quantity && (
                     <p className="text-xs text-red-500 mt-1">
@@ -1104,9 +1135,8 @@ export default function ManageAdmissions() {
                     min="0"
                     placeholder="৳"
                     {...registerCharge("unitPrice", { valueAsNumber: true })}
-                    className={`w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary ${
-                      chargeErrors.unitPrice ? "border-red-500" : ""
-                    }`}
+                    className={`w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary ${chargeErrors.unitPrice ? "border-red-500" : ""
+                      }`}
                   />
                   {chargeErrors.unitPrice && (
                     <p className="text-xs text-red-500 mt-1">
@@ -1161,17 +1191,66 @@ export default function ManageAdmissions() {
             </p>
 
             <form onSubmit={handleDischargeSubmit} className="space-y-4">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-semibold mb-1">
+                    Daily Bed Charge (৳)
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={dischargeDailyBedCharge}
+                    onChange={(e) =>
+                      setDischargeDailyBedCharge(Number(e.target.value))
+                    }
+                    className="w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold mb-1">
+                    Admission Fee (৳)
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={dischargeAdmissionFee}
+                    onChange={(e) =>
+                      setDischargeAdmissionFee(Number(e.target.value))
+                    }
+                    className="w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                </div>
+              </div>
+
               <div>
                 <label className="block text-xs font-semibold mb-1">
                   {t("remarks")}
                 </label>
                 <textarea
-                  rows={3}
+                  rows={2}
                   value={dischargeNotes}
                   onChange={(e) => setDischargeNotes(e.target.value)}
-                  placeholder="..."
+                  placeholder="Discharge summary or doctor advice..."
                   className="w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                 />
+              </div>
+
+              <div className="flex items-center gap-2 p-2.5 rounded-xl border bg-primary/5">
+                <input
+                  type="checkbox"
+                  id="collectPaymentImmediately"
+                  checked={collectPaymentAfterDischarge}
+                  onChange={(e) =>
+                    setCollectPaymentAfterDischarge(e.target.checked)
+                  }
+                  className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                />
+                <label
+                  htmlFor="collectPaymentImmediately"
+                  className="text-xs font-medium cursor-pointer"
+                >
+                  Collect payment immediately after discharge
+                </label>
               </div>
 
               <div className="flex items-center justify-end gap-3 pt-3 border-t">
@@ -1217,9 +1296,8 @@ export default function ManageAdmissions() {
                   autoFocus
                   placeholder={t("ward_name_ph")}
                   {...registerWard("name")}
-                  className={`w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary ${
-                    wardErrors.name ? "border-red-500" : ""
-                  }`}
+                  className={`w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary ${wardErrors.name ? "border-red-500" : ""
+                    }`}
                 />
                 {wardErrors.name && (
                   <p className="text-xs text-red-500 mt-1">
@@ -1255,6 +1333,17 @@ export default function ManageAdmissions() {
         open={Boolean(selectedInvoiceForPrint)}
         onClose={() => setSelectedInvoiceForPrint(null)}
         data={selectedInvoiceForPrint}
+      />
+
+      {/* MODAL: DIRECT PAYMENT COLLECTION */}
+      <CollectPaymentModal
+        isOpen={isPaymentModalOpen}
+        onClose={() => {
+          setIsPaymentModalOpen(false)
+          setSelectedPatientForPayment(null)
+          refetch()
+        }}
+        patient={selectedPatientForPayment}
       />
     </div>
   )
