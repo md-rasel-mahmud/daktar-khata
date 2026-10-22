@@ -632,5 +632,13 @@
   "wards_list": "ওয়ার্ড তালিকা",
   "rooms_list": "রুম তালিকা",
   "delete_bed": "বেড মুছে ফেলুন",
-  "bed_deleted_success": "বেড সফলভাবে মুছে ফেলা হয়েছে!"
+  "bed_deleted_success": "বেড সফলভাবে মুছে ফেলা হয়েছে!",
+  "print_a4": "A4 প্রিন্ট",
+  "print_pos": "POS থার্মাল (৮০ মিমি)",
+  "download_pdf": "পিডিএফ ডাউনলোড",
+  "print_slip": "অ্যাপয়েন্টমেন্ট স্লিপ প্রিন্ট",
+  "print_invoice": "ইনভয়েস ও রিসিট প্রিন্ট",
+  "diagnostic_test_report": "ডায়াগনস্টিক ও ল্যাব টেস্ট রিপোর্ট",
+  "view_report": "রিপোর্ট দেখুন",
+  "view_invoice": "ইনভয়েস দেখুন"
 }

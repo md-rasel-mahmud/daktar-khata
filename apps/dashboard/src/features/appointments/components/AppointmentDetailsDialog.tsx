@@ -1,8 +1,10 @@
-import React from "react"
+import React, { useState } from "react"
 import { format } from "date-fns"
 import { useTranslation } from "react-i18next"
 import { Label } from "@repo/ui/label"
+import { Printer } from "lucide-react"
 import AppointmentStatusBadge from "@/components/common/AppointmentStatusBadge"
+import { AppointmentPrintModal } from "@/components/common/print"
 import {
   Dialog,
   DialogContent,
@@ -44,6 +46,7 @@ const AppointmentDetailsDialog: React.FC<AppointmentDetailsDialogProps> = ({
   appointment,
 }) => {
   const { t } = useTranslation()
+  const [isPrintOpen, setIsPrintOpen] = useState(false)
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -117,9 +120,40 @@ const AppointmentDetailsDialog: React.FC<AppointmentDetailsDialogProps> = ({
                 </div>
               )}
             </div>
+
+            <div className="pt-3 border-t flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setIsPrintOpen(true)}
+                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-bold shadow hover:bg-primary/90 transition"
+              >
+                <Printer className="h-4 w-4" />
+                {t("print_slip")}
+              </button>
+            </div>
           </div>
         )}
       </DialogContent>
+
+      <AppointmentPrintModal
+        open={isPrintOpen}
+        onClose={() => setIsPrintOpen(false)}
+        data={
+          appointment
+            ? {
+                appointmentDate: appointment.appointmentDate,
+                appointmentSlot: appointment.appointmentSlot,
+                status: appointment.status,
+                reasonFor: appointment.reasonFor,
+                problemDescription: appointment.problemDescription,
+                paymentStatus: appointment.paymentStatus,
+                paymentMethod: appointment.paymentMethod,
+                doctor: appointment.doctor,
+                patient: appointment.patient,
+              }
+            : null
+        }
+      />
     </Dialog>
   )
 }

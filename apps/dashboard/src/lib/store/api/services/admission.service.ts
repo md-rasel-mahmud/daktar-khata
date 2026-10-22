@@ -255,6 +255,7 @@ export const {
   useDischargePatientMutation,
   useAddAdmissionDailyChargeMutation,
   useGetAdmissionInvoiceQuery,
+  useLazyGetAdmissionInvoiceQuery,
   useGetWardsQuery,
   useCreateWardMutation,
   useUpdateWardMutation,

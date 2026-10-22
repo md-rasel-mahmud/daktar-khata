@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from "react"
 import { addDays, endOfDay, format, isAfter, isSameDay, startOfDay } from "date-fns"
 import { type DateRange } from "react-day-picker"
-import { FilterX } from "lucide-react"
+import { FilterX, Printer } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import { Button } from "@repo/ui/button"
 import { Badge } from "@repo/ui/badge"
@@ -36,6 +36,10 @@ import {
   AppointmentDetailsDialog,
   CompleteAppointmentDialog,
 } from "@/features/appointments/components"
+import {
+  AppointmentPrintModal,
+  type AppointmentPrintData,
+} from "@/components/common/print"
 
 type AppointmentStatus =
   | "PENDING"
@@ -115,6 +119,8 @@ const MerchantAppointmentsPage: React.FC = () => {
   const [isCompleteDialogOpen, setIsCompleteDialogOpen] = useState(false)
   const [isDetailsDialogOpen, setIsDetailsDialogOpen] = useState(false)
   const [prescription, setPrescription] = useState("")
+  const [selectedAppointmentForPrint, setSelectedAppointmentForPrint] =
+    useState<AppointmentPrintData | null>(null)
 
   const mapToRow = useCallback(
     (appointment: AppointmentModel): AppointmentRow => ({
@@ -339,6 +345,27 @@ const MerchantAppointmentsPage: React.FC = () => {
               <Button
                 size="sm"
                 variant="outline"
+                onClick={() =>
+                  setSelectedAppointmentForPrint({
+                    tokenNumber:
+                      (row.raw as any)?.serialNumber ||
+                      (row.raw as any)?.tokenNumber ||
+                      "01",
+                    appointmentDate: row.date,
+                    appointmentSlot: row.slot,
+                    status: row.status,
+                    reasonFor: row.reasonFor,
+                    doctor: { name: row.doctorName },
+                    patient: { name: row.patientName, mobile: row.patientMobile },
+                  })
+                }
+                title={t("print_slip")}
+              >
+                <Printer className="h-3.5 w-3.5" />
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
                 onClick={() => handleOpenDetails(row)}
               >
                 {t("details")}
@@ -408,6 +435,27 @@ const MerchantAppointmentsPage: React.FC = () => {
 
             return (
               <div className="inline-flex gap-2">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() =>
+                    setSelectedAppointmentForPrint({
+                      tokenNumber:
+                        (row.raw as any)?.serialNumber ||
+                        (row.raw as any)?.tokenNumber ||
+                        "01",
+                      appointmentDate: row.date,
+                      appointmentSlot: row.slot,
+                      status: row.status,
+                      reasonFor: row.reasonFor,
+                      doctor: { name: row.doctorName },
+                      patient: { name: row.patientName, mobile: row.patientMobile },
+                    })
+                  }
+                  title={t("print_slip")}
+                >
+                  <Printer className="h-3.5 w-3.5" />
+                </Button>
                 <Button
                   size="sm"
                   variant="outline"
@@ -596,6 +644,12 @@ const MerchantAppointmentsPage: React.FC = () => {
         onPrescriptionChange={setPrescription}
         onConfirm={handleCompleteAppointment}
         isLoading={updateLoading}
+      />
+
+      <AppointmentPrintModal
+        open={Boolean(selectedAppointmentForPrint)}
+        onClose={() => setSelectedAppointmentForPrint(null)}
+        data={selectedAppointmentForPrint}
       />
     </>
   )

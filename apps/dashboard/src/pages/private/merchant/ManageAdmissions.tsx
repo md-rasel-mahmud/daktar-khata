@@ -9,6 +9,7 @@ import {
   useCreateWardMutation,
   useGetRoomsQuery,
   useGetBedsQuery,
+  useLazyGetAdmissionInvoiceQuery,
 } from "@/lib/store/api/services/admission.service"
 import type { AdmissionItem } from "@/lib/store/api/services/admission.service"
 import { useGetPatientsQuery } from "@/lib/store/api/services/patient.service"
@@ -28,7 +29,12 @@ import {
   Clock,
   Layers,
   Building,
+  Printer,
 } from "lucide-react"
+import {
+  InvoicePrintModal,
+  type InvoicePrintData,
+} from "@/components/common/print"
 
 export default function ManageAdmissions() {
   const { t, i18n } = useTranslation()
@@ -89,6 +95,90 @@ export default function ManageAdmissions() {
   const [dischargePatient, { isLoading: isDischarging }] = useDischargePatientMutation()
   const [addDailyCharge, { isLoading: isAddingCharge }] = useAddAdmissionDailyChargeMutation()
   const [createWard, { isLoading: isCreatingWard }] = useCreateWardMutation()
+  const [triggerGetInvoice] = useLazyGetAdmissionInvoiceQuery()
+
+  const [selectedInvoiceForPrint, setSelectedInvoiceForPrint] =
+    useState<InvoicePrintData | null>(null)
+
+  const handleOpenAdmissionInvoice = async (adm: AdmissionItem) => {
+    try {
+      const res = await triggerGetInvoice(adm._id).unwrap()
+      const invoiceData = res?.data || res
+      if (invoiceData && invoiceData.lineItems && invoiceData.lineItems.length > 0) {
+        setSelectedInvoiceForPrint({
+          invoiceNumber: invoiceData.invoiceNumber || `INV-${adm._id.slice(-6).toUpperCase()}`,
+          date: invoiceData.issuedDate || new Date(),
+          patient: {
+            name: adm.patient?.name || "Patient",
+            mobile: adm.patient?.mobile || adm.patient?.phone || "N/A",
+            ward: adm.ward?.name,
+            bedNumber: adm.bed?.bedNumber,
+            room: adm.room?.name,
+          },
+          doctor: {
+            name: adm.doctor?.name,
+            specialization: adm.doctor?.specialization?.join(", "),
+          },
+          lineItems: invoiceData.lineItems.map((li: any) => ({
+            serviceName: li.serviceName,
+            category: li.category,
+            quantity: li.quantity || 1,
+            unitPrice: li.unitPrice || 0,
+            total: li.total || (li.quantity * li.unitPrice) || 0,
+          })),
+          subtotal: invoiceData.subtotal || 0,
+          totalDiscount: invoiceData.totalDiscount || 0,
+          totalTax: invoiceData.totalTax || 0,
+          grandTotal: invoiceData.grandTotal || 0,
+          paidAmount: invoiceData.paidAmount || 0,
+          dueAmount: invoiceData.dueAmount ?? invoiceData.grandTotal ?? 0,
+          paymentMethod: "CASH / POS",
+        })
+      } else {
+        const daysAdmitted = Math.max(
+          1,
+          Math.ceil(
+            (new Date().getTime() - new Date(adm.admissionDate).getTime()) /
+              (1000 * 60 * 60 * 24)
+          )
+        )
+        const dailyCharge = adm.bed?.dailyCharge || 500
+        const bedTotal = daysAdmitted * dailyCharge
+
+        setSelectedInvoiceForPrint({
+          invoiceNumber: `INV-ADM-${adm._id.slice(-6).toUpperCase()}`,
+          date: new Date(),
+          patient: {
+            name: adm.patient?.name || "Patient",
+            mobile: adm.patient?.mobile || adm.patient?.phone || "N/A",
+            ward: adm.ward?.name,
+            bedNumber: adm.bed?.bedNumber,
+            room: adm.room?.name,
+          },
+          doctor: {
+            name: adm.doctor?.name,
+            specialization: adm.doctor?.specialization?.join(", "),
+          },
+          lineItems: [
+            {
+              serviceName: `Bed & Ward Charges (${daysAdmitted} Day(s) - Bed #${adm.bed?.bedNumber || "N/A"})`,
+              category: "ACCOMMODATION",
+              quantity: daysAdmitted,
+              unitPrice: dailyCharge,
+              total: bedTotal,
+            },
+          ],
+          subtotal: bedTotal,
+          grandTotal: bedTotal,
+          paidAmount: 0,
+          dueAmount: bedTotal,
+          paymentMethod: "CASH / POS",
+        })
+      }
+    } catch {
+      toast.error(t("failed"))
+    }
+  }
 
   const [isQuickWardModalOpen, setIsQuickWardModalOpen] = useState(false)
   const [quickWardName, setQuickWardName] = useState("")
@@ -323,6 +413,14 @@ export default function ManageAdmissions() {
                       </span>
                     </td>
                     <td className="px-5 py-4 text-right space-x-2">
+                      <button
+                        onClick={() => handleOpenAdmissionInvoice(adm)}
+                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-primary/10 text-primary hover:bg-primary/20 border border-primary/20 text-xs font-semibold"
+                        title={t("view_invoice")}
+                      >
+                        <Printer className="h-3.5 w-3.5" />
+                        {t("view_invoice")}
+                      </button>
                       {adm.status === "ADMITTED" && (
                         <>
                           <button
@@ -330,7 +428,7 @@ export default function ManageAdmissions() {
                               setSelectedAdmissionForCharge(adm)
                               setIsChargeModalOpen(true)
                             }}
-                            className="inline-flex items-center gap-1 px-3 py-1 rounded-md bg-amber-500/15 text-amber-700 hover:bg-amber-500/25 border border-amber-500/30 text-xs font-semibold"
+                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-amber-500/15 text-amber-700 hover:bg-amber-500/25 border border-amber-500/30 text-xs font-semibold"
                             title={t("add_daily_nursing_charge")}
                           >
                             <Syringe className="h-3.5 w-3.5" />
@@ -341,7 +439,7 @@ export default function ManageAdmissions() {
                               setSelectedAdmissionForDischarge(adm)
                               setIsDischargeModalOpen(true)
                             }}
-                            className="inline-flex items-center gap-1 px-3 py-1 rounded-md bg-red-500/10 text-red-600 hover:bg-red-500/20 border border-red-500/20 text-xs font-semibold"
+                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-red-500/10 text-red-600 hover:bg-red-500/20 border border-red-500/20 text-xs font-semibold"
                             title={t("confirm_discharge")}
                           >
                             <LogOut className="h-3.5 w-3.5" />
@@ -691,6 +789,12 @@ export default function ManageAdmissions() {
           </div>
         </div>
       )}
+      {/* MODAL: INVOICE PRINT PREVIEW (A4 & POS) */}
+      <InvoicePrintModal
+        open={Boolean(selectedInvoiceForPrint)}
+        onClose={() => setSelectedInvoiceForPrint(null)}
+        data={selectedInvoiceForPrint}
+      />
     </div>
   )
 }

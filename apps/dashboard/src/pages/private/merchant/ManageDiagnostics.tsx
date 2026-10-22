@@ -20,12 +20,17 @@ import {
   User,
   AlertCircle,
 } from "lucide-react"
+import {
+  InvoicePrintModal,
+  ReportPrintModal,
+} from "@/components/common/print"
 
 export default function ManageDiagnostics() {
   const { t } = useTranslation()
   const [search, setSearch] = useState("")
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false)
   const [selectedReceipt, setSelectedReceipt] = useState<TestOrder | null>(null)
+  const [selectedReportForPrint, setSelectedReportForPrint] = useState<any>(null)
 
   const [orderForm, setOrderForm] = useState({
     patient: "",
@@ -213,13 +218,40 @@ export default function ManageDiagnostics() {
                       </span>
                     </td>
                     <td className="px-5 py-4 text-right">
-                      <button
-                        onClick={() => setSelectedReceipt(ord)}
-                        className="p-1.5 rounded-lg border hover:bg-muted text-muted-foreground hover:text-foreground"
-                        title={t("print_receipt")}
-                      >
-                        <Printer className="h-4 w-4" />
-                      </button>
+                      <div className="flex items-center justify-end gap-1.5">
+                        <button
+                          onClick={() =>
+                            setSelectedReportForPrint({
+                              reportNumber: ord.orderNumber ? `REP-${ord.orderNumber}` : "LAB-2026-001",
+                              orderNumber: ord.tokenNumber ? `#${ord.tokenNumber}` : ord.orderNumber,
+                              testName: ord.items?.[0]?.testName || "Diagnostic Investigation",
+                              date: ord.createdAt || new Date(),
+                              patient: {
+                                name: ord.patient?.name || "Patient",
+                                mobile: ord.patient?.mobile,
+                                gender: ord.patient?.gender,
+                                age: ord.patient?.age,
+                              },
+                              referringDoctor: {
+                                name: ord.doctor?.name || ord.referringDoctorName || "Direct Walk-in",
+                              },
+                            })
+                          }
+                          className="px-2.5 py-1.5 rounded-lg border hover:bg-muted text-muted-foreground hover:text-foreground transition flex items-center gap-1 text-xs font-semibold"
+                          title={t("view_report")}
+                        >
+                          <FileText className="h-3.5 w-3.5 text-primary" />
+                          <span className="hidden sm:inline">{t("view_report")}</span>
+                        </button>
+                        <button
+                          onClick={() => setSelectedReceipt(ord)}
+                          className="px-2.5 py-1.5 rounded-lg border hover:bg-muted text-muted-foreground hover:text-foreground transition flex items-center gap-1 text-xs font-semibold"
+                          title={t("print_invoice")}
+                        >
+                          <Printer className="h-3.5 w-3.5" />
+                          <span className="hidden sm:inline">{t("print_invoice")}</span>
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -340,76 +372,49 @@ export default function ManageDiagnostics() {
         </div>
       )}
 
-      {/* MODAL 2: RECEIPT / TOKEN PRINT PREVIEW */}
-      {selectedReceipt && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white text-slate-900 rounded-3xl max-w-md w-full p-6 shadow-2xl relative animate-in fade-in zoom-in-95">
-            <div className="text-center pb-4 border-b">
-              <h3 className="text-xl font-black text-slate-900">{t("receipt_header")}</h3>
-              <p className="text-xs text-slate-500">{t("receipt_sub")}</p>
-            </div>
+      {/* MODAL 2: INVOICE / RECEIPT PRINT PREVIEW (A4 & POS) */}
+      <InvoicePrintModal
+        open={Boolean(selectedReceipt)}
+        onClose={() => setSelectedReceipt(null)}
+        data={
+          selectedReceipt
+            ? {
+                invoiceNumber: selectedReceipt.orderNumber || "TO-COUNTER",
+                date: selectedReceipt.createdAt || new Date(),
+                patient: {
+                  name: selectedReceipt.patient?.name || "Walk-in Patient",
+                  mobile: selectedReceipt.patient?.mobile || "N/A",
+                },
+                doctor: {
+                  name:
+                    selectedReceipt.doctor?.name ||
+                    selectedReceipt.referringDoctorName ||
+                    "Direct Walk-in",
+                },
+                lineItems: (selectedReceipt.items || []).map((itm) => ({
+                  serviceName: itm.testName,
+                  category: "Diagnostic Test",
+                  quantity: 1,
+                  unitPrice: itm.price,
+                  total: itm.price,
+                })),
+                subtotal: (selectedReceipt.items || []).reduce((s, itm) => s + itm.price, 0),
+                grandTotal: (selectedReceipt.items || []).reduce((s, itm) => s + itm.price, 0),
+                paidAmount: (selectedReceipt.items || []).reduce((s, itm) => s + itm.price, 0),
+                dueAmount: 0,
+                paymentMethod: "CASH / POS",
+              }
+            : null
+        }
+      />
 
-            <div className="my-4 text-center p-4 rounded-2xl bg-slate-50 border">
-              <span className="text-xs uppercase text-slate-500 font-bold">{t("waiting_token_number")}</span>
-              <div className="text-5xl font-black text-indigo-600 my-1">
-                #{selectedReceipt.tokenNumber ?? 1}
-              </div>
-              <div className="text-xs font-mono text-slate-600 font-semibold">
-                {t("order_number_lbl")} {selectedReceipt.orderNumber}
-              </div>
-            </div>
-
-            <div className="space-y-1 text-xs mb-4">
-              <div className="flex justify-between">
-                <span className="text-slate-500">{t("patient_name")}:</span>
-                <span className="font-bold">{selectedReceipt.patient?.name}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-500">{t("referring_doctor_type")}:</span>
-                <span className="font-medium">
-                  {selectedReceipt.doctor?.name || selectedReceipt.referringDoctorName || "Direct Walk-in"}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-500">{t("report_date")}:</span>
-                <span>{new Date(selectedReceipt.createdAt).toLocaleString()}</span>
-              </div>
-            </div>
-
-            <div className="border-t pt-3 space-y-1">
-              <span className="text-xs font-bold text-slate-700 block mb-1">{t("test_details")}</span>
-              {selectedReceipt.items?.map((itm, i) => (
-                <div key={i} className="flex justify-between text-xs">
-                  <span>{itm.testName}</span>
-                  <span className="font-semibold">৳{itm.price}</span>
-                </div>
-              ))}
-              <div className="border-t pt-2 flex justify-between text-sm font-black text-slate-900">
-                <span>{t("final_charges")}:</span>
-                <span>
-                  ৳{selectedReceipt.items?.reduce((s, itm) => s + itm.price, 0).toLocaleString()}
-                </span>
-              </div>
-            </div>
-
-            <div className="mt-6 flex gap-3">
-              <button
-                onClick={() => setSelectedReceipt(null)}
-                className="flex-1 py-2 rounded-xl border border-slate-300 text-xs font-bold text-slate-700 hover:bg-slate-50"
-              >
-                {t("close")}
-              </button>
-              <button
-                onClick={() => window.print()}
-                className="flex-1 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold hover:bg-indigo-500 flex items-center justify-center gap-1.5 shadow"
-              >
-                <Printer className="h-4 w-4" />
-                {t("print_receipt")}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* MODAL 3: DIAGNOSTIC LAB REPORT PRINT PREVIEW (A4 & PDF) */}
+      <ReportPrintModal
+        open={Boolean(selectedReportForPrint)}
+        onClose={() => setSelectedReportForPrint(null)}
+        data={selectedReportForPrint}
+      />
     </div>
   )
 }
+

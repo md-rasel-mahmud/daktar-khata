@@ -7,9 +7,11 @@ import {
   FileText,
   Search,
   Printer,
+  Download,
   ShieldCheck,
   Stethoscope,
 } from "lucide-react"
+import { printHtmlDocument, downloadDocumentAsPdf } from "@/components/common/print"
 
 export default function PublicReportDownload() {
   const { t, i18n } = useTranslation()
@@ -40,8 +42,99 @@ export default function PublicReportDownload() {
     }
   }
 
-  const handlePrint = () => {
-    window.print()
+  const getReportA4Html = () => `
+    <div style="padding: 16px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #0f172a;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2.5px solid #0284c7; padding-bottom: 14px; margin-bottom: 16px;">
+        <div>
+          <h1 style="font-size: 22px; font-weight: 900; color: #0284c7; margin: 0; text-transform: uppercase;">Daktar Khata Clinical Laboratory</h1>
+          <p style="font-size: 11px; color: #475569; margin: 2px 0;">Dhaka, Bangladesh | Hotline: +880 1700-000000</p>
+          <p style="font-size: 11px; color: #0369a1; font-weight: 700; margin-top: 4px;">DEPARTMENT OF CLINICAL PATHOLOGY & DIAGNOSTIC SERVICES</p>
+        </div>
+        <div style="text-align: right; background: #f0f9ff; border: 1.5px solid #0284c7; border-radius: 8px; padding: 6px 14px;">
+          <div style="font-size: 10px; font-weight: 700; color: #0369a1; text-transform: uppercase;">Report Ref</div>
+          <div style="font-size: 16px; font-weight: 900; color: #0284c7;">#${reportData?.reportNumber || token}</div>
+        </div>
+      </div>
+
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; border: 1px solid #cbd5e1; font-size: 11px; background: #f8fafc;">
+        <tr>
+          <td style="padding: 6px 10px; border-right: 1px solid #cbd5e1; border-bottom: 1px solid #cbd5e1; width: 50%;">
+            <span style="color: #64748b; font-weight: 600;">Patient Name:</span>
+            <span style="font-weight: 800; color: #0f172a; margin-left: 6px; font-size: 13px;">${reportData?.patient?.name || "Patient"}</span>
+          </td>
+          <td style="padding: 6px 10px; border-bottom: 1px solid #cbd5e1; width: 50%;">
+            <span style="color: #64748b; font-weight: 600;">Phone:</span>
+            <span style="font-weight: 700; color: #0f172a; margin-left: 6px;">${reportData?.patient?.mobile || phone}</span>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 6px 10px; border-right: 1px solid #cbd5e1;">
+            <span style="color: #64748b; font-weight: 600;">Token No:</span>
+            <span style="font-weight: 700; color: #0284c7; margin-left: 6px;">#${token}</span>
+          </td>
+          <td style="padding: 6px 10px;">
+            <span style="color: #64748b; font-weight: 600;">Report Status:</span>
+            <span style="font-weight: 700; color: #15803d; margin-left: 6px;">OFFICIAL & VERIFIED</span>
+          </td>
+        </tr>
+      </table>
+
+      <div style="margin-bottom: 20px;">
+        <h3 style="font-size: 13px; font-weight: 800; text-transform: uppercase; margin-bottom: 8px; color: #0f172a;">Clinical Findings:</h3>
+        <div style="padding: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; font-family: monospace; font-size: 12px; line-height: 1.5; white-space: pre-wrap;">
+          ${reportData?.findings || "All clinical parameters within normal biological reference range."}
+        </div>
+      </div>
+
+      ${
+        reportData?.conclusion
+          ? `
+        <div style="margin-bottom: 20px; padding: 12px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px;">
+          <h4 style="font-size: 12px; font-weight: 800; color: #166534; margin: 0 0 4px 0;">Conclusion / Impression:</h4>
+          <p style="font-size: 12px; color: #15803d; margin: 0;">${reportData.conclusion}</p>
+        </div>
+      `
+          : ""
+      }
+
+      ${
+        reportData?.remarks
+          ? `
+        <div style="font-size: 11px; color: #64748b; font-style: italic; margin-bottom: 30px;">
+          <b>Remarks:</b> ${reportData.remarks}
+        </div>
+      `
+          : ""
+      }
+
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 60px; padding-top: 16px; border-top: 1px dashed #cbd5e1;">
+        <div style="font-size: 10px; color: #94a3b8;">
+          <div>Verified through Daktar Khata Secure Health Record System</div>
+          <div>Computer-generated digital diagnostic report.</div>
+        </div>
+        <div style="text-align: center; width: 220px;">
+          <div style="border-top: 1.5px solid #334155; margin-bottom: 4px;"></div>
+          <div style="font-size: 12px; font-weight: 800; color: #0f172a;">${reportData?.approvedBy?.name || "Chief Clinical Pathologist"}</div>
+          <div style="font-size: 10px; color: #64748b;">Medical Laboratory In-Charge</div>
+        </div>
+      </div>
+    </div>
+  `
+
+  const handlePrintA4 = () => {
+    printHtmlDocument({
+      title: `LabReport-${reportData?.reportNumber || token}-${reportData?.patient?.name || "Patient"}`,
+      mode: "A4",
+      htmlContent: getReportA4Html(),
+    })
+  }
+
+  const handleDownloadPdf = () => {
+    downloadDocumentAsPdf({
+      title: `LabReport-${reportData?.reportNumber || token}-${reportData?.patient?.name || "Patient"}.pdf`,
+      mode: "A4",
+      htmlContent: getReportA4Html(),
+    })
   }
 
   const locale = i18n.language === "bn" ? "bn-BD" : "en-US"
@@ -136,11 +229,18 @@ export default function PublicReportDownload() {
 
               <div className="flex items-center gap-2 print:hidden">
                 <button
-                  onClick={handlePrint}
-                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs shadow transition"
+                  onClick={handleDownloadPdf}
+                  className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-300 hover:bg-slate-100 text-slate-800 font-bold text-xs transition"
+                >
+                  <Download className="h-4 w-4" />
+                  {t("download_pdf")}
+                </button>
+                <button
+                  onClick={handlePrintA4}
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs shadow transition"
                 >
                   <Printer className="h-4 w-4" />
-                  {t("print_report")}
+                  {t("print_a4")}
                 </button>
               </div>
             </div>

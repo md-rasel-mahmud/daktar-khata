@@ -630,5 +630,13 @@
   "wards_list": "Wards List",
   "rooms_list": "Rooms List",
   "delete_bed": "Delete Bed",
-  "bed_deleted_success": "Bed deleted successfully!"
+  "bed_deleted_success": "Bed deleted successfully!",
+  "print_a4": "A4 Print",
+  "print_pos": "POS Thermal (80mm)",
+  "download_pdf": "Download PDF",
+  "print_slip": "Print Appointment Slip",
+  "print_invoice": "Print Invoice & Receipt",
+  "diagnostic_test_report": "Diagnostic & Lab Test Report",
+  "view_report": "View Report",
+  "view_invoice": "View Invoice"
 }
