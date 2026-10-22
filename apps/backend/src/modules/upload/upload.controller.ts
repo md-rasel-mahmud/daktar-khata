@@ -6,9 +6,25 @@ import {
   BadRequestException,
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
-import { diskStorage } from "multer";
 import * as path from "path";
 import { Public } from "../../common";
+
+// Safe multer reference avoiding missing global ambient type errors
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const multerModule = require("multer");
+const diskStorage = multerModule?.diskStorage || (multerModule as any)?.default?.diskStorage;
+
+export interface UploadedFileType {
+  fieldname: string;
+  originalname: string;
+  encoding: string;
+  mimetype: string;
+  size: number;
+  destination: string;
+  filename: string;
+  path: string;
+  buffer?: Buffer;
+}
 
 @Controller("upload")
 export class UploadController {
@@ -18,7 +34,7 @@ export class UploadController {
     FileInterceptor("file", {
       storage: diskStorage({
         destination: "./uploads",
-        filename: (req, file, cb) => {
+        filename: (req: any, file: any, cb: any) => {
           const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
           const ext = path.extname(file.originalname);
           cb(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
@@ -27,7 +43,7 @@ export class UploadController {
       limits: {
         fileSize: 5 * 1024 * 1024, // 5MB limit
       },
-      fileFilter: (req, file, cb) => {
+      fileFilter: (req: any, file: any, cb: any) => {
         if (!file.mimetype.match(/\/(jpg|jpeg|png|gif|webp|svg\+xml)$/)) {
           return cb(
             new BadRequestException("Only image files are allowed!"),
@@ -38,7 +54,7 @@ export class UploadController {
       },
     }),
   )
-  uploadImage(@UploadedFile() file: Express.Multer.File) {
+  uploadImage(@UploadedFile() file: UploadedFileType) {
     if (!file) {
       throw new BadRequestException("No image file provided");
     }
