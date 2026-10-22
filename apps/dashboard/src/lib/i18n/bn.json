@@ -653,5 +653,6 @@
   "patient_create_failed": "রোগী নিবন্ধন করতে ব্যর্থ হয়েছে।",
   "create_new_patient": "নতুন রোগী নিবন্ধন করুন",
   "add_patient": "রোগী যোগ করুন",
-  "save_patient": "রোগী সংরক্ষণ করুন"
+  "save_patient": "রোগী সংরক্ষণ করুন",
+  "select_existing_patient": "বিদ্যমান রোগী"
 }

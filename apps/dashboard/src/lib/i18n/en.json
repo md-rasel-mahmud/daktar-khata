@@ -652,5 +652,6 @@
   "patient_create_failed": "Failed to create patient.",
   "create_new_patient": "Register New Patient",
   "add_patient": "Add Patient",
-  "save_patient": "Register Patient"
+  "save_patient": "Register Patient",
+  "select_existing_patient": "Existing Patient"
 }

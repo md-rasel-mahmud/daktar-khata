@@ -12,7 +12,10 @@ import {
   useLazyGetAdmissionInvoiceQuery,
 } from "@/lib/store/api/services/admission.service"
 import type { AdmissionItem } from "@/lib/store/api/services/admission.service"
-import { useGetPatientsQuery } from "@/lib/store/api/services/patient.service"
+import {
+  useGetPatientsQuery,
+  useCreatePatientMutation,
+} from "@/lib/store/api/services/patient.service"
 import { useGetDoctorOptionsQuery } from "@/lib/store/api/services/doctor.service"
 import { toast } from "sonner"
 import {
@@ -36,7 +39,6 @@ import {
   InvoicePrintModal,
   type InvoicePrintData,
 } from "@/components/common/print"
-import { QuickPatientModal } from "@/components/modals/QuickPatientModal"
 
 export default function ManageAdmissions() {
   const { t, i18n } = useTranslation()
@@ -45,7 +47,16 @@ export default function ManageAdmissions() {
 
   // Modals state
   const [isAdmissionModalOpen, setIsAdmissionModalOpen] = useState(false)
-  const [isQuickPatientModalOpen, setIsQuickPatientModalOpen] = useState(false)
+  const [patientTab, setPatientTab] = useState<"select" | "create">("select")
+  const [quickPatientForm, setQuickPatientForm] = useState({
+    name: "",
+    phone: "",
+    gender: "MALE",
+    bloodGroup: "O+",
+    age: "",
+    address: "",
+    emergencyContact: "",
+  })
   const [admissionForm, setAdmissionForm] = useState({
     patient: "",
     doctor: "",
@@ -95,6 +106,7 @@ export default function ManageAdmissions() {
   )
 
   const [createAdmission, { isLoading: isCreatingAdmission }] = useCreateAdmissionMutation()
+  const [createPatient, { isLoading: isCreatingPatient }] = useCreatePatientMutation()
   const [dischargePatient, { isLoading: isDischarging }] = useDischargePatientMutation()
   const [addDailyCharge, { isLoading: isAddingCharge }] = useAddAdmissionDailyChargeMutation()
   const [createWard, { isLoading: isCreatingWard }] = useCreateWardMutation()
@@ -208,14 +220,42 @@ export default function ManageAdmissions() {
   // Handle Admission Submit
   const handleAdmissionSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!admissionForm.patient || !admissionForm.bed) {
+
+    let patientId = admissionForm.patient
+
+    if (patientTab === "create") {
+      if (!quickPatientForm.name.trim() || !quickPatientForm.phone.trim()) {
+        toast.error(t("fill_required_fields"))
+        return
+      }
+
+      try {
+        const newPatientRes = await createPatient({
+          name: quickPatientForm.name.trim(),
+          phone: quickPatientForm.phone.trim(),
+          gender: quickPatientForm.gender,
+          bloodGroup: quickPatientForm.bloodGroup,
+          age: quickPatientForm.age ? quickPatientForm.age.trim() : undefined,
+          address: quickPatientForm.address ? quickPatientForm.address.trim() : undefined,
+          emergencyContact: quickPatientForm.emergencyContact ? quickPatientForm.emergencyContact.trim() : undefined,
+        }).unwrap()
+
+        const createdPatient = newPatientRes?.data || newPatientRes
+        patientId = createdPatient?._id || createdPatient?.id
+      } catch (err: any) {
+        toast.error(err?.data?.message || t("patient_create_failed"))
+        return
+      }
+    }
+
+    if (!patientId || !admissionForm.bed) {
       toast.error(t("select_patient_and_bed"))
       return
     }
 
     try {
       await createAdmission({
-        patient: admissionForm.patient,
+        patient: patientId,
         doctor: admissionForm.doctor || undefined,
         ward: admissionForm.ward || undefined,
         room: admissionForm.room || undefined,
@@ -235,6 +275,16 @@ export default function ManageAdmissions() {
         reason: "",
         diagnosis: "",
       })
+      setQuickPatientForm({
+        name: "",
+        phone: "",
+        gender: "MALE",
+        bloodGroup: "O+",
+        age: "",
+        address: "",
+        emergencyContact: "",
+      })
+      setPatientTab("select")
       refetch()
     } catch (err: any) {
       toast.error(err?.data?.message || t("admission_failed"))
@@ -474,31 +524,185 @@ export default function ManageAdmissions() {
               {t("inpatient_admissions")}
             </h2>
             <form onSubmit={handleAdmissionSubmit} className="space-y-4">
-              <div>
-                <div className="flex items-center justify-between mb-1">
-                  <label className="text-xs font-semibold">{t("select_patient_req")}</label>
-                  <button
-                    type="button"
-                    onClick={() => setIsQuickPatientModalOpen(true)}
-                    className="text-[11px] text-primary font-semibold hover:underline flex items-center gap-1"
-                  >
-                    <UserPlus className="h-3 w-3" />
-                    {t("quick_add_patient")}
-                  </button>
+              {/* PATIENT SELECTION / QUICK REGISTRATION TAB */}
+              <div className="p-3.5 rounded-2xl border bg-muted/30 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-foreground flex items-center gap-1.5">
+                    <User className="h-4 w-4 text-primary" />
+                    {t("patient")}
+                  </span>
+                  <div className="flex p-0.5 rounded-xl bg-muted border text-xs">
+                    <button
+                      type="button"
+                      onClick={() => setPatientTab("select")}
+                      className={`px-3 py-1 rounded-lg font-medium transition ${
+                        patientTab === "select"
+                          ? "bg-background text-foreground shadow-sm"
+                          : "text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      {t("select_existing_patient")}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPatientTab("create")}
+                      className={`px-3 py-1 rounded-lg font-medium transition flex items-center gap-1 ${
+                        patientTab === "create"
+                          ? "bg-background text-foreground shadow-sm"
+                          : "text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      <UserPlus className="h-3.5 w-3.5" />
+                      {t("quick_add_patient")}
+                    </button>
+                  </div>
                 </div>
-                <select
-                  required
-                  value={admissionForm.patient}
-                  onChange={(e) => setAdmissionForm({ ...admissionForm, patient: e.target.value })}
-                  className="w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                >
-                  <option value="">{t("choose_patient")}</option>
-                  {patientsList.map((p: any) => (
-                    <option key={p._id} value={p._id}>
-                      {p.name} — {p.mobile || p.phone} ({p.gender || "N/A"})
-                    </option>
-                  ))}
-                </select>
+
+                {patientTab === "select" ? (
+                  <div>
+                    <label className="block text-xs font-medium text-muted-foreground mb-1">
+                      {t("select_patient_req")}
+                    </label>
+                    <select
+                      required={patientTab === "select"}
+                      value={admissionForm.patient}
+                      onChange={(e) => setAdmissionForm({ ...admissionForm, patient: e.target.value })}
+                      className="w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                    >
+                      <option value="">{t("choose_patient")}</option>
+                      {patientsList.map((p: any) => (
+                        <option key={p._id} value={p._id}>
+                          {p.name} — {p.mobile || p.phone} ({p.gender || "N/A"})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                ) : (
+                  <div className="space-y-2.5 pt-1">
+                    <div className="grid grid-cols-2 gap-2.5">
+                      <div>
+                        <label className="block text-[11px] font-semibold mb-1">
+                          {t("patient_name_label")} <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          required={patientTab === "create"}
+                          placeholder="e.g. Rahim Ahmed"
+                          value={quickPatientForm.name}
+                          onChange={(e) =>
+                            setQuickPatientForm({ ...quickPatientForm, name: e.target.value })
+                          }
+                          className="w-full px-2.5 py-1.5 rounded-xl border bg-background text-xs focus:outline-none focus:ring-2 focus:ring-primary"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[11px] font-semibold mb-1">
+                          {t("patient_phone_label")} <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="tel"
+                          required={patientTab === "create"}
+                          placeholder="017XXXXXXXX"
+                          value={quickPatientForm.phone}
+                          onChange={(e) =>
+                            setQuickPatientForm({ ...quickPatientForm, phone: e.target.value })
+                          }
+                          className="w-full px-2.5 py-1.5 rounded-xl border bg-background text-xs focus:outline-none focus:ring-2 focus:ring-primary"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-2">
+                      <div>
+                        <label className="block text-[11px] font-semibold mb-1">
+                          {t("patient_gender_label")}
+                        </label>
+                        <select
+                          value={quickPatientForm.gender}
+                          onChange={(e) =>
+                            setQuickPatientForm({ ...quickPatientForm, gender: e.target.value })
+                          }
+                          className="w-full px-2 py-1.5 rounded-xl border bg-background text-xs focus:outline-none focus:ring-2 focus:ring-primary"
+                        >
+                          <option value="MALE">Male</option>
+                          <option value="FEMALE">Female</option>
+                          <option value="OTHER">Other</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-semibold mb-1">
+                          {t("patient_blood_group_label")}
+                        </label>
+                        <select
+                          value={quickPatientForm.bloodGroup}
+                          onChange={(e) =>
+                            setQuickPatientForm({ ...quickPatientForm, bloodGroup: e.target.value })
+                          }
+                          className="w-full px-2 py-1.5 rounded-xl border bg-background text-xs focus:outline-none focus:ring-2 focus:ring-primary"
+                        >
+                          <option value="A+">A+</option>
+                          <option value="A-">A-</option>
+                          <option value="B+">B+</option>
+                          <option value="B-">B-</option>
+                          <option value="AB+">AB+</option>
+                          <option value="AB-">AB-</option>
+                          <option value="O+">O+</option>
+                          <option value="O-">O-</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-semibold mb-1">
+                          {t("patient_age_label")}
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="e.g. 35"
+                          value={quickPatientForm.age}
+                          onChange={(e) =>
+                            setQuickPatientForm({ ...quickPatientForm, age: e.target.value })
+                          }
+                          className="w-full px-2 py-1.5 rounded-xl border bg-background text-xs focus:outline-none focus:ring-2 focus:ring-primary"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2.5">
+                      <div>
+                        <label className="block text-[11px] font-semibold mb-1">
+                          {t("patient_address_label")}
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="e.g. Dhanmondi, Dhaka"
+                          value={quickPatientForm.address}
+                          onChange={(e) =>
+                            setQuickPatientForm({ ...quickPatientForm, address: e.target.value })
+                          }
+                          className="w-full px-2.5 py-1.5 rounded-xl border bg-background text-xs focus:outline-none focus:ring-2 focus:ring-primary"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[11px] font-semibold mb-1">
+                          {t("patient_emergency_contact_label")}
+                        </label>
+                        <input
+                          type="tel"
+                          placeholder="e.g. 018XXXXXXXX"
+                          value={quickPatientForm.emergencyContact}
+                          onChange={(e) =>
+                            setQuickPatientForm({
+                              ...quickPatientForm,
+                              emergencyContact: e.target.value,
+                            })
+                          }
+                          className="w-full px-2.5 py-1.5 rounded-xl border bg-background text-xs focus:outline-none focus:ring-2 focus:ring-primary"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div>
@@ -609,10 +813,10 @@ export default function ManageAdmissions() {
                 </button>
                 <button
                   type="submit"
-                  disabled={isCreatingAdmission || !admissionForm.bed}
+                  disabled={isCreatingAdmission || isCreatingPatient || !admissionForm.bed}
                   className="px-5 py-2 rounded-xl bg-primary text-primary-foreground text-sm font-bold shadow hover:bg-primary/90 transition"
                 >
-                  {t("confirm_admission")}
+                  {isCreatingAdmission || isCreatingPatient ? t("submitting") : t("confirm_admission")}
                 </button>
               </div>
             </form>
@@ -807,17 +1011,6 @@ export default function ManageAdmissions() {
         open={Boolean(selectedInvoiceForPrint)}
         onClose={() => setSelectedInvoiceForPrint(null)}
         data={selectedInvoiceForPrint}
-      />
-
-      {/* MODAL: QUICK ADD PATIENT */}
-      <QuickPatientModal
-        isOpen={isQuickPatientModalOpen}
-        onClose={() => setIsQuickPatientModalOpen(false)}
-        onSuccess={(newPatient) => {
-          if (newPatient?._id) {
-            setAdmissionForm((prev) => ({ ...prev, patient: newPatient._id }))
-          }
-        }}
       />
     </div>
   )
