@@ -6,13 +6,9 @@ import {
   BadRequestException,
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
+import * as fs from "fs";
 import * as path from "path";
 import { Public } from "../../common";
-
-// Safe multer reference avoiding missing global ambient type errors
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const multerModule = require("multer");
-const diskStorage = multerModule?.diskStorage || (multerModule as any)?.default?.diskStorage;
 
 export interface UploadedFileType {
   fieldname: string;
@@ -26,20 +22,53 @@ export interface UploadedFileType {
   buffer?: Buffer;
 }
 
+// Pure Node.js storage engine that implements Multer StorageEngine contract
+// Zero dependency on external 'multer' package at runtime
+function createCustomDiskStorage(destinationPath: string) {
+  return {
+    _handleFile(req: any, file: any, cb: (err: any, info?: any) => void) {
+      try {
+        if (!fs.existsSync(destinationPath)) {
+          fs.mkdirSync(destinationPath, { recursive: true });
+        }
+        const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+        const ext = path.extname(file.originalname || "");
+        const filename = `${file.fieldname || "file"}-${uniqueSuffix}${ext}`;
+        const finalPath = path.join(destinationPath, filename);
+
+        const outStream = fs.createWriteStream(finalPath);
+        file.stream.pipe(outStream);
+        outStream.on("error", (err) => cb(err));
+        outStream.on("finish", () => {
+          cb(null, {
+            destination: destinationPath,
+            filename,
+            path: finalPath,
+            size: outStream.bytesWritten,
+            mimetype: file.mimetype,
+          });
+        });
+      } catch (err) {
+        cb(err);
+      }
+    },
+    _removeFile(req: any, file: any, cb: (err: any) => void) {
+      if (file?.path && fs.existsSync(file.path)) {
+        fs.unlink(file.path, cb);
+      } else {
+        cb(null);
+      }
+    },
+  };
+}
+
 @Controller("upload")
 export class UploadController {
   @Public()
   @Post("image")
   @UseInterceptors(
     FileInterceptor("file", {
-      storage: diskStorage({
-        destination: "./uploads",
-        filename: (req: any, file: any, cb: any) => {
-          const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-          const ext = path.extname(file.originalname);
-          cb(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
-        },
-      }),
+      storage: createCustomDiskStorage("./uploads"),
       limits: {
         fileSize: 5 * 1024 * 1024, // 5MB limit
       },
