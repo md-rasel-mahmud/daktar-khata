@@ -1,6 +1,7 @@
 import {
   Controller,
   Get,
+  Post,
   Body,
   Patch,
   Param,
@@ -10,6 +11,7 @@ import {
 } from "@nestjs/common";
 import { PatientService } from "./patient.service";
 import { UpdatePatientDto } from "./dto/update-patient.dto";
+import { CreateQuickPatientDto } from "./dto/create-quick-patient.dto";
 import { Roles } from "../../common/decorators/roles.decorator";
 import { RolesEnum } from "../../constant";
 import { AuthUser } from "../../common/decorator/authUser.decorator";
@@ -23,6 +25,24 @@ export class PatientController {
     private readonly patientService: PatientService,
     private readonly medicalRecordService: MedicalRecordService,
   ) {}
+
+  @Post()
+  @Roles(
+    RolesEnum.MERCHANT,
+    RolesEnum.STAFF,
+    RolesEnum.ADMIN,
+    RolesEnum.SUPER_ADMIN,
+    RolesEnum.DOCTOR,
+  )
+  create(
+    @AuthUser() authUser: IAuthUser,
+    @Body() createQuickPatientDto: CreateQuickPatientDto,
+  ) {
+    return this.patientService.createQuickPatient(
+      authUser,
+      createQuickPatientDto,
+    );
+  }
 
   @Get()
   @Roles(

@@ -637,8 +637,21 @@
   "print_pos": "POS থার্মাল (৮০ মিমি)",
   "download_pdf": "পিডিএফ ডাউনলোড",
   "print_slip": "অ্যাপয়েন্টমেন্ট স্লিপ প্রিন্ট",
-  "print_invoice": "ইনভয়েস ও রিসিট প্রিন্ট",
   "diagnostic_test_report": "ডায়াগনস্টিক ও ল্যাব টেস্ট রিপোর্ট",
   "view_report": "রিপোর্ট দেখুন",
-  "view_invoice": "ইনভয়েস দেখুন"
+  "view_invoice": "ইনভয়েস দেখুন",
+  "quick_add_patient": "+ নতুন রোগী",
+  "quick_add_patient_desc": "ন্যূনতম তথ্য দিয়ে দ্রুত নতুন রোগী নিবন্ধন করুন",
+  "patient_name_label": "রোগীর পুরো নাম",
+  "patient_phone_label": "মোবাইল নম্বর",
+  "patient_gender_label": "লিঙ্গ",
+  "patient_blood_group_label": "রক্তের গ্রুপ",
+  "patient_age_label": "বয়স",
+  "patient_address_label": "ঠিকানা",
+  "patient_emergency_contact_label": "জরুরি যোগাযোগ নম্বর",
+  "patient_created_success": "রোগী সফলভাবে নিবন্ধন করা হয়েছে!",
+  "patient_create_failed": "রোগী নিবন্ধন করতে ব্যর্থ হয়েছে।",
+  "create_new_patient": "নতুন রোগী নিবন্ধন করুন",
+  "add_patient": "রোগী যোগ করুন",
+  "save_patient": "রোগী সংরক্ষণ করুন"
 }

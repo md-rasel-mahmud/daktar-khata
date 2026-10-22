@@ -32,7 +32,8 @@ export class Patient extends Person {
   @Prop({
     type: String,
     enum: Object.values(BloodGroup),
-    required: true,
+    required: false,
+    default: BloodGroup.O_POSITIVE,
   })
   bloodGroup: BloodGroup;
 

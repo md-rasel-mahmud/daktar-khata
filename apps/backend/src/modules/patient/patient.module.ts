@@ -8,6 +8,7 @@ import { PatientService } from "./patient.service";
 import { AppointmentSchema } from "../appointment/schema/appointment.schema";
 import { DoctorSchema } from "../doctor/schema/doctor.schema";
 import { MedicalRecordModule } from "../medical-records/medical-record.module";
+import { UserSchema } from "../user/schema/user.schema";
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { MedicalRecordModule } from "../medical-records/medical-record.module";
       { name: collectionsName.patient, schema: PatientSchema },
       { name: collectionsName.appointment, schema: AppointmentSchema },
       { name: collectionsName.doctor, schema: DoctorSchema },
+      { name: collectionsName.user, schema: UserSchema },
     ]),
   ],
   controllers: [PatientController],

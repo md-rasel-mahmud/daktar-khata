@@ -17,7 +17,7 @@ import {
 } from "@repo/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar"
 import { Badge } from "@repo/ui/badge"
-import { MoreHorizontal, UserCheck, UserX, Loader2 } from "lucide-react"
+import { MoreHorizontal, UserCheck, UserX, Loader2, UserPlus } from "lucide-react"
 import { useGetPatientsQuery } from "@/lib/store/api/services/patient.service"
 import { toast } from "sonner"
 import { format } from "date-fns"
@@ -25,12 +25,14 @@ import {
   ClientDataTable,
   type DataTableColumn,
 } from "@/components/common/table"
+import { QuickPatientModal } from "@/components/modals/QuickPatientModal"
 
 type PatientRow = any;
 
 const ManageUsers: React.FC = () => {
   const { t } = useTranslation()
   const [searchQuery, setSearchQuery] = useState("")
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
   const { data: patients = [], isLoading, isError } = useGetPatientsQuery(undefined)
 
   const filteredPatients = useMemo(() => {
@@ -171,13 +173,22 @@ const ManageUsers: React.FC = () => {
 
   return (
     <div className="fadeIn space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">
-          {t("manage_users")}
-        </h1>
-        <p className="text-muted-foreground">
-          {t("view and manage all patients registered in the system")}
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">
+            {t("manage_users")}
+          </h1>
+          <p className="text-muted-foreground">
+            {t("view and manage all patients registered in the system")}
+          </p>
+        </div>
+        <Button
+          onClick={() => setIsCreateModalOpen(true)}
+          className="rounded-xl flex items-center gap-2 self-start sm:self-auto"
+        >
+          <UserPlus className="h-4 w-4" />
+          {t("add_patient")}
+        </Button>
       </div>
 
       {/* Patients List */}
@@ -214,6 +225,11 @@ const ManageUsers: React.FC = () => {
           )}
         </CardContent>
       </Card>
+
+      <QuickPatientModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+      />
     </div>
   )
 }

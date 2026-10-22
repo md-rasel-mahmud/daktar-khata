@@ -25,6 +25,7 @@ import {
   LogOut,
   Calendar,
   User,
+  UserPlus,
   Stethoscope,
   Clock,
   Layers,
@@ -35,6 +36,7 @@ import {
   InvoicePrintModal,
   type InvoicePrintData,
 } from "@/components/common/print"
+import { QuickPatientModal } from "@/components/modals/QuickPatientModal"
 
 export default function ManageAdmissions() {
   const { t, i18n } = useTranslation()
@@ -43,6 +45,7 @@ export default function ManageAdmissions() {
 
   // Modals state
   const [isAdmissionModalOpen, setIsAdmissionModalOpen] = useState(false)
+  const [isQuickPatientModalOpen, setIsQuickPatientModalOpen] = useState(false)
   const [admissionForm, setAdmissionForm] = useState({
     patient: "",
     doctor: "",
@@ -472,7 +475,17 @@ export default function ManageAdmissions() {
             </h2>
             <form onSubmit={handleAdmissionSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold mb-1">{t("select_patient_req")}</label>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="text-xs font-semibold">{t("select_patient_req")}</label>
+                  <button
+                    type="button"
+                    onClick={() => setIsQuickPatientModalOpen(true)}
+                    className="text-[11px] text-primary font-semibold hover:underline flex items-center gap-1"
+                  >
+                    <UserPlus className="h-3 w-3" />
+                    {t("quick_add_patient")}
+                  </button>
+                </div>
                 <select
                   required
                   value={admissionForm.patient}
@@ -794,6 +807,17 @@ export default function ManageAdmissions() {
         open={Boolean(selectedInvoiceForPrint)}
         onClose={() => setSelectedInvoiceForPrint(null)}
         data={selectedInvoiceForPrint}
+      />
+
+      {/* MODAL: QUICK ADD PATIENT */}
+      <QuickPatientModal
+        isOpen={isQuickPatientModalOpen}
+        onClose={() => setIsQuickPatientModalOpen(false)}
+        onSuccess={(newPatient) => {
+          if (newPatient?._id) {
+            setAdmissionForm((prev) => ({ ...prev, patient: newPatient._id }))
+          }
+        }}
       />
     </div>
   )

@@ -2,12 +2,16 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { ClientSession, Model, Types } from "mongoose";
 import { CreatePatientDto } from "./dto/create-patient.dto";
+import { CreateQuickPatientDto } from "./dto/create-quick-patient.dto";
 import { UpdatePatientDto } from "./dto/update-patient.dto";
-import { collectionsName, RolesEnum } from "../../constant";
+import { collectionsName, Gender, RolesEnum, Status } from "../../constant";
 import { Patient } from "./schema/patient.schema";
+import { User } from "../user/schema/user.schema";
 import { AppointmentDocument } from "../appointment/schema/appointment.schema";
 import { Doctor } from "../doctor/schema/doctor.schema";
 import { AppointmentStatus } from "../../constant/enums/status.enum";
+import { BloodGroup } from "../../constant/enums/blood-group.enum";
+import { IAuthUser } from "../../common";
 
 type PatientWithAppointments = Patient & {
   appointments: Array<Record<string, any>>;
@@ -35,6 +39,8 @@ export class PatientService {
     private readonly appointmentModel: Model<AppointmentDocument>,
     @InjectModel(collectionsName.doctor)
     private readonly doctorModel: Model<Doctor>,
+    @InjectModel(collectionsName.user)
+    private readonly userModel: Model<User>,
   ) {}
 
   async create(
@@ -43,6 +49,76 @@ export class PatientService {
   ): Promise<Patient> {
     const patient = new this.patientModel(createPatientDto);
     return patient.save({ session });
+  }
+
+  async createQuickPatient(authUser: IAuthUser, dto: CreateQuickPatientDto): Promise<Patient> {
+    const merchantId = authUser.merchant ? new Types.ObjectId(authUser.merchant) : undefined;
+    const clinicId = authUser.clinic ? new Types.ObjectId(authUser.clinic) : undefined;
+    const cleanPhone = dto.phone.trim();
+
+    // Check if patient already exists by mobile
+    let existingPatient = await this.patientModel.findOne({
+      $or: [
+        { mobile: cleanPhone },
+      ],
+      ...(merchantId ? { merchant: merchantId } : {}),
+    });
+
+    if (existingPatient) {
+      return existingPatient;
+    }
+
+    // Check or create user
+    let user = await this.userModel.findOne({
+      phone: cleanPhone,
+      ...(merchantId ? { merchant: merchantId } : {}),
+    });
+
+    if (!user) {
+      const defaultPassword = "DK@" + (cleanPhone.slice(-4) || "1234");
+      user = new this.userModel({
+        name: dto.name.trim(),
+        phone: cleanPhone,
+        password: defaultPassword,
+        role: RolesEnum.PATIENT,
+        merchant: merchantId,
+        clinic: clinicId,
+        status: Status.ACTIVE,
+        isActive: true,
+      });
+      await user.save();
+    }
+
+    // Check if patient already linked to this user
+    existingPatient = await this.patientModel.findOne({
+      user: user._id,
+      ...(merchantId ? { merchant: merchantId } : {}),
+    });
+
+    if (existingPatient) {
+      return existingPatient;
+    }
+
+    const bloodGroupValues = Object.values(BloodGroup);
+    const selectedBloodGroup = bloodGroupValues.includes(dto.bloodGroup as any)
+      ? (dto.bloodGroup as BloodGroup)
+      : BloodGroup.O_POSITIVE;
+
+    const newPatient = new this.patientModel({
+      name: dto.name.trim(),
+      mobile: cleanPhone,
+      gender: dto.gender || Gender.MALE,
+      bloodGroup: selectedBloodGroup,
+      address: dto.address?.trim() || undefined,
+      emergencyContact: dto.emergencyContact?.trim() || undefined,
+      note: dto.age ? `Age: ${dto.age}` : undefined,
+      status: Status.ACTIVE,
+      user: user._id,
+      merchant: merchantId,
+      clinic: clinicId,
+    });
+
+    return await newPatient.save();
   }
 
   private async findPatientByIdentifier(identifier: string): Promise<Patient> {

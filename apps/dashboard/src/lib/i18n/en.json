@@ -638,5 +638,19 @@
   "print_invoice": "Print Invoice & Receipt",
   "diagnostic_test_report": "Diagnostic & Lab Test Report",
   "view_report": "View Report",
-  "view_invoice": "View Invoice"
+  "view_invoice": "View Invoice",
+  "quick_add_patient": "+ New Patient",
+  "quick_add_patient_desc": "Quickly register a patient with minimal details",
+  "patient_name_label": "Patient Full Name",
+  "patient_phone_label": "Mobile Number",
+  "patient_gender_label": "Gender",
+  "patient_blood_group_label": "Blood Group",
+  "patient_age_label": "Age",
+  "patient_address_label": "Address",
+  "patient_emergency_contact_label": "Emergency Contact",
+  "patient_created_success": "Patient registered successfully!",
+  "patient_create_failed": "Failed to create patient.",
+  "create_new_patient": "Register New Patient",
+  "add_patient": "Add Patient",
+  "save_patient": "Register Patient"
 }
