@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { useTranslation } from "react-i18next"
 import {
   useGetAdmissionsQuery,
   useCreateAdmissionMutation,
@@ -28,6 +29,7 @@ import {
 } from "lucide-react"
 
 export default function ManageAdmissions() {
+  const { t, i18n } = useTranslation()
   const [statusFilter, setStatusFilter] = useState<string>("")
   const [search, setSearch] = useState<string>("")
 
@@ -89,7 +91,7 @@ export default function ManageAdmissions() {
   const handleAdmissionSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!admissionForm.patient || !admissionForm.bed) {
-      toast.error("রোগী এবং বেড নির্বাচন আবশ্যক")
+      toast.error(t("select_patient_and_bed"))
       return
     }
 
@@ -104,7 +106,7 @@ export default function ManageAdmissions() {
         diagnosis: admissionForm.diagnosis,
       }).unwrap()
 
-      toast.success("রোগী সফলভাবে হাসপাতালে ভর্তি করা হয়েছে এবং বেড বরাদ্দ হয়েছে!")
+      toast.success(t("admission_success"))
       setIsAdmissionModalOpen(false)
       setAdmissionForm({
         patient: "",
@@ -117,7 +119,7 @@ export default function ManageAdmissions() {
       })
       refetch()
     } catch (err: any) {
-      toast.error(err?.data?.message || "ভর্তি প্রক্রিয়া ব্যর্থ হয়েছে")
+      toast.error(err?.data?.message || t("admission_failed"))
     }
   }
 
@@ -125,7 +127,7 @@ export default function ManageAdmissions() {
   const handleChargeSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!selectedAdmissionForCharge || !chargeForm.serviceName || !chargeForm.unitPrice) {
-      toast.error("চার্জ বিবরণ ও মূল্য দিন")
+      toast.error(t("enter_charge_details"))
       return
     }
 
@@ -141,7 +143,7 @@ export default function ManageAdmissions() {
         },
       }).unwrap()
 
-      toast.success("ইনজেকশন/নার্সিং চার্জ রোগীর ইনভয়েসে সফলভাবে যুক্ত হয়েছে!")
+      toast.success(t("charge_added_msg"))
       setIsChargeModalOpen(false)
       setSelectedAdmissionForCharge(null)
       setChargeForm({
@@ -152,7 +154,7 @@ export default function ManageAdmissions() {
         notes: "",
       })
     } catch (err: any) {
-      toast.error(err?.data?.message || "চার্জ যুক্ত করা ব্যর্থ হয়েছে")
+      toast.error(err?.data?.message || t("failed"))
     }
   }
 
@@ -167,13 +169,13 @@ export default function ManageAdmissions() {
         body: { dischargeNotes },
       }).unwrap()
 
-      toast.success("রোগীকে সফলভাবে ডিসচার্জ করা হয়েছে এবং বেড খালি করা হয়েছে!")
+      toast.success(t("discharge_success_msg"))
       setIsDischargeModalOpen(false)
       setSelectedAdmissionForDischarge(null)
       setDischargeNotes("")
       refetch()
     } catch (err: any) {
-      toast.error(err?.data?.message || "ডিসচার্জ প্রক্রিয়া ব্যর্থ হয়েছে")
+      toast.error(err?.data?.message || t("failed"))
     }
   }
 
@@ -189,10 +191,8 @@ export default function ManageAdmissions() {
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">ইনপেশেন্ট ভর্তি ও বেড ম্যানেজমেন্ট</h1>
-          <p className="text-sm text-muted-foreground">
-            হাসপাতালে রোগী ভর্তি, বেড বুকিং, দৈনিক নার্সিং/ইনজেকশন খরচ যুক্তকরণ এবং ডিসচার্জ করুন
-          </p>
+          <h1 className="text-2xl font-bold tracking-tight">{t("inpatient_admissions")}</h1>
+          <p className="text-sm text-muted-foreground">{t("inpatient_desc")}</p>
         </div>
 
         <button
@@ -200,7 +200,7 @@ export default function ManageAdmissions() {
           className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-sm shadow transition"
         >
           <Plus className="h-4 w-4" />
-          নতুন রোগী ভর্তি করুন (New Admission)
+          {t("new_admission")}
         </button>
       </div>
 
@@ -212,21 +212,21 @@ export default function ManageAdmissions() {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="রোগী বা ডাক্তারের নাম লিখে খুঁজুন..."
+            placeholder={t("search_patient_doctor")}
             className="w-full pl-9 pr-3 py-1.5 rounded-lg border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold text-muted-foreground">স্ট্যাটাস:</span>
+          <span className="text-xs font-semibold text-muted-foreground">{t("status")}:</span>
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
             className="px-3 py-1.5 rounded-lg border bg-background text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary"
           >
-            <option value="">সকল ভর্তি রোগী</option>
-            <option value="ADMITTED">বর্তমানে চিকিৎসাধীন (ADMITTED)</option>
-            <option value="DISCHARGED">ডিসচার্জ সম্পন্ন (DISCHARGED)</option>
+            <option value="">{t("all_admissions")}</option>
+            <option value="ADMITTED">{t("admitted_active")}</option>
+            <option value="DISCHARGED">{t("discharged")}</option>
           </select>
         </div>
       </div>
@@ -237,12 +237,12 @@ export default function ManageAdmissions() {
           <table className="w-full text-left text-sm">
             <thead className="bg-muted/40 text-muted-foreground uppercase text-xs font-semibold">
               <tr>
-                <th className="px-5 py-3">রোগীর নাম</th>
-                <th className="px-5 py-3">দায়িত্বপ্রাপ্ত ডাক্তার</th>
-                <th className="px-5 py-3">ওয়ার্ড ও বেড</th>
-                <th className="px-5 py-3">ভর্তির তারিখ</th>
-                <th className="px-5 py-3">স্ট্যাটাস</th>
-                <th className="px-5 py-3 text-right">অ্যাকশন</th>
+                <th className="px-5 py-3">{t("patient_name")}</th>
+                <th className="px-5 py-3">{t("assigned_doctor")}</th>
+                <th className="px-5 py-3">{t("ward_bed")}</th>
+                <th className="px-5 py-3">{t("admission_date")}</th>
+                <th className="px-5 py-3">{t("status")}</th>
+                <th className="px-5 py-3 text-right">{t("actions")}</th>
               </tr>
             </thead>
             <tbody className="divide-y">
@@ -254,12 +254,12 @@ export default function ManageAdmissions() {
                         {adm.patient?.name || "N/A"}
                       </div>
                       <div className="text-xs text-muted-foreground">
-                        মোবাইল: {adm.patient?.phone || adm.patient?.mobile || "N/A"}
+                        {adm.patient?.phone || adm.patient?.mobile || "N/A"}
                       </div>
                     </td>
                     <td className="px-5 py-4">
                       <div className="font-medium text-foreground">
-                        {adm.doctor?.name || "মেডিকেল অফিসার"}
+                        {adm.doctor?.name || t("medical_officer")}
                       </div>
                       <div className="text-xs text-muted-foreground">
                         {adm.doctor?.specialization?.join(", ") || "General Medicine"}
@@ -268,20 +268,23 @@ export default function ManageAdmissions() {
                     <td className="px-5 py-4">
                       <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-cyan-500/10 text-cyan-700 font-bold text-xs border border-cyan-500/20">
                         <Bed className="h-3.5 w-3.5" />
-                        {adm.ward?.name || "General"} — বেড #{adm.bed?.bedNumber || "N/A"}
+                        {adm.ward?.name || "General"} — #{adm.bed?.bedNumber || "N/A"}
                       </div>
                       {adm.room?.name && (
                         <div className="text-xs text-muted-foreground mt-0.5">
-                          রুম: {adm.room.name}
+                          {adm.room.name}
                         </div>
                       )}
                     </td>
                     <td className="px-5 py-4 text-muted-foreground">
-                      {new Date(adm.admissionDate).toLocaleDateString("bn-BD", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })}
+                      {new Date(adm.admissionDate).toLocaleDateString(
+                        i18n.language === "bn" ? "bn-BD" : "en-US",
+                        {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                        }
+                      )}
                     </td>
                     <td className="px-5 py-4">
                       <span
@@ -291,7 +294,7 @@ export default function ManageAdmissions() {
                             : "bg-slate-500/20 text-slate-600"
                         }`}
                       >
-                        {adm.status === "ADMITTED" ? "চিকিৎসাধীন" : "ডিসচার্জড"}
+                        {adm.status === "ADMITTED" ? t("admitted_active") : t("discharged")}
                       </span>
                     </td>
                     <td className="px-5 py-4 text-right space-x-2">
@@ -303,10 +306,10 @@ export default function ManageAdmissions() {
                               setIsChargeModalOpen(true)
                             }}
                             className="inline-flex items-center gap-1 px-3 py-1 rounded-md bg-amber-500/15 text-amber-700 hover:bg-amber-500/25 border border-amber-500/30 text-xs font-semibold"
-                            title="ইনজেকশন বা নার্সিং খরচ যোগ করুন"
+                            title={t("add_daily_nursing_charge")}
                           >
                             <Syringe className="h-3.5 w-3.5" />
-                            খরচ যোগ করুন
+                            {t("add_charge")}
                           </button>
                           <button
                             onClick={() => {
@@ -314,10 +317,10 @@ export default function ManageAdmissions() {
                               setIsDischargeModalOpen(true)
                             }}
                             className="inline-flex items-center gap-1 px-3 py-1 rounded-md bg-red-500/10 text-red-600 hover:bg-red-500/20 border border-red-500/20 text-xs font-semibold"
-                            title="ডিসচার্জ করুন ও বেড খালি করুন"
+                            title={t("confirm_discharge")}
                           >
                             <LogOut className="h-3.5 w-3.5" />
-                            ডিসচার্জ
+                            {t("discharge")}
                           </button>
                         </>
                       )}
@@ -327,7 +330,7 @@ export default function ManageAdmissions() {
               ) : (
                 <tr>
                   <td colSpan={6} className="text-center py-10 text-muted-foreground">
-                    কোনো ভর্তি রোগী পাওয়া যায়নি।
+                    {t("no_admissions_found")}
                   </td>
                 </tr>
               )}
@@ -342,18 +345,18 @@ export default function ManageAdmissions() {
           <div className="bg-card border rounded-3xl max-w-lg w-full p-6 shadow-2xl relative animate-in fade-in zoom-in-95 max-h-[90vh] overflow-y-auto">
             <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
               <Bed className="h-5 w-5 text-primary" />
-              রোগী ভর্তি ও বেড বরাদ্দ
+              {t("inpatient_admissions")}
             </h2>
             <form onSubmit={handleAdmissionSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold mb-1">রোগী নির্বাচন করুন *</label>
+                <label className="block text-xs font-semibold mb-1">{t("select_patient_req")}</label>
                 <select
                   required
                   value={admissionForm.patient}
                   onChange={(e) => setAdmissionForm({ ...admissionForm, patient: e.target.value })}
                   className="w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                 >
-                  <option value="">রোগী বেছে নিন...</option>
+                  <option value="">{t("choose_patient")}</option>
                   {patientsList.map((p: any) => (
                     <option key={p._id} value={p._id}>
                       {p.name} — {p.mobile || p.phone} ({p.gender || "N/A"})
@@ -363,13 +366,13 @@ export default function ManageAdmissions() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold mb-1">চিকিৎসক / রেফারকারী ডাক্তার</label>
+                <label className="block text-xs font-semibold mb-1">{t("attending_ref_doctor")}</label>
                 <select
                   value={admissionForm.doctor}
                   onChange={(e) => setAdmissionForm({ ...admissionForm, doctor: e.target.value })}
                   className="w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                 >
-                  <option value="">ডাক্তার বেছে নিন...</option>
+                  <option value="">{t("choose_doctor")}</option>
                   {doctorsList.map((doc: any) => (
                     <option key={doc.value || doc._id} value={doc.value || doc._id}>
                       {doc.label || doc.name}
@@ -380,7 +383,7 @@ export default function ManageAdmissions() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold mb-1">ওয়ার্ড</label>
+                  <label className="block text-xs font-semibold mb-1">{t("ward")}</label>
                   <select
                     value={admissionForm.ward}
                     onChange={(e) =>
@@ -388,7 +391,7 @@ export default function ManageAdmissions() {
                     }
                     className="w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                   >
-                    <option value="">ওয়ার্ড ফিল্টার করুন...</option>
+                    <option value="">{t("filter_ward")}</option>
                     {wards.map((w) => (
                       <option key={w._id} value={w._id}>
                         {w.name}
@@ -398,7 +401,7 @@ export default function ManageAdmissions() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold mb-1">রুম</label>
+                  <label className="block text-xs font-semibold mb-1">{t("room")}</label>
                   <select
                     value={admissionForm.room}
                     onChange={(e) =>
@@ -406,7 +409,7 @@ export default function ManageAdmissions() {
                     }
                     className="w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                   >
-                    <option value="">রুম ফিল্টার করুন...</option>
+                    <option value="">{t("filter_room")}</option>
                     {rooms.map((r) => (
                       <option key={r._id} value={r._id}>
                         {r.name || `Room ${r.roomNumber}`}
@@ -418,7 +421,7 @@ export default function ManageAdmissions() {
 
               <div>
                 <label className="block text-xs font-semibold mb-1">
-                  বরাদ্দযোগ্য খালি বেড নির্বাচন করুন *
+                  {t("select_available_bed")}
                 </label>
                 <select
                   required
@@ -426,27 +429,27 @@ export default function ManageAdmissions() {
                   onChange={(e) => setAdmissionForm({ ...admissionForm, bed: e.target.value })}
                   className="w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary font-bold text-emerald-600"
                 >
-                  <option value="">খালি বেড বেছে নিন...</option>
+                  <option value="">{t("choose_bed")}</option>
                   {beds.map((b) => (
                     <option key={b._id} value={b._id}>
-                      বেড #{b.bedNumber} ({b.ward?.name || "General"} — ৳{b.dailyCharge ?? 500}/দিন)
+                      #{b.bedNumber} ({b.ward?.name || "General"} — ৳{b.dailyCharge ?? 500})
                     </option>
                   ))}
                 </select>
                 {beds.length === 0 && (
                   <p className="text-xs text-amber-500 mt-1">
-                    এই ওয়ার্ড/রুমে বর্তমানে কোনো খালি বেড নেই।
+                    {t("no_beds_available_here")}
                   </p>
                 )}
               </div>
 
               <div>
-                <label className="block text-xs font-semibold mb-1">ভর্তির কারণ / রোগ নির্ণয়</label>
+                <label className="block text-xs font-semibold mb-1">{t("admission_reason")}</label>
                 <input
                   type="text"
                   value={admissionForm.reason}
                   onChange={(e) => setAdmissionForm({ ...admissionForm, reason: e.target.value })}
-                  placeholder="যেমন: তীব্র পেটব্যথা ও বমি / পোস্ট-অপারেটিভ কেয়ার"
+                  placeholder={t("admission_reason")}
                   className="w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                 />
               </div>
@@ -457,14 +460,14 @@ export default function ManageAdmissions() {
                   onClick={() => setIsAdmissionModalOpen(false)}
                   className="px-4 py-2 rounded-xl border hover:bg-muted text-sm font-medium"
                 >
-                  বাতিল
+                  {t("cancel")}
                 </button>
                 <button
                   type="submit"
                   disabled={isCreatingAdmission || !admissionForm.bed}
                   className="px-5 py-2 rounded-xl bg-primary text-primary-foreground text-sm font-bold shadow hover:bg-primary/90 transition"
                 >
-                  ভর্তি নিশ্চিত করুন
+                  {t("confirm_admission")}
                 </button>
               </div>
             </form>
@@ -478,44 +481,44 @@ export default function ManageAdmissions() {
           <div className="bg-card border rounded-3xl max-w-md w-full p-6 shadow-2xl relative animate-in fade-in zoom-in-95">
             <div className="flex items-center gap-2 mb-2 text-amber-500 font-bold text-lg">
               <Syringe className="h-5 w-5" />
-              দৈনিক নার্সিং ও সেবার খরচ যোগ করুন
+              {t("add_daily_nursing_charge")}
             </div>
             <p className="text-xs text-muted-foreground mb-4">
-              রোগী: <b>{selectedAdmissionForCharge.patient?.name}</b> (বেড #{selectedAdmissionForCharge.bed?.bedNumber})
+              {t("patient_name")}: <b>{selectedAdmissionForCharge.patient?.name}</b> (#{selectedAdmissionForCharge.bed?.bedNumber})
             </p>
 
             <form onSubmit={handleChargeSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold mb-1">সেবার ধরন / ক্যাটাগরি</label>
+                <label className="block text-xs font-semibold mb-1">{t("category_label")}</label>
                 <select
                   value={chargeForm.category}
                   onChange={(e) => setChargeForm({ ...chargeForm, category: e.target.value })}
                   className="w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                 >
-                  <option value="INJECTION">INJECTION (ইনজেকশন প্রয়োগ)</option>
-                  <option value="NURSING">NURSING (নার্সিং পর্যবেক্ষণ/সেবা)</option>
-                  <option value="DRESSING">DRESSING (ব্যান্ডেজ ও ড্রেসিং)</option>
-                  <option value="MEDICINE">MEDICINE (ওষুধ/স্যালাইন)</option>
-                  <option value="MEDICAL_SUPPLY">MEDICAL_SUPPLY (ক্যানুলা/সিরিঞ্জ/সরঞ্জাম)</option>
-                  <option value="OTHER">OTHER (অন্যান্য চার্জ)</option>
+                  <option value="INJECTION">{t("injection_saline_charge")}</option>
+                  <option value="NURSING">{t("nursing_care")}</option>
+                  <option value="DRESSING">{t("dressing_wound")}</option>
+                  <option value="MEDICINE">{t("medicines")}</option>
+                  <option value="MEDICAL_SUPPLY">{t("other_service")}</option>
+                  <option value="OTHER">{t("other_service")}</option>
                 </select>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold mb-1">সার্ভিস / আইটেমের নাম *</label>
+                <label className="block text-xs font-semibold mb-1">{t("charge_desc")}</label>
                 <input
                   type="text"
                   required
                   value={chargeForm.serviceName}
                   onChange={(e) => setChargeForm({ ...chargeForm, serviceName: e.target.value })}
-                  placeholder="যেমন: Inj. Ceftriaxone 1g Push / Normal Saline 1000ml"
+                  placeholder="Inj. Ceftriaxone / Normal Saline"
                   className="w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold mb-1">পরিমাণ (Qty)</label>
+                  <label className="block text-xs font-semibold mb-1">{t("quantity")}</label>
                   <input
                     type="number"
                     min="1"
@@ -526,21 +529,21 @@ export default function ManageAdmissions() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold mb-1">একক মূল্য (BDT) *</label>
+                  <label className="block text-xs font-semibold mb-1">{t("charge_amount_label")}</label>
                   <input
                     type="number"
                     required
                     min="0"
                     value={chargeForm.unitPrice}
                     onChange={(e) => setChargeForm({ ...chargeForm, unitPrice: e.target.value })}
-                    placeholder="৳ মূল্য"
+                    placeholder="৳"
                     className="w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>
               </div>
 
               <div className="p-3 rounded-xl bg-muted/50 border text-xs flex justify-between items-center font-bold">
-                <span>মোট চার্জ:</span>
+                <span>{t("final_charges")}:</span>
                 <span className="text-foreground text-sm">
                   ৳{((parseInt(chargeForm.quantity) || 1) * (parseFloat(chargeForm.unitPrice) || 0)).toLocaleString()}
                 </span>
@@ -552,14 +555,14 @@ export default function ManageAdmissions() {
                   onClick={() => setIsChargeModalOpen(false)}
                   className="px-4 py-2 rounded-xl border hover:bg-muted text-sm font-medium"
                 >
-                  বাতিল
+                  {t("cancel")}
                 </button>
                 <button
                   type="submit"
                   disabled={isAddingCharge}
                   className="px-5 py-2 rounded-xl bg-amber-600 text-white text-sm font-bold shadow hover:bg-amber-500 transition"
                 >
-                  ইনভয়েসে যুক্ত করুন
+                  {t("add_to_invoice")}
                 </button>
               </div>
             </form>
@@ -573,21 +576,20 @@ export default function ManageAdmissions() {
           <div className="bg-card border rounded-3xl max-w-md w-full p-6 shadow-2xl relative animate-in fade-in zoom-in-95">
             <h2 className="text-xl font-bold mb-2 text-red-600 flex items-center gap-2">
               <LogOut className="h-5 w-5" />
-              রোগী ডিসচার্জ নিশ্চিতকরণ
+              {t("confirm_discharge")}
             </h2>
             <p className="text-sm text-muted-foreground mb-4">
-              রোগী: <b>{selectedAdmissionForDischarge.patient?.name}</b> কে ডিসচার্জ করলে বরাদ্দকৃত বেডটি
-              স্বয়ংক্রিয়ভাবে খালি (AVAILABLE) হয়ে যাবে।
+              {t("discharge_confirm_desc")}
             </p>
 
             <form onSubmit={handleDischargeSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold mb-1">ডিসচার্জ সামারি / নোট</label>
+                <label className="block text-xs font-semibold mb-1">{t("remarks")}</label>
                 <textarea
                   rows={3}
                   value={dischargeNotes}
                   onChange={(e) => setDischargeNotes(e.target.value)}
-                  placeholder="রোগীর বর্তমান অবস্থা, ফলো-আপ পরামর্শ বা প্রেসক্রিপশন..."
+                  placeholder="..."
                   className="w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                 />
               </div>
@@ -598,14 +600,14 @@ export default function ManageAdmissions() {
                   onClick={() => setIsDischargeModalOpen(false)}
                   className="px-4 py-2 rounded-xl border hover:bg-muted text-sm font-medium"
                 >
-                  বাতিল
+                  {t("cancel")}
                 </button>
                 <button
                   type="submit"
                   disabled={isDischarging}
                   className="px-5 py-2 rounded-xl bg-red-600 text-white text-sm font-bold shadow hover:bg-red-500 transition"
                 >
-                  ডিসচার্জ সম্পন্ন করুন
+                  {t("confirm_discharge")}
                 </button>
               </div>
             </form>

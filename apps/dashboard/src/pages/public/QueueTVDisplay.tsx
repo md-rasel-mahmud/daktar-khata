@@ -5,10 +5,10 @@ import {
   useGetPublicTestStationSnapshotQuery,
   useGetMultiDoctorQueueSummaryQuery,
 } from "@/lib/store/api/services/queue.service"
-import type { PublicQueueSnapshot } from "@/lib/store/api/services/queue.service"
 import { io } from "socket.io-client"
 import type { Socket } from "socket.io-client"
 import { playWaitingChime } from "@/lib/audio-chime"
+import { useTranslation } from "react-i18next"
 import {
   Maximize,
   Minimize,
@@ -17,7 +17,6 @@ import {
   Stethoscope,
   Activity,
   Users,
-  CheckCircle2,
   Clock,
   Sparkles,
   Wifi,
@@ -25,6 +24,7 @@ import {
 } from "lucide-react"
 
 export default function QueueTVDisplay() {
+  const { t, i18n } = useTranslation()
   const [searchParams] = useSearchParams()
   const doctorId = searchParams.get("doctor") || ""
   const testStation = searchParams.get("test") || ""
@@ -144,12 +144,13 @@ export default function QueueTVDisplay() {
     }
   }
 
+  const locale = i18n.language === "bn" ? "bn-BD" : "en-US"
   const formattedTime = currentTime.toLocaleTimeString([], {
     hour: "2-digit",
     minute: "2-digit",
     second: "2-digit",
   })
-  const formattedDate = currentTime.toLocaleDateString("bn-BD", {
+  const formattedDate = currentTime.toLocaleDateString(locale, {
     weekday: "long",
     year: "numeric",
     month: "long",
@@ -158,18 +159,18 @@ export default function QueueTVDisplay() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans select-none overflow-hidden">
-      {/* Top Header Bar for TV */}
-      <header className="px-8 py-5 bg-slate-900/90 border-b border-slate-800 flex items-center justify-between shadow-2xl backdrop-blur-md">
-        <div className="flex items-center gap-4">
-          <div className="h-12 w-12 rounded-2xl bg-gradient-to-tr from-cyan-600 to-blue-500 flex items-center justify-center shadow-lg shadow-cyan-500/20">
+      {/* Header Bar */}
+      <header className="px-8 py-4 bg-slate-900/90 border-b border-slate-800/80 backdrop-blur-md flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="h-12 w-12 rounded-2xl bg-gradient-to-tr from-cyan-600 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/20">
             <Stethoscope className="h-7 w-7 text-white" />
           </div>
           <div>
             <h1 className="text-2xl font-black tracking-tight text-white flex items-center gap-2">
-              ডাক্তার খাতা <span className="text-cyan-400">ওয়েটিং রুম ডিসপ্লে</span>
+              {t("app_name")} <span className="text-cyan-400">{t("waiting_room_display")}</span>
             </h1>
             <p className="text-xs text-slate-400 font-medium">
-              {doctorSnapshot?.clinicName || "মাল্টি-টেন্যান্ট ক্লিনিক ও ডায়াগনস্টিক সেন্টার"}
+              {doctorSnapshot?.clinicName || t("clinic_directory_badge")}
             </p>
           </div>
         </div>
@@ -181,12 +182,12 @@ export default function QueueTVDisplay() {
               <>
                 <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 animate-ping" />
                 <Wifi className="h-3.5 w-3.5 text-emerald-400" />
-                <span className="text-emerald-400">লাইভ সংযুক্ত</span>
+                <span className="text-emerald-400">{t("live_connected")}</span>
               </>
             ) : (
               <>
                 <WifiOff className="h-3.5 w-3.5 text-amber-400" />
-                <span className="text-amber-400">স্বয়ংক্রিয় রিফ্রেশ</span>
+                <span className="text-amber-400">{t("auto_refresh")}</span>
               </>
             )}
           </div>
@@ -202,14 +203,14 @@ export default function QueueTVDisplay() {
           <div className="flex items-center gap-2 border-l border-slate-800 pl-4">
             <button
               onClick={() => setSoundEnabled(!soundEnabled)}
-              title={soundEnabled ? "মিউট করুন" : "সাউন্ড অন করুন"}
+              title={soundEnabled ? t("mute_sound") : t("unmute_sound")}
               className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition"
             >
               {soundEnabled ? <Volume2 className="h-5 w-5 text-cyan-400" /> : <VolumeX className="h-5 w-5 text-slate-500" />}
             </button>
             <button
               onClick={toggleFullscreen}
-              title="ফুলস্ক্রিন টিভিতে দেখান"
+              title={isFullscreen ? t("exit_fullscreen") : t("fullscreen_tv")}
               className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition"
             >
               {isFullscreen ? <Minimize className="h-5 w-5" /> : <Maximize className="h-5 w-5" />}
@@ -233,51 +234,51 @@ export default function QueueTVDisplay() {
                 <div>
                   <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 font-bold text-sm mb-4">
                     <span className="h-2 w-2 rounded-full bg-cyan-400 animate-pulse" />
-                    এখন চেম্বারে আছেন / NOW IN CONSULTATION
+                    {t("now_in_consultation")}
                   </div>
                   <h2 className="text-3xl font-black text-white">
-                    {doctorSnapshot?.doctorName || "ডাক্তারের চেম্বার"}
+                    {doctorSnapshot?.doctorName || t("doctor_chamber")}
                   </h2>
                   <p className="text-slate-400 text-sm mt-1">
-                    {doctorSnapshot?.specialization?.join(", ") || "বিশেষজ্ঞ চিকিৎসক"}
+                    {doctorSnapshot?.specialization?.join(", ") || t("doctor")}
                   </p>
                 </div>
 
                 {/* Giant Serial Display */}
                 <div className="my-8 text-center py-10 bg-slate-950/60 rounded-3xl border border-slate-800/80 shadow-inner">
                   <span className="text-sm font-semibold tracking-widest text-slate-400 uppercase">
-                    রানিং সিরিয়াল নম্বর
+                    {t("running_serial")}
                   </span>
                   <div className="text-9xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white via-cyan-200 to-cyan-400 drop-shadow-[0_10px_20px_rgba(6,182,212,0.3)] my-2">
-                    {doctorSnapshot?.current ? `#${doctorSnapshot.current.serial}` : "অপেক্ষমাণ"}
+                    {doctorSnapshot?.current ? `#${doctorSnapshot.current.serial}` : t("waiting")}
                   </div>
                   <div className="inline-block mt-2 px-6 py-2 rounded-xl bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 font-bold text-base">
                     {doctorSnapshot?.current?.status === "CALLED"
-                      ? "🔔 কল করা হয়েছে / PLEASE ENTER"
+                      ? `🔔 ${t("called_enter")}`
                       : doctorSnapshot?.current?.status === "IN_CONSULTATION"
-                      ? "ডাক্তার দেখছেন / IN CONSULTATION"
-                      : "রোগী ডাকা হচ্ছে..."}
+                      ? t("in_consultation")
+                      : t("calling_patient_dots")}
                   </div>
                 </div>
 
                 {/* Summary Info */}
                 <div className="grid grid-cols-3 gap-4 pt-4 border-t border-slate-800 text-center">
                   <div className="bg-slate-950/40 rounded-xl p-3">
-                    <div className="text-xs text-slate-400 font-medium">অপেক্ষমাণ রোগী</div>
+                    <div className="text-xs text-slate-400 font-medium">{t("waiting_patients")}</div>
                     <div className="text-2xl font-bold text-amber-400 mt-1">
-                      {doctorSnapshot?.waitingCount ?? 0} জন
+                      {doctorSnapshot?.waitingCount ?? 0}
                     </div>
                   </div>
                   <div className="bg-slate-950/40 rounded-xl p-3">
-                    <div className="text-xs text-slate-400 font-medium">আজ সম্পন্ন হয়েছে</div>
+                    <div className="text-xs text-slate-400 font-medium">{t("completed_today")}</div>
                     <div className="text-2xl font-bold text-emerald-400 mt-1">
-                      {doctorSnapshot?.completedCount ?? 0} জন
+                      {doctorSnapshot?.completedCount ?? 0}
                     </div>
                   </div>
                   <div className="bg-slate-950/40 rounded-xl p-3">
-                    <div className="text-xs text-slate-400 font-medium">গড় কনসালটেশন</div>
+                    <div className="text-xs text-slate-400 font-medium">{t("avg_consultation")}</div>
                     <div className="text-2xl font-bold text-cyan-400 mt-1">
-                      ~{doctorSnapshot?.avgConsultationMinutes ?? 10} মিনিট
+                      ~{doctorSnapshot?.avgConsultationMinutes ?? 10} {t("minutes")}
                     </div>
                   </div>
                 </div>
@@ -291,10 +292,10 @@ export default function QueueTVDisplay() {
                 <div className="flex items-center justify-between pb-4 border-b border-slate-800 mb-6">
                   <h3 className="text-xl font-bold text-white flex items-center gap-2">
                     <Clock className="h-5 w-5 text-amber-400" />
-                    পরবর্তী সিরিয়াল / NEXT IN LINE
+                    {t("next_patients")}
                   </h3>
                   <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-amber-500/10 text-amber-400 border border-amber-500/20">
-                    প্রস্তুত থাকুন
+                    {t("be_ready")}
                   </span>
                 </div>
 
@@ -303,21 +304,21 @@ export default function QueueTVDisplay() {
                   <div className="p-5 rounded-2xl bg-gradient-to-r from-amber-500/15 via-slate-800/80 to-slate-800/50 border-2 border-amber-500/50 flex items-center justify-between shadow-lg">
                     <div className="flex items-center gap-4">
                       <div className="h-12 w-12 rounded-xl bg-amber-500 text-slate-950 font-black text-xl flex items-center justify-center shadow-md">
-                        ১ম
+                        {t("first_serial")}
                       </div>
                       <div>
                         <div className="text-xs font-bold text-amber-400 uppercase tracking-wider">
-                          পরবর্তী সিরিয়াল নম্বর
+                          {t("serial")}
                         </div>
                         <div className="text-4xl font-black text-white mt-0.5">
                           {doctorSnapshot?.waitingSerials?.[0]
                             ? `#${doctorSnapshot.waitingSerials[0]}`
-                            : "কেউ নেই"}
+                            : t("nobody")}
                         </div>
                       </div>
                     </div>
                     <div className="text-right text-xs text-slate-400 font-medium">
-                      দরজার সামনে প্রস্তুত থাকুন
+                      {t("stand_by_door")}
                     </div>
                   </div>
 
@@ -325,21 +326,21 @@ export default function QueueTVDisplay() {
                   <div className="p-5 rounded-2xl bg-slate-800/60 border border-slate-700/80 flex items-center justify-between">
                     <div className="flex items-center gap-4">
                       <div className="h-12 w-12 rounded-xl bg-slate-700 text-slate-200 font-bold text-xl flex items-center justify-center">
-                        ২য়
+                        {t("second_serial")}
                       </div>
                       <div>
                         <div className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                          তার পরের সিরিয়াল
+                          {t("serial")}
                         </div>
                         <div className="text-4xl font-black text-slate-200 mt-0.5">
                           {doctorSnapshot?.waitingSerials?.[1]
                             ? `#${doctorSnapshot.waitingSerials[1]}`
-                            : "কেউ নেই"}
+                            : t("nobody")}
                         </div>
                       </div>
                     </div>
                     <div className="text-right text-xs text-slate-500 font-medium">
-                      ওয়েটিং জোনে বসুন
+                      {t("sit_in_waiting")}
                     </div>
                   </div>
                 </div>
@@ -347,7 +348,7 @@ export default function QueueTVDisplay() {
                 {/* Queue Strip for other numbers */}
                 <div className="mt-6 pt-4 border-t border-slate-800">
                   <div className="text-xs font-semibold text-slate-400 mb-2">
-                    পরবর্তী অপেক্ষমাণ সিরিয়ালসমূহ:
+                    {t("upcoming_serials")}:
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {doctorSnapshot?.waitingSerials && doctorSnapshot.waitingSerials.length > 2 ? (
@@ -360,7 +361,7 @@ export default function QueueTVDisplay() {
                         </span>
                       ))
                     ) : (
-                      <span className="text-xs text-slate-500">অতিরিক্ত সিরিয়াল নেই</span>
+                      <span className="text-xs text-slate-500">{t("no_additional_serials")}</span>
                     )}
                   </div>
                 </div>
@@ -378,39 +379,39 @@ export default function QueueTVDisplay() {
                 <div>
                   <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/20 border border-indigo-400/40 text-indigo-300 font-bold text-sm mb-4">
                     <span className="h-2 w-2 rounded-full bg-indigo-400 animate-pulse" />
-                    ডায়াগনস্টিক টেস্ট রুম / DIAGNOSTIC STATION
+                    {t("diagnostic_station")}
                   </div>
                   <h2 className="text-3xl font-black text-white">
-                    {testStation || "আল্ট্রাসনোগ্রাফি ও প্যাথলজি রুম"}
+                    {testStation || t("services_tests")}
                   </h2>
                   <p className="text-slate-400 text-sm mt-1">
-                    টেস্ট সিরিয়াল অনুযায়ী রুমে প্রবেশ করুন
+                    {t("enter_by_serial")}
                   </p>
                 </div>
 
                 <div className="my-8 text-center py-10 bg-slate-950/60 rounded-3xl border border-slate-800/80 shadow-inner">
                   <span className="text-sm font-semibold tracking-widest text-slate-400 uppercase">
-                    রানিং টেস্ট টোকেন
+                    {t("running_token")}
                   </span>
                   <div className="text-9xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white via-indigo-200 to-indigo-400 drop-shadow-[0_10px_20px_rgba(99,102,241,0.3)] my-2">
-                    {testSnapshot?.current ? `#${testSnapshot.current.tokenNumber}` : "অপেক্ষমাণ"}
+                    {testSnapshot?.current ? `#${testSnapshot.current.tokenNumber}` : t("waiting")}
                   </div>
                   <div className="inline-block mt-2 px-6 py-2 rounded-xl bg-indigo-500/20 border border-indigo-500/30 text-indigo-300 font-bold text-base">
-                    {testSnapshot?.current ? "টেস্ট চলছে / TEST IN PROGRESS" : "পরবর্তী রোগী ডাকা হচ্ছে..."}
+                    {testSnapshot?.current ? t("in_consultation") : t("calling_patient_dots")}
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4 pt-4 border-t border-slate-800 text-center">
                   <div className="bg-slate-950/40 rounded-xl p-3">
-                    <div className="text-xs text-slate-400 font-medium">অপেক্ষমাণ টেস্ট</div>
+                    <div className="text-xs text-slate-400 font-medium">{t("waiting_patients")}</div>
                     <div className="text-2xl font-bold text-amber-400 mt-1">
-                      {testSnapshot?.waitingCount ?? 0} জন
+                      {testSnapshot?.waitingCount ?? 0}
                     </div>
                   </div>
                   <div className="bg-slate-950/40 rounded-xl p-3">
-                    <div className="text-xs text-slate-400 font-medium">আজ সম্পন্ন হয়েছে</div>
+                    <div className="text-xs text-slate-400 font-medium">{t("completed_today")}</div>
                     <div className="text-2xl font-bold text-emerald-400 mt-1">
-                      {testSnapshot?.completedCount ?? 0} টি
+                      {testSnapshot?.completedCount ?? 0}
                     </div>
                   </div>
                 </div>
@@ -423,10 +424,10 @@ export default function QueueTVDisplay() {
                 <div className="flex items-center justify-between pb-4 border-b border-slate-800 mb-6">
                   <h3 className="text-xl font-bold text-white flex items-center gap-2">
                     <Clock className="h-5 w-5 text-indigo-400" />
-                    পরবর্তী টেস্ট টোকেন / NEXT IN LINE
+                    {t("next_patients")}
                   </h3>
                   <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
-                    প্রস্তুত থাকুন
+                    {t("be_ready")}
                   </span>
                 </div>
 
@@ -434,40 +435,40 @@ export default function QueueTVDisplay() {
                   <div className="p-5 rounded-2xl bg-gradient-to-r from-indigo-500/15 via-slate-800/80 to-slate-800/50 border-2 border-indigo-500/50 flex items-center justify-between shadow-lg">
                     <div className="flex items-center gap-4">
                       <div className="h-12 w-12 rounded-xl bg-indigo-500 text-white font-black text-xl flex items-center justify-center shadow-md">
-                        ১ম
+                        {t("first_serial")}
                       </div>
                       <div>
                         <div className="text-xs font-bold text-indigo-400 uppercase tracking-wider">
-                          পরবর্তী টোকেন
+                          {t("token")}
                         </div>
                         <div className="text-4xl font-black text-white mt-0.5">
-                          {testSnapshot?.next?.tokenNumber ? `#${testSnapshot.next.tokenNumber}` : "কেউ নেই"}
+                          {testSnapshot?.next?.tokenNumber ? `#${testSnapshot.next.tokenNumber}` : t("nobody")}
                         </div>
                       </div>
                     </div>
                     <div className="text-right text-xs text-slate-400 font-medium">
-                      রুমের সামনে প্রস্তুত থাকুন
+                      {t("stand_by_door")}
                     </div>
                   </div>
 
                   <div className="p-5 rounded-2xl bg-slate-800/60 border border-slate-700/80 flex items-center justify-between">
                     <div className="flex items-center gap-4">
                       <div className="h-12 w-12 rounded-xl bg-slate-700 text-slate-200 font-bold text-xl flex items-center justify-center">
-                        ২য়
+                        {t("second_serial")}
                       </div>
                       <div>
                         <div className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                          তার পরের টোকেন
+                          {t("token")}
                         </div>
                         <div className="text-4xl font-black text-slate-200 mt-0.5">
                           {testSnapshot?.nextSecond?.tokenNumber
                             ? `#${testSnapshot.nextSecond.tokenNumber}`
-                            : "কেউ নেই"}
+                            : t("nobody")}
                         </div>
                       </div>
                     </div>
                     <div className="text-right text-xs text-slate-500 font-medium">
-                      ওয়েটিং জোনে বসুন
+                      {t("sit_in_waiting")}
                     </div>
                   </div>
                 </div>
@@ -483,10 +484,10 @@ export default function QueueTVDisplay() {
               <div>
                 <h2 className="text-2xl font-black text-white flex items-center gap-2">
                   <Sparkles className="h-6 w-6 text-cyan-400" />
-                  সেন্ট্রাল ওয়েটিং হল বোর্ড / ALL ACTIVE CHAMBERS & COUNTERS
+                  {t("central_board_title")}
                 </h2>
                 <p className="text-sm text-slate-400">
-                  আপনার চেম্বার বা টেস্ট রুমের সিরিয়াল অনুসরণ করুন
+                  {t("follow_your_serial")}
                 </p>
               </div>
             </div>
@@ -501,34 +502,34 @@ export default function QueueTVDisplay() {
                     <div>
                       <div className="flex items-center justify-between mb-3">
                         <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
-                          চেম্বার সিরিয়াল
+                          {t("chamber_serial")}
                         </span>
                         <span className="text-xs text-slate-400 font-medium">
-                          অপেক্ষমাণ: {doc.waitingCount} জন
+                          {t("waiting")}: {doc.waitingCount}
                         </span>
                       </div>
                       <h3 className="text-lg font-bold text-white line-clamp-1">
                         {doc.doctorName}
                       </h3>
                       <p className="text-xs text-slate-400 line-clamp-1 mb-4">
-                        {doc.specialization?.join(", ") || "মেডিকেল কনসালট্যান্ট"}
+                        {doc.specialization?.join(", ") || t("doctor")}
                       </p>
                     </div>
 
                     <div className="bg-slate-950/70 border border-slate-800 rounded-2xl p-4 text-center my-3">
                       <div className="text-xs font-semibold text-slate-400 uppercase">
-                        এখন ডাক্তার দেখছেন
+                        {t("now_seeing_doctor")}
                       </div>
                       <div className="text-5xl font-black text-cyan-400 my-1">
                         {doc.current ? `#${doc.current.serial}` : "—"}
                       </div>
                       <div className="text-xs font-medium text-emerald-400">
-                        {doc.current ? doc.current.status : "অপেক্ষমাণ"}
+                        {doc.current ? doc.current.status : t("waiting")}
                       </div>
                     </div>
 
                     <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
-                      <span className="text-slate-400">পরবর্তী সিরিয়াল:</span>
+                      <span className="text-slate-400">{t("upcoming_serials")}:</span>
                       <div className="flex items-center gap-1.5 font-bold">
                         <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
                           {doc.next ? `#${doc.next.serial}` : "—"}
@@ -547,11 +548,10 @@ export default function QueueTVDisplay() {
               <div className="bg-slate-900 border border-slate-800 rounded-3xl p-16 text-center">
                 <Users className="h-16 w-16 text-slate-600 mx-auto mb-4" />
                 <h3 className="text-xl font-bold text-white mb-2">
-                  বর্তমানে কোনো সচল কনসালটেশন বা টেস্ট কিউ নেই
+                  {t("no_active_queues")}
                 </h3>
                 <p className="text-sm text-slate-400 max-w-md mx-auto">
-                  ডাক্তার বা টেকনিশিয়ান চেম্বার থেকে সিরিয়াল কল করলে তা সাথে সাথে এই বোর্ডে
-                  রিয়েল-টাইমে প্রদর্শিত হবে।
+                  {t("no_active_queues_sub")}
                 </p>
               </div>
             )}
@@ -562,8 +562,7 @@ export default function QueueTVDisplay() {
       {/* Footer Ticker / Note */}
       <footer className="px-8 py-3 bg-slate-900 border-t border-slate-800 text-center text-xs text-slate-400 flex items-center justify-between">
         <div>
-          জরুরি রোগীদের ক্ষেত্রে সিরিয়াল কিছুটা পরিবর্তিত হতে পারে। আপনার সিরিয়াল আসলে অনুগ্রহ করে
-          দরজার কাছে এগিয়ে আসুন।
+          {t("queue_ticker_notice")}
         </div>
         <div className="font-semibold text-slate-500">Daktar Khata Smart Waiting Display v2.0</div>
       </footer>

@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { useTranslation } from "react-i18next"
 import {
   useGetBedsQuery,
   useGetWardsQuery,
@@ -21,6 +22,7 @@ import {
 } from "lucide-react"
 
 export default function ManageBeds() {
+  const { t } = useTranslation()
   const [selectedWard, setSelectedWard] = useState<string>("")
   const [statusFilter, setStatusFilter] = useState<string>("")
 
@@ -49,7 +51,7 @@ export default function ManageBeds() {
   const handleCreateBed = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!bedForm.bedNumber || !bedForm.ward || !bedForm.room) {
-      toast.error("বেড নম্বর, ওয়ার্ড ও রুম নির্বাচন করুন")
+      toast.error(t("select_ward_room_bed"))
       return
     }
 
@@ -62,24 +64,24 @@ export default function ManageBeds() {
         status: "AVAILABLE",
       }).unwrap()
 
-      toast.success("নতুন বেড সফলভাবে যুক্ত হয়েছে!")
+      toast.success(t("bed_created_success"))
       setIsAddBedOpen(false)
       setBedForm({ bedNumber: "", ward: "", room: "", dailyCharge: "500" })
       refetchBeds()
       refetchSummary()
     } catch (err: any) {
-      toast.error(err?.data?.message || "বেড তৈরি করা যায়নি")
+      toast.error(err?.data?.message || t("bed_create_failed"))
     }
   }
 
   const handleStatusChange = async (bedId: string, nextStatus: string) => {
     try {
       await updateStatus({ id: bedId, status: nextStatus }).unwrap()
-      toast.success(`বেডের স্ট্যাটাস পরিবর্তিত হয়েছে: ${nextStatus}`)
+      toast.success(`${t("bed_status_updated")} ${nextStatus}`)
       refetchBeds()
       refetchSummary()
     } catch {
-      toast.error("বেডের স্ট্যাটাস পরিবর্তন করা যায়নি")
+      toast.error(t("bed_status_update_failed"))
     }
   }
 
@@ -88,10 +90,8 @@ export default function ManageBeds() {
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">হাসপাতাল বেড ম্যাট্রিক্স ও স্ট্যাটাস</h1>
-          <p className="text-sm text-muted-foreground">
-            সকল ওয়ার্ড ও রুমের বেড দখল ও ফাঁকা থাকার অবস্থা রিয়েল-টাইমে দেখুন ও পরিচালনা করুন
-          </p>
+          <h1 className="text-2xl font-bold tracking-tight">{t("bed_matrix_title")}</h1>
+          <p className="text-sm text-muted-foreground">{t("bed_matrix_desc")}</p>
         </div>
 
         <button
@@ -99,7 +99,7 @@ export default function ManageBeds() {
           className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-sm shadow transition"
         >
           <Plus className="h-4 w-4" />
-          নতুন বেড যোগ করুন
+          {t("new_bed")}
         </button>
       </div>
 
@@ -107,7 +107,7 @@ export default function ManageBeds() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="p-5 rounded-2xl bg-card border shadow-sm flex items-center justify-between">
           <div>
-            <div className="text-xs font-semibold text-muted-foreground uppercase">মোট বেড</div>
+            <div className="text-xs font-semibold text-muted-foreground uppercase">{t("total_beds")}</div>
             <div className="text-3xl font-black text-foreground mt-1">{summary?.total ?? 0}</div>
           </div>
           <div className="h-12 w-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
@@ -117,7 +117,7 @@ export default function ManageBeds() {
 
         <div className="p-5 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 shadow-sm flex items-center justify-between">
           <div>
-            <div className="text-xs font-semibold text-emerald-600 uppercase">ফাঁকা / খালি বেড</div>
+            <div className="text-xs font-semibold text-emerald-600 uppercase">{t("available_beds")}</div>
             <div className="text-3xl font-black text-emerald-600 mt-1">
               {summary?.available ?? 0}
             </div>
@@ -129,7 +129,7 @@ export default function ManageBeds() {
 
         <div className="p-5 rounded-2xl bg-red-500/10 border border-red-500/20 shadow-sm flex items-center justify-between">
           <div>
-            <div className="text-xs font-semibold text-red-600 uppercase">ভর্তি / রোগী আছেন</div>
+            <div className="text-xs font-semibold text-red-600 uppercase">{t("occupied_beds")}</div>
             <div className="text-3xl font-black text-red-600 mt-1">
               {summary?.occupied ?? 0}
             </div>
@@ -141,7 +141,7 @@ export default function ManageBeds() {
 
         <div className="p-5 rounded-2xl bg-amber-500/10 border border-amber-500/20 shadow-sm flex items-center justify-between">
           <div>
-            <div className="text-xs font-semibold text-amber-600 uppercase">ক্লিনিং / রক্ষণাবেক্ষণ</div>
+            <div className="text-xs font-semibold text-amber-600 uppercase">{t("cleaning_maintenance")}</div>
             <div className="text-3xl font-black text-amber-600 mt-1">
               {(summary?.cleaning ?? 0) + (summary?.maintenance ?? 0)}
             </div>
@@ -157,13 +157,13 @@ export default function ManageBeds() {
         <div className="flex flex-wrap items-center gap-3">
           <div className="flex items-center gap-2">
             <Filter className="h-4 w-4 text-muted-foreground" />
-            <span className="text-xs font-semibold">ওয়ার্ড ফিল্টার:</span>
+            <span className="text-xs font-semibold">{t("filter_ward_lbl")}</span>
             <select
               value={selectedWard}
               onChange={(e) => setSelectedWard(e.target.value)}
               className="px-3 py-1.5 rounded-lg border bg-background text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary"
             >
-              <option value="">সকল ওয়ার্ড</option>
+              <option value="">{t("all_wards")}</option>
               {wards.map((w) => (
                 <option key={w._id} value={w._id}>
                   {w.name}
@@ -173,17 +173,17 @@ export default function ManageBeds() {
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold">স্ট্যাটাস:</span>
+            <span className="text-xs font-semibold">{t("status")}:</span>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
               className="px-3 py-1.5 rounded-lg border bg-background text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary"
             >
-              <option value="">সকল স্ট্যাটাস</option>
-              <option value="AVAILABLE">খালি (AVAILABLE)</option>
-              <option value="OCCUPIED">দখলকৃত (OCCUPIED)</option>
-              <option value="CLEANING">ক্লিনিং (CLEANING)</option>
-              <option value="MAINTENANCE">মেরামত (MAINTENANCE)</option>
+              <option value="">{t("all_statuses")}</option>
+              <option value="AVAILABLE">{t("status_available")}</option>
+              <option value="OCCUPIED">{t("status_occupied")}</option>
+              <option value="CLEANING">{t("status_cleaning")}</option>
+              <option value="MAINTENANCE">{t("status_maintenance")}</option>
             </select>
           </div>
         </div>
@@ -194,7 +194,7 @@ export default function ManageBeds() {
             refetchSummary()
           }}
           className="p-2 rounded-lg border hover:bg-muted text-muted-foreground"
-          title="রিফ্রেশ"
+          title="Refresh"
         >
           <RefreshCw className="h-4 w-4" />
         </button>
@@ -253,9 +253,9 @@ export default function ManageBeds() {
                           : "text-amber-600"
                       }`}
                     >
-                      {isAvail ? "খালি" : isOcc ? "ভর্তি" : "ক্লিনিং"}
+                      {isAvail ? t("status_available") : isOcc ? t("status_occupied") : t("status_cleaning")}
                     </span>
-                    <span className="text-muted-foreground">৳{b.dailyCharge ?? 500}/দিন</span>
+                    <span className="text-muted-foreground">৳{b.dailyCharge ?? 500}</span>
                   </div>
 
                   {/* Quick Status Action */}
@@ -264,7 +264,7 @@ export default function ManageBeds() {
                       onClick={() => handleStatusChange(b._id, "AVAILABLE")}
                       className="w-full py-1 rounded bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition"
                     >
-                      খালি চিহ্নিত করুন
+                      {t("mark_available")}
                     </button>
                   )}
                   {isAvail && (
@@ -272,7 +272,7 @@ export default function ManageBeds() {
                       onClick={() => handleStatusChange(b._id, "MAINTENANCE")}
                       className="w-full py-1 rounded bg-muted hover:bg-muted/80 text-muted-foreground text-xs transition"
                     >
-                      মেরামত দিন
+                      {t("mark_maintenance")}
                     </button>
                   )}
                   {b.status === "MAINTENANCE" && (
@@ -280,7 +280,7 @@ export default function ManageBeds() {
                       onClick={() => handleStatusChange(b._id, "AVAILABLE")}
                       className="w-full py-1 rounded bg-emerald-600 text-white font-semibold text-xs"
                     >
-                      সচল করুন
+                      {t("mark_activate")}
                     </button>
                   )}
                 </div>
@@ -289,7 +289,7 @@ export default function ManageBeds() {
           })
         ) : (
           <div className="col-span-full py-16 text-center text-muted-foreground bg-card border rounded-2xl">
-            কোনো বেড পাওয়া যায়নি।
+            {t("no_beds_found")}
           </div>
         )}
       </div>
@@ -300,18 +300,18 @@ export default function ManageBeds() {
           <div className="bg-card border rounded-3xl max-w-md w-full p-6 shadow-2xl relative animate-in fade-in zoom-in-95">
             <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
               <Bed className="h-5 w-5 text-primary" />
-              নতুন বেড যুক্ত করুন
+              {t("add_new_bed_modal")}
             </h2>
             <form onSubmit={handleCreateBed} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold mb-1">ওয়ার্ড নির্বাচন করুন *</label>
+                <label className="block text-xs font-semibold mb-1">{t("select_ward_req")}</label>
                 <select
                   required
                   value={bedForm.ward}
                   onChange={(e) => setBedForm({ ...bedForm, ward: e.target.value, room: "" })}
                   className="w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                 >
-                  <option value="">ওয়ার্ড বেছে নিন...</option>
+                  <option value="">{t("choose_ward")}</option>
                   {wards.map((w) => (
                     <option key={w._id} value={w._id}>
                       {w.name}
@@ -321,14 +321,14 @@ export default function ManageBeds() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold mb-1">রুম নির্বাচন করুন *</label>
+                <label className="block text-xs font-semibold mb-1">{t("select_room_req")}</label>
                 <select
                   required
                   value={bedForm.room}
                   onChange={(e) => setBedForm({ ...bedForm, room: e.target.value })}
                   className="w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                 >
-                  <option value="">রুম বেছে নিন...</option>
+                  <option value="">{t("choose_room")}</option>
                   {rooms.map((r) => (
                     <option key={r._id} value={r._id}>
                       {r.name || `Room ${r.roomNumber}`}
@@ -339,19 +339,19 @@ export default function ManageBeds() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold mb-1">বেড নম্বর / নাম *</label>
+                  <label className="block text-xs font-semibold mb-1">{t("bed_number_req")}</label>
                   <input
                     type="text"
                     required
                     value={bedForm.bedNumber}
                     onChange={(e) => setBedForm({ ...bedForm, bedNumber: e.target.value })}
-                    placeholder="যেমন: 101, B-12"
+                    placeholder={t("bed_number_ph")}
                     className="w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold mb-1">দৈনিক ভাড়া (BDT)</label>
+                  <label className="block text-xs font-semibold mb-1">{t("daily_charge_bdt")}</label>
                   <input
                     type="number"
                     value={bedForm.dailyCharge}
@@ -368,14 +368,14 @@ export default function ManageBeds() {
                   onClick={() => setIsAddBedOpen(false)}
                   className="px-4 py-2 rounded-xl border hover:bg-muted text-sm font-medium"
                 >
-                  বাতিল
+                  {t("cancel")}
                 </button>
                 <button
                   type="submit"
                   disabled={isCreating}
                   className="px-5 py-2 rounded-xl bg-primary text-primary-foreground text-sm font-bold shadow hover:bg-primary/90 transition"
                 >
-                  বেড তৈরি করুন
+                  {t("create_bed_btn")}
                 </button>
               </div>
             </form>

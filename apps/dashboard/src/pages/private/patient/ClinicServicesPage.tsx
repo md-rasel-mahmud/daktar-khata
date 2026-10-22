@@ -11,31 +11,28 @@ import { useGetDoctorOptionsQuery } from "@/lib/store/api/services/doctor.servic
 import { useCreateTestOrderMutation } from "@/lib/store/api/services/diagnostics.service"
 import { useSelector } from "react-redux"
 import type { RootState } from "@/lib/store/store"
+import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 import { useNavigate } from "react-router"
 import {
   Bed,
-  CheckCircle2,
   Stethoscope,
   TestTube,
   Sparkles,
-  Calendar,
-  Layers,
   ArrowRight,
-  ShieldCheck,
-  Check,
 } from "lucide-react"
 
 export default function ClinicServicesPage() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const authUser = useSelector((state: RootState) => state.auth?.user)
 
-  const [activeTab, setActiveTab] = useState<"tests" | "doctors" | "beds">("tests")
+  const [activeTab, setActiveTab] = useState<"tests" | "doctors">("tests")
   const [selectedTestToBook, setSelectedTestToBook] = useState<TestCatalogItem | null>(null)
 
   // API Queries
-  const { data: bedSummary, isLoading: isLoadingBeds } = useGetBedAvailabilitySummaryQuery()
-  const { data: services = [] } = useGetServicesQuery()
+  const { data: bedSummary } = useGetBedAvailabilitySummaryQuery()
+  useGetServicesQuery()
   const { data: tests = [] } = useGetTestCatalogQuery()
   const { data: doctorsData } = useGetDoctorOptionsQuery(undefined)
   const doctorsList = Array.isArray(doctorsData) ? doctorsData : (doctorsData as any)?.data || []
@@ -45,7 +42,7 @@ export default function ClinicServicesPage() {
   const handleSelfBookTest = async () => {
     const patientId = authUser?.user?._id || (authUser as any)?._id
     if (!selectedTestToBook || !patientId) {
-      toast.error("বুকিং সম্পন্ন করতে লগইন নিশ্চিত করুন")
+      toast.error(t("login_required_booking"))
       return
     }
 
@@ -63,12 +60,10 @@ export default function ClinicServicesPage() {
         ],
       }).unwrap()
 
-      toast.success(
-        `"${selectedTestToBook.name}" টেস্টটি সফলভাবে বুক হয়েছে! ক্লিনিকে আসার পর আপনার টোকেন সংগ্রহ করুন।`
-      )
+      toast.success(t("booking_confirmed"))
       setSelectedTestToBook(null)
     } catch (err: any) {
-      toast.error(err?.data?.message || "টেস্ট বুকিং ব্যর্থ হয়েছে")
+      toast.error(err?.data?.message || t("cancel"))
     }
   }
 
@@ -78,14 +73,13 @@ export default function ClinicServicesPage() {
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-blue-700 via-indigo-700 to-cyan-600 p-8 text-white shadow-xl">
         <div className="relative z-10 max-w-2xl">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-bold mb-3">
-            <Sparkles className="h-3.5 w-3.5" /> ক্লিনিক সার্ভিস ও রিসোর্স ডিরেক্টরি
+            <Sparkles className="h-3.5 w-3.5" /> {t("clinic_directory_badge")}
           </div>
           <h1 className="text-3xl font-black tracking-tight sm:text-4xl">
-            ক্লিনিকের সকল সেবা, চিকিৎসক ও লাইভ বেড তথ্য
+            {t("clinic_directory_title")}
           </h1>
           <p className="mt-2 text-sm text-blue-100 sm:text-base">
-            ডায়াগনস্টিক টেস্ট সরাসরি বুক করুন, ডাক্তারের সাথে অ্যাপয়েন্টমেন্ট নিন এবং হাসপাতালের লাইভ বেড
-            পরিস্থিতি জানুন।
+            {t("clinic_directory_desc")}
           </p>
         </div>
       </div>
@@ -101,19 +95,17 @@ export default function ClinicServicesPage() {
               <div className="flex items-center gap-2">
                 <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 animate-ping" />
                 <span className="text-xs font-bold text-emerald-600 uppercase tracking-wider">
-                  লাইভ বেড স্ট্যাটাস (রিয়েল-টাইম)
+                  {t("live_bed_status_tag")}
                 </span>
               </div>
               <h2 className="text-2xl font-black text-foreground mt-0.5">
-                হাসপাতালে বর্তমানে{" "}
-                <span className="text-emerald-600 font-black">
-                  {bedSummary?.available ?? 0} টি
-                </span>{" "}
-                বেড ফাঁকা আছে
+                {t("beds_available_msg", { count: bedSummary?.available ?? 0 })}
               </h2>
               <p className="text-xs text-muted-foreground mt-0.5">
-                সর্বমোট {bedSummary?.total ?? 0} টি বেডের মধ্যে {bedSummary?.occupied ?? 0} টিতে
-                রোগী ভর্তি আছেন
+                {t("beds_occupied_subtext", {
+                  total: bedSummary?.total ?? 0,
+                  occupied: bedSummary?.occupied ?? 0,
+                })}
               </p>
             </div>
           </div>
@@ -126,8 +118,8 @@ export default function ClinicServicesPage() {
                 className="px-3.5 py-2 rounded-xl bg-muted/60 border text-xs font-semibold flex items-center gap-2"
               >
                 <span>{w.wardName}:</span>
-                <span className="text-emerald-600 font-bold">{w.available} ফাঁকা</span>
-                <span className="text-muted-foreground font-normal">/ {w.total} মোট</span>
+                <span className="text-emerald-600 font-bold">{w.available} {t("available")}</span>
+                <span className="text-muted-foreground font-normal">/ {w.total} {t("all_wards")}</span>
               </div>
             ))}
           </div>
@@ -145,7 +137,7 @@ export default function ClinicServicesPage() {
           }`}
         >
           <TestTube className="h-4 w-4" />
-          ডায়াগনস্টিক টেস্টসমূহ ({tests.length})
+          {t("tab_tests")} ({tests.length})
         </button>
         <button
           onClick={() => setActiveTab("doctors")}
@@ -156,7 +148,7 @@ export default function ClinicServicesPage() {
           }`}
         >
           <Stethoscope className="h-4 w-4" />
-          বিশেষজ্ঞ চিকিৎসকবৃন্দ ({doctorsList.length})
+          {t("tab_doctors")} ({doctorsList.length})
         </button>
       </div>
 
@@ -176,7 +168,7 @@ export default function ClinicServicesPage() {
                         {test.category}
                       </span>
                       <span className="text-xs text-muted-foreground">
-                        ডেলিভারি: ~{test.turnaroundHours ?? 24} ঘণ্টা
+                        {t("delivery_time")}: ~{test.turnaroundHours ?? 24}h
                       </span>
                     </div>
 
@@ -188,14 +180,14 @@ export default function ClinicServicesPage() {
                     )}
                     {test.preparationInstructions && (
                       <div className="mt-3 p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-700 text-xs">
-                        ⚠️ <b>নির্দেশনা:</b> {test.preparationInstructions}
+                        ⚠️ <b>{t("details")}:</b> {test.preparationInstructions}
                       </div>
                     )}
                   </div>
 
                   <div className="mt-6 pt-4 border-t flex items-center justify-between">
                     <div>
-                      <span className="text-xs text-muted-foreground block">টেস্ট ফি:</span>
+                      <span className="text-xs text-muted-foreground block">{t("test_fee")}:</span>
                       <span className="text-xl font-black text-primary">
                         ৳{test.price.toLocaleString()}
                       </span>
@@ -205,14 +197,14 @@ export default function ClinicServicesPage() {
                       onClick={() => setSelectedTestToBook(test)}
                       className="px-4 py-2 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-bold shadow transition"
                     >
-                      টেস্ট বুক করুন
+                      {t("book_test")}
                     </button>
                   </div>
                 </div>
               ))
             ) : (
               <div className="col-span-full py-16 text-center text-muted-foreground bg-card border rounded-3xl">
-                কোনো ডায়াগনস্টিক টেস্ট তালিকাভুক্ত নেই।
+                {t("no_tests_available")}
               </div>
             )}
           </div>
@@ -234,20 +226,20 @@ export default function ClinicServicesPage() {
                   </div>
                   <h3 className="text-xl font-bold text-foreground">{doc.label || doc.name}</h3>
                   <p className="text-xs font-semibold text-primary mt-0.5">
-                    {doc.specialization?.join(", ") || "মেডিকেল কনসালট্যান্ট"}
+                    {doc.specialization?.join(", ") || t("doctor")}
                   </p>
                   <p className="text-xs text-muted-foreground mt-2">
-                    পদবি: {doc.designation || "এমবিবিএস, এফসিপিএস"}
+                    {doc.designation || "MBBS, FCPS"}
                   </p>
                 </div>
 
                 <div className="mt-6 pt-4 border-t flex items-center justify-between">
-                  <span className="text-xs text-muted-foreground">সিরিয়াল অনলাইন উপলভ্য</span>
+                  <span className="text-xs text-muted-foreground">{t("available_slots")}</span>
                   <button
                     onClick={() => navigate("/patient/appointments")}
                     className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-bold shadow transition"
                   >
-                    অ্যাপয়েন্টমেন্ট নিন
+                    {t("book_appointment")}
                     <ArrowRight className="h-3.5 w-3.5" />
                   </button>
                 </div>
@@ -255,7 +247,7 @@ export default function ClinicServicesPage() {
             ))
           ) : (
             <div className="col-span-full py-16 text-center text-muted-foreground bg-card border rounded-3xl">
-              কোনো ডাক্তার তালিকাভুক্ত নেই।
+              {t("no_doctors_available")}
             </div>
           )}
         </div>
@@ -267,23 +259,23 @@ export default function ClinicServicesPage() {
           <div className="bg-card border rounded-3xl max-w-md w-full p-6 shadow-2xl relative animate-in fade-in zoom-in-95">
             <h2 className="text-xl font-bold mb-2 flex items-center gap-2">
               <TestTube className="h-5 w-5 text-primary" />
-              টেস্ট বুকিং নিশ্চিত করুন
+              {t("confirm_test_booking")}
             </h2>
             <p className="text-xs text-muted-foreground mb-4">
-              আপনি অনলাইনে টেস্টের জন্য সিরিয়াল বুক করতে যাচ্ছেন:
+              {t("confirm_booking")}:
             </p>
 
             <div className="p-4 rounded-2xl bg-muted/50 border space-y-2 text-sm mb-4">
               <div className="flex justify-between font-bold">
-                <span>টেস্ট:</span>
+                <span>{t("selected_test")}:</span>
                 <span className="text-primary">{selectedTestToBook.name}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-muted-foreground">ক্যাটাগরি:</span>
+                <span className="text-muted-foreground">{t("category")}:</span>
                 <span>{selectedTestToBook.category}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-muted-foreground">ফি:</span>
+                <span className="text-muted-foreground">{t("test_fee")}:</span>
                 <span className="font-bold text-foreground">
                   ৳{selectedTestToBook.price.toLocaleString()}
                 </span>
@@ -296,7 +288,7 @@ export default function ClinicServicesPage() {
                 onClick={() => setSelectedTestToBook(null)}
                 className="px-4 py-2 rounded-xl border hover:bg-muted text-sm font-medium"
               >
-                বাতিল
+                {t("cancel")}
               </button>
               <button
                 type="button"
@@ -304,7 +296,7 @@ export default function ClinicServicesPage() {
                 disabled={isBookingTest}
                 className="px-5 py-2 rounded-xl bg-primary text-primary-foreground text-sm font-bold shadow hover:bg-primary/90 transition"
               >
-                বুকিং নিশ্চিত করুন
+                {t("confirm_booking")}
               </button>
             </div>
           </div>

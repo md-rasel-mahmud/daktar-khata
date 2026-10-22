@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { useTranslation } from "react-i18next"
 import {
   useGetServicesQuery,
   useCreateServiceMutation,
@@ -26,6 +27,7 @@ import {
 } from "lucide-react"
 
 export default function ManageServices() {
+  const { t } = useTranslation()
   const [activeTab, setActiveTab] = useState<"services" | "tests">("services")
   const [search, setSearch] = useState("")
 
@@ -71,7 +73,7 @@ export default function ManageServices() {
   const handleServiceSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!serviceForm.name || !serviceForm.price) {
-      toast.error("সার্ভিসের নাম ও মূল্য প্রদান আবশ্যক")
+      toast.error(t("service_name_price_req"))
       return
     }
 
@@ -87,10 +89,10 @@ export default function ManageServices() {
 
       if (editingService) {
         await updateService({ id: editingService._id, body: payload }).unwrap()
-        toast.success("সার্ভিস সফলভাবে আপডেট করা হয়েছে!")
+        toast.success(t("service_updated_success"))
       } else {
         await createService(payload).unwrap()
-        toast.success("নতুন সার্ভিস সফলভাবে যুক্ত করা হয়েছে!")
+        toast.success(t("service_created_success"))
       }
 
       setIsServiceModalOpen(false)
@@ -104,7 +106,7 @@ export default function ManageServices() {
         department: "General",
       })
     } catch (err: any) {
-      toast.error(err?.data?.message || "সার্ভিস সংরক্ষণ ব্যর্থ হয়েছে")
+      toast.error(err?.data?.message || t("failed"))
     }
   }
 
@@ -112,7 +114,7 @@ export default function ManageServices() {
   const handleTestSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!testForm.name || !testForm.price) {
-      toast.error("টেস্টের নাম ও মূল্য প্রদান আবশ্যক")
+      toast.error(t("test_name_price_req"))
       return
     }
 
@@ -129,10 +131,10 @@ export default function ManageServices() {
 
       if (editingTest) {
         await updateTest({ id: editingTest._id, body: payload }).unwrap()
-        toast.success("ডায়াগনস্টিক টেস্ট সফলভাবে আপডেট করা হয়েছে!")
+        toast.success(t("test_updated_success"))
       } else {
         await createTest(payload).unwrap()
-        toast.success("নতুন ডায়াগনস্টিক টেস্ট সফলভাবে যুক্ত করা হয়েছে!")
+        toast.success(t("test_created_success"))
       }
 
       setIsTestModalOpen(false)
@@ -147,27 +149,27 @@ export default function ManageServices() {
         preparationInstructions: "",
       })
     } catch (err: any) {
-      toast.error(err?.data?.message || "টেস্ট সংরক্ষণ ব্যর্থ হয়েছে")
+      toast.error(err?.data?.message || t("failed"))
     }
   }
 
   const handleDeleteService = async (id: string) => {
-    if (!confirm("আপনি কি নিশ্চিতভাবে এই সার্ভিসটি মুছে ফেলতে চান?")) return
+    if (!confirm(t("delete_confirm"))) return
     try {
       await deleteService(id).unwrap()
-      toast.success("সার্ভিস সফলভাবে মুছে ফেলা হয়েছে")
+      toast.success(t("deleted_success"))
     } catch {
-      toast.error("সার্ভিস মুছতে ব্যর্থ হয়েছে")
+      toast.error(t("failed"))
     }
   }
 
   const handleDeleteTest = async (id: string) => {
-    if (!confirm("আপনি কি নিশ্চিতভাবে এই ডায়াগনস্টিক টেস্টটি মুছে ফেলতে চান?")) return
+    if (!confirm(t("delete_confirm"))) return
     try {
       await deleteTest(id).unwrap()
-      toast.success("টেস্ট সফলভাবে মুছে ফেলা হয়েছে")
+      toast.success(t("deleted_success"))
     } catch {
-      toast.error("টেস্ট মুছতে ব্যর্থ হয়েছে")
+      toast.error(t("failed"))
     }
   }
 
@@ -203,11 +205,8 @@ export default function ManageServices() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">সার্ভিস ও টেস্ট ক্যাটালগ ম্যানেজমেন্ট</h1>
-          <p className="text-sm text-muted-foreground">
-            ক্লিনিকের সকল কনসালটেশন, নার্সিং সেবা, ইনজেকশন ও ডায়াগনস্টিক টেস্টের মূল্য তালিকা তৈরি ও
-            নিয়ন্ত্রণ করুন
-          </p>
+          <h1 className="text-2xl font-bold tracking-tight">{t("services_tests_catalog")}</h1>
+          <p className="text-sm text-muted-foreground">{t("services_tests_desc")}</p>
         </div>
 
         <button
@@ -240,7 +239,7 @@ export default function ManageServices() {
           className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-sm shadow transition"
         >
           <Plus className="h-4 w-4" />
-          {activeTab === "services" ? "নতুন ক্লিনিক্যাল সার্ভিস যুক্ত করুন" : "নতুন ডায়াগনস্টিক টেস্ট যুক্ত করুন"}
+          {activeTab === "services" ? t("add_service_btn") : t("add_test_btn")}
         </button>
       </div>
 
@@ -255,7 +254,7 @@ export default function ManageServices() {
           }`}
         >
           <Stethoscope className="h-4 w-4" />
-          ক্লিনিক্যাল সার্ভিসসমূহ ({services.length})
+          {t("services_tab")} ({services.length})
         </button>
         <button
           onClick={() => setActiveTab("tests")}
@@ -266,7 +265,7 @@ export default function ManageServices() {
           }`}
         >
           <TestTube className="h-4 w-4" />
-          ডায়াগনস্টিক টেস্ট ক্যাটালগ ({tests.length})
+          {t("tests_tab")} ({tests.length})
         </button>
       </div>
 
@@ -280,7 +279,7 @@ export default function ManageServices() {
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder="সার্ভিসের নাম লিখে খুঁজুন..."
+                placeholder={t("search_services_tests")}
                 className="w-full pl-9 pr-3 py-1.5 rounded-lg border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
               />
             </div>
@@ -290,13 +289,13 @@ export default function ManageServices() {
             <table className="w-full text-left text-sm">
               <thead className="bg-muted/40 text-muted-foreground uppercase text-xs font-semibold">
                 <tr>
-                  <th className="px-5 py-3">সার্ভিসের নাম</th>
-                  <th className="px-5 py-3">ক্যাটাগরি</th>
-                  <th className="px-5 py-3">বিভাগ</th>
-                  <th className="px-5 py-3">মূল্য (BDT)</th>
-                  <th className="px-5 py-3">সময়কাল</th>
-                  <th className="px-5 py-3">স্ট্যাটাস</th>
-                  <th className="px-5 py-3 text-right">অ্যাকশন</th>
+                  <th className="px-5 py-3">{t("name")}</th>
+                  <th className="px-5 py-3">{t("category_label")}</th>
+                  <th className="px-5 py-3">{t("department")}</th>
+                  <th className="px-5 py-3">{t("price")}</th>
+                  <th className="px-5 py-3">{t("duration_mins")}</th>
+                  <th className="px-5 py-3">{t("status")}</th>
+                  <th className="px-5 py-3 text-right">{t("actions")}</th>
                 </tr>
               </thead>
               <tbody className="divide-y">
@@ -323,16 +322,16 @@ export default function ManageServices() {
                         ৳{svc.price.toLocaleString()}
                       </td>
                       <td className="px-5 py-4 text-muted-foreground">
-                        {svc.durationMinutes ? `${svc.durationMinutes} মি.` : "—"}
+                        {svc.durationMinutes ? `${svc.durationMinutes} m` : "—"}
                       </td>
                       <td className="px-5 py-4">
                         {svc.isActive !== false ? (
                           <span className="inline-flex items-center gap-1 text-xs text-emerald-600 font-medium">
-                            <CheckCircle2 className="h-3.5 w-3.5" /> সক্রিয়
+                            <CheckCircle2 className="h-3.5 w-3.5" /> {t("active")}
                           </span>
                         ) : (
                           <span className="inline-flex items-center gap-1 text-xs text-muted-foreground font-medium">
-                            <XCircle className="h-3.5 w-3.5" /> নিষ্ক্রিয়
+                            <XCircle className="h-3.5 w-3.5" /> {t("inactive")}
                           </span>
                         )}
                       </td>
@@ -340,14 +339,14 @@ export default function ManageServices() {
                         <button
                           onClick={() => openEditServiceModal(svc)}
                           className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground"
-                          title="সম্পাদনা"
+                          title={t("edit")}
                         >
                           <Edit2 className="h-4 w-4" />
                         </button>
                         <button
                           onClick={() => handleDeleteService(svc._id)}
                           className="p-1.5 rounded-lg hover:bg-red-50 text-muted-foreground hover:text-red-600"
-                          title="মুছে ফেলুন"
+                          title={t("delete")}
                         >
                           <Trash2 className="h-4 w-4" />
                         </button>
@@ -357,7 +356,7 @@ export default function ManageServices() {
                 ) : (
                   <tr>
                     <td colSpan={7} className="text-center py-10 text-muted-foreground">
-                      কোনো সার্ভিস পাওয়া যায়নি। নতুন সার্ভিস যোগ করতে উপরের বাটনে চাপুন।
+                      {t("no_services_found")}
                     </td>
                   </tr>
                 )}
@@ -374,13 +373,13 @@ export default function ManageServices() {
             <table className="w-full text-left text-sm">
               <thead className="bg-muted/40 text-muted-foreground uppercase text-xs font-semibold">
                 <tr>
-                  <th className="px-5 py-3">টেস্টের নাম</th>
-                  <th className="px-5 py-3">ক্যাটাগরি</th>
-                  <th className="px-5 py-3">স্যাম্পল টাইপ</th>
-                  <th className="px-5 py-3">মূল্য (BDT)</th>
-                  <th className="px-5 py-3">রিপোর্ট ডেলিভারি</th>
-                  <th className="px-5 py-3">স্ট্যাটাস</th>
-                  <th className="px-5 py-3 text-right">অ্যাকশন</th>
+                  <th className="px-5 py-3">{t("name")}</th>
+                  <th className="px-5 py-3">{t("category_label")}</th>
+                  <th className="px-5 py-3">{t("sample_type")}</th>
+                  <th className="px-5 py-3">{t("price")}</th>
+                  <th className="px-5 py-3">{t("turnaround_time")}</th>
+                  <th className="px-5 py-3">{t("status")}</th>
+                  <th className="px-5 py-3 text-right">{t("actions")}</th>
                 </tr>
               </thead>
               <tbody className="divide-y">
@@ -407,16 +406,16 @@ export default function ManageServices() {
                         ৳{test.price.toLocaleString()}
                       </td>
                       <td className="px-5 py-4 text-muted-foreground">
-                        ~{test.turnaroundHours ?? 24} ঘণ্টা
+                        ~{test.turnaroundHours ?? 24} h
                       </td>
                       <td className="px-5 py-4">
                         {test.isActive !== false ? (
                           <span className="inline-flex items-center gap-1 text-xs text-emerald-600 font-medium">
-                            <CheckCircle2 className="h-3.5 w-3.5" /> সক্রিয়
+                            <CheckCircle2 className="h-3.5 w-3.5" /> {t("active")}
                           </span>
                         ) : (
                           <span className="inline-flex items-center gap-1 text-xs text-muted-foreground font-medium">
-                            <XCircle className="h-3.5 w-3.5" /> নিষ্ক্রিয়
+                            <XCircle className="h-3.5 w-3.5" /> {t("inactive")}
                           </span>
                         )}
                       </td>
@@ -424,14 +423,14 @@ export default function ManageServices() {
                         <button
                           onClick={() => openEditTestModal(test)}
                           className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground"
-                          title="সম্পাদনা"
+                          title={t("edit")}
                         >
                           <Edit2 className="h-4 w-4" />
                         </button>
                         <button
                           onClick={() => handleDeleteTest(test._id)}
                           className="p-1.5 rounded-lg hover:bg-red-50 text-muted-foreground hover:text-red-600"
-                          title="মুছে ফেলুন"
+                          title={t("delete")}
                         >
                           <Trash2 className="h-4 w-4" />
                         </button>
@@ -441,7 +440,7 @@ export default function ManageServices() {
                 ) : (
                   <tr>
                     <td colSpan={7} className="text-center py-10 text-muted-foreground">
-                      কোনো টেস্ট পাওয়া যায়নি। নতুন টেস্ট যোগ করতে উপরের বাটনে চাপুন।
+                      {t("no_tests_in_catalog")}
                     </td>
                   </tr>
                 )}
@@ -456,48 +455,48 @@ export default function ManageServices() {
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-card border rounded-3xl max-w-lg w-full p-6 shadow-2xl relative animate-in fade-in zoom-in-95">
             <h2 className="text-xl font-bold mb-4">
-              {editingService ? "সার্ভিস সম্পাদনা করুন" : "নতুন ক্লিনিক্যাল সার্ভিস যুক্ত করুন"}
+              {editingService ? t("edit") : t("add_service_btn")}
             </h2>
             <form onSubmit={handleServiceSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold mb-1">সার্ভিসের নাম *</label>
+                <label className="block text-xs font-semibold mb-1">{t("name")} *</label>
                 <input
                   type="text"
                   required
                   value={serviceForm.name}
                   onChange={(e) => setServiceForm({ ...serviceForm, name: e.target.value })}
-                  placeholder="যেমন: ডক্টর কনসালটেশন ফি / ইনজেকশন প্রয়োগ ফি"
+                  placeholder="Doctor Consultation Fee / Injection Setup"
                   className="w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold mb-1">ক্যাটাগরি</label>
+                  <label className="block text-xs font-semibold mb-1">{t("category_label")}</label>
                   <select
                     value={serviceForm.category}
                     onChange={(e) => setServiceForm({ ...serviceForm, category: e.target.value })}
                     className="w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                   >
-                    <option value="CONSULTATION">CONSULTATION (ডাক্তার ফি)</option>
-                    <option value="NURSING">NURSING (নার্সিং সেবা)</option>
-                    <option value="BED">BED (বেড চার্জ)</option>
-                    <option value="OPERATION">OPERATION (অপারেশন ফি)</option>
-                    <option value="MEDICINE">MEDICINE (ওষুধ)</option>
-                    <option value="MEDICAL_SUPPLY">MEDICAL_SUPPLY (চিকিৎসা সরঞ্জাম)</option>
-                    <option value="SERVICE">SERVICE (অন্যান্য সেবা)</option>
+                    <option value="CONSULTATION">CONSULTATION</option>
+                    <option value="NURSING">NURSING</option>
+                    <option value="BED">BED</option>
+                    <option value="OPERATION">OPERATION</option>
+                    <option value="MEDICINE">MEDICINE</option>
+                    <option value="MEDICAL_SUPPLY">MEDICAL SUPPLY</option>
+                    <option value="SERVICE">SERVICE</option>
                   </select>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold mb-1">মূল্য (BDT) *</label>
+                  <label className="block text-xs font-semibold mb-1">{t("price")} *</label>
                   <input
                     type="number"
                     required
                     min="0"
                     value={serviceForm.price}
                     onChange={(e) => setServiceForm({ ...serviceForm, price: e.target.value })}
-                    placeholder="৳ মূল্য"
+                    placeholder="৳"
                     className="w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>
@@ -505,18 +504,18 @@ export default function ManageServices() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold mb-1">বিভাগ / ডিপার্টমেন্ট</label>
+                  <label className="block text-xs font-semibold mb-1">{t("department")}</label>
                   <input
                     type="text"
                     value={serviceForm.department}
                     onChange={(e) => setServiceForm({ ...serviceForm, department: e.target.value })}
-                    placeholder="যেমন: General, Dental, OPD"
+                    placeholder="General, Dental, OPD"
                     className="w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold mb-1">সময়কাল (মিনিট)</label>
+                  <label className="block text-xs font-semibold mb-1">{t("duration_mins")}</label>
                   <input
                     type="number"
                     value={serviceForm.durationMinutes}
@@ -530,12 +529,12 @@ export default function ManageServices() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold mb-1">বিবরণ</label>
+                <label className="block text-xs font-semibold mb-1">{t("description")}</label>
                 <textarea
                   rows={2}
                   value={serviceForm.description}
                   onChange={(e) => setServiceForm({ ...serviceForm, description: e.target.value })}
-                  placeholder="সার্ভিস সংক্রান্ত নির্দেশনা বা বিবরণ..."
+                  placeholder="..."
                   className="w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                 />
               </div>
@@ -546,14 +545,14 @@ export default function ManageServices() {
                   onClick={() => setIsServiceModalOpen(false)}
                   className="px-4 py-2 rounded-xl border hover:bg-muted text-sm font-medium"
                 >
-                  বাতিল
+                  {t("cancel")}
                 </button>
                 <button
                   type="submit"
                   disabled={isCreatingService || isUpdatingService}
                   className="px-5 py-2 rounded-xl bg-primary text-primary-foreground text-sm font-bold shadow hover:bg-primary/90 transition"
                 >
-                  সংরক্ষণ করুন
+                  {t("save")}
                 </button>
               </div>
             </form>
@@ -566,46 +565,46 @@ export default function ManageServices() {
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-card border rounded-3xl max-w-lg w-full p-6 shadow-2xl relative animate-in fade-in zoom-in-95">
             <h2 className="text-xl font-bold mb-4">
-              {editingTest ? "ডায়াগনস্টিক টেস্ট সম্পাদনা করুন" : "নতুন ডায়াগনস্টিক টেস্ট যুক্ত করুন"}
+              {editingTest ? t("edit") : t("add_test_btn")}
             </h2>
             <form onSubmit={handleTestSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold mb-1">টেস্টের নাম *</label>
+                <label className="block text-xs font-semibold mb-1">{t("name")} *</label>
                 <input
                   type="text"
                   required
                   value={testForm.name}
                   onChange={(e) => setTestForm({ ...testForm, name: e.target.value })}
-                  placeholder="যেমন: Ultrasonography Whole Abdomen / CBC"
+                  placeholder="Ultrasonography Whole Abdomen / CBC"
                   className="w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold mb-1">ক্যাটাগরি</label>
+                  <label className="block text-xs font-semibold mb-1">{t("category_label")}</label>
                   <select
                     value={testForm.category}
                     onChange={(e) => setTestForm({ ...testForm, category: e.target.value })}
                     className="w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                   >
-                    <option value="RADIOLOGY">RADIOLOGY (আল্ট্রাসনোগ্রাফি, এক্স-রে)</option>
-                    <option value="PATHOLOGY">PATHOLOGY (রক্ত, ইউরিন পরীক্ষা)</option>
-                    <option value="CARDIOLOGY">CARDIOLOGY (ইসিজি, ইকো)</option>
-                    <option value="BIOCHEMISTRY">BIOCHEMISTRY (বায়োকেমিস্ট্রি)</option>
-                    <option value="OTHER">OTHER (অন্যান্য)</option>
+                    <option value="RADIOLOGY">RADIOLOGY</option>
+                    <option value="PATHOLOGY">PATHOLOGY</option>
+                    <option value="CARDIOLOGY">CARDIOLOGY</option>
+                    <option value="BIOCHEMISTRY">BIOCHEMISTRY</option>
+                    <option value="OTHER">OTHER</option>
                   </select>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold mb-1">মূল্য (BDT) *</label>
+                  <label className="block text-xs font-semibold mb-1">{t("price")} *</label>
                   <input
                     type="number"
                     required
                     min="0"
                     value={testForm.price}
                     onChange={(e) => setTestForm({ ...testForm, price: e.target.value })}
-                    placeholder="৳ টেস্ট ফি"
+                    placeholder="৳"
                     className="w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>
@@ -613,7 +612,7 @@ export default function ManageServices() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold mb-1">স্যাম্পল টাইপ</label>
+                  <label className="block text-xs font-semibold mb-1">{t("sample_type")}</label>
                   <input
                     type="text"
                     value={testForm.sampleType}
@@ -624,7 +623,7 @@ export default function ManageServices() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold mb-1">ডেলিভারি সময় (ঘণ্টা)</label>
+                  <label className="block text-xs font-semibold mb-1">{t("turnaround_time")}</label>
                   <input
                     type="number"
                     value={testForm.turnaroundHours}
@@ -636,14 +635,14 @@ export default function ManageServices() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold mb-1">প্রস্তুতি নির্দেশনা</label>
+                <label className="block text-xs font-semibold mb-1">{t("instructions")}</label>
                 <input
                   type="text"
                   value={testForm.preparationInstructions}
                   onChange={(e) =>
                     setTestForm({ ...testForm, preparationInstructions: e.target.value })
                   }
-                  placeholder="যেমন: খালি পেটে আসতে হবে / পানি পান করে মূত্রাশয় পূর্ণ রাখতে হবে"
+                  placeholder="..."
                   className="w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                 />
               </div>
@@ -654,14 +653,14 @@ export default function ManageServices() {
                   onClick={() => setIsTestModalOpen(false)}
                   className="px-4 py-2 rounded-xl border hover:bg-muted text-sm font-medium"
                 >
-                  বাতিল
+                  {t("cancel")}
                 </button>
                 <button
                   type="submit"
                   disabled={isCreatingTest || isUpdatingTest}
                   className="px-5 py-2 rounded-xl bg-primary text-primary-foreground text-sm font-bold shadow hover:bg-primary/90 transition"
                 >
-                  সংরক্ষণ করুন
+                  {t("save")}
                 </button>
               </div>
             </form>
