@@ -78,11 +78,15 @@ export default function ManageServices() {
     }
 
     try {
+      const priceVal = parseFloat(serviceForm.price) || 0
+      const durationVal = parseInt(serviceForm.durationMinutes) || 15
       const payload: any = {
         name: serviceForm.name,
         category: serviceForm.category,
-        price: parseFloat(serviceForm.price),
-        durationMinutes: parseInt(serviceForm.durationMinutes) || 15,
+        defaultPrice: priceVal,
+        price: priceVal,
+        serviceDuration: durationVal,
+        durationMinutes: durationVal,
         description: serviceForm.description,
         department: serviceForm.department,
       }
@@ -175,11 +179,13 @@ export default function ManageServices() {
 
   const openEditServiceModal = (item: ServiceItem) => {
     setEditingService(item)
+    const priceVal = item.defaultPrice ?? item.price ?? 0
+    const durationVal = item.serviceDuration ?? item.durationMinutes ?? 15
     setServiceForm({
       name: item.name,
       category: item.category || "CONSULTATION",
-      price: item.price.toString(),
-      durationMinutes: item.durationMinutes?.toString() || "15",
+      price: priceVal.toString(),
+      durationMinutes: durationVal.toString(),
       description: item.description || "",
       department: item.department || "General",
     })
@@ -319,10 +325,10 @@ export default function ManageServices() {
                         {svc.department || "General"}
                       </td>
                       <td className="px-5 py-4 font-bold text-foreground">
-                        ৳{svc.price.toLocaleString()}
+                        ৳{(svc.defaultPrice ?? svc.price ?? 0).toLocaleString()}
                       </td>
                       <td className="px-5 py-4 text-muted-foreground">
-                        {svc.durationMinutes ? `${svc.durationMinutes} m` : "—"}
+                        {(svc.serviceDuration ?? svc.durationMinutes) ? `${svc.serviceDuration ?? svc.durationMinutes} m` : "—"}
                       </td>
                       <td className="px-5 py-4">
                         {svc.isActive !== false ? (

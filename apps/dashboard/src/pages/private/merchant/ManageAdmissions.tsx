@@ -6,6 +6,7 @@ import {
   useDischargePatientMutation,
   useAddAdmissionDailyChargeMutation,
   useGetWardsQuery,
+  useCreateWardMutation,
   useGetRoomsQuery,
   useGetBedsQuery,
 } from "@/lib/store/api/services/admission.service"
@@ -26,6 +27,7 @@ import {
   Stethoscope,
   Clock,
   Layers,
+  Building,
 } from "lucide-react"
 
 export default function ManageAdmissions() {
@@ -71,7 +73,7 @@ export default function ManageAdmissions() {
   const { data: doctorsData } = useGetDoctorOptionsQuery(undefined)
   const doctorsList = Array.isArray(doctorsData) ? doctorsData : (doctorsData as any)?.data || []
 
-  const { data: wards = [] } = useGetWardsQuery()
+  const { data: wards = [], refetch: refetchWards } = useGetWardsQuery()
   const { data: rooms = [] } = useGetRoomsQuery(
     admissionForm.ward ? { wardId: admissionForm.ward } : undefined
   )
@@ -86,6 +88,29 @@ export default function ManageAdmissions() {
   const [createAdmission, { isLoading: isCreatingAdmission }] = useCreateAdmissionMutation()
   const [dischargePatient, { isLoading: isDischarging }] = useDischargePatientMutation()
   const [addDailyCharge, { isLoading: isAddingCharge }] = useAddAdmissionDailyChargeMutation()
+  const [createWard, { isLoading: isCreatingWard }] = useCreateWardMutation()
+
+  const [isQuickWardModalOpen, setIsQuickWardModalOpen] = useState(false)
+  const [quickWardName, setQuickWardName] = useState("")
+
+  const handleQuickWardCreate = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!quickWardName.trim()) {
+      toast.error(t("ward_name_req"))
+      return
+    }
+
+    try {
+      const newWard = await createWard({ name: quickWardName.trim() }).unwrap()
+      toast.success(t("ward_created_success"))
+      setAdmissionForm((prev) => ({ ...prev, ward: (newWard as any)._id || "" }))
+      setQuickWardName("")
+      setIsQuickWardModalOpen(false)
+      refetchWards()
+    } catch (err: any) {
+      toast.error(err?.data?.message || t("failed_to_update"))
+    }
+  }
 
   // Handle Admission Submit
   const handleAdmissionSubmit = async (e: React.FormEvent) => {
@@ -383,7 +408,16 @@ export default function ManageAdmissions() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold mb-1">{t("ward")}</label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-xs font-semibold">{t("ward")}</label>
+                    <button
+                      type="button"
+                      onClick={() => setIsQuickWardModalOpen(true)}
+                      className="text-[11px] text-primary font-semibold hover:underline"
+                    >
+                      {t("quick_add_ward")}
+                    </button>
+                  </div>
                   <select
                     value={admissionForm.ward}
                     onChange={(e) =>
@@ -608,6 +642,49 @@ export default function ManageAdmissions() {
                   className="px-5 py-2 rounded-xl bg-red-600 text-white text-sm font-bold shadow hover:bg-red-500 transition"
                 >
                   {t("confirm_discharge")}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: QUICK ADD WARD */}
+      {isQuickWardModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-card border rounded-3xl max-w-sm w-full p-6 shadow-2xl relative animate-in fade-in zoom-in-95">
+            <h2 className="text-lg font-bold mb-3 flex items-center gap-2">
+              <Building className="h-5 w-5 text-primary" />
+              {t("new_ward_btn")}
+            </h2>
+            <form onSubmit={handleQuickWardCreate} className="space-y-4">
+              <div>
+                <label className="block text-xs font-semibold mb-1">{t("ward_name_req")}</label>
+                <input
+                  type="text"
+                  required
+                  autoFocus
+                  value={quickWardName}
+                  onChange={(e) => setQuickWardName(e.target.value)}
+                  placeholder={t("ward_name_ph")}
+                  className="w-full px-3 py-2 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+              </div>
+
+              <div className="flex items-center justify-end gap-2 pt-2 border-t">
+                <button
+                  type="button"
+                  onClick={() => setIsQuickWardModalOpen(false)}
+                  className="px-3.5 py-1.5 rounded-xl border hover:bg-muted text-xs font-medium"
+                >
+                  {t("cancel")}
+                </button>
+                <button
+                  type="submit"
+                  disabled={isCreatingWard}
+                  className="px-4 py-1.5 rounded-xl bg-primary text-primary-foreground text-xs font-bold shadow hover:bg-primary/90 transition"
+                >
+                  {t("submit")}
                 </button>
               </div>
             </form>

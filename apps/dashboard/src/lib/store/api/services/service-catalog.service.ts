@@ -5,7 +5,9 @@ export interface ServiceItem {
   name: string
   category: string
   description?: string
-  price: number
+  defaultPrice?: number
+  price?: number
+  serviceDuration?: number
   durationMinutes?: number
   department?: string
   isActive: boolean

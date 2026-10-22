@@ -140,6 +140,23 @@ export const admissionApi = api.injectEndpoints({
       invalidatesTags: ["Beds"],
     }),
 
+    updateWard: builder.mutation<WardItem, { id: string; body: Partial<WardItem> }>({
+      query: ({ id, body }) => ({
+        url: `ward/${id}`,
+        method: "PUT",
+        body,
+      }),
+      invalidatesTags: ["Beds"],
+    }),
+
+    deleteWard: builder.mutation<any, string>({
+      query: (id) => ({
+        url: `ward/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Beds"],
+    }),
+
     getRooms: builder.query<RoomItem[], { wardId?: string; merchantId?: string } | void>({
       query: (arg) => {
         const params = (typeof arg === "object" && arg !== null ? arg : {}) as { wardId?: string; merchantId?: string }
@@ -158,6 +175,23 @@ export const admissionApi = api.injectEndpoints({
         url: "room",
         method: "POST",
         body,
+      }),
+      invalidatesTags: ["Beds"],
+    }),
+
+    updateRoom: builder.mutation<RoomItem, { id: string; body: any }>({
+      query: ({ id, body }) => ({
+        url: `room/${id}`,
+        method: "PUT",
+        body,
+      }),
+      invalidatesTags: ["Beds"],
+    }),
+
+    deleteRoom: builder.mutation<any, string>({
+      query: (id) => ({
+        url: `room/${id}`,
+        method: "DELETE",
       }),
       invalidatesTags: ["Beds"],
     }),
@@ -182,6 +216,14 @@ export const admissionApi = api.injectEndpoints({
         url: "bed",
         method: "POST",
         body,
+      }),
+      invalidatesTags: ["Beds"],
+    }),
+
+    deleteBed: builder.mutation<any, string>({
+      query: (id) => ({
+        url: `bed/${id}`,
+        method: "DELETE",
       }),
       invalidatesTags: ["Beds"],
     }),
@@ -215,10 +257,15 @@ export const {
   useGetAdmissionInvoiceQuery,
   useGetWardsQuery,
   useCreateWardMutation,
+  useUpdateWardMutation,
+  useDeleteWardMutation,
   useGetRoomsQuery,
   useCreateRoomMutation,
+  useUpdateRoomMutation,
+  useDeleteRoomMutation,
   useGetBedsQuery,
   useCreateBedMutation,
+  useDeleteBedMutation,
   useUpdateBedStatusMutation,
   useGetBedAvailabilitySummaryQuery,
 } = admissionApi
