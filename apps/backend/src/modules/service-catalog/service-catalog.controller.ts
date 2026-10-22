@@ -37,6 +37,7 @@ export class ServiceCatalogController {
 
   @Get()
   @Roles(
+    RolesEnum.PATIENT,
     RolesEnum.DOCTOR,
     RolesEnum.STAFF,
     RolesEnum.MERCHANT,
@@ -49,7 +50,7 @@ export class ServiceCatalogController {
     @Query("category") category?: ServiceCategory,
     @Query("search") search?: string,
   ) {
-    const targetMerchant = user.merchant
+    const targetMerchant = user?.merchant
       ? user.merchant.toString()
       : merchantId;
     return this.serviceCatalogService.findAll(targetMerchant, category, search);
@@ -57,6 +58,7 @@ export class ServiceCatalogController {
 
   @Get(":id")
   @Roles(
+    RolesEnum.PATIENT,
     RolesEnum.DOCTOR,
     RolesEnum.STAFF,
     RolesEnum.MERCHANT,

@@ -33,6 +33,7 @@ export class TestCatalogController {
 
   @Get()
   @Roles(
+    RolesEnum.PATIENT,
     RolesEnum.DOCTOR,
     RolesEnum.STAFF,
     RolesEnum.MERCHANT,
@@ -45,6 +46,7 @@ export class TestCatalogController {
 
   @Get(":id")
   @Roles(
+    RolesEnum.PATIENT,
     RolesEnum.DOCTOR,
     RolesEnum.STAFF,
     RolesEnum.MERCHANT,

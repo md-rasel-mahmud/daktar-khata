@@ -482,4 +482,21 @@ export class AppointmentQueueService {
       // Realtime is best-effort; clients also poll.
     }
   }
+
+  /** Snapshot of all active doctor queues for central multi-board TV. */
+  async getMultiSummary(merchantId?: string) {
+    const { start, end } = this.todayRange();
+    const filter: any = {
+      appointmentDate: { $gte: start, $lte: end },
+      status: { $nin: [AppointmentStatus.CANCELLED] },
+    };
+    if (merchantId && Types.ObjectId.isValid(merchantId)) {
+      filter.merchant = new Types.ObjectId(merchantId);
+    }
+    const doctorIds = await this.appointmentModel.distinct("doctor", filter);
+    const snapshots = await Promise.all(
+      doctorIds.map((id) => this.getPublicSnapshot(id.toString()).catch(() => null)),
+    );
+    return snapshots.filter(Boolean);
+  }
 }

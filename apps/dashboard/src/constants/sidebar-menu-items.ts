@@ -12,6 +12,11 @@ import {
   BookOpen,
   MessageSquare,
   LayoutTemplate,
+  Tv,
+  Bed,
+  Stethoscope,
+  FlaskConical,
+  ListOrdered,
 } from "lucide-react"
 
 export const sidebarMenuItems = [
@@ -49,6 +54,51 @@ export const sidebarMenuItems = [
     path: "/merchant/appointments",
     icon: Calendar,
     label: "Appointments",
+    roles: [
+      RolesEnum.MERCHANT,
+      RolesEnum.STAFF,
+    ],
+  },
+  {
+    path: "/merchant/queue",
+    icon: Tv,
+    label: "Live Queue & TV",
+    roles: [
+      RolesEnum.MERCHANT,
+      RolesEnum.STAFF,
+    ],
+  },
+  {
+    path: "/merchant/diagnostics",
+    icon: FlaskConical,
+    label: "Diagnostics Billing",
+    roles: [
+      RolesEnum.MERCHANT,
+      RolesEnum.STAFF,
+    ],
+  },
+  {
+    path: "/merchant/admissions",
+    icon: Bed,
+    label: "Patient Admissions",
+    roles: [
+      RolesEnum.MERCHANT,
+      RolesEnum.STAFF,
+    ],
+  },
+  {
+    path: "/merchant/beds",
+    icon: Bed,
+    label: "Bed Matrix",
+    roles: [
+      RolesEnum.MERCHANT,
+      RolesEnum.STAFF,
+    ],
+  },
+  {
+    path: "/merchant/services",
+    icon: Stethoscope,
+    label: "Services & Tests",
     roles: [
       RolesEnum.MERCHANT,
       RolesEnum.STAFF,
@@ -236,6 +286,12 @@ export const sidebarMenuItems = [
     label: "Appointments",
     roles: [RolesEnum.DOCTOR],
   },
+  {
+    path: "/doctor/queue",
+    icon: ListOrdered,
+    label: "Chamber Queue",
+    roles: [RolesEnum.DOCTOR],
+  },
 
   {
     path: "/patient",
@@ -253,6 +309,12 @@ export const sidebarMenuItems = [
     path: "/patient/records",
     icon: FileText,
     label: "Medical Records",
+    roles: [RolesEnum.PATIENT],
+  },
+  {
+    path: "/patient/services",
+    icon: Stethoscope,
+    label: "Clinic Services & Beds",
     roles: [RolesEnum.PATIENT],
   },
   {

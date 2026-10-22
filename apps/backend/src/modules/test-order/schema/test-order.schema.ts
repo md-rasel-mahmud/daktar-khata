@@ -31,11 +31,23 @@ export const TestOrderItemSchema = SchemaFactory.createForClass(TestOrderItem);
 
 @Schema({ timestamps: true, versionKey: false })
 export class TestOrder {
+  @Prop({ type: String, unique: true, sparse: true, trim: true })
+  orderNumber?: string;
+
+  @Prop({ type: Number })
+  tokenNumber?: number;
+
   @Prop({ type: Types.ObjectId, ref: collectionsName.patient, required: true })
   patient: Types.ObjectId;
 
-  @Prop({ type: Types.ObjectId, ref: collectionsName.doctor, required: true })
-  doctor: Types.ObjectId;
+  @Prop({ type: Types.ObjectId, ref: collectionsName.doctor, required: false })
+  doctor?: Types.ObjectId;
+
+  @Prop({ type: String, trim: true })
+  referringDoctorName?: string;
+
+  @Prop({ type: Boolean, default: false })
+  isWalkIn: boolean;
 
   @Prop({ type: Types.ObjectId, ref: collectionsName.encounter })
   encounter?: Types.ObjectId;

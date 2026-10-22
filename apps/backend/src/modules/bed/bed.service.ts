@@ -67,4 +67,37 @@ export class BedService {
     if (!bed) throw new NotFoundException("Bed not found");
     return bed;
   }
+
+  async getAvailabilitySummary(merchantId?: string) {
+    const filter: any = {};
+    if (merchantId && Types.ObjectId.isValid(merchantId)) {
+      filter.merchant = new Types.ObjectId(merchantId);
+    }
+    const beds = await this.bedModel.find(filter).populate("ward", "name").lean();
+    const total = beds.length;
+    const available = beds.filter((b) => b.status === BedStatus.AVAILABLE).length;
+    const occupied = beds.filter((b) => b.status === BedStatus.OCCUPIED).length;
+    const cleaning = beds.filter((b) => (b.status as any) === "CLEANING").length;
+    const maintenance = beds.filter((b) => b.status === BedStatus.MAINTENANCE).length;
+
+    // Ward-wise breakdown
+    const wardMap: Record<string, { wardName: string; total: number; available: number }> = {};
+    for (const b of beds) {
+      const wardName = (b.ward as any)?.name || "General Ward";
+      if (!wardMap[wardName]) {
+        wardMap[wardName] = { wardName, total: 0, available: 0 };
+      }
+      wardMap[wardName].total++;
+      if (b.status === BedStatus.AVAILABLE) wardMap[wardName].available++;
+    }
+
+    return {
+      total,
+      available,
+      occupied,
+      cleaning,
+      maintenance,
+      wards: Object.values(wardMap),
+    };
+  }
 }

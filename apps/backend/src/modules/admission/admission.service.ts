@@ -13,6 +13,8 @@ import { AdmissionStatus, BedStatus } from "../../constant/enums/status.enum";
 import { DoctorService } from "../doctor/doctor.service";
 import { BedDocument } from "../bed/schema/bed.schema";
 import { BedAllocationDocument } from "../bed-allocation/schema/bed-allocation.schema";
+import { InvoiceDocument } from "../invoice/schema/invoice.schema";
+import { InvoiceStatus } from "../../constant/enums/status.enum";
 
 @Injectable()
 export class AdmissionService {
@@ -23,12 +25,25 @@ export class AdmissionService {
     private readonly bedModel: Model<BedDocument>,
     @InjectModel(collectionsName.bedAllocation)
     private readonly allocationModel: Model<BedAllocationDocument>,
+    @InjectModel(collectionsName.invoice)
+    private readonly invoiceModel: Model<InvoiceDocument>,
     @InjectConnection() private readonly connection: Connection,
     private readonly doctorService: DoctorService,
   ) {}
 
-  async create(dto: CreateAdmissionDto, userId: Types.ObjectId) {
-    const doctor = await this.doctorService.findOne(dto.doctor);
+  async create(dto: CreateAdmissionDto, userId: Types.ObjectId, merchantId?: Types.ObjectId) {
+    let targetMerchant = merchantId;
+    let doctorDoc: any = null;
+
+    if (dto.doctor && Types.ObjectId.isValid(dto.doctor)) {
+      doctorDoc = await this.doctorService.findOne(dto.doctor);
+      if (doctorDoc?.merchant) targetMerchant = doctorDoc.merchant;
+    }
+
+    if (!targetMerchant) {
+      throw new BadRequestException("Merchant ID is required for admission");
+    }
+
     const session = await this.connection.startSession();
 
     try {
@@ -36,9 +51,9 @@ export class AdmissionService {
 
       const admissionData: any = {
         ...dto,
-        merchant: doctor.merchant,
+        merchant: targetMerchant,
         patient: new Types.ObjectId(dto.patient),
-        doctor: doctor._id,
+        doctor: doctorDoc ? doctorDoc._id : null,
         status: AdmissionStatus.ADMITTED,
       };
 
@@ -70,7 +85,7 @@ export class AdmissionService {
               bed: bed._id,
               patient: new Types.ObjectId(dto.patient),
               admission: admission._id,
-              merchant: doctor.merchant,
+              merchant: targetMerchant,
               allocatedBy: userId,
             },
           ],
@@ -175,5 +190,79 @@ export class AdmissionService {
     } finally {
       session.endSession();
     }
+  }
+
+  async addDailyCharge(
+    admissionId: string,
+    dto: {
+      serviceName: string;
+      category?: string;
+      quantity?: number;
+      unitPrice: number;
+      notes?: string;
+    },
+    userId: Types.ObjectId,
+  ) {
+    const admission = await this.admissionModel.findById(new Types.ObjectId(admissionId));
+    if (!admission) throw new NotFoundException("Admission not found");
+    if (admission.status === AdmissionStatus.DISCHARGED) {
+      throw new BadRequestException("Cannot add charges to discharged admission");
+    }
+
+    const qty = dto.quantity || 1;
+    const price = dto.unitPrice || 0;
+    const lineItemTotal = qty * price;
+
+    let invoice = await this.invoiceModel.findOne({
+      admission: admission._id,
+      status: { $ne: InvoiceStatus.CANCELLED },
+    });
+
+    if (!invoice) {
+      const invoiceNumber = `INV-ADM-${Date.now().toString(36).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`;
+      invoice = new this.invoiceModel({
+        invoiceNumber,
+        patient: admission.patient,
+        doctor: admission.doctor || null,
+        admission: admission._id,
+        merchant: admission.merchant,
+        status: InvoiceStatus.ISSUED,
+        issuedDate: new Date(),
+        lineItems: [],
+        subtotal: 0,
+        totalDiscount: 0,
+        totalTax: 0,
+        grandTotal: 0,
+        paidAmount: 0,
+        dueAmount: 0,
+      });
+    }
+
+    invoice.lineItems.push({
+      serviceName: dto.serviceName,
+      category: (dto.category as any) || "NURSING",
+      quantity: qty,
+      unitPrice: price,
+      discount: 0,
+      tax: 0,
+      total: lineItemTotal,
+    });
+
+    invoice.subtotal = invoice.lineItems.reduce((s, itm) => s + itm.total, 0);
+    invoice.grandTotal = invoice.subtotal;
+    invoice.dueAmount = Math.max(0, invoice.grandTotal - (invoice.paidAmount || 0));
+    await invoice.save();
+
+    return {
+      message: "Daily charge added to admission invoice",
+      invoice,
+    };
+  }
+
+  async getAdmissionInvoice(admissionId: string) {
+    return this.invoiceModel.findOne({
+      admission: new Types.ObjectId(admissionId),
+      status: { $ne: InvoiceStatus.CANCELLED },
+    });
   }
 }

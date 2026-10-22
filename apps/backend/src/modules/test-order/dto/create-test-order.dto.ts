@@ -38,10 +38,24 @@ export class CreateTestOrderDto {
   @IsMongoId()
   patient: string;
 
-  @ApiProperty()
-  @IsNotEmpty()
+  @ApiPropertyOptional()
+  @IsOptional()
   @IsMongoId()
-  doctor: string;
+  doctor?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  referringDoctorName?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  isWalkIn?: boolean;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsMongoId()
+  merchant?: string;
 
   @ApiPropertyOptional()
   @IsOptional()

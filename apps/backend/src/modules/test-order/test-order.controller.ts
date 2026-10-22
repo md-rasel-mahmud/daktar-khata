@@ -5,6 +5,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   BadRequestException,
 } from "@nestjs/common";
 import { TestOrderService } from "./test-order.service";
@@ -16,14 +17,66 @@ import { Types } from "mongoose";
 import { Roles } from "../../common/decorators/roles.decorator";
 import { IAuthUser } from "../../common";
 
+import { Public } from "../../common";
+
 @Controller("test-order")
 export class TestOrderController {
   constructor(private readonly testOrderService: TestOrderService) {}
 
   @Post()
-  @Roles(RolesEnum.DOCTOR, RolesEnum.ADMIN, RolesEnum.SUPER_ADMIN)
+  @Roles(
+    RolesEnum.PATIENT,
+    RolesEnum.DOCTOR,
+    RolesEnum.STAFF,
+    RolesEnum.MERCHANT,
+    RolesEnum.ADMIN,
+    RolesEnum.SUPER_ADMIN,
+  )
   async create(@AuthUser() user: IAuthUser, @Body() dto: CreateTestOrderDto) {
-    return this.testOrderService.create(dto);
+    const merchantId = user.merchant ? new Types.ObjectId(user.merchant) : undefined;
+    return this.testOrderService.create(dto, merchantId);
+  }
+
+  @Get()
+  @Roles(
+    RolesEnum.STAFF,
+    RolesEnum.MERCHANT,
+    RolesEnum.DOCTOR,
+    RolesEnum.ADMIN,
+    RolesEnum.SUPER_ADMIN,
+  )
+  async findAll(
+    @AuthUser() user: IAuthUser,
+    @Query("merchant") merchantId?: string,
+    @Query("status") status?: string,
+  ) {
+    const targetMerchant = user.merchant ? user.merchant.toString() : merchantId;
+    return this.testOrderService.findAll(targetMerchant, status);
+  }
+
+  @Public()
+  @Get("queue/public/:station")
+  async getPublicStationSnapshot(
+    @Param("station") station: string,
+    @Query("merchant") merchantId?: string,
+  ) {
+    return this.testOrderService.getPublicStationSnapshot(station, merchantId);
+  }
+
+  @Post("queue/call-next")
+  @Roles(
+    RolesEnum.STAFF,
+    RolesEnum.MERCHANT,
+    RolesEnum.ADMIN,
+    RolesEnum.SUPER_ADMIN,
+  )
+  async callNextStationToken(
+    @AuthUser() user: IAuthUser,
+    @Body("station") station: string,
+    @Body("merchant") merchantId?: string,
+  ) {
+    const targetMerchant = user.merchant ? user.merchant.toString() : merchantId;
+    return this.testOrderService.callNextStationToken(station, targetMerchant);
   }
 
   @Get("encounter/:id")

@@ -6,6 +6,15 @@ export type LabReportDocument = LabReport & Document;
 
 @Schema({ timestamps: true, versionKey: false })
 export class LabReport {
+  @Prop({ type: String, unique: true, sparse: true, trim: true })
+  reportNumber?: string;
+
+  @Prop({ type: String, trim: true })
+  fileUrl?: string;
+
+  @Prop({ type: String, index: true, trim: true })
+  downloadToken?: string;
+
   @Prop({ type: Types.ObjectId, ref: collectionsName.testOrder, required: true })
   testOrder: Types.ObjectId;
 

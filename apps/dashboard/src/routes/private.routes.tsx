@@ -62,6 +62,25 @@ const MerchantInvoices = lazy(() => import("@/pages/private/merchant/Invoices"))
 const MerchantSubscriptionPage = lazy(
   () => import("@/pages/private/merchant/MerchantSubscriptionPage")
 )
+const DoctorQueuePage = lazy(
+  () => import("@/pages/private/doctor/DoctorQueuePage")
+)
+const MerchantQueuePage = lazy(
+  () => import("@/pages/private/merchant/MerchantQueuePage")
+)
+const ManageServices = lazy(
+  () => import("@/pages/private/merchant/ManageServices")
+)
+const ManageAdmissions = lazy(
+  () => import("@/pages/private/merchant/ManageAdmissions")
+)
+const ManageBeds = lazy(() => import("@/pages/private/merchant/ManageBeds"))
+const ManageDiagnostics = lazy(
+  () => import("@/pages/private/merchant/ManageDiagnostics")
+)
+const ClinicServicesPage = lazy(
+  () => import("@/pages/private/patient/ClinicServicesPage")
+)
 
 const withSuspense = (element: React.ReactNode) => (
   <Suspense
@@ -120,6 +139,56 @@ export const privateRoutes = [
   {
     path: "/merchant/appointments",
     element: withSuspense(<MerchantAppointmentsPage />),
+    allowRoutes: [
+      RolesEnum.SUPER_ADMIN,
+      RolesEnum.ADMIN,
+      RolesEnum.MERCHANT,
+      RolesEnum.STAFF,
+    ],
+  },
+  {
+    path: "/merchant/queue",
+    element: withSuspense(<MerchantQueuePage />),
+    allowRoutes: [
+      RolesEnum.SUPER_ADMIN,
+      RolesEnum.ADMIN,
+      RolesEnum.MERCHANT,
+      RolesEnum.STAFF,
+    ],
+  },
+  {
+    path: "/merchant/services",
+    element: withSuspense(<ManageServices />),
+    allowRoutes: [
+      RolesEnum.SUPER_ADMIN,
+      RolesEnum.ADMIN,
+      RolesEnum.MERCHANT,
+      RolesEnum.STAFF,
+    ],
+  },
+  {
+    path: "/merchant/admissions",
+    element: withSuspense(<ManageAdmissions />),
+    allowRoutes: [
+      RolesEnum.SUPER_ADMIN,
+      RolesEnum.ADMIN,
+      RolesEnum.MERCHANT,
+      RolesEnum.STAFF,
+    ],
+  },
+  {
+    path: "/merchant/beds",
+    element: withSuspense(<ManageBeds />),
+    allowRoutes: [
+      RolesEnum.SUPER_ADMIN,
+      RolesEnum.ADMIN,
+      RolesEnum.MERCHANT,
+      RolesEnum.STAFF,
+    ],
+  },
+  {
+    path: "/merchant/diagnostics",
+    element: withSuspense(<ManageDiagnostics />),
     allowRoutes: [
       RolesEnum.SUPER_ADMIN,
       RolesEnum.ADMIN,
@@ -324,6 +393,11 @@ export const privateRoutes = [
     allowRoutes: [RolesEnum.SUPER_ADMIN, RolesEnum.ADMIN, RolesEnum.DOCTOR],
   },
   {
+    path: "/doctor/queue",
+    element: withSuspense(<DoctorQueuePage />),
+    allowRoutes: [RolesEnum.SUPER_ADMIN, RolesEnum.ADMIN, RolesEnum.DOCTOR],
+  },
+  {
     path: "/patient",
     element: withSuspense(<PatientDashboard />),
     allowRoutes: [RolesEnum.SUPER_ADMIN, RolesEnum.ADMIN, RolesEnum.PATIENT],
@@ -336,6 +410,11 @@ export const privateRoutes = [
   {
     path: "/patient/records",
     element: withSuspense(<PatientMedicalRecords />),
+    allowRoutes: [RolesEnum.SUPER_ADMIN, RolesEnum.ADMIN, RolesEnum.PATIENT],
+  },
+  {
+    path: "/patient/services",
+    element: withSuspense(<ClinicServicesPage />),
     allowRoutes: [RolesEnum.SUPER_ADMIN, RolesEnum.ADMIN, RolesEnum.PATIENT],
   },
 

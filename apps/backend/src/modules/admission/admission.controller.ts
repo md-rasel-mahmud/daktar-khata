@@ -31,7 +31,53 @@ export class AdmissionController {
     RolesEnum.SUPER_ADMIN,
   )
   async create(@AuthUser() user: IAuthUser, @Body() dto: CreateAdmissionDto) {
-    return this.admissionService.create(dto, new Types.ObjectId(user._id));
+    const merchantId = user.merchant ? new Types.ObjectId(user.merchant) : undefined;
+    return this.admissionService.create(dto, new Types.ObjectId(user._id), merchantId);
+  }
+
+  @Post(":id/charges")
+  @Roles(
+    RolesEnum.DOCTOR,
+    RolesEnum.STAFF,
+    RolesEnum.MERCHANT,
+    RolesEnum.ADMIN,
+    RolesEnum.SUPER_ADMIN,
+  )
+  async addDailyCharge(
+    @AuthUser() user: IAuthUser,
+    @Param("id") id: string,
+    @Body()
+    dto: {
+      serviceName: string;
+      category?: string;
+      quantity?: number;
+      unitPrice: number;
+      notes?: string;
+    },
+  ) {
+    if (!Types.ObjectId.isValid(id)) {
+      throw new BadRequestException("Invalid admission ID");
+    }
+    return this.admissionService.addDailyCharge(
+      id,
+      dto,
+      new Types.ObjectId(user._id),
+    );
+  }
+
+  @Get(":id/invoice")
+  @Roles(
+    RolesEnum.DOCTOR,
+    RolesEnum.STAFF,
+    RolesEnum.MERCHANT,
+    RolesEnum.ADMIN,
+    RolesEnum.SUPER_ADMIN,
+  )
+  async getAdmissionInvoice(@Param("id") id: string) {
+    if (!Types.ObjectId.isValid(id)) {
+      throw new BadRequestException("Invalid admission ID");
+    }
+    return this.admissionService.getAdmissionInvoice(id);
   }
 
   @Get()

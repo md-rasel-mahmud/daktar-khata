@@ -9,6 +9,8 @@ const ErrorPage = lazy(() => import("@/pages/public/ErrorPage"))
 const Unauthorized = lazy(() => import("@/pages/public/Unauthorized"))
 const Login = lazy(() => import("@/pages/public/auth/Login"))
 const SignUp = lazy(() => import("@/pages/public/auth/SignUp"))
+const QueueTVDisplay = lazy(() => import("@/pages/public/QueueTVDisplay"))
+const PublicReportDownload = lazy(() => import("@/pages/public/PublicReportDownload"))
 const DashboardLayout = lazy(
   () => import("@/components/layout/DashboardLayout")
 )
@@ -45,6 +47,16 @@ export const router = createBrowserRouter([
   {
     path: "/auth/signup",
     element: withSuspense(<SignUp />),
+    errorElement: withSuspense(<ErrorPage />),
+  },
+  {
+    path: "/display/queue",
+    element: withSuspense(<QueueTVDisplay />),
+    errorElement: withSuspense(<ErrorPage />),
+  },
+  {
+    path: "/reports/download",
+    element: withSuspense(<PublicReportDownload />),
     errorElement: withSuspense(<ErrorPage />),
   },
   {

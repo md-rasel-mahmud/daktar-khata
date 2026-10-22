@@ -5,6 +5,7 @@ import { TestOrderController } from "./test-order.controller";
 import { TestOrderSchema } from "./schema/test-order.schema";
 import { collectionsName } from "../../constant";
 import { DoctorModule } from "../doctor/doctor.module";
+import { QueueModule } from "../queue/queue.module";
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { DoctorModule } from "../doctor/doctor.module";
       { name: collectionsName.testOrder, schema: TestOrderSchema },
     ]),
     DoctorModule,
+    QueueModule,
   ],
   controllers: [TestOrderController],
   providers: [TestOrderService],

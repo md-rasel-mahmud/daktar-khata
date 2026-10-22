@@ -77,6 +77,12 @@ export const api = createApi({
     "Blogs",
     "ContactMessages",
     "LandingContent",
+    "Queue",
+    "ServiceCatalog",
+    "Admissions",
+    "Beds",
+    "TestOrders",
+    "LabReports",
   ],
   endpoints: () => ({}),
 })

@@ -37,4 +37,9 @@ export class CreateLabReportDto {
   @IsOptional()
   @IsString()
   remarks?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  fileUrl?: string;
 }

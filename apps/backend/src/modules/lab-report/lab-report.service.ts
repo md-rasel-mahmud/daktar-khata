@@ -16,8 +16,15 @@ export class LabReportService {
   ) {}
 
   async create(dto: CreateLabReportDto, userId: Types.ObjectId, merchantId: Types.ObjectId) {
+    const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+    const random = Math.floor(1000 + Math.random() * 9000);
+    const reportNumber = `REP-${dateStr}-${random}`;
+    const downloadToken = Math.random().toString(36).substring(2, 10).toUpperCase();
+
     const report = await this.labReportModel.create({
       ...dto,
+      reportNumber,
+      downloadToken,
       testOrder: new Types.ObjectId(dto.testOrder),
       patient: new Types.ObjectId(dto.patient),
       merchant: merchantId,
@@ -34,11 +41,54 @@ export class LabReportService {
     return report;
   }
 
+  async findAll(merchantId?: string) {
+    const filter: any = {};
+    if (merchantId && Types.ObjectId.isValid(merchantId)) {
+      filter.merchant = new Types.ObjectId(merchantId);
+    }
+    return this.labReportModel
+      .find(filter)
+      .sort({ createdAt: -1 })
+      .populate("patient", "name mobile gender bloodGroup")
+      .populate("testOrder reportedBy approvedBy");
+  }
+
   async getByPatient(patientId: string) {
     return this.labReportModel
       .find({ patient: new Types.ObjectId(patientId) })
       .sort({ createdAt: -1 })
       .populate("testOrder reportedBy approvedBy");
+  }
+
+  async publicSearch(phone: string, tokenOrNumber: string) {
+    const cleanPhone = phone?.trim();
+    const cleanToken = tokenOrNumber?.trim();
+
+    if (!cleanPhone || !cleanToken) {
+      throw new NotFoundException("Phone number and Report Token / Number are required");
+    }
+
+    const reports = await this.labReportModel
+      .find({
+        $or: [
+          { reportNumber: cleanToken },
+          { downloadToken: cleanToken.toUpperCase() },
+        ],
+      })
+      .populate("patient", "name mobile gender")
+      .populate("testOrder reportedBy approvedBy");
+
+    // Match patient phone
+    const matched = reports.find((r: any) => {
+      const patientMobile = r.patient?.mobile || "";
+      return patientMobile.endsWith(cleanPhone) || cleanPhone.endsWith(patientMobile);
+    });
+
+    if (!matched) {
+      throw new NotFoundException("No lab report found matching the provided details");
+    }
+
+    return matched;
   }
 
   async approve(id: string, userId: Types.ObjectId) {

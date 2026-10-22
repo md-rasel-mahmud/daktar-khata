@@ -19,9 +19,17 @@ import { Roles } from "../../common/decorators/roles.decorator";
 import { IAuthUser } from "../../common";
 import { BedStatus } from "../../constant/enums/status.enum";
 
+import { Public } from "../../common";
+
 @Controller("bed")
 export class BedController {
   constructor(private readonly bedService: BedService) {}
+
+  @Public()
+  @Get("availability")
+  async getAvailabilitySummary(@Query("merchant") merchantId?: string) {
+    return this.bedService.getAvailabilitySummary(merchantId);
+  }
 
   @Post()
   @Roles(RolesEnum.MERCHANT, RolesEnum.ADMIN, RolesEnum.SUPER_ADMIN)
