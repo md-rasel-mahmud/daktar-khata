@@ -69,7 +69,15 @@ export class InvoiceService {
       (sum, item) => sum + (item.discount || 0),
       0,
     );
-    const invoiceDiscount = dto.invoiceDiscount || 0;
+    let invoiceDiscount = 0;
+    if (dto.invoiceDiscount && dto.invoiceDiscount > 0) {
+      if (dto.invoiceDiscountType === "PERCENTAGE") {
+        invoiceDiscount =
+          Math.round(((subtotal * dto.invoiceDiscount) / 100) * 100) / 100;
+      } else {
+        invoiceDiscount = dto.invoiceDiscount;
+      }
+    }
     const totalDiscount = lineItemDiscounts + invoiceDiscount;
     const totalTax = dto.lineItems.reduce(
       (sum, item) => sum + (item.tax || 0),
@@ -151,7 +159,23 @@ export class InvoiceService {
       throw new BadRequestException("Invoice is already fully paid");
     }
 
-    invoice.paidAmount += dto.amount;
+    let discountAmount = 0;
+    if (dto.discount && dto.discount > 0) {
+      if (dto.discountType === "PERCENTAGE") {
+        discountAmount =
+          Math.round(((invoice.dueAmount * dto.discount) / 100) * 100) / 100;
+      } else {
+        discountAmount = dto.discount;
+      }
+      discountAmount = Math.min(discountAmount, invoice.dueAmount);
+    }
+
+    if (discountAmount > 0) {
+      invoice.totalDiscount = (invoice.totalDiscount || 0) + discountAmount;
+      invoice.grandTotal = Math.max(0, invoice.grandTotal - discountAmount);
+    }
+
+    invoice.paidAmount = (invoice.paidAmount || 0) + dto.amount;
     invoice.dueAmount = Math.max(0, invoice.grandTotal - invoice.paidAmount);
 
     if (invoice.dueAmount === 0) {
@@ -162,9 +186,14 @@ export class InvoiceService {
 
     invoice.paymentHistory.push({
       amount: dto.amount,
+      discount: discountAmount,
       method: dto.method,
       transactionId: dto.transactionId || "",
-      note: dto.note || "",
+      note:
+        dto.note ||
+        (discountAmount > 0
+          ? `Payment with ৳${discountAmount} discount`
+          : ""),
       date: new Date(),
       recordedBy: recordedById || null,
     } as any);

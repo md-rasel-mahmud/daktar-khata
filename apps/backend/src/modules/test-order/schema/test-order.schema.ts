@@ -66,6 +66,19 @@ export class TestOrder {
   status: string;
 
   @Prop({ type: Number, default: 0 })
+  discount: number;
+
+  @Prop({
+    type: String,
+    enum: ["FIXED", "PERCENTAGE"],
+    default: "FIXED",
+  })
+  discountType: string;
+
+  @Prop({ type: Number, default: 0 })
+  totalAmount: number;
+
+  @Prop({ type: Number, default: 0 })
   paidAmount: number;
 
   @Prop({ type: Number, default: 0 })

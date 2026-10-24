@@ -306,19 +306,27 @@ export default function PatientInvoicesPage() {
             <form onSubmit={handleSubmit(onSubmitPayment)} className="space-y-4">
               <div className="p-3.5 rounded-2xl bg-muted/40 border space-y-1 text-xs">
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Invoice Total:</span>
+                  <span className="text-muted-foreground">{t("invoice_total") || "Invoice Total"}:</span>
                   <span className="font-semibold text-foreground">
                     ৳{selectedInvoice.grandTotal}
                   </span>
                 </div>
+                {selectedInvoice.totalDiscount > 0 && (
+                  <div className="flex justify-between text-rose-600">
+                    <span>{t("discount") || "Discount"}:</span>
+                    <span className="font-semibold font-mono">
+                      -৳{selectedInvoice.totalDiscount}
+                    </span>
+                  </div>
+                )}
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Already Paid:</span>
+                  <span className="text-muted-foreground">{t("already_paid") || "Already Paid"}:</span>
                   <span className="font-semibold text-emerald-600">
                     ৳{selectedInvoice.paidAmount}
                   </span>
                 </div>
                 <div className="flex justify-between pt-1 border-t text-sm font-bold">
-                  <span>Payable Due:</span>
+                  <span>{t("net_payable") || "Payable Due"}:</span>
                   <span className="text-primary font-mono">
                     ৳{selectedInvoice.dueAmount}
                   </span>

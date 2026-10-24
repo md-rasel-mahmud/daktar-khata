@@ -115,6 +115,11 @@ export class CreateInvoiceDto {
   @Min(0)
   invoiceDiscount?: number;
 
+  @ApiPropertyOptional({ example: "FIXED", enum: ["FIXED", "PERCENTAGE"] })
+  @IsOptional()
+  @IsString()
+  invoiceDiscountType?: "FIXED" | "PERCENTAGE";
+
   @ApiProperty({ type: [LineItemInputDto] })
   @IsArray()
   @ValidateNested({ each: true })

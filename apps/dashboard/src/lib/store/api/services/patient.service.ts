@@ -112,7 +112,20 @@ export const patientApi = api.injectEndpoints({
 
     // Record invoice payment
     recordInvoicePayment: builder.mutation({
-      query: ({ invoiceId, body }: { invoiceId: string; body: { amount: number; method: string; transactionId?: string; note?: string } }) => ({
+      query: ({
+        invoiceId,
+        body,
+      }: {
+        invoiceId: string
+        body: {
+          amount: number
+          method: string
+          discount?: number
+          discountType?: "FIXED" | "PERCENTAGE"
+          transactionId?: string
+          note?: string
+        }
+      }) => ({
         url: `invoice/${invoiceId}/payment`,
         method: "POST",
         body,

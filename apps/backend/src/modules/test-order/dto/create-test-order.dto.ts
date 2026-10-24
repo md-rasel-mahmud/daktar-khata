@@ -73,6 +73,21 @@ export class CreateTestOrderDto {
   @IsNumber()
   paidAmount?: number;
 
+  @ApiPropertyOptional({ example: 0 })
+  @IsOptional()
+  @IsNumber()
+  discount?: number;
+
+  @ApiPropertyOptional({ example: "FIXED", enum: ["FIXED", "PERCENTAGE"] })
+  @IsOptional()
+  @IsString()
+  discountType?: "FIXED" | "PERCENTAGE";
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsNumber()
+  totalAmount?: number;
+
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()

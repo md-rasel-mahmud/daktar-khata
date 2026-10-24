@@ -103,10 +103,12 @@ const MerchantInvoices: React.FC = () => {
         className: "text-right",
         cell: (row) => {
           const totalAmt = Number(row.totalAmount || row.amount || 0)
+          const discountAmt = Number(row.discount || 0)
+          const subTotalAmt = Number(row.subTotal || totalAmt + discountAmt)
           const items =
             row.lineItems && row.lineItems.length > 0
               ? row.lineItems.map((item: any) => ({
-                  serviceName: item.itemName || item.serviceName || "Service Item",
+                  serviceName: item.itemName || item.name || item.serviceName || "Service Item",
                   category: item.category || row.category || "Service",
                   quantity: item.quantity || 1,
                   unitPrice: Number(item.unitPrice || item.rate || totalAmt),
@@ -117,8 +119,8 @@ const MerchantInvoices: React.FC = () => {
                     serviceName: row.category || "General Service / Invoice",
                     category: row.transactionType || "Billing",
                     quantity: 1,
-                    unitPrice: totalAmt,
-                    total: totalAmt,
+                    unitPrice: subTotalAmt,
+                    total: subTotalAmt,
                   },
                 ]
 
@@ -131,7 +133,8 @@ const MerchantInvoices: React.FC = () => {
                     invoiceNumber: row.invoiceNo || "INV-COUNTER",
                     date: row.invoiceDate || row.date || new Date(),
                     lineItems: items,
-                    subtotal: totalAmt,
+                    subtotal: subTotalAmt,
+                    totalDiscount: discountAmt,
                     grandTotal: totalAmt,
                     paidAmount: totalAmt,
                     dueAmount: 0,

@@ -42,6 +42,9 @@ export class InvoicePayment {
   @Prop({ required: true, min: 0 })
   amount: number;
 
+  @Prop({ default: 0, min: 0 })
+  discount?: number;
+
   @Prop({ required: true, default: PaymentMethod.CASH })
   method: string;
 

@@ -19,6 +19,9 @@ export interface TestOrder {
   merchant: string
   items: TestOrderItem[]
   status: string
+  discount?: number
+  discountType?: "FIXED" | "PERCENTAGE"
+  totalAmount?: number
   paidAmount?: number
   dueAmount?: number
   paymentStatus?: string

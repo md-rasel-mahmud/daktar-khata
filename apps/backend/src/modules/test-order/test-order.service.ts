@@ -61,10 +61,23 @@ export class TestOrderService {
     const tokenNumber = todayCount + 1;
     const orderNumber = this.generateOrderNumber();
 
-    const totalAmount = dto.items.reduce((s, itm) => s + (itm.price || 0), 0);
-    const paidAmount = typeof dto.paidAmount === "number" ? dto.paidAmount : totalAmount;
+    const subtotal = dto.items.reduce((s, itm) => s + (itm.price || 0), 0);
+    let discountAmount = 0;
+    if (dto.discount && dto.discount > 0) {
+      if (dto.discountType === "PERCENTAGE") {
+        discountAmount =
+          Math.round(((subtotal * dto.discount) / 100) * 100) / 100;
+      } else {
+        discountAmount = dto.discount;
+      }
+    }
+    discountAmount = Math.min(discountAmount, subtotal);
+    const totalAmount = Math.max(0, subtotal - discountAmount);
+    const paidAmount =
+      typeof dto.paidAmount === "number" ? dto.paidAmount : totalAmount;
     const dueAmount = Math.max(0, totalAmount - paidAmount);
-    const paymentStatus = dueAmount === 0 ? "PAID" : paidAmount > 0 ? "PARTIALLY_PAID" : "DUE";
+    const paymentStatus =
+      dueAmount === 0 ? "PAID" : paidAmount > 0 ? "PARTIALLY_PAID" : "DUE";
 
     const order = await this.testOrderModel.create({
       ...dto,
@@ -75,6 +88,9 @@ export class TestOrderService {
       patient: new Types.ObjectId(dto.patient),
       doctor: doctorDoc ? doctorDoc._id : null,
       referringDoctorName: dto.referringDoctorName || "",
+      discount: discountAmount,
+      discountType: dto.discountType || "FIXED",
+      totalAmount,
       paidAmount,
       dueAmount,
       paymentStatus,

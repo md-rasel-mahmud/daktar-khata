@@ -31,6 +31,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Loader2,
+  Percent,
 } from "lucide-react"
 import {
   InvoicePrintModal,
@@ -44,6 +45,8 @@ import { z } from "zod"
 const walkInOrderSchema = z.object({
   patient: z.string().optional(),
   referringDoctorName: z.string().trim().optional(),
+  discountType: z.enum(["FIXED", "PERCENTAGE"]),
+  discountValue: z.number().min(0),
   paidAmount: z.number().optional(),
 })
 
@@ -102,7 +105,9 @@ export default function ManageDiagnostics() {
     defaultValues: {
       patient: "",
       referringDoctorName: "Self / Walk-in",
-      paidAmount: 0,
+      discountType: "FIXED",
+      discountValue: 0,
+      paidAmount: undefined,
     },
   })
 
@@ -136,6 +141,16 @@ export default function ManageDiagnostics() {
     selectedTestIds.includes(c._id)
   )
   const totalPrice = selectedTestObjects.reduce((sum, item) => sum + item.price, 0)
+
+  const watchedDiscountType = watch("discountType") || "FIXED"
+  const watchedDiscountValue = watch("discountValue") || 0
+
+  const calculatedDiscount =
+    watchedDiscountType === "PERCENTAGE"
+      ? Math.round(((totalPrice * Math.min(100, Math.max(0, watchedDiscountValue))) / 100) * 100) / 100
+      : Math.min(totalPrice, Math.max(0, watchedDiscountValue))
+
+  const netPayablePrice = Math.max(0, totalPrice - calculatedDiscount)
 
   const onConfirmCreateOrder = async (data: WalkInOrderFormData) => {
     if (selectedTestIds.length === 0) {
@@ -188,8 +203,11 @@ export default function ManageDiagnostics() {
         patient: finalPatientId,
         referringDoctorName: data.referringDoctorName || "Self / Walk-in",
         isWalkIn: true,
+        discount: calculatedDiscount,
+        discountType: data.discountType || "FIXED",
+        totalAmount: netPayablePrice,
         paidAmount:
-          typeof data.paidAmount === "number" ? data.paidAmount : totalPrice,
+          typeof data.paidAmount === "number" ? data.paidAmount : netPayablePrice,
         items,
       }).unwrap()
 
@@ -197,7 +215,13 @@ export default function ManageDiagnostics() {
       setIsOrderModalOpen(false)
       setSelectedReceipt(res)
       setSelectedTestIds([])
-      reset()
+      reset({
+        patient: "",
+        referringDoctorName: "Self / Walk-in",
+        discountType: "FIXED",
+        discountValue: 0,
+        paidAmount: undefined,
+      })
       resetQuickPatient()
       setPatientTab("select")
       refetch()
@@ -759,28 +783,101 @@ export default function ManageDiagnostics() {
                 </div>
               </div>
 
-              {/* Total and Initial Payment */}
+              {/* Total, Discount, and Initial Payment */}
               <div className="p-3.5 rounded-2xl bg-muted/40 border space-y-3">
                 <div className="flex items-center justify-between font-bold text-sm">
-                  <span>{t("total_payable")}:</span>
-                  <span className="text-primary text-base font-mono">
+                  <span>{t("subtotal") || "Subtotal"}:</span>
+                  <span className="text-foreground text-sm font-mono">
                     ৳{totalPrice.toLocaleString()}
                   </span>
                 </div>
 
+                {/* Discount Option (% or Fixed) */}
+                <div className="p-2.5 rounded-xl bg-background border space-y-2">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-semibold text-[11px] flex items-center gap-1">
+                      <Percent className="h-3.5 w-3.5 text-primary" />
+                      {t("discount") || "Discount"}
+                    </span>
+                    <div className="flex bg-muted p-0.5 rounded-lg border text-[11px]">
+                      <button
+                        type="button"
+                        onClick={() => setValue("discountType", "FIXED")}
+                        className={`px-2 py-0.5 rounded-md font-medium transition ${
+                          watchedDiscountType === "FIXED"
+                            ? "bg-primary text-primary-foreground shadow-sm"
+                            : "text-muted-foreground hover:text-foreground"
+                        }`}
+                      >
+                        ৳ {t("fixed") || "Fixed"}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setValue("discountType", "PERCENTAGE")}
+                        className={`px-2 py-0.5 rounded-md font-medium transition ${
+                          watchedDiscountType === "PERCENTAGE"
+                            ? "bg-primary text-primary-foreground shadow-sm"
+                            : "text-muted-foreground hover:text-foreground"
+                        }`}
+                      >
+                        % {t("percentage") || "Percent"}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      max={watchedDiscountType === "PERCENTAGE" ? 100 : totalPrice}
+                      placeholder={
+                        watchedDiscountType === "PERCENTAGE"
+                          ? t("enter_discount_percentage") || "e.g. 10%"
+                          : t("enter_discount_fixed") || "e.g. 100 ৳"
+                      }
+                      {...register("discountValue", { valueAsNumber: true })}
+                      className="w-full px-2.5 py-1.5 rounded-xl border bg-background text-xs focus:outline-none focus:ring-2 focus:ring-primary font-medium"
+                    />
+                    {calculatedDiscount > 0 && (
+                      <div className="text-right whitespace-nowrap text-xs text-rose-600 font-semibold">
+                        -৳{calculatedDiscount.toLocaleString()}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between font-bold text-sm pt-1 border-t border-dashed">
+                  <span>{t("net_payable") || "Net Payable"}:</span>
+                  <span className="text-primary text-base font-mono">
+                    ৳{netPayablePrice.toLocaleString()}
+                  </span>
+                </div>
+
                 <div>
-                  <label className="block text-xs font-semibold mb-1">
-                    {t("initial_payment_collected") || "Initial Payment Collected (৳)"}
-                  </label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="block text-xs font-semibold">
+                      {t("initial_payment_collected") || "Initial Payment Collected (৳)"}
+                    </label>
+                    {netPayablePrice > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => setValue("paidAmount", netPayablePrice)}
+                        className="text-[10px] text-primary hover:underline font-semibold"
+                      >
+                        {t("pay_full_due") || "Full"} (৳{netPayablePrice})
+                      </button>
+                    )}
+                  </div>
                   <input
                     type="number"
                     step="0.01"
-                    placeholder={`e.g. ${totalPrice} for full payment`}
+                    placeholder={`e.g. ${netPayablePrice} for full payment`}
                     {...register("paidAmount", { valueAsNumber: true })}
                     className="w-full px-3 py-2 rounded-xl border bg-background text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                   <p className="text-[11px] text-muted-foreground mt-0.5">
-                    Leave blank or enter full amount for 100% paid receipt.
+                    {t("leave_blank_for_full_payment") || "Leave blank or enter full amount for 100% paid receipt."}
                   </p>
                 </div>
               </div>
@@ -837,17 +934,21 @@ export default function ManageDiagnostics() {
                   (s: number, itm: any) => s + itm.price,
                   0
                 ),
-                grandTotal: (selectedReceipt.items || []).reduce(
-                  (s: number, itm: any) => s + itm.price,
-                  0
-                ),
+                totalDiscount: selectedReceipt.discount || 0,
+                grandTotal:
+                  typeof selectedReceipt.totalAmount === "number"
+                    ? selectedReceipt.totalAmount
+                    : (selectedReceipt.items || []).reduce(
+                        (s: number, itm: any) => s + itm.price,
+                        0
+                      ) - (selectedReceipt.discount || 0),
                 paidAmount:
                   typeof selectedReceipt.paidAmount === "number"
                     ? selectedReceipt.paidAmount
                     : (selectedReceipt.items || []).reduce(
                         (s: number, itm: any) => s + itm.price,
                         0
-                      ),
+                      ) - (selectedReceipt.discount || 0),
                 dueAmount: selectedReceipt.dueAmount || 0,
                 paymentMethod: "CASH / POS",
               }

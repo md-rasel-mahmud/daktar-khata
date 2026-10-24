@@ -13,6 +13,17 @@ export class RecordPaymentDto {
   @IsString()
   method: string;
 
+  @ApiPropertyOptional({ example: 50 })
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  discount?: number;
+
+  @ApiPropertyOptional({ example: "FIXED", enum: ["FIXED", "PERCENTAGE"] })
+  @IsOptional()
+  @IsString()
+  discountType?: "FIXED" | "PERCENTAGE";
+
   @ApiPropertyOptional({ example: "TRX-98765" })
   @IsOptional()
   @IsString()

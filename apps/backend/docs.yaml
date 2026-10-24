@@ -3364,6 +3364,9 @@ paths:
                   price: 0
                   notes: string
               paidAmount: 0
+              discount: 0
+              discountType: FIXED
+              totalAmount: 0
               paymentStatus: string
             examples:
               default:
@@ -3380,7 +3383,7 @@ paths:
                 'Authorization': 'Bearer <token>',
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify({\n  "patient": "string",\n  "doctor": "string",\n  "referringDoctorName": "string",\n  "isWalkIn": true,\n  "merchant": "string",\n  "encounter": "string",\n  "items": [\n    {\n      "test": "string",\n      "testName": "string",\n      "price": 0,\n      "notes": "string"\n    }\n  ],\n  "paidAmount": 0,\n  "paymentStatus": "string"\n})
+              body: JSON.stringify({\n  "patient": "string",\n  "doctor": "string",\n  "referringDoctorName": "string",\n  "isWalkIn": true,\n  "merchant": "string",\n  "encounter": "string",\n  "items": [\n    {\n      "test": "string",\n      "testName": "string",\n      "price": 0,\n      "notes": "string"\n    }\n  ],\n  "paidAmount": 0,\n  "discount": 0,\n  "discountType": "FIXED",\n  "totalAmount": 0,\n  "paymentStatus": "string"\n})
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_182
     get:
@@ -4565,6 +4568,7 @@ paths:
               dueDate: '2026-09-30T00:00:00.000Z'
               notes: Special discount for OPD patient
               invoiceDiscount: 0
+              invoiceDiscountType: FIXED
               lineItems:
                 - service: 64e7c3b2f1a2b3c4d5e6f7a8
                   serviceName: OPD Consultation
@@ -4593,7 +4597,7 @@ paths:
                 'Authorization': 'Bearer <token>',
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify({\n  "patient": "64e7c3b2f1a2b3c4d5e6f7a8",\n  "doctor": "64e7c3b2f1a2b3c4d5e6f7a9",\n  "admission": "64e7c3b2f1a2b3c4d5e6f7aa",\n  "appointment": "64e7c3b2f1a2b3c4d5e6f7ab",\n  "dueDate": "2026-09-30T00:00:00.000Z",\n  "notes": "Special discount for OPD patient",\n  "invoiceDiscount": 0,\n  "lineItems": [\n    {\n      "service": "64e7c3b2f1a2b3c4d5e6f7a8",\n      "serviceName": "OPD Consultation",\n      "category": "CONSULTATION",\n      "quantity": 1,\n      "unitPrice": 500,\n      "discount": 0,\n      "tax": 0\n    }\n  ],\n  "initialPayment": {\n    "amount": 500,\n    "method": "CASH",\n    "transactionId": "TRX-12345",\n    "note": "Advance payment"\n  }\n})
+              body: JSON.stringify({\n  "patient": "64e7c3b2f1a2b3c4d5e6f7a8",\n  "doctor": "64e7c3b2f1a2b3c4d5e6f7a9",\n  "admission": "64e7c3b2f1a2b3c4d5e6f7aa",\n  "appointment": "64e7c3b2f1a2b3c4d5e6f7ab",\n  "dueDate": "2026-09-30T00:00:00.000Z",\n  "notes": "Special discount for OPD patient",\n  "invoiceDiscount": 0,\n  "invoiceDiscountType": "FIXED",\n  "lineItems": [\n    {\n      "service": "64e7c3b2f1a2b3c4d5e6f7a8",\n      "serviceName": "OPD Consultation",\n      "category": "CONSULTATION",\n      "quantity": 1,\n      "unitPrice": 500,\n      "discount": 0,\n      "tax": 0\n    }\n  ],\n  "initialPayment": {\n    "amount": 500,\n    "method": "CASH",\n    "transactionId": "TRX-12345",\n    "note": "Advance payment"\n  }\n})
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_242
     get:
@@ -4685,6 +4689,8 @@ paths:
             example: &ref_246
               amount: 1000
               method: CASH
+              discount: 50
+              discountType: FIXED
               transactionId: TRX-98765
               note: Partial cash payment at counter
             examples:
@@ -4702,7 +4708,7 @@ paths:
                 'Authorization': 'Bearer <token>',
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify({\n  "amount": 1000,\n  "method": "CASH",\n  "transactionId": "TRX-98765",\n  "note": "Partial cash payment at counter"\n})
+              body: JSON.stringify({\n  "amount": 1000,\n  "method": "CASH",\n  "discount": 50,\n  "discountType": "FIXED",\n  "transactionId": "TRX-98765",\n  "note": "Partial cash payment at counter"\n})
             }).then(r => r.json()).then(console.log)
       x-code-samples: *ref_247
   /api/v1/invoice/{id}/refund:
@@ -8610,6 +8616,20 @@ components:
         paidAmount:
           type: number
           _propertyName: paidAmount
+        discount:
+          type: number
+          example: 0
+          _propertyName: discount
+        discountType:
+          type: string
+          example: FIXED
+          enum:
+            - FIXED
+            - PERCENTAGE
+          _propertyName: discountType
+        totalAmount:
+          type: number
+          _propertyName: totalAmount
         paymentStatus:
           type: string
           _propertyName: paymentStatus
@@ -9059,6 +9079,13 @@ components:
           example: 0
           default: 0
           _propertyName: invoiceDiscount
+        invoiceDiscountType:
+          type: string
+          example: FIXED
+          enum:
+            - FIXED
+            - PERCENTAGE
+          _propertyName: invoiceDiscountType
         lineItems:
           type: array
           items:
@@ -9083,6 +9110,17 @@ components:
           example: CASH
           default: CASH
           _propertyName: method
+        discount:
+          type: number
+          example: 50
+          _propertyName: discount
+        discountType:
+          type: string
+          example: FIXED
+          enum:
+            - FIXED
+            - PERCENTAGE
+          _propertyName: discountType
         transactionId:
           type: string
           example: TRX-98765

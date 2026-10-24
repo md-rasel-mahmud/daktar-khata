@@ -1249,7 +1249,7 @@ export default function ManageAdmissions() {
                   htmlFor="collectPaymentImmediately"
                   className="text-xs font-medium cursor-pointer"
                 >
-                  Collect payment immediately after discharge
+                  {t("collect_payment_after_discharge") || "Collect payment immediately after discharge"}
                 </label>
               </div>
 
